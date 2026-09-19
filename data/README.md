@@ -1,25 +1,125 @@
-# Kế hoạch dữ liệu PAD sơ bộ (Buổi 1)
+# Dataset and protocol decision for the PAD study
 
-Không commit video khuôn mặt hoặc ảnh enrollment vào Git. Dữ liệu được đặt ngoài
-repository và đường dẫn được cung cấp bằng config/biến môi trường ở các buổi sau.
+The two-person project uses **one mandatory benchmark**. A second dataset is optional and must not delay the primary experiment table.
 
-## So sánh lựa chọn
+Raw videos, extracted face frames and pseudo-depth maps are not committed to Git.
 
-| Dataset | Quy mô và bối cảnh | Attack / protocol | Truy cập và giấy phép | Vai trò đề nghị |
-|---|---|---|---|---|
-| OULU-NPU | Trang dự án hiện mô tả 4.950 video real/attack, quay bằng camera trước của 6 điện thoại trong 3 phiên với điều kiện sáng/nền khác nhau. Bài báo gốc mô tả bản đầy đủ 5.940 video, 55 subjects. | Print và video replay; 4 protocol kiểm tra điều kiện, thiết bị và attack instrument chưa thấy. | Phải ký EULA; người ký cần vị trí thường trực tại tổ chức; không nhận email công cộng; không được phân phối lại. | **Phương án A / dataset chính**, nếu giảng viên hoặc trường ký được EULA. |
-| Replay-Attack | 1.300 clip của 50 clients; webcam laptop 320×240, khoảng 25 fps; controlled và adverse lighting. | Print, mobile, high-definition; photo/video; hand/fixed support; train/devel/test/enroll tách subject. | Tải qua cổng dữ liệu Idiap và tuân thủ điều khoản hiển thị khi yêu cầu dữ liệu; không đưa dữ liệu vào repo. | **Phương án B**, nhỏ hơn và phù hợp để dựng baseline nhanh. |
+## Primary choice
 
-Nguồn kiểm tra ngày 17-09-2026:
+### Option A OULU NPU Protocol 1
 
-- [OULU-NPU official database page](https://sites.google.com/site/oulunpudatabase/)
-- [OULU-NPU paper record at University of Oulu](https://oulurepo.oulu.fi/handle/10024/24331)
-- [Replay-Attack official page at Idiap](https://www.idiap.ch/en/scientific-research/data/replayattack/index_html?set_language=en)
+Use OULU-NPU Protocol 1 if institutional access is approved by the decision deadline recorded below.
 
-## Quyết định và hành động
+Why it is preferred:
 
-1. Xin EULA OULU-NPU bằng email tổ chức ngay trong Buổi 1.
-2. Trong lúc chờ, xin Replay-Attack và dùng official `grandtest` split để dựng loader.
-3. Giữ nguyên split theo subject/video; tuyệt đối không tách frame ngẫu nhiên.
-4. Lưu checksum manifest, không lưu raw frame webcam/enrollment theo mặc định.
+- It provides an official video protocol.
+- CDCN and UCDCN report results on OULU-NPU.
+- APCER, BPCER and ACER support a paper-style comparison.
+- Protocol 1 is narrow enough for a two-person reproduction study.
+
+Access requires the dataset EULA. Do not redistribute the data.
+
+Official page: <https://sites.google.com/site/oulunpudatabase/>
+
+### Option B Replay Attack
+
+Switch to Replay-Attack if OULU-NPU access is not approved by the deadline. Use the official train, development and test protocol; do not create a random frame split.
+
+Why it is a practical fallback:
+
+- It is smaller and suitable for building the experimental pipeline quickly.
+- It contains bona fide, print and replay presentations.
+- CDCN, UCDCN and recent Face PAD work include this benchmark.
+
+Official page: <https://www.idiap.ch/dataset/replayattack>
+
+## Decision record
+
+Fill this table during the first research report.
+
+| Field | Value |
+|---|---|
+| Decision deadline | |
+| Selected dataset | |
+| Selected protocol | |
+| Access approved by | |
+| Dataset root outside Git | |
+| Protocol source | |
+| Evaluation unit | Video |
+| Main metrics | APCER, BPCER, ACER, EER, ROC AUC |
+
+Once selected, the benchmark and protocol remain fixed for E0 through E4.
+
+## Required manifests
+
+```text
+data/
+├── README.md
+└── manifests/
+    ├── train.csv
+    ├── val.csv
+    └── test.csv
+```
+
+Minimum schema:
+
+```csv
+sample_id,split,subject_id,video_id,frame_index,image_path,depth_path,label,attack_type
+```
+
+Conventions:
+
+- `label = 1` for bona fide.
+- `label = 0` for presentation attack.
+- Higher model score means more likely bona fide.
+- Paths are relative to a configured data root.
+- `depth_path` may be empty before pseudo-depth generation.
+
+## Leakage rules
+
+- Follow the official split.
+- All frames from one video remain in one split.
+- Subjects remain separated when required by the protocol.
+- Do not use resized, recompressed or augmented copies of a test video in training.
+- Do not tune thresholds, augmentation, epochs or architecture on the test set.
+- Record a checksum for each manifest used by an experiment.
+
+The validator must fail on duplicate sample IDs, missing files, invalid labels, video overlap and subject overlap when applicable.
+
+## Frame sampling
+
+- Sample a fixed number of training frames per video, distributed over time.
+- Use one fixed validation/test sampling rule for all models.
+- Aggregate frame scores into one video score before reporting benchmark metrics.
+- Choose mean or median aggregation on validation, then lock it.
+
+## Pseudo depth generation
+
+For bona fide frames:
+
+1. Detect and crop the face consistently.
+2. Run 3DDFA V2 offline.
+3. Render a depth map and face mask.
+4. Normalize depth inside the mask to `[0, 1]`.
+5. Resize to the CDCN output size.
+
+For print and replay frames, use a zero map according to the selected depth-supervision protocol.
+
+Quality assurance must report:
+
+- 3DDFA failure rate by split.
+- Empty, NaN or infinite maps.
+- Live and spoof depth statistics.
+- Visual alignment of RGB, mask and depth.
+- Examples of both successful and failed generation.
+
+## Comparison discipline
+
+External results are copied only after confirming the exact dataset, protocol, split, metric and threshold rule. Results with incompatible settings are labelled contextual rather than direct.
+
+Core references:
+
+- CDCN: <https://openaccess.thecvf.com/content_CVPR_2020/html/Yu_Searching_Central_Difference_Convolutional_Networks_for_Face_Anti-Spoofing_CVPR_2020_paper.html>
+- UCDCN: <https://link.springer.com/article/10.1007/s40747-024-01397-0>
+- CASO-PAD: <https://www.nature.com/articles/s41598-026-67944-6>
 
