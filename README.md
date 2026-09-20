@@ -2,7 +2,7 @@
 
 Greenfield research project for RGB face presentation attack detection using pseudo-depth supervision.
 
-The repository has intentionally been reset. Previous detector, ArcFace, enrollment, gallery, scripts, tests, model downloads and local environment have been removed. Implementation will restart from the research protocol instead of from a product-style recognition pipeline.
+The implementation follows the research protocol rather than a product-style recognition pipeline.
 
 ## Research question
 
@@ -46,21 +46,79 @@ Literature and protocol
 - [x] Research scope rewritten for a two-person lean study.
 - [x] Alternating A/B report schedule defined.
 - [x] Recent related work and evaluation rules documented.
+- [x] Three-slide core briefing prepared for the next report.
 - [x] Previous implementation and artifacts removed.
 - [ ] Dataset and protocol selected.
-- [ ] Clean Python environment created.
-- [ ] Repository skeleton created from the new specification.
-- [ ] E0 implemented.
-- [ ] E1 implemented.
-- [ ] CDCN MT Lite implemented.
+- [x] Reproducible Python package and experiment configs created.
+- [x] Manifest leakage validator and metric tests implemented.
+- [x] Resumable pseudo-depth queue, status ledger, QA audit, and failure reporting implemented.
+- [x] E0 MobileNetV3 baseline implemented.
+- [x] E1 compact CDCN depth baseline implemented.
+- [x] E2-E4 CDCN MT Lite and staged-training paths implemented.
+- [ ] Official dataset manifest created and validated.
+- [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
+      12,000 uniformly sampled frames).
+- [ ] Full E0-E4 runs completed.
+
+## Quick start
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+pytest -q
+python scripts/validate_manifest.py data/manifests/all.csv --data-root /content/data
+python scripts/generate_depth.py data/manifests/all.csv --data-root /content/data --output-root /content/data/depth
+python scripts/materialize_depth_manifest.py data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --data-root /content/data --output data/manifests/all-with-depth.csv
+python scripts/verify_depth_provenance.py --source data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --derived data/manifests/all-with-depth.csv
+python scripts/validate_manifest.py data/manifests/all-with-depth.csv --data-root /content/data --require-depth
+python scripts/audit_depth.py data/manifests/all-with-depth.csv --data-root /content/data --report reports/depth-qa.json
+python scripts/run_experiment.py configs/e0_mobilenet.yaml
+```
+
+All configurations use validation data to select the operating threshold. Test scores
+must only be evaluated after the configuration is frozen. E2 requires the E1 checkpoint
+path in `training.init_checkpoint`; it fails instead of silently training a head on a
+random frozen backbone.
+Depth-supervised runs also perform manifest preflight before creating a run: every
+bona fide sample must reference an existing pseudo-depth target. Empty attack depth
+paths remain valid because their protocol target is an all-zero map.
+E1, E3, and E4 additionally require `data.source_manifest` and `data.depth_ledger`
+in their configs. Training verifies the derived manifest provenance sidecar against
+those exact files before creating a run directory, so the byte-level check cannot be
+accidentally skipped when starting a paid run. `data.depth_provenance` may point to a
+non-default sidecar path when needed. The same preflight then audits every referenced
+depth artifact before creating a run directory, so a map changed in place after
+materialization cannot bypass validation. Bona fide maps must be readable, finite,
+two-dimensional and non-zero, while explicit attack maps must be zero. Each accepted
+depth-supervised run stores `depth_input_snapshot.json` with the verified provenance,
+full QA result, and SHA-256 plus byte size of every explicit depth target. This makes
+the exact pseudo-depth state used at startup auditable even if the shared cache later
+changes. Run the
+standalone audit before E1 when a JSON report is needed; it records the bona fide
+reconstruction failure rate by split and class-level depth statistics.
+Pseudo-depth preparation is resumable: `depth_status.csv` records pending, complete,
+and failed samples, while `3ddfa_pending.csv` contains only work still requiring
+3DDFA V2. Import a worker failure CSV with `--failure-report`; failed bona fide rows
+stay failed until `--retry-failed` is explicitly requested and are never replaced by
+zero maps.
+After the ledger is complete, materialize a separate manifest with verified depth
+paths. The command refuses pending or failed rows, invalid artifacts, stale ledger
+entries, and outputs outside the configured data root; it never edits the official
+source manifest. It also writes `<output>.provenance.json` with SHA-256 checksums for
+the exact source manifest, ledger, and derived manifest bytes. Verify that sidecar
+after copying or resuming in Colab, then use the derived manifest for the depth audit
+and E1/E3/E4 configs.
+
+For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.md).
 
 ## Immediate deliverables
 
-1. Prepare the three required slides on modern methods, the selected method and evaluation against recent work.
+1. Review and rehearse the [three-slide core briefing](reports/face-pad-core-briefing.pptx).
 2. Lock OULU-NPU Protocol 1 or switch to Replay-Attack by the decision deadline.
-3. Create manifests and leakage validation.
-4. Implement metric tests before model training.
-5. Build E0 and then reproduce E1.
+3. Create the official-protocol manifest and pass leakage validation.
+4. Run an E0 smoke test on a small training subset.
+5. Generate checked pseudo-depth targets, then run E1.
 
 ## Scope limits
 

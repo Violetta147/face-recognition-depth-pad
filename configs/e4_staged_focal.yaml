@@ -1,0 +1,20 @@
+experiment_id: E4
+seed: 42
+runs_dir: runs
+model: {name: cdcn_mt_lite, theta: 0.7, base_channels: 32}
+data:
+  manifest: data/manifests/all-with-depth.csv
+  source_manifest: data/manifests/all.csv
+  depth_ledger: /content/data/depth/depth_status.csv
+  root: /content/data
+  image_size: 256
+loss: {classification: focal, alpha: 0.25, gamma: 2.0, lambda_abs: 1.0, lambda_contrast: 0.5, lambda_cls: 1.0}
+training:
+  batch_size: 16
+  workers: 2
+  weight_decay: 0.0001
+  stages:
+    - {name: depth, epochs: 20, lr: 0.0001}
+    - {name: head, epochs: 8, lr: 0.001}
+    - {name: joint, epochs: 8, lr: 0.00001}
+evaluation: {aggregation: mean}

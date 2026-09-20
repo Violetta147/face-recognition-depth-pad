@@ -1,0 +1,8 @@
+experiment_id: E0
+seed: 42
+runs_dir: runs
+model: {name: mobilenet_v3_small, pretrained: true}
+data: {manifest: data/manifests/all.csv, root: /content/data, image_size: 224}
+loss: {classification: bce, lambda_cls: 1.0}
+training: {epochs: 20, lr: 0.0003, batch_size: 32, workers: 2, weight_decay: 0.0001}
+evaluation: {aggregation: mean}

@@ -1,0 +1,13 @@
+experiment_id: E1
+seed: 42
+runs_dir: runs
+model: {name: cdcn, theta: 0.7, base_channels: 32}
+data:
+  manifest: data/manifests/all-with-depth.csv
+  source_manifest: data/manifests/all.csv
+  depth_ledger: /content/data/depth/depth_status.csv
+  root: /content/data
+  image_size: 256
+loss: {lambda_abs: 1.0, lambda_contrast: 0.5}
+training: {epochs: 30, lr: 0.0001, batch_size: 16, workers: 2, weight_decay: 0.0001}
+evaluation: {aggregation: mean}

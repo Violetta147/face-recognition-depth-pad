@@ -559,6 +559,7 @@ runs/E4_seed42_timestamp/
 ├── config.yaml
 ├── environment.txt
 ├── manifest_checksum.json
+├── depth_input_snapshot.json   # E1, E3, E4
 ├── train_log.csv
 ├── best.ckpt
 ├── val_scores.csv

@@ -1,0 +1,13 @@
+experiment_id: E2
+seed: 42
+runs_dir: runs
+model: {name: cdcn_mt_lite, theta: 0.7, base_channels: 32}
+data: {manifest: data/manifests/all.csv, root: /content/data, image_size: 256}
+loss: {classification: bce, lambda_abs: 0.0, lambda_contrast: 0.0, lambda_cls: 1.0}
+training:
+  init_checkpoint: runs/REPLACE_WITH_E1_RUN/best.ckpt
+  batch_size: 16
+  workers: 2
+  weight_decay: 0.0001
+  stages: [{name: head, epochs: 10, lr: 0.001}]
+evaluation: {aggregation: mean}
