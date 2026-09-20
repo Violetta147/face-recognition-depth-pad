@@ -9,10 +9,23 @@ class ContrastiveDepthLoss(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         kernels = []
-        for dy, dx in [(0, 1), (1, 0), (1, 1), (1, -1), (0, 2), (2, 0), (2, 2), (2, -2)]:
+        # Eight unique first-order differences around the centre pixel.  The
+        # previous implementation included distance-two offsets in a 3x3
+        # kernel and clamped them back to one, silently duplicating four
+        # directions.
+        for dy, dx in [
+            (-1, -1),
+            (-1, 0),
+            (-1, 1),
+            (0, -1),
+            (0, 1),
+            (1, -1),
+            (1, 0),
+            (1, 1),
+        ]:
             kernel = torch.zeros(3, 3)
             kernel[1, 1] = 1
-            y, x = 1 + max(-1, min(1, dy)), 1 + max(-1, min(1, dx))
+            y, x = 1 + dy, 1 + dx
             kernel[y, x] = -1
             kernels.append(kernel)
         self.register_buffer("kernels", torch.stack(kernels)[:, None])

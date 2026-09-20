@@ -1,0 +1,13 @@
+experiment_id: CASIA_E1_CDCN
+seed: 42
+runs_dir: /content/drive/MyDrive/face-pad/runs
+model: {name: cdcn, theta: 0.7, base_channels: 32}
+data:
+  manifest: data/manifests/casia_fasd_debug_with_depth.csv
+  source_manifest: data/manifests/casia_fasd_debug.csv
+  depth_ledger: /content/datasets/casia-fasd/depth/depth_status.csv
+  root: /content/datasets/casia-fasd
+  image_size: 224
+loss: {lambda_abs: 1.0, lambda_contrast: 0.5}
+training: {epochs: 30, lr: 0.0001, batch_size: 32, workers: 2, weight_decay: 0.0001}
+evaluation: {aggregation: mean}

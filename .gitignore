@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.codex-pytest-temp/
 .coverage
 .env
 .idea/

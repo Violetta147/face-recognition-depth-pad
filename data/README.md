@@ -35,20 +35,25 @@ Official page: <https://www.idiap.ch/dataset/replayattack>
 
 ## Decision record
 
-Fill this table during the first research report.
+The midterm uses CASIA-FASD as an explicitly temporary engineering benchmark while
+the licensed datasets are awaiting approval. The final benchmark decision is due one
+week after this record; this prevents access approval from blocking E0 and E1.
 
 | Field | Value |
 |---|---|
-| Decision deadline | |
-| Selected dataset | |
-| Selected protocol | |
-| Access approved by | |
-| Dataset root outside Git | |
-| Protocol source | |
+| Decision deadline | 27 September 2026 |
+| Selected dataset | CASIA-FASD for the midterm; OULU-NPU preferred for the final study |
+| Selected protocol | Project-defined subject-disjoint CASIA development split; not an official comparison protocol |
+| Access approved by | CASIA Kaggle copy is available; OULU-NPU and Replay-Attack requests are pending |
+| Dataset root outside Git | `/content/datasets/casia-fasd` |
+| Protocol source | Kaggle `immada/casia-fasd` plus the certified CASIA video mapping documented below |
 | Evaluation unit | Video |
 | Main metrics | APCER, BPCER, ACER, EER, ROC AUC |
 
-Once selected, the benchmark and protocol remain fixed for E0 through E4.
+If OULU-NPU is approved by the deadline, the final E0 through E4 table will use
+OULU-NPU Protocol 1. Otherwise the team will use Replay-Attack once its access is
+approved. CASIA results remain midterm development evidence and will never be mixed
+into the final official-protocol comparison table.
 
 ## Temporary engineering dataset
 
@@ -129,11 +134,21 @@ The validator must fail on duplicate sample IDs, missing files, invalid labels, 
 
 For bona fide frames:
 
-1. Detect and crop the face consistently.
+1. Detect the largest face consistently.
 2. Run 3DDFA V2 offline.
-3. Render a depth map and face mask.
-4. Normalize depth inside the mask to `[0, 1]`.
-5. Resize to the CDCN output size.
+3. Render an image-aligned depth map with zero background; the QA mask is derived
+   from non-zero rendered pixels.
+4. Normalize valid rendered depth to `[0, 1]`.
+5. Resize the aligned target to the CDCN output size.
+
+The temporary CASIA development run keeps the same full-frame input convention as
+E0 so E0 and E1 differ by supervision/model rather than by an untracked crop change.
+The smoke-test contact sheet must confirm that the detected face occupies enough of
+the frame and that RGB/depth remain aligned. Before locking the final licensed
+benchmark, the group must decide whether its official protocol requires a persistent
+face-crop preprocessing stage; if it does, E0 and E1 must both be rerun with that same
+crop rule. The derived binary mask is an inspection artifact and is not consumed by
+the current loss.
 
 For print and replay frames, use a zero map according to the selected depth-supervision protocol.
 

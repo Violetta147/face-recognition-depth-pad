@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import pandas as pd
+from PIL import Image
 
 from .data import manifest_checksum
 from .depth_qa import _load_depth
@@ -119,6 +120,13 @@ def verify_depth_manifest_provenance(
         raise ValueError(f"unsupported provenance schema_version: {payload.get('schema_version')}")
     if payload.get("hash_algorithm") != "sha256":
         raise ValueError(f"unsupported provenance hash_algorithm: {payload.get('hash_algorithm')}")
+
+    worker_record = payload.get("worker_metadata")
+    if worker_record is not None:
+        worker_file = worker_record.get("file") if isinstance(worker_record, dict) else None
+        if not isinstance(worker_file, str) or not worker_file:
+            raise ValueError("worker_metadata is missing its file name")
+        paths["worker_metadata"] = Path(ledger_path).with_name(worker_file)
 
     mismatches: list[str] = []
     for key, path in paths.items():
@@ -246,6 +254,114 @@ def prepare_depth_jobs(
     return {status: int((ledger["status"] == status).sum()) for status in sorted(VALID_STATUSES)}
 
 
+def _normalise_bona_fide_depth(depth: np.ndarray, output_size: int) -> np.ndarray:
+    depth = np.asarray(depth, dtype=np.float32)
+    if depth.ndim != 2 or depth.size == 0:
+        raise ValueError(f"3DDFA returned invalid depth shape: {tuple(depth.shape)}")
+    if not np.isfinite(depth).all():
+        raise ValueError("3DDFA returned NaN or infinity")
+    minimum = float(depth.min())
+    maximum = float(depth.max())
+    if maximum - minimum <= 1e-8:
+        raise ValueError("3DDFA returned a constant depth map")
+    depth = (depth - minimum) / (maximum - minimum)
+    if depth.shape != (output_size, output_size):
+        depth = np.asarray(
+            Image.fromarray(depth, mode="F").resize(
+                (output_size, output_size),
+                resample=Image.Resampling.BILINEAR,
+            ),
+            dtype=np.float32,
+        )
+    return depth
+
+
+def process_pending_depth_jobs(
+    pending_path: str | Path,
+    ledger_path: str | Path,
+    reconstruct: Callable[[Path], np.ndarray],
+    *,
+    failure_report: str | Path | None = None,
+    output_size: int = 32,
+    limit: int | None = None,
+) -> dict[str, int]:
+    """Run a reconstruction callback and atomically update the depth ledger.
+
+    The callback isolates the queue/provenance logic from the external 3DDFA V2
+    checkout.  State is saved after every sample so a Colab disconnect can be
+    resumed without repeating completed reconstructions.
+    """
+    pending_path = Path(pending_path)
+    ledger_path = Path(ledger_path)
+    pending = pd.read_csv(pending_path, keep_default_na=False, dtype={"sample_id": str})
+    required_pending = {"sample_id", "image_path", "output_path"}
+    missing = sorted(required_pending.difference(pending.columns))
+    if missing:
+        raise ValueError(f"pending work list is missing columns: {missing}")
+    ledger = pd.read_csv(ledger_path, keep_default_na=False, dtype={"sample_id": str})
+    missing = sorted(set(LEDGER_COLUMNS).difference(ledger.columns))
+    if missing:
+        raise ValueError(f"status ledger is missing columns: {missing}")
+    if pending["sample_id"].duplicated().any() or ledger["sample_id"].duplicated().any():
+        raise ValueError("pending work list and ledger require unique sample_id values")
+    ledger = ledger.set_index("sample_id", drop=False)
+    unknown = sorted(set(pending["sample_id"]).difference(ledger.index))
+    if unknown:
+        raise ValueError(f"pending work list contains sample_id not in ledger: {unknown[:10]}")
+
+    attempted = succeeded = failed = 0
+    failures: list[dict[str, str]] = []
+    rows = pending.to_dict("records")
+    for row in rows:
+        if limit is not None and attempted >= limit:
+            break
+        sample_id = str(row["sample_id"])
+        if str(ledger.at[sample_id, "status"]) != "pending_3ddfa":
+            continue
+        attempted += 1
+        destination = Path(str(row["output_path"]))
+        try:
+            depth = _normalise_bona_fide_depth(reconstruct(Path(str(row["image_path"]))), output_size)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            temporary = destination.with_suffix(destination.suffix + ".tmp")
+            with temporary.open("wb") as handle:
+                np.save(handle, depth.astype(np.float32, copy=False))
+            temporary.replace(destination)
+            valid, error = _valid_depth(destination, require_nonzero=True, zero_tolerance=1e-6)
+            if not valid:
+                raise ValueError(error)
+            ledger.at[sample_id, "status"] = "complete_bona_fide"
+            ledger.at[sample_id, "last_error"] = ""
+            succeeded += 1
+        except Exception as exc:
+            message = f"{type(exc).__name__}: {exc}"
+            ledger.at[sample_id, "status"] = "failed_bona_fide"
+            ledger.at[sample_id, "last_error"] = message
+            failures.append({"sample_id": sample_id, "error": message})
+            failed += 1
+
+        ledger_frame = ledger.reset_index(drop=True)[LEDGER_COLUMNS]
+        remaining = pending[
+            pending["sample_id"].map(
+                lambda value: str(ledger.at[str(value), "status"]) == "pending_3ddfa"
+            )
+        ]
+        _write_csv_atomic(ledger_frame, ledger_path)
+        _write_csv_atomic(remaining, pending_path)
+        if failure_report is not None:
+            current_failures = ledger_frame.loc[
+                ledger_frame["status"] == "failed_bona_fide", ["sample_id", "last_error"]
+            ].rename(columns={"last_error": "error"})
+            _write_csv_atomic(current_failures, Path(failure_report))
+
+    return {
+        "attempted": attempted,
+        "succeeded": succeeded,
+        "failed": failed,
+        "remaining": int((ledger["status"] == "pending_3ddfa").sum()),
+    }
+
+
 def materialize_depth_manifest(
     manifest: str | Path,
     ledger_path: str | Path,
@@ -351,5 +467,11 @@ def materialize_depth_manifest(
         "rows": len(derived),
         **counts,
     }
+    worker_metadata = ledger_path.with_suffix(ledger_path.suffix + ".worker.json")
+    if worker_metadata.is_file():
+        provenance["worker_metadata"] = {
+            "file": worker_metadata.name,
+            "sha256": manifest_checksum(worker_metadata),
+        }
     _write_json_atomic(provenance, provenance_path)
     return {"rows": len(derived), **counts}

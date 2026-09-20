@@ -13,6 +13,11 @@ The implementation follows the research protocol rather than a product-style rec
 - [Research specification](DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md)
 - [Two-person alternating report plan](KE_HOACH_THUC_HIEN_THEO_BUOI_HOC.md)
 - [Dataset and protocol decision](data/README.md)
+- [Colab execution runbook](COLAB.md)
+- [Literature matrix for round 1](reports/LITERATURE_MATRIX.md)
+- [Frozen CASIA E0 result](reports/CASIA_E0_BCE_5E_seed42_summary.md)
+- [Audit of rounds 1-3](reports/MIDTERM_ROUNDS_1_3_AUDIT.md)
+- [Midterm handoff and required Colab evidence](reports/MIDTERM_ROUNDS_1_3_HANDOFF.md)
 
 ## Mandatory study
 
@@ -46,18 +51,22 @@ Literature and protocol
 - [x] Research scope rewritten for a two-person lean study.
 - [x] Alternating A/B report schedule defined.
 - [x] Recent related work and evaluation rules documented.
-- [x] Three-slide core briefing prepared for the next report.
+- [x] Three-slide core briefing retained as a reference; the final midterm deck is deferred until rounds 1-3 have complete evidence.
 - [x] Previous implementation and artifacts removed.
-- [ ] Dataset and protocol selected.
+- [x] Temporary midterm dataset and subject-disjoint CASIA development protocol recorded.
+- [ ] Final licensed benchmark locked; OULU-NPU and Replay-Attack approval is pending until 27 September 2026.
 - [x] Reproducible Python package and experiment configs created.
 - [x] Manifest leakage validator and metric tests implemented.
 - [x] Resumable pseudo-depth queue, status ledger, QA audit, and failure reporting implemented.
 - [x] E0 MobileNetV3 baseline implemented.
-- [x] E1 compact CDCN depth baseline implemented.
-- [x] E2-E4 CDCN MT Lite and staged-training paths implemented.
+- [x] E1 compact CDCN-style depth baseline and resumable 3DDFA V2 worker implemented.
+- [x] E1-to-E2 checkpoint transfer and staged-training code covered by unit tests.
+- [ ] E1 has completed a real pseudo-depth run.
+- [ ] E2-E4 have completed end-to-end integration runs.
 - [ ] Official dataset manifest created and validated.
 - [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
       12,000 uniformly sampled frames).
+- [x] CASIA E0 five-epoch baseline completed and test result frozen.
 - [ ] Full E0-E4 runs completed.
 
 ## Quick start
@@ -69,11 +78,16 @@ python -m pip install -e ".[dev]"
 pytest -q
 python scripts/validate_manifest.py data/manifests/all.csv --data-root /content/data
 python scripts/generate_depth.py data/manifests/all.csv --data-root /content/data --output-root /content/data/depth
+python scripts/run_3ddfa_worker.py --pending /content/data/depth/3ddfa_pending.csv --ledger /content/data/depth/depth_status.csv --3ddfa-root /content/3DDFA_V2 --mode gpu
+python scripts/visualize_depth_targets.py --ledger /content/data/depth/depth_status.csv --output reports/depth-smoke.png
 python scripts/materialize_depth_manifest.py data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --data-root /content/data --output data/manifests/all-with-depth.csv
 python scripts/verify_depth_provenance.py --source data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --derived data/manifests/all-with-depth.csv
 python scripts/validate_manifest.py data/manifests/all-with-depth.csv --data-root /content/data --require-depth
 python scripts/audit_depth.py data/manifests/all-with-depth.csv --data-root /content/data --report reports/depth-qa.json
 python scripts/run_experiment.py configs/e0_mobilenet.yaml
+# After an E1 run is frozen:
+python scripts/visualize_depth_cases.py --run-dir runs/<E1_RUN_ID> --split val --count 10
+python scripts/score_checkpoint.py --run-dir runs/<E1_RUN_ID> --split test
 ```
 
 All configurations use validation data to select the operating threshold. Test scores
@@ -114,11 +128,12 @@ For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.m
 
 ## Immediate deliverables
 
-1. Review and rehearse the [three-slide core briefing](reports/face-pad-core-briefing.pptx).
-2. Lock OULU-NPU Protocol 1 or switch to Replay-Attack by the decision deadline.
-3. Create the official-protocol manifest and pass leakage validation.
-4. Run an E0 smoke test on a small training subset.
-5. Generate checked pseudo-depth targets, then run E1.
+1. On Colab, generate a 12-image batch contact sheet for the data demo.
+2. Run a 50-sample 3DDFA smoke test, inspect its maps, then complete the queue.
+3. Materialize and audit the depth manifest, then run CASIA E1 smoke and full runs.
+4. Export frozen E1 test scores and at least ten predicted-depth inspection cases.
+5. Rerun the round 1-3 audit, then prepare the midterm deck from verified artifacts.
+6. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
 
 ## Scope limits
 

@@ -455,6 +455,8 @@ Run | Model | Seed | APCER | BPCER | ACER | EER | AUC | Params | Latency p50
 | CDCN | 2020 | Điền đúng protocol | Depth | APCER, BPCER, ACER hoặc HTER | | Chỉ khi cùng protocol |
 | UCDCN | 2024 | Điền đúng protocol | Depth và classification | APCER, BPCER, ACER | | Chỉ khi cùng protocol |
 | CASO-PAD | 2026 | Điền đúng protocol | Binary RGB | Accuracy, AUC, HTER, EER | | Có thể chỉ contextual |
+| Deep Spatial Gradient and Temporal Depth | 2020 | OULU-NPU, SiW và cross-dataset | Spatial gradient và temporal depth | ACER, EER, HTER | | Contextual nếu khác protocol |
+| Dual-Cross Central Difference Network | 2021 | OULU-NPU, SiW, CASIA-MFSD và Replay-Attack | Static-dynamic CDC | ACER, EER, HTER | | Contextual nếu khác protocol |
 | CDCN MT Lite | 2026 | Protocol nhóm chọn | Depth và classification | APCER, BPCER, ACER, EER, AUC | | Kết quả nhóm |
 
 Mọi ô kết quả từ paper phải được chép từ đúng bảng và kiểm tra lại trước khi đưa vào slide. Không dùng số từ abstract nếu abstract và protocol table không cùng cách đánh giá.
@@ -640,14 +642,14 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 
 ### 16.1 Nghiệm thu giữa kỳ
 
-- [ ] Có ba slide tổng quan phương pháp hiện đại, phương pháp nhóm và đánh giá.
-- [ ] Có bài CDCN, UCDCN và CASO-PAD trong literature table.
-- [ ] Chốt một dataset và protocol.
-- [ ] Manifest validator pass.
-- [ ] Có metric script được test bằng ví dụ tính tay.
-- [ ] Có ít nhất E0 hoặc E1 chạy end to end trên validation.
-- [ ] Có hình pseudo depth hoặc kế hoạch chắc chắn để sinh depth.
-- [ ] Hai thành viên đã phân lịch báo cáo luân phiên.
+- [ ] Có ba slide tổng quan phương pháp hiện đại, phương pháp nhóm và đánh giá; chỉ làm sau khi Lượt 3 đủ bằng chứng.
+- [x] Có bài CDCN, UCDCN và CASO-PAD trong literature table.
+- [x] Chốt CASIA-FASD và split subject-disjoint làm protocol phát triển giữa kỳ; benchmark cuối vẫn chờ hạn 27/09/2026.
+- [x] Manifest validator pass trên 12.000 frame và 600 video CASIA.
+- [x] Có metric script được test bằng ví dụ tính tay.
+- [x] E0 chạy end to end trên validation; threshold đã khóa trước test.
+- [x] Có runbook, worker, QA gate và công cụ trực quan hóa chắc chắn để sinh/kiểm tra pseudo depth.
+- [x] Hai thành viên đã phân lịch báo cáo luân phiên.
 
 ### 16.2 Nghiệm thu cuối
 

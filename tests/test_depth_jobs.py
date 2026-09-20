@@ -12,6 +12,7 @@ from deepface_pad.depth_jobs import (
     depth_provenance_path,
     materialize_depth_manifest,
     prepare_depth_jobs,
+    process_pending_depth_jobs,
     verify_depth_manifest_provenance,
 )
 
@@ -93,6 +94,60 @@ def test_invalid_existing_bona_fide_output_requires_explicit_retry(tmp_path: Pat
     assert (output / "live.npy").is_file()
 
 
+def test_pending_worker_normalises_updates_and_resumes(tmp_path: Path):
+    manifest = tmp_path / "manifest.csv"
+    output = tmp_path / "depth"
+    _write_manifest(manifest)
+    prepare_depth_jobs(manifest, tmp_path, output)
+
+    calls = []
+
+    def reconstruct(path: Path) -> np.ndarray:
+        calls.append(path)
+        return np.arange(16, dtype=np.float32).reshape(4, 4)
+
+    summary = process_pending_depth_jobs(
+        output / "3ddfa_pending.csv",
+        output / "depth_status.csv",
+        reconstruct,
+    )
+
+    assert summary == {"attempted": 1, "succeeded": 1, "failed": 0, "remaining": 0}
+    assert calls == [tmp_path / "live.jpg"]
+    saved = np.load(output / "live.npy")
+    assert saved.shape == (32, 32)
+    assert saved.min() == pytest.approx(0)
+    assert saved.max() == pytest.approx(1)
+    assert pd.read_csv(output / "3ddfa_pending.csv").empty
+    assert process_pending_depth_jobs(
+        output / "3ddfa_pending.csv", output / "depth_status.csv", reconstruct
+    )["attempted"] == 0
+
+
+def test_pending_worker_records_failure_without_zero_fallback(tmp_path: Path):
+    manifest = tmp_path / "manifest.csv"
+    output = tmp_path / "depth"
+    failures = tmp_path / "failures.csv"
+    _write_manifest(manifest)
+    prepare_depth_jobs(manifest, tmp_path, output)
+
+    def reconstruct(_path: Path) -> np.ndarray:
+        raise RuntimeError("face fitting failed")
+
+    summary = process_pending_depth_jobs(
+        output / "3ddfa_pending.csv",
+        output / "depth_status.csv",
+        reconstruct,
+        failure_report=failures,
+    )
+
+    assert summary["failed"] == 1
+    assert not (output / "live.npy").exists()
+    failed = pd.read_csv(failures, keep_default_na=False).iloc[0]
+    assert failed.sample_id == "live"
+    assert "face fitting failed" in failed.error
+
+
 def test_materialize_verified_depth_manifest_without_mutating_source(tmp_path: Path):
     manifest = tmp_path / "manifest.csv"
     output = tmp_path / "depth"
@@ -138,6 +193,28 @@ def test_depth_provenance_detects_exact_byte_changes(tmp_path: Path, changed: st
     changed_path.write_bytes(changed_path.read_bytes() + b"\n")
 
     with pytest.raises(ValueError, match=rf"{changed}: checksum mismatch"):
+        verify_depth_manifest_provenance(manifest, output / "depth_status.csv", derived)
+
+
+def test_depth_provenance_includes_and_verifies_worker_metadata(tmp_path: Path):
+    manifest = tmp_path / "manifest.csv"
+    output = tmp_path / "depth"
+    derived = tmp_path / "manifest-with-depth.csv"
+    _write_manifest(manifest)
+    prepare_depth_jobs(manifest, tmp_path, output)
+    np.save(output / "live.npy", np.ones((2, 2), dtype=np.float32))
+    prepare_depth_jobs(manifest, tmp_path, output)
+    worker_metadata = output / "depth_status.csv.worker.json"
+    worker_metadata.write_text('{"git_commit": "abc123"}\n', encoding="utf-8")
+
+    materialize_depth_manifest(manifest, output / "depth_status.csv", tmp_path, derived)
+    provenance = verify_depth_manifest_provenance(
+        manifest, output / "depth_status.csv", derived
+    )
+
+    assert provenance["worker_metadata"]["sha256"] == manifest_checksum(worker_metadata)
+    worker_metadata.write_text('{"git_commit": "changed"}\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="worker_metadata: checksum mismatch"):
         verify_depth_manifest_provenance(manifest, output / "depth_status.csv", derived)
 
 

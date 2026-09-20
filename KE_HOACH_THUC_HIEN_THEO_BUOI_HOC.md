@@ -148,13 +148,13 @@ Chia slide thành hai cột.
 
 ### Artifact phải có trước lượt tiếp theo
 
-- [ ] Ba slide trên.
-- [ ] Một bảng literature ít nhất 5 paper.
-- [ ] Quyết định OULU-NPU hay Replay-Attack kèm deadline.
-- [ ] Sơ đồ CDCN MT Lite.
-- [ ] Bảng metric có công thức APCER, BPCER và ACER.
-- [ ] Một demo nhỏ: webcam face crop hoặc dataset batch visualization.
-- [ ] Lịch A/B luân phiên đã ghi trên slide cuối.
+- [ ] Deck giữa kỳ Lượt 1 đến Lượt 3 chỉ làm sau khi bằng chứng E1 đầy đủ.
+- [x] Literature matrix có ít nhất 5 paper.
+- [x] Deadline chốt benchmark chính thức là 27 tháng 9 năm 2026; CASIA chỉ dùng giữa kỳ.
+- [x] Sơ đồ CDCN MT Lite.
+- [x] Bảng metric có công thức APCER, BPCER và ACER.
+- [ ] Dataset batch visualization: script đã sẵn sàng, cần chạy trên Colab vì ảnh không nằm trong Git.
+- [x] Lịch A/B luân phiên đã chốt trong kế hoạch; sẽ đưa lên slide sau khi hoàn tất dữ liệu.
 
 ---
 
@@ -244,10 +244,10 @@ Thuyết phục giảng viên rằng nhóm đã thu hẹp đúng trọng tâm, n
 
 ### Tiêu chí đạt
 
-- [ ] Câu hỏi nghiên cứu chỉ có một biến chính là learned depth head.
-- [ ] Nhóm giải thích được tại sao UCDCN gần về kỹ thuật còn CASO-PAD mới nhất về thời gian.
-- [ ] Không trộn số liệu khác protocol.
-- [ ] Dataset có nguồn và license rõ.
+- [x] Câu hỏi nghiên cứu chỉ có một biến chính là learned depth head.
+- [x] Nhóm giải thích được tại sao UCDCN gần về kỹ thuật còn CASO-PAD mới nhất về thời gian.
+- [x] Không trộn số liệu khác protocol.
+- [ ] Dataset chính thức có nguồn và license rõ: yêu cầu truy cập vẫn đang chờ duyệt; CASIA giữa kỳ được ghi riêng.
 
 ### Nếu bị chặn
 
@@ -296,11 +296,11 @@ Có pipeline dữ liệu đúng và baseline MobileNetV3 E0 tạo được raw s
 
 ### Tiêu chí đạt
 
-- [ ] Không có video leakage.
-- [ ] Metric test pass.
-- [ ] Raw validation score được lưu.
-- [ ] E0 có run ID, config và checkpoint.
-- [ ] Chưa dùng test để chọn model.
+- [x] Không có video leakage trên manifest CASIA giữa kỳ.
+- [x] Metric test pass.
+- [x] Raw validation score được lưu trong run artifact trên Drive.
+- [x] E0 có run ID, config và checkpoint.
+- [x] Test chỉ được mở sau khi khóa cấu hình và threshold; kết quả E0 đã đóng băng.
 
 ### Nếu bị chặn
 
@@ -354,6 +354,12 @@ Sinh pseudo depth đúng và có CDCN E1 chạy được. Đây là mốc nhóm 
 - [ ] E1 xuất raw score ở mức frame và video.
 - [ ] Có ít nhất 10 predicted depth case đúng và sai để xem.
 - [ ] Slide giữa kỳ đã cập nhật bằng số thật.
+
+Trạng thái ngày 20 tháng 9 năm 2026: queue, ledger, worker 3DDFA V2,
+provenance, QA và E1 config đã hoàn tất và có unit test. Năm tiêu chí trên chỉ được
+đánh dấu sau khi người dùng chạy queue trên Colab, vì dataset và tài khoản GPU không
+nằm trong workspace của Codex. Chỉ làm và cập nhật slide sau khi các bằng chứng này
+đã đầy đủ.
 
 ### Nếu bị chặn
 

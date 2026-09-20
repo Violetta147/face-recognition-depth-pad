@@ -70,6 +70,11 @@ def inspect_training_inputs(config: dict) -> tuple[bool, dict[str, Any] | None]:
         "derived_manifest": Path(data["manifest"]),
         "provenance_sidecar": provenance_path,
     }
+    worker_record = provenance.get("worker_metadata")
+    if isinstance(worker_record, dict) and worker_record.get("file"):
+        files["worker_metadata"] = Path(data["depth_ledger"]).with_name(
+            str(worker_record["file"])
+        )
     snapshot = {
         "schema_version": 1,
         "captured_at_utc": datetime.now(timezone.utc).isoformat(),

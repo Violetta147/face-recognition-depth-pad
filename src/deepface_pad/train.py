@@ -35,6 +35,32 @@ def build_model(config: dict) -> nn.Module:
     raise ValueError(f"unknown model: {name}")
 
 
+def load_initial_weights(model: nn.Module, checkpoint_path: str | Path, device: torch.device) -> None:
+    """Load an E1 checkpoint into the compatible E2 backbone.
+
+    E1 stores a bare ``CDCN`` with keys such as ``encoder.0.0.weight``.  E2
+    wraps that same module under ``backbone``.  Remapping is explicit so a
+    frozen, randomly initialized E2 backbone can never pass unnoticed.
+    """
+    state = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    weights = state["model"]
+    target_keys = set(model.state_dict())
+    if hasattr(model, "backbone") and weights and not any(key.startswith("backbone.") for key in weights):
+        if all(f"backbone.{key}" in target_keys for key in weights):
+            weights = {f"backbone.{key}": value for key, value in weights.items()}
+    missing, unexpected = model.load_state_dict(weights, strict=False)
+    allowed_missing = {
+        "head.layers.0.weight",
+        "head.layers.0.bias",
+        "head.layers.2.weight",
+        "head.layers.2.bias",
+        "head.classifier.weight",
+        "head.classifier.bias",
+    }
+    if unexpected or not set(missing).issubset(allowed_missing):
+        raise RuntimeError(f"incompatible init checkpoint; missing={missing}, unexpected={unexpected}")
+
+
 def _loss(config: dict, output: dict[str, torch.Tensor], batch: dict[str, object], stage: str = "joint") -> torch.Tensor:
     label = batch["label"].to(output[next(iter(output))].device)
     total = torch.zeros((), device=label.device)
@@ -97,11 +123,7 @@ def run(config_path: str | Path) -> Path:
     stages = config["training"].get("stages", [{"name": "joint", "epochs": config["training"]["epochs"], "lr": config["training"]["lr"]}])
     initial = config["training"].get("init_checkpoint")
     if initial:
-        state = torch.load(initial, map_location=device, weights_only=False)
-        missing, unexpected = model.load_state_dict(state["model"], strict=False)
-        allowed_missing = {"head.layers.0.weight", "head.layers.0.bias", "head.layers.2.weight", "head.layers.2.bias", "head.classifier.weight", "head.classifier.bias"}
-        if unexpected or not set(missing).issubset(allowed_missing):
-            raise RuntimeError(f"incompatible init checkpoint; missing={missing}, unexpected={unexpected}")
+        load_initial_weights(model, initial, device)
     elif any(stage["name"] == "head" for stage in stages):
         raise ValueError("head-only training requires training.init_checkpoint from E1")
     for stage in stages:
