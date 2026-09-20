@@ -34,7 +34,13 @@ def aggregate_video_scores(
         raise ValueError(f"Videos contain conflicting labels: {bad[:5]}")
     grouped = frame_scores.groupby("video_id", sort=True)
     scores = grouped["score"].mean() if method == "mean" else grouped["score"].median()
-    return pd.DataFrame({"video_id": scores.index, "label": grouped["label"].first(), "score": scores.values})
+    return pd.DataFrame(
+        {
+            "video_id": scores.index,
+            "label": grouped["label"].first().to_numpy(),
+            "score": scores.to_numpy(),
+        }
+    ).reset_index(drop=True)
 
 
 def error_rates(labels: np.ndarray, scores: np.ndarray, threshold: float) -> tuple[float, float, float]:

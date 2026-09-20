@@ -21,3 +21,5 @@ def test_video_aggregation():
     frame = pd.DataFrame({"video_id": ["a", "a", "b", "b"], "label": [0, 0, 1, 1], "score": [0.1, 0.3, 0.7, 0.9]})
     result = aggregate_video_scores(frame)
     assert result.score.tolist() == [0.2, 0.8]
+    assert result.index.tolist() == [0, 1]
+    assert result.index.name is None
