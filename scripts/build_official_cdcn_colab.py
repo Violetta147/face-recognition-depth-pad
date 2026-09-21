@@ -190,6 +190,15 @@ for index, source in enumerate(backup_files, start=1):
     if index % 250 == 0 or index == len(backup_files):
         print(f"Depth restore {index}/{len(backup_files)} — copied={copied}, reused={skipped}", flush=True)
 
+# Checkpoint Drive chỉ giữ 3.000 live maps để tránh 9.000 file zero dư thừa.
+# Lệnh này tạo lại attack zero-maps ở local, tái sử dụng toàn bộ live maps hợp lệ
+# và làm mới ledger; nó không chạy 3DDFA.
+run([
+    sys.executable, "scripts/generate_depth.py", MANIFEST,
+    "--data-root", DATA_ROOT,
+    "--output-root", DEPTH_ROOT,
+], cwd=REPO_ROOT)
+
 assert DEPTH_LEDGER.is_file(), f"Thiếu ledger: {DEPTH_LEDGER}"
 
 ledger = pd.read_csv(DEPTH_LEDGER, keep_default_na=False, dtype={"sample_id": str})
