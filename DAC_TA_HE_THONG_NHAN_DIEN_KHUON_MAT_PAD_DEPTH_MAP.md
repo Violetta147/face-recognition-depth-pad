@@ -648,7 +648,10 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 - [x] Manifest validator pass trên 12.000 frame và 600 video CASIA.
 - [x] Có metric script được test bằng ví dụ tính tay.
 - [x] E0 chạy end to end trên validation; threshold đã khóa trước test.
-- [x] Có runbook, worker, QA gate và công cụ trực quan hóa chắc chắn để sinh/kiểm tra pseudo depth.
+- [x] Queue 3DDFA hoàn tất 3.000 frame bona fide và 9.000 attack zero-map, không có persistent failure; provenance và QA đã khóa.
+- [x] E1 depth-only hoàn tất smoke và full 30 epoch; threshold validation, locked test và raw score frame/video đã đóng băng.
+- [x] Có batch visualization, face-crop demo và 12 predicted-depth case validation thực tế.
+- [x] Có training curves và test score distributions E0–E1 sinh lại từ raw artifact.
 - [x] Hai thành viên đã phân lịch báo cáo luân phiên.
 
 ### 16.2 Nghiệm thu cuối

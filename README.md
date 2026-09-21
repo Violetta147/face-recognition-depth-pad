@@ -61,7 +61,8 @@ Literature and protocol
 - [x] E0 MobileNetV3 baseline implemented.
 - [x] E1 compact CDCN-style depth baseline and resumable 3DDFA V2 worker implemented.
 - [x] E1-to-E2 checkpoint transfer and staged-training code covered by unit tests.
-- [ ] E1 has completed a real pseudo-depth run.
+- [x] E1 completed a 30-epoch pseudo-depth run, validation threshold selection,
+      locked test evaluation, depth-case inspection, and E0-E1 comparison.
 - [ ] E2-E4 have completed end-to-end integration runs.
 - [ ] Official dataset manifest created and validated.
 - [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
@@ -126,14 +127,16 @@ and E1/E3/E4 configs.
 
 For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.md).
 
-## Immediate deliverables
+## Next deliverables
 
-1. On Colab, generate a 12-image batch contact sheet for the data demo.
-2. Run a 50-sample 3DDFA smoke test, inspect its maps, then complete the queue.
-3. Materialize and audit the depth manifest, then run CASIA E1 smoke and full runs.
-4. Export frozen E1 test scores and at least ten predicted-depth inspection cases.
-5. Rerun the round 1-3 audit, then prepare the midterm deck from verified artifacts.
-6. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
+Rounds 1-3 are technically complete. The clean, output-free Colab notebook is
+`notebooks/Face_PAD_Midterm_L1_L2_L3.ipynb`; the executed copy and all biometric
+artifacts remain private on Google Drive.
+
+1. Commit the clean notebook and synchronized closeout documents.
+2. Write the midterm report and build the deck from the frozen artifacts.
+3. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
+4. Continue with E2-E4 only as new experiments selected on validation.
 
 ## Scope limits
 

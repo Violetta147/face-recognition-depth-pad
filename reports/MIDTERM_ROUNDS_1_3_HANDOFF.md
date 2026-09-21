@@ -8,7 +8,7 @@ Lượt 1, 2 và 3 đã hoàn tất trên protocol CASIA-FASD giữa kỳ. Kết
 và locked test đã đóng băng. Slide chưa được thực hiện.
 
 Fresh clone tại commit `1833d68` đã chạy **39 unit test, tất cả đều pass**.
-Notebook hoàn chỉnh nằm trong repository tại commit `4b203c3`:
+Notebook hoàn chỉnh, không chứa output sinh trắc học, nằm trong repository tại commit `d5a72d9`:
 `notebooks/Face_PAD_Midterm_L1_L2_L3.ipynb`.
 
 ## Kết quả chính thức
@@ -31,6 +31,9 @@ nhưng tăng mạnh false accept attack, đặc biệt với video replay.
 - E1 full: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_seed42_20260921T024300Z`.
 - E1 cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases`.
 - E0–E1 comparison: `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv`.
+- Face-crop demo: `/content/drive/MyDrive/face-pad/reports/casia-3ddfa-face-crop-demo.png`.
+- Training curves: `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png`.
+- Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`.
 
 Run E1 full chứa đầy đủ `config.yaml`, `environment.txt`,
 `manifest_checksum.json`, `train_log.csv`, `best.ckpt`, validation/test frame and
@@ -42,13 +45,14 @@ video scores, `threshold.json`, `metrics.json`, `test_metrics.json` và
 - Không thay threshold hoặc chọn checkpoint dựa trên test.
 - Không chạy nhiều biến thể rồi chọn bằng CASIA test đã mở.
 - Không commit dataset, frame, depth map, checkpoint hoặc dữ liệu sinh trắc học.
+- Không thay bản notebook sạch trong Git bằng bản đã chạy trên Drive vì output có ảnh khuôn mặt.
 - Thí nghiệm mới phải có ID/config mới và chọn hoàn toàn trên validation.
 - Kết quả hiện tại chỉ áp dụng cho protocol CASIA giữa kỳ, chưa phải kết luận
   cross-dataset hoặc production.
 
 ## Việc còn lại cần con người thực hiện
 
-1. Review rồi commit hai tài liệu audit/handoff đã cập nhật.
-2. Giữ bản sao Drive và notebook; có thể ngắt runtime GPU sau khi xác nhận đồng bộ.
-3. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
-4. Dùng các số đã đóng băng để viết báo cáo giữa kỳ và sau đó mới làm slide.
+1. Commit notebook không có output và toàn bộ tài liệu closeout đã cập nhật.
+2. Giữ bản sao Drive và notebook đã chạy; có thể ngắt runtime GPU sau khi xác nhận đồng bộ.
+3. Dùng các số đã đóng băng để viết báo cáo giữa kỳ và sau đó mới làm slide.
+4. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.

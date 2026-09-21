@@ -153,7 +153,7 @@ Chia slide thành hai cột.
 - [x] Deadline chốt benchmark chính thức là 27 tháng 9 năm 2026; CASIA chỉ dùng giữa kỳ.
 - [x] Sơ đồ CDCN MT Lite.
 - [x] Bảng metric có công thức APCER, BPCER và ACER.
-- [ ] Dataset batch visualization: script đã sẵn sàng, cần chạy trên Colab vì ảnh không nằm trong Git.
+- [x] Dataset batch visualization đã xuất tại `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`.
 - [x] Lịch A/B luân phiên đã chốt trong kế hoạch; sẽ đưa lên slide sau khi hoàn tất dữ liệu.
 
 ---
@@ -349,17 +349,18 @@ Sinh pseudo depth đúng và có CDCN E1 chạy được. Đây là mốc nhóm 
 
 ### Tiêu chí đạt
 
-- [ ] Không có NaN hoặc map live rỗng không được ghi nhận.
-- [ ] Failure rate của 3DDFA được báo cáo.
-- [ ] E1 xuất raw score ở mức frame và video.
-- [ ] Có ít nhất 10 predicted depth case đúng và sai để xem.
+- [x] Không có NaN hoặc map live rỗng trong QA cuối.
+- [x] Failure rate của 3DDFA được báo cáo: 0 persistent failure trên 3.000 frame bona fide.
+- [x] E1 xuất raw score ở mức frame và video cho validation và locked test.
+- [x] Có 12 predicted-depth case validation gồm cả đúng và sai để xem.
 - [ ] Slide giữa kỳ đã cập nhật bằng số thật.
 
-Trạng thái ngày 20 tháng 9 năm 2026: queue, ledger, worker 3DDFA V2,
-provenance, QA và E1 config đã hoàn tất và có unit test. Năm tiêu chí trên chỉ được
-đánh dấu sau khi người dùng chạy queue trên Colab, vì dataset và tài khoản GPU không
-nằm trong workspace của Codex. Chỉ làm và cập nhật slide sau khi các bằng chứng này
-đã đầy đủ.
+Trạng thái ngày 21 tháng 9 năm 2026: queue 3DDFA đã hoàn tất 3.000 frame bona fide,
+9.000 attack zero-map đã được kiểm tra, không có persistent failure; E1 smoke và E1
+full 30 epoch đã chạy, threshold validation và locked test đã đóng băng. Batch dữ
+liệu, depth QA, face-crop demo, predicted-depth cases, training curves và score
+distributions đều nằm trên Google Drive. Phần kỹ thuật Lượt 1–3 đã đủ dữ kiện;
+slide vẫn hoãn chủ động cho đến giai đoạn viết báo cáo.
 
 ### Nếu bị chặn
 

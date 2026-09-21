@@ -12,8 +12,8 @@ E0/E1 và toàn bộ bằng chứng runtime trên Google Drive. Slide chưa thu�
 | Lượt 2 | Hoàn tất và đóng băng | Manifest sạch, E0 đã chạy, threshold chọn trên validation và locked test đã mở đúng một lần. |
 | Lượt 3 | Hoàn tất và đóng băng | 3DDFA queue/QA, E1 smoke/full, validation, locked test, depth cases và so sánh E0–E1 đều đã hoàn tất. |
 
-Fresh-clone verification tại commit `1833d68`: **39 passed**. Notebook hoàn chỉnh
-đã được đưa lên GitHub tại commit `4b203c3`.
+Fresh-clone verification tại commit `1833d68`: **39 passed**. Notebook hoàn chỉnh,
+không chứa output sinh trắc học, đã được đưa lên GitHub tại commit `d5a72d9`.
 
 Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 0 subject leakage, 0 sample ID trùng**.
@@ -30,6 +30,7 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 | Repository skeleton | Hoàn tất | Package, scripts, configs, reports và tests. |
 | Protocol giữa kỳ | Hoàn tất | CASIA-FASD, 20 frame/video; validation tách subject; source test giữ khóa. |
 | Batch visualization | Hoàn tất | `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`. |
+| Face-crop demo | Hoàn tất | `/content/drive/MyDrive/face-pad/reports/casia-3ddfa-face-crop-demo.png`; 8 vùng mặt được phát hiện và crop đúng. |
 | Benchmark cuối có license | Đang chờ bên ngoài | OULU-NPU và Replay-Attack đang chờ duyệt; không chặn báo cáo CASIA giữa kỳ. |
 | Slide | Hoãn chủ động | Chỉ thực hiện sau khi đóng băng dữ kiện Lượt 1–3. |
 
@@ -44,6 +45,7 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 | Locked test | Hoàn tất | APCER 0%, BPCER 11,1111%, ACER 5,5556%, EER 2,4074%, AUC 0,997984. |
 | Error analysis | Hoàn tất | 0/270 attack false accept; 10/90 bona fide false reject. |
 | Artifact | Hoàn tất ngoài Git | Config, environment, checksum, checkpoint, logs và raw scores nằm trên Drive. |
+| Training curve và score distribution | Hoàn tất | `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png` và `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`. |
 
 ## Lượt 3 — pseudo-depth và CDCN E1
 
@@ -80,6 +82,9 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 - Failure chính: `video_replay/low` 12/30, `video_replay/high` 10/30,
   `warped_photo/high` 9/30; bona fide `live/low` 6/30.
 - Depth cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases`.
+- Face-crop demo: `/content/drive/MyDrive/face-pad/reports/casia-3ddfa-face-crop-demo.png`.
+- Training curves: `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png`.
+- Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`.
 
 ## So sánh đóng băng E0–E1
 
@@ -109,7 +114,7 @@ Comparison CSV:
 
 ## Việc còn lại sau Lượt 3
 
-1. Commit tài liệu audit/handoff cuối và giữ notebook/code trên GitHub.
-2. Giữ raw data, depth, checkpoint và biometric artifacts trên Drive, không đưa lên Git.
-3. Chờ quyền truy cập OULU-NPU/Replay-Attack để chốt benchmark cuối.
-4. Chuyển sang viết nội dung báo cáo giữa kỳ, rồi mới dựng slide.
+1. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
+2. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
+3. Chuyển sang viết nội dung báo cáo giữa kỳ, rồi mới dựng slide từ các số đã khóa.
+4. Chờ quyền truy cập OULU-NPU/Replay-Attack để chốt benchmark cuối và bắt đầu các lượt sau.
