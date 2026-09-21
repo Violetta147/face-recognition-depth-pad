@@ -65,7 +65,11 @@ class OfficialCentralDifferenceConv2d(nn.Module):
         normal = self.conv(image)
         if math.fabs(self.theta) < 1e-8:
             return normal
-        kernel_diff = self.conv.weight.sum(dim=(2, 3), keepdim=True)
+        # Preserve the upstream reduction order exactly. A tuple reduction can
+        # accumulate floating-point values in a different order and defeats the
+        # numerical-equivalence check even when the operator is mathematically
+        # identical.
+        kernel_diff = self.conv.weight.sum(2).sum(2)[:, :, None, None]
         difference = F.conv2d(
             image,
             kernel_diff,
@@ -120,9 +124,7 @@ class OfficialCDCN(nn.Module):
             OfficialCentralDifferenceConv2d(64, 1, theta=theta),
             nn.ReLU(),
         )
-        self.resize_to_depth = nn.Upsample(
-            size=(32, 32), mode="bilinear", align_corners=False
-        )
+        self.resize_to_depth = nn.Upsample(size=(32, 32), mode="bilinear")
 
     def forward(self, image: torch.Tensor) -> dict[str, torch.Tensor]:
         first = self.block1(self.conv1(image))

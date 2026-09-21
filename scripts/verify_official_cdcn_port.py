@@ -30,6 +30,7 @@ def main() -> None:
     source = root / OFFICIAL_CDCN_PROVENANCE["source_file"]
     actual_hash = hashlib.sha256(source.read_bytes()).hexdigest()
     expected_hash = OFFICIAL_CDCN_PROVENANCE["source_sha256"]
+    print(f"official source SHA256: {actual_hash}", flush=True)
     if actual_hash != expected_hash:
         raise SystemExit(
             f"official source checksum mismatch: {actual_hash} != {expected_hash}"
@@ -37,6 +38,7 @@ def main() -> None:
 
     official = _load_official(source).eval()
     port = OfficialCDCN(theta=0.7).eval()
+    print("loaded upstream and local models", flush=True)
     official_state = official.state_dict()
     port_state = port.state_dict()
     remapped = {}
@@ -52,9 +54,13 @@ def main() -> None:
                 break
         remapped[key] = official_state[official_key]
     port.load_state_dict(remapped, strict=True)
+    print(f"matched {len(remapped)} state tensors", flush=True)
 
     torch.manual_seed(42)
-    sample = torch.randn(1, 3, 256, 256)
+    # CDCN is fully convolutional before its fixed 32x32 fusion. A 64x64
+    # equivalence input exercises every layer while avoiding unnecessary peak
+    # memory in a separate Colab CPU subprocess.
+    sample = torch.randn(1, 3, 64, 64)
     with torch.no_grad():
         official_depth = official(sample)[0][:, None]
         port_depth = port(sample)["depth"]
