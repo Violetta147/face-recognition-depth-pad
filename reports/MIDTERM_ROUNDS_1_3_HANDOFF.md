@@ -1,37 +1,54 @@
 # Bàn giao giữa kỳ Lượt 1–3
 
-Ngày chốt trạng thái: 20 tháng 9 năm 2026.
+Ngày chốt trạng thái: 21 tháng 9 năm 2026.
 
-## Đã hoàn tất trong repository
+## Trạng thái cuối
 
-- Đặc tả, kế hoạch hai thành viên, threat model và giới hạn nghiên cứu.
-- Literature matrix gồm ít nhất năm công trình và quy tắc so sánh công bằng.
-- Protocol CASIA-FASD tạm thời: 600 video, 12.000 frame, tách subject giữa train, validation và test.
-- E0 MobileNetV3 năm epoch; threshold chọn trên validation rồi khóa trước test.
-- Kết quả test E0: APCER 0%, BPCER 11,11%, ACER 5,56%, EER 2,41%, ROC AUC 0,99798.
-- Failure analysis E0 theo quality, subject và video khó.
-- Queue, ledger, retry, provenance, QA và worker 3DDFA V2 có khả năng resume.
-- CDCN E1, contrastive depth loss và chuyển checkpoint E1 sang E2.
-- 38 unit test đều pass.
+Lượt 1, 2 và 3 đã hoàn tất trên protocol CASIA-FASD giữa kỳ. Kết quả, threshold
+và locked test đã đóng băng. Slide chưa được thực hiện.
 
-## Việc duy nhất cần người dùng thực hiện
+Fresh clone tại commit `1833d68` đã chạy **39 unit test, tất cả đều pass**.
+Notebook hoàn chỉnh nằm trong repository tại commit `4b203c3`:
+`notebooks/Face_PAD_Midterm_L1_L2_L3.ipynb`.
 
-Codex không thể tự mở phiên Colab trả phí, truy cập Google Drive hoặc dataset trong tài khoản của người dùng. Vì vậy người dùng cần chạy phần GPU theo đúng mục **Consolidated CASIA midterm run** trong `COLAB.md`.
+## Kết quả chính thức
 
-1. Đưa các thay đổi repository hiện tại lên GitHub hoặc tải chúng vào Colab, rồi cài lại package editable.
-2. Chạy tạo batch visualization và queue depth trên CPU.
-3. Cài 3DDFA V2 chính thức; chạy smoke test 50 bona fide frame trên A100.
-4. Mở vài depth map và chỉ tiếp tục nếu vùng mặt có cấu trúc hợp lý, không rỗng và không phải map hằng.
-5. Chạy hết queue, xử lý/retry failure có lý do, materialize manifest và chạy depth audit.
-6. Chỉ khi `casia-depth-qa.json` có `valid: true`, chạy `casia_e1_smoke.yaml`, sau đó mới chạy `casia_e1_cdcn.yaml`.
-7. Không dùng test để chỉnh threshold hoặc chọn checkpoint. Threshold E1 phải được khóa từ validation trước khi mở test.
+| Model | APCER | BPCER | ACER | EER | AUC |
+|---|---:|---:|---:|---:|---:|
+| E0 MobileNetV3 | 0,0000% | 11,1111% | **5,5556%** | **2,4074%** | **0,997984** |
+| E1 CDCN + pseudo-depth | 19,2593% | **8,8889%** | 14,0741% | 11,1111% | 0,956420 |
 
-## Bằng chứng cần gửi lại
+E0 là mô hình tốt nhất ở giai đoạn giữa kỳ. E1 giảm nhẹ false reject bona fide
+nhưng tăng mạnh false accept attack, đặc biệt với video replay.
 
-- Ảnh `casia-val-batch.png`.
-- Ảnh `casia-depth-smoke.png` và thư mục `e1-depth-cases`, gồm case đúng và case lỗi nếu có.
-- File `casia-depth-qa.json` và số lượng complete/failed trong ledger.
-- Đường dẫn run E1 smoke và E1 full trên Drive.
-- `train_log.csv`, `metrics.json`, `threshold.json`, raw validation/test scores và `depth_input_snapshot.json` của E1.
+## Artifact trên Google Drive
 
-Khi nhận các bằng chứng trên, có thể đánh dấu các tiêu chí còn lại của Lượt 3, rà soát toàn bộ số liệu và chỉ lúc đó mới làm slide giữa kỳ. Không cần zip dataset hoặc commit frame, depth map, checkpoint hay dữ liệu sinh trắc học lên GitHub.
+- Batch protocol: `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`.
+- E0 frozen run: `/content/drive/MyDrive/face-pad/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z`.
+- Depth smoke: `/content/drive/MyDrive/face-pad/reports/casia-depth-smoke.png`.
+- Depth QA: `/content/drive/MyDrive/face-pad/reports/casia-depth-qa.json`.
+- E1 smoke: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z`.
+- E1 full: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_seed42_20260921T024300Z`.
+- E1 cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases`.
+- E0–E1 comparison: `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv`.
+
+Run E1 full chứa đầy đủ `config.yaml`, `environment.txt`,
+`manifest_checksum.json`, `train_log.csv`, `best.ckpt`, validation/test frame and
+video scores, `threshold.json`, `metrics.json`, `test_metrics.json` và
+`depth_input_snapshot.json`.
+
+## Quy tắc đóng băng
+
+- Không thay threshold hoặc chọn checkpoint dựa trên test.
+- Không chạy nhiều biến thể rồi chọn bằng CASIA test đã mở.
+- Không commit dataset, frame, depth map, checkpoint hoặc dữ liệu sinh trắc học.
+- Thí nghiệm mới phải có ID/config mới và chọn hoàn toàn trên validation.
+- Kết quả hiện tại chỉ áp dụng cho protocol CASIA giữa kỳ, chưa phải kết luận
+  cross-dataset hoặc production.
+
+## Việc còn lại cần con người thực hiện
+
+1. Review rồi commit hai tài liệu audit/handoff đã cập nhật.
+2. Giữ bản sao Drive và notebook; có thể ngắt runtime GPU sau khi xác nhận đồng bộ.
+3. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
+4. Dùng các số đã đóng băng để viết báo cáo giữa kỳ và sau đó mới làm slide.

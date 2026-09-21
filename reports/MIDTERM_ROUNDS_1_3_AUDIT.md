@@ -1,98 +1,115 @@
 # Rà soát hoàn thành Lượt 1–3
 
-Ngày rà soát: 20 tháng 9 năm 2026. Phạm vi rà soát gồm đặc tả nghiên cứu,
-kế hoạch theo lượt, quyết định dữ liệu, cấu hình, mã nguồn, unit test và bằng chứng
-CASIA E0 do người dùng cung cấp. Slide không thuộc phạm vi hoàn thành hiện tại.
+Ngày rà soát cuối: 21 tháng 9 năm 2026. Phạm vi gồm đặc tả nghiên cứu,
+kế hoạch theo lượt, protocol CASIA-FASD, mã nguồn, unit test, pseudo-depth,
+E0/E1 và toàn bộ bằng chứng runtime trên Google Drive. Slide chưa thuộc phạm vi này.
 
-## Kết luận ngắn
+## Kết luận
 
 | Lượt | Trạng thái | Kết luận |
 |---|---|---|
-| Lượt 1 | Gần hoàn tất | Framing, literature, kiến trúc, metric và protocol CASIA giữa kỳ đã có. Còn chờ quyền truy cập benchmark chính thức và một batch visualization thực tế. |
-| Lượt 2 | Hoàn tất cho CASIA giữa kỳ | Manifest sạch, metric được test, E0 chạy xong, threshold khóa trên validation và test result đã đóng băng. Cần giữ nguyên artifact trên Drive. |
-| Lượt 3 | Code hoàn tất, thực nghiệm chưa hoàn tất | 3DDFA queue/worker/QA, CDCN E1 và công cụ xuất bằng chứng đã sẵn sàng. Chưa có depth thật, failure rate, E1 run và predicted-depth cases vì các bước này phải chạy trong Colab có dataset/GPU. |
+| Lượt 1 | Hoàn tất cho giữa kỳ | Framing, literature, kiến trúc, metric, protocol CASIA và batch visualization thực tế đã có. Benchmark cuối vẫn chờ quyền truy cập. |
+| Lượt 2 | Hoàn tất và đóng băng | Manifest sạch, E0 đã chạy, threshold chọn trên validation và locked test đã mở đúng một lần. |
+| Lượt 3 | Hoàn tất và đóng băng | 3DDFA queue/QA, E1 smoke/full, validation, locked test, depth cases và so sánh E0–E1 đều đã hoàn tất. |
 
-Toàn bộ test hiện tại: **38 passed**. Manifest CASIA đã kiểm tra: **12.000 frame,
-600 video, 50 subject, 0 video leakage, 0 subject leakage, 0 sample ID trùng**.
+Fresh-clone verification tại commit `1833d68`: **39 passed**. Notebook hoàn chỉnh
+đã được đưa lên GitHub tại commit `4b203c3`.
+
+Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
+0 subject leakage, 0 sample ID trùng**.
 
 ## Lượt 1 — bài toán, literature và protocol
 
-| Yêu cầu | Trạng thái | Bằng chứng / việc còn lại |
+| Yêu cầu | Trạng thái | Bằng chứng / ghi chú |
 |---|---|---|
-| Một câu hỏi nghiên cứu, một biến chính | Hoàn tất | Learned depth head là thay đổi chính; E2 cô lập thay đổi này. |
-| Literature matrix và paper cốt lõi | Hoàn tất | `reports/LITERATURE_MATRIX.md`; có CDCN, Deep Spatial Gradient, DC-CDN, UCDCN và CASO-PAD. |
-| Quy tắc direct/contextual comparison | Hoàn tất | Đã ghi trong đặc tả và literature matrix. |
-| Kiến trúc E0–E4 và CDCN MT Lite | Hoàn tất | Đặc tả và config E0–E4 có trong repo. |
-| Lịch A/B hai thành viên | Hoàn tất | Đã chốt trong kế hoạch theo lượt. |
-| Repository skeleton | Hoàn tất | Package, scripts, configs và tests đã có. |
-| Dataset/protocol giữa kỳ | Hoàn tất | CASIA-FASD tạm thời, 20 frame/video, validation subject 4/9/14/19, test giữ nguyên source test. |
-| Dataset benchmark cuối có license/quyền truy cập | Chưa hoàn tất | OULU-NPU và Replay-Attack đang chờ duyệt. Hạn quyết định: 27/09/2026. Đây là phụ thuộc bên ngoài, không chặn báo cáo CASIA giữa kỳ. |
-| Demo face crop hoặc batch dataset | Chưa có artifact thực tế | `scripts/visualize_manifest_batch.py` đã sẵn sàng; cần chạy nơi có dataset để tạo `casia-val-batch.png`. |
-| Slide | Hoãn chủ động | Chỉ làm sau khi Lượt 3 có số và hình thật. |
+| Câu hỏi nghiên cứu và biến chính | Hoàn tất | E0 RGB baseline và E1 pseudo-depth/CDCN được so sánh trên cùng protocol. |
+| Literature matrix và paper cốt lõi | Hoàn tất | `reports/LITERATURE_MATRIX.md`. |
+| Quy tắc direct/contextual comparison | Hoàn tất | Đặc tả và literature matrix. |
+| Kiến trúc E0–E4 | Hoàn tất | Đặc tả, mã nguồn và config E0–E4 có trong repository. |
+| Lịch A/B hai thành viên | Hoàn tất | Kế hoạch theo lượt. |
+| Repository skeleton | Hoàn tất | Package, scripts, configs, reports và tests. |
+| Protocol giữa kỳ | Hoàn tất | CASIA-FASD, 20 frame/video; validation tách subject; source test giữ khóa. |
+| Batch visualization | Hoàn tất | `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`. |
+| Benchmark cuối có license | Đang chờ bên ngoài | OULU-NPU và Replay-Attack đang chờ duyệt; không chặn báo cáo CASIA giữa kỳ. |
+| Slide | Hoãn chủ động | Chỉ thực hiện sau khi đóng băng dữ kiện Lượt 1–3. |
 
 ## Lượt 2 — dữ liệu, metric và E0
 
 | Yêu cầu | Trạng thái | Bằng chứng / ghi chú |
 |---|---|---|
-| Manifest theo protocol phát triển | Hoàn tất | `data/manifests/casia_fasd_debug.csv` tồn tại cục bộ nhưng bị Git ignore để tránh đẩy dữ liệu dẫn xuất ngoài ý muốn. |
-| Không leakage | Hoàn tất | 0 video leakage, 0 subject leakage; validator và test cố tình tạo leakage đều có. |
-| APCER/BPCER/ACER/EER/AUC | Hoàn tất | `src/deepface_pad/metrics.py`; có ví dụ tính tay trong test. |
-| E0 MobileNetV3 | Hoàn tất | Run `CASIA_E0_BCE_5E_seed42_20260920T082941Z`, 5 epoch, A100. |
-| Threshold chỉ chọn trên validation | Hoàn tất | Threshold khóa: `0.9900876432657242`. |
-| Test đóng băng | Hoàn tất | APCER 0%, BPCER 11,11%, ACER 5,56%, EER 2,41%, AUC 0,99798. |
-| Raw validation score/config/checkpoint | Hoàn tất ngoài Git | Nằm trong run directory trên Drive; không đưa checkpoint/dataset vào Git. |
-| Error analysis | Hoàn tất bước đầu | 0/270 false accept và 10/90 false reject; lỗi tập trung ở bona fide subject chưa thấy. |
-| Training curve, batch image và score plots dạng file | Chưa gom đủ | Train log/raw scores đang ở Drive; batch image phải chạy bằng script. Việc này không thay đổi kết quả E0 nhưng cần trước khi soạn slide. |
+| Manifest và leakage checks | Hoàn tất | Validator xác nhận không video/subject leakage. |
+| APCER/BPCER/ACER/EER/AUC | Hoàn tất | `src/deepface_pad/metrics.py` và unit tests. |
+| E0 MobileNetV3 | Hoàn tất | `CASIA_E0_BCE_5E_seed42_20260920T082941Z`, 5 epoch, A100. |
+| Threshold validation | Hoàn tất | `0.9900876432657242`, khóa trước test. |
+| Locked test | Hoàn tất | APCER 0%, BPCER 11,1111%, ACER 5,5556%, EER 2,4074%, AUC 0,997984. |
+| Error analysis | Hoàn tất | 0/270 attack false accept; 10/90 bona fide false reject. |
+| Artifact | Hoàn tất ngoài Git | Config, environment, checksum, checkpoint, logs và raw scores nằm trên Drive. |
 
 ## Lượt 3 — pseudo-depth và CDCN E1
 
-### Phần đã hoàn tất trong code
+### Pseudo-depth và QA
 
-- Queue và ledger có thể resume; trạng thái được ghi atomically sau từng frame.
-- Attack dùng zero target; failure bona fide không bao giờ bị thay bằng zero map.
-- Worker tích hợp checkout 3DDFA V2 chính thức, chọn face lớn nhất và hỗ trợ GPU/CPU/ONNX.
-- Materialization tạo manifest dẫn xuất, không sửa source manifest.
-- Provenance sidecar và preflight khóa checksum của manifest, ledger và từng depth artifact.
-- QA từ chối map thiếu, hỏng, NaN/Inf, live all-zero hoặc attack non-zero.
-- CDCN E1, absolute loss và contrastive depth loss tám hướng đã có.
-- Config smoke một epoch và full 30 epoch đã có.
-- `score_checkpoint.py` xuất frame/video score và metric test bằng threshold validation đã khóa.
-- `visualize_depth_targets.py` tạo RGB–target–mask–histogram cho smoke gate.
-- `visualize_depth_cases.py` tạo ít nhất mười RGB–target–mask–prediction case sau E1.
+- Queue/ledger có thể resume và ghi trạng thái atomically.
+- 9.000 attack frame dùng zero target theo protocol.
+- 3.000 bona fide frame được xử lý bằng 3DDFA V2; smoke 50 frame thành công,
+  không có persistent failure được giữ lại.
+- Attack không-zero, live all-zero, file hỏng và NaN/Inf đều bị QA từ chối.
+- Provenance khóa implementation/config/checksum và worker script.
+- Smoke image: `/content/drive/MyDrive/face-pad/reports/casia-depth-smoke.png`.
+- QA report: `/content/drive/MyDrive/face-pad/reports/casia-depth-qa.json`.
 
-### Phần chưa thể đánh dấu cho đến khi chạy Colab
+### E1 smoke
 
-| Tiêu chí Lượt 3 | Trạng thái hiện tại | Điều kiện để đánh dấu |
-|---|---|---|
-| Không có NaN/map live rỗng không được ghi nhận | Chưa có bằng chứng runtime | `casia-depth-qa.json` phải `valid: true`. |
-| Failure rate 3DDFA được báo cáo | Chưa có số | Hoàn tất ledger và audit; ghi failure rate theo split. |
-| RGB/depth thẳng hàng | Chưa kiểm tra trên ảnh thật | Duyệt `casia-depth-smoke.png`; nếu sai thì dừng, không train E1. |
-| E1 raw score frame/video | Chưa có run | E1 smoke và E1 full phải hoàn tất; run dir có `val_frame_scores.csv`, `val_scores.csv`, `test_frame_scores.csv`, `test_scores.csv`. |
-| Ít nhất 10 predicted-depth case đúng/sai | Chưa có checkpoint E1 | Chạy `visualize_depth_cases.py`; nếu model không có lỗi validation thì báo 0 lỗi và dùng các case đúng sát threshold, không bịa failure case. |
-| Validation/test metric E1 | Chưa có | Threshold chọn trên validation; chỉ sau đó mới chạy frozen test. |
-| So sánh E0–E1 | Chưa thể làm | Cùng CASIA manifest, sampling, input convention và video aggregation; chỉ khác model/supervision. |
-| Slide cập nhật số thật | Hoãn | Chỉ làm sau tất cả các dòng trên. |
+- Run: `CASIA_E1_SMOKE_seed42_20260921T023804Z`.
+- Một epoch hoàn tất; loss hữu hạn, checkpoint và depth snapshot tồn tại.
+- Validation smoke: APCER 52,7778%, BPCER 8,3333%, ACER 30,5556%,
+  EER 33,3333%, AUC 0,689815.
+- Smoke chỉ là kiểm tra pipeline, không phải kết quả mô hình cuối.
 
-## Quyết định preprocessing cần giữ nhất quán
+### E1 full
 
-E0 CASIA hiện dùng full frame được resize. Để so sánh E0–E1 có kiểm soát, E1 giữa kỳ
-giữ cùng input convention; 3DDFA render depth thẳng hàng trên frame và QA tạo mask
-từ pixel depth khác zero. Smoke gate phải xác nhận face đủ lớn và alignment hợp lý.
+- Run: `CASIA_E1_CDCN_seed42_20260921T024300Z`.
+- 30 epoch; train loss giảm từ `0.383147` xuống `0.085622`, validation loss
+  giảm từ `0.335765` xuống mức tốt nhất `0.084825` tại epoch 30.
+- Threshold validation khóa: `0.0412299589253962`.
+- Validation: APCER 5,5556%, BPCER 8,3333%, ACER 6,9444%,
+  EER 8,3333%, AUC 0,981481.
+- Locked test: APCER 19,2593%, BPCER 8,8889%, ACER 14,0741%,
+  EER 11,1111%, AUC 0,956420.
+- Locked test tương ứng 52/270 attack false accept và 8/90 bona fide false reject.
+- Failure chính: `video_replay/low` 12/30, `video_replay/high` 10/30,
+  `warped_photo/high` 9/30; bona fide `live/low` 6/30.
+- Depth cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases`.
 
-Khi benchmark cuối được chốt, nếu official protocol yêu cầu persistent face crop,
-nhóm phải áp dụng cùng một crop rule và chạy lại cả E0 lẫn E1. Không được crop riêng
-E1 rồi so với E0 full-frame.
+## So sánh đóng băng E0–E1
 
-## Trình tự hoàn tất trước khi làm slide
+| Model | APCER | BPCER | ACER | EER | AUC |
+|---|---:|---:|---:|---:|---:|
+| E0 MobileNetV3 | 0,0000% | 11,1111% | **5,5556%** | **2,4074%** | **0,997984** |
+| E1 CDCN + pseudo-depth | 19,2593% | **8,8889%** | 14,0741% | 11,1111% | 0,956420 |
 
-1. Đưa các thay đổi code hiện tại vào Colab; không đưa raw data/depth/checkpoint lên Git.
-2. Chạy unit test và `visualize_manifest_batch.py` trên CPU.
-3. Chạy 3DDFA smoke 50 bona fide frame trên A100, tạo `casia-depth-smoke.png` và duyệt bằng mắt.
-4. Nếu smoke pass, chạy hết queue; review/retry failure có lý do.
-5. Materialize manifest, verify provenance, validate và audit; chỉ tiếp tục khi `valid: true`.
-6. Chạy E1 smoke; nếu loss hữu hạn và predicted depth không sụp thành hằng số, chạy E1 full.
-7. Xuất 10 depth cases trên validation, khóa threshold, rồi mới score test bằng `score_checkpoint.py`.
-8. Gửi lại các artifact được liệt kê trong `reports/MIDTERM_ROUNDS_1_3_HANDOFF.md` để rà số lần cuối.
-9. Chỉ sau bước 8 mới bắt đầu làm slide.
+E1 cải thiện BPCER 2,2222 điểm phần trăm nhưng làm APCER tăng 19,2593 điểm
+phần trăm và ACER tăng **8,5185 điểm phần trăm**. Trên protocol CASIA giữa kỳ,
+E0 là mô hình tốt nhất. Pseudo-depth E1 học được tín hiệu hình học nhưng chưa tổng
+quát hóa tốt với replay attack và live chất lượng thấp.
 
-Các command chính xác nằm trong mục **Consolidated CASIA midterm run** của `COLAB.md`.
+Comparison CSV:
+`/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv`.
+
+## Tính hợp lệ và giới hạn diễn giải
+
+- E0 và E1 dùng cùng manifest, sampling, input convention và video aggregation.
+- Mỗi threshold được chọn trên validation rồi khóa trước test.
+- Test E1 chỉ được score sau khi threshold validation đã được ghi nhận.
+- Không dùng test để retune E1 hoặc chọn epoch.
+- CASIA-FASD là dataset tạm thời cho giữa kỳ; kết quả chưa chứng minh khả năng
+  tổng quát hóa cross-dataset hoặc hiệu năng production.
+- Một E1-50 trong tương lai phải được xem là thí nghiệm mới và chọn hoàn toàn bằng
+  validation; test hiện tại không còn là holdout chưa quan sát cho việc phát triển đó.
+
+## Việc còn lại sau Lượt 3
+
+1. Commit tài liệu audit/handoff cuối và giữ notebook/code trên GitHub.
+2. Giữ raw data, depth, checkpoint và biometric artifacts trên Drive, không đưa lên Git.
+3. Chờ quyền truy cập OULU-NPU/Replay-Attack để chốt benchmark cuối.
+4. Chuyển sang viết nội dung báo cáo giữa kỳ, rồi mới dựng slide.
