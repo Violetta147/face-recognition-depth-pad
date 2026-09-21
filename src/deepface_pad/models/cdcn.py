@@ -26,7 +26,7 @@ def _block(inputs: int, outputs: int, theta: float) -> nn.Sequential:
 
 
 class CDCN(nn.Module):
-    """Compact CDCN-style backbone that predicts a 32x32 pseudo-depth map."""
+    """Legacy compact CDCN-style pilot; not the authors' full CDCN topology."""
     def __init__(self, theta: float = 0.7, base_channels: int = 32) -> None:
         super().__init__()
         c = base_channels

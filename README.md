@@ -59,10 +59,14 @@ Literature and protocol
 - [x] Manifest leakage validator and metric tests implemented.
 - [x] Resumable pseudo-depth queue, status ledger, QA audit, and failure reporting implemented.
 - [x] E0 MobileNetV3 baseline implemented.
-- [x] E1 compact CDCN-style depth baseline and resumable 3DDFA V2 worker implemented.
+- [x] E1 compact CDCN-style pilot and resumable 3DDFA V2 worker implemented.
+- [x] Official CDCN CVPR 2020 architecture/loss ported with pinned-source provenance
+      and a numerical equivalence verifier.
 - [x] E1-to-E2 checkpoint transfer and staged-training code covered by unit tests.
-- [x] E1 completed a 30-epoch pseudo-depth run, validation threshold selection,
-      locked test evaluation, depth-case inspection, and E0-E1 comparison.
+- [x] E1-Lite pilot completed a 30-epoch pseudo-depth run, validation threshold
+      selection, locked test evaluation, depth-case inspection, and E0 comparison.
+- [ ] Official-CDCN E1 correction run completed and frozen. The pilot result must
+      not be reported as an official CDCN reproduction.
 - [ ] E2-E4 have completed end-to-end integration runs.
 - [ ] Official dataset manifest created and validated.
 - [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
@@ -129,14 +133,17 @@ For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.m
 
 ## Next deliverables
 
-Rounds 1-3 are technically complete. The clean, output-free Colab notebook is
-`notebooks/Face_PAD_Midterm_L1_L2_L3.ipynb`; the executed copy and all biometric
-artifacts remain private on Google Drive.
+The data/protocol, E0, and pseudo-depth portions of rounds 1-3 are complete. The
+former E1 result is retained as an E1-Lite pilot; round 3 is reopened until the
+official-CDCN correction run is selected on validation and scored once on locked
+test. Use `notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb` for that correction.
+The executed notebook and all biometric artifacts remain private on Google Drive.
 
-1. Commit the clean notebook and synchronized closeout documents.
-2. Write the midterm report and build the deck from the frozen artifacts.
-3. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
-4. Continue with E2-E4 only as new experiments selected on validation.
+1. Run and freeze official-CDCN E1 using the correction notebook.
+2. Synchronize the official-E1 metrics into the audit/handoff documents.
+3. Write the midterm report and build the deck from the corrected frozen artifacts.
+4. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
+5. Continue with E2-E4 only as new experiments selected on validation.
 
 ## Scope limits
 

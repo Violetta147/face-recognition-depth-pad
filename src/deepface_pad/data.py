@@ -26,7 +26,7 @@ def manifest_checksum(path: str | Path) -> str:
 def depth_supervision_required(config: dict) -> bool:
     """Return whether a training config consumes pseudo-depth targets."""
     model_name = config.get("model", {}).get("name")
-    if model_name == "cdcn":
+    if model_name in {"cdcn", "cdcn_lite", "cdcn_official"}:
         return True
     if model_name != "cdcn_mt_lite":
         return False
@@ -86,6 +86,7 @@ class PadDataset(Dataset):
         image_size: int = 256,
         augment: bool = False,
         require_depth: bool = False,
+        normalization: str = "imagenet",
     ):
         if torch is None or v2 is None:
             raise RuntimeError("PadDataset requires the torch and torchvision training dependencies")
@@ -96,10 +97,14 @@ class PadDataset(Dataset):
             if missing:
                 raise ValueError(f"split {split} is missing bona fide depth_path: {missing[:10]}")
         self.root = Path(data_root)
+        self.augment = augment
         transforms = [v2.ToImage(), v2.Resize((image_size, image_size)), v2.ToDtype(torch.float32, scale=True)]
-        if augment:
-            transforms.insert(1, v2.RandomHorizontalFlip())
-        transforms.append(v2.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)))
+        if normalization == "imagenet":
+            transforms.append(v2.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)))
+        elif normalization == "cdcn_official":
+            transforms.append(v2.Normalize(mean=(0.5, 0.5, 0.5), std=(128 / 255,) * 3))
+        else:
+            raise ValueError(f"unknown normalization: {normalization}")
         self.transform = v2.Compose(transforms)
 
     def __len__(self) -> int:
@@ -118,4 +123,7 @@ class PadDataset(Dataset):
                 depth = depth / maximum
         else:
             depth = torch.zeros(1, 32, 32)
+        if self.augment and bool(torch.rand(()) < 0.5):
+            image = torch.flip(image, dims=(-1,))
+            depth = torch.flip(depth, dims=(-1,))
         return {"image": image, "depth": depth, "label": torch.tensor(float(row.label)), "video_id": str(row.video_id), "sample_id": str(row.sample_id)}

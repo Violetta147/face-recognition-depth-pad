@@ -31,6 +31,7 @@ def test_depth_supervision_rejects_missing_bona_fide_target(tmp_path: Path):
 
 def test_only_depth_consuming_configs_require_targets():
     assert depth_supervision_required({"model": {"name": "cdcn"}})
+    assert depth_supervision_required({"model": {"name": "cdcn_official"}})
     assert depth_supervision_required(
         {
             "model": {"name": "cdcn_mt_lite"},

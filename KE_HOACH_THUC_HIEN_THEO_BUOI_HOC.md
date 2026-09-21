@@ -351,16 +351,16 @@ Sinh pseudo depth đúng và có CDCN E1 chạy được. Đây là mốc nhóm 
 
 - [x] Không có NaN hoặc map live rỗng trong QA cuối.
 - [x] Failure rate của 3DDFA được báo cáo: 0 persistent failure trên 3.000 frame bona fide.
-- [x] E1 xuất raw score ở mức frame và video cho validation và locked test.
-- [x] Có 12 predicted-depth case validation gồm cả đúng và sai để xem.
+- [ ] Official-CDCN E1 xuất raw score ở mức frame và video cho validation và locked test; artifact hiện có thuộc E1-Lite Pilot.
+- [ ] Có 12 predicted-depth case validation official-E1 gồm cả đúng và sai để xem; bộ pilot hiện có chỉ là bằng chứng pipeline.
 - [ ] Slide giữa kỳ đã cập nhật bằng số thật.
 
-Trạng thái ngày 21 tháng 9 năm 2026: queue 3DDFA đã hoàn tất 3.000 frame bona fide,
-9.000 attack zero-map đã được kiểm tra, không có persistent failure; E1 smoke và E1
-full 30 epoch đã chạy, threshold validation và locked test đã đóng băng. Batch dữ
-liệu, depth QA, face-crop demo, predicted-depth cases, training curves và score
-distributions đều nằm trên Google Drive. Phần kỹ thuật Lượt 1–3 đã đủ dữ kiện;
-slide vẫn hoãn chủ động cho đến giai đoạn viết báo cáo.
+Trạng thái hiệu chỉnh ngày 21 tháng 9 năm 2026: queue 3DDFA đã hoàn tất 3.000 frame
+bona fide, 9.000 attack zero-map đã được kiểm tra và không có persistent failure.
+E1 smoke/full 30 epoch trước đây dùng compact CDCN-style nội bộ, vì vậy được giữ
+thành E1-Lite Pilot chứ không phải reproduction. Kiến trúc/loss official CDCN đã
+được port với provenance khóa; cần chạy correction notebook, khóa validation rồi
+mới mở test một lần để phần kỹ thuật Lượt 3 đủ dữ kiện cho báo cáo.
 
 ### Nếu bị chặn
 

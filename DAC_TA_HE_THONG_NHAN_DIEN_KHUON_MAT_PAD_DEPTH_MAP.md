@@ -649,9 +649,9 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 - [x] Có metric script được test bằng ví dụ tính tay.
 - [x] E0 chạy end to end trên validation; threshold đã khóa trước test.
 - [x] Queue 3DDFA hoàn tất 3.000 frame bona fide và 9.000 attack zero-map, không có persistent failure; provenance và QA đã khóa.
-- [x] E1 depth-only hoàn tất smoke và full 30 epoch; threshold validation, locked test và raw score frame/video đã đóng băng.
-- [x] Có batch visualization, face-crop demo và 12 predicted-depth case validation thực tế.
-- [x] Có training curves và test score distributions E0–E1 sinh lại từ raw artifact.
+- [ ] Official-CDCN E1 depth-only hoàn tất smoke và full run; run compact cũ chỉ được giữ với nhãn E1-Lite Pilot.
+- [x] Có batch visualization, face-crop demo và 12 predicted-depth case validation thực tế cho pilot; official-E1 phải xuất lại cases riêng.
+- [ ] Có training curves và test score distributions E0–official-E1 sinh lại từ raw artifact sau correction run.
 - [x] Hai thành viên đã phân lịch báo cáo luân phiên.
 
 ### 16.2 Nghiệm thu cuối

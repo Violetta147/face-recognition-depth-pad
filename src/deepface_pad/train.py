@@ -16,9 +16,15 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from .data import PadDataset, manifest_checksum
-from .losses import FocalLoss, depth_loss
+from .losses import FocalLoss, depth_loss, official_cdcn_depth_loss
 from .metrics import aggregate_video_scores, evaluate_scores
-from .models import CDCN, CDCNMultiTaskLite, MobileNetBaseline
+from .models import (
+    CDCN,
+    CDCNMultiTaskLite,
+    MobileNetBaseline,
+    OFFICIAL_CDCN_PROVENANCE,
+    OfficialCDCN,
+)
 from .preflight import inspect_training_inputs
 
 
@@ -30,7 +36,8 @@ def seed_everything(seed: int) -> None:
 def build_model(config: dict) -> nn.Module:
     name = config["model"]["name"]
     if name == "mobilenet_v3_small": return MobileNetBaseline(config["model"].get("pretrained", True))
-    if name == "cdcn": return CDCN(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
+    if name in {"cdcn", "cdcn_lite"}: return CDCN(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
+    if name == "cdcn_official": return OfficialCDCN(config["model"].get("theta", 0.7))
     if name == "cdcn_mt_lite": return CDCNMultiTaskLite(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
     raise ValueError(f"unknown model: {name}")
 
@@ -65,7 +72,12 @@ def _loss(config: dict, output: dict[str, torch.Tensor], batch: dict[str, object
     label = batch["label"].to(output[next(iter(output))].device)
     total = torch.zeros((), device=label.device)
     if "depth" in output and stage != "head":
-        total = total + depth_loss(output["depth"], batch["depth"].to(label.device), config["loss"].get("lambda_abs", 1.0), config["loss"].get("lambda_contrast", 0.5))
+        loss_function = (
+            official_cdcn_depth_loss
+            if config["loss"].get("implementation") == "official_cdcn"
+            else depth_loss
+        )
+        total = total + loss_function(output["depth"], batch["depth"].to(label.device), config["loss"].get("lambda_abs", 1.0), config["loss"].get("lambda_contrast", 0.5))
     if "logit" in output and stage != "depth":
         if config["loss"].get("classification", "bce") == "focal":
             cls = FocalLoss(config["loss"].get("alpha", 0.25), config["loss"].get("gamma", 2.0))(output["logit"], label)
@@ -103,6 +115,10 @@ def run(config_path: str | Path) -> Path:
     (run_dir / "environment.txt").write_text(f"python={sys.version}\nplatform={platform.platform()}\ntorch={torch.__version__}\ndevice={device}\n", encoding="utf-8")
     checksum = manifest_checksum(config["data"]["manifest"])
     (run_dir / "manifest_checksum.json").write_text(json.dumps({"sha256": checksum}, indent=2), encoding="utf-8")
+    if config["model"]["name"] == "cdcn_official":
+        (run_dir / "model_provenance.json").write_text(
+            json.dumps(OFFICIAL_CDCN_PROVENANCE, indent=2) + "\n", encoding="utf-8"
+        )
     if depth_snapshot is not None:
         (run_dir / "depth_input_snapshot.json").write_text(
             json.dumps(depth_snapshot, indent=2) + "\n", encoding="utf-8"
@@ -115,6 +131,7 @@ def run(config_path: str | Path) -> Path:
             config["data"].get("image_size", 256),
             split == "train",
             require_depth=require_depth,
+            normalization=config["data"].get("normalization", "imagenet"),
         )
         for split in ("train", "val")
     }
@@ -127,7 +144,24 @@ def run(config_path: str | Path) -> Path:
     elif any(stage["name"] == "head" for stage in stages):
         raise ValueError("head-only training requires training.init_checkpoint from E1")
     for stage in stages:
-        _set_stage(model, stage["name"]); optimizer = torch.optim.AdamW((p for p in model.parameters() if p.requires_grad), lr=stage["lr"], weight_decay=config["training"].get("weight_decay", 1e-4))
+        _set_stage(model, stage["name"])
+        optimizer_class = (
+            torch.optim.Adam
+            if config["training"].get("optimizer", "adamw") == "adam"
+            else torch.optim.AdamW
+        )
+        optimizer = optimizer_class(
+            (p for p in model.parameters() if p.requires_grad),
+            lr=stage["lr"],
+            weight_decay=config["training"].get("weight_decay", 1e-4),
+        )
+        scheduler = None
+        if config["training"].get("step_size"):
+            scheduler = torch.optim.lr_scheduler.StepLR(
+                optimizer,
+                step_size=config["training"]["step_size"],
+                gamma=config["training"].get("gamma", 0.5),
+            )
         for epoch in range(stage["epochs"]):
             model.train(); losses = []
             for batch in loaders["train"]:
@@ -137,6 +171,8 @@ def run(config_path: str | Path) -> Path:
                 for batch in loaders["val"]: val_losses.append(_loss(config, model(batch["image"].to(device)), batch, stage["name"]).item())
             row = {"stage": stage["name"], "epoch": epoch + 1, "train_loss": float(np.mean(losses)), "val_loss": float(np.mean(val_losses))}; history.append(row)
             if row["val_loss"] < best: best = row["val_loss"]; torch.save({"model": model.state_dict(), "config": config, "val_loss": best}, run_dir / "best.ckpt")
+            if scheduler is not None:
+                scheduler.step()
     pd.DataFrame(history).to_csv(run_dir / "train_log.csv", index=False)
     checkpoint = torch.load(run_dir / "best.ckpt", map_location=device, weights_only=False); model.load_state_dict(checkpoint["model"])
     frame_scores = score_loader(model, loaders["val"], device); frame_scores.to_csv(run_dir / "val_frame_scores.csv", index=False)

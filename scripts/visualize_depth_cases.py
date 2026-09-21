@@ -127,6 +127,7 @@ def main() -> None:
         config["data"].get("image_size", 256),
         augment=False,
         require_depth=True,
+        normalization=config["data"].get("normalization", "imagenet"),
     )
     loader = DataLoader(
         dataset,

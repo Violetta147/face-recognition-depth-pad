@@ -38,6 +38,34 @@ class ContrastiveDepthLoss(nn.Module):
         return F.l1_loss(pred_grad, target_grad)
 
 
+class OfficialContrastiveDepthLoss(nn.Module):
+    """Contrastive depth loss from the official CDCN CVPR 2020 training code."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        kernels = torch.tensor(
+            [
+                [[1, 0, 0], [0, -1, 0], [0, 0, 0]],
+                [[0, 1, 0], [0, -1, 0], [0, 0, 0]],
+                [[0, 0, 1], [0, -1, 0], [0, 0, 0]],
+                [[0, 0, 0], [1, -1, 0], [0, 0, 0]],
+                [[0, 0, 0], [0, -1, 1], [0, 0, 0]],
+                [[0, 0, 0], [0, -1, 0], [1, 0, 0]],
+                [[0, 0, 0], [0, -1, 0], [0, 1, 0]],
+                [[0, 0, 0], [0, -1, 0], [0, 0, 1]],
+            ],
+            dtype=torch.float32,
+        )
+        self.register_buffer("kernels", kernels[:, None])
+
+    def forward(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        kernels = self.kernels.to(device=prediction.device, dtype=prediction.dtype)
+        target = target.to(device=prediction.device, dtype=prediction.dtype)
+        pred_grad = F.conv2d(prediction.expand(-1, 8, -1, -1), kernels, groups=8)
+        target_grad = F.conv2d(target.expand(-1, 8, -1, -1), kernels, groups=8)
+        return F.mse_loss(pred_grad, target_grad)
+
+
 class FocalLoss(nn.Module):
     def __init__(self, alpha: float = 0.25, gamma: float = 2.0) -> None:
         super().__init__()
@@ -55,3 +83,17 @@ class FocalLoss(nn.Module):
 def depth_loss(prediction: torch.Tensor, target: torch.Tensor, lambda_abs: float = 1.0, lambda_contrast: float = 0.5) -> torch.Tensor:
     target = target.to(device=prediction.device, dtype=prediction.dtype)
     return lambda_abs * F.l1_loss(prediction, target) + lambda_contrast * ContrastiveDepthLoss()(prediction, target)
+
+
+def official_cdcn_depth_loss(
+    prediction: torch.Tensor,
+    target: torch.Tensor,
+    lambda_abs: float = 1.0,
+    lambda_contrast: float = 1.0,
+) -> torch.Tensor:
+    """Official CDCN loss: depth MSE plus eight-neighbour contrast MSE."""
+
+    target = target.to(device=prediction.device, dtype=prediction.dtype)
+    return lambda_abs * F.mse_loss(prediction, target) + lambda_contrast * (
+        OfficialContrastiveDepthLoss()(prediction, target)
+    )

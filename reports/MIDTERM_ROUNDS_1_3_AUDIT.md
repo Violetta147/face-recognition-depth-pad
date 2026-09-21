@@ -10,7 +10,7 @@ E0/E1 và toàn bộ bằng chứng runtime trên Google Drive. Slide chưa thu�
 |---|---|---|
 | Lượt 1 | Hoàn tất cho giữa kỳ | Framing, literature, kiến trúc, metric, protocol CASIA và batch visualization thực tế đã có. Benchmark cuối vẫn chờ quyền truy cập. |
 | Lượt 2 | Hoàn tất và đóng băng | Manifest sạch, E0 đã chạy, threshold chọn trên validation và locked test đã mở đúng một lần. |
-| Lượt 3 | Hoàn tất và đóng băng | 3DDFA queue/QA, E1 smoke/full, validation, locked test, depth cases và so sánh E0–E1 đều đã hoàn tất. |
+| Lượt 3 | Mở lại một phần | 3DDFA queue/QA đã hoàn tất. Run E1 cũ là compact CDCN-style pilot, không phải official CDCN; cần chạy correction E1 trước khi chốt báo cáo. |
 
 Fresh-clone verification tại commit `1833d68`: **39 passed**. Notebook hoàn chỉnh,
 không chứa output sinh trắc học, đã được đưa lên GitHub tại commit `d5a72d9`.
@@ -60,7 +60,7 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 - Smoke image: `/content/drive/MyDrive/face-pad/reports/casia-depth-smoke.png`.
 - QA report: `/content/drive/MyDrive/face-pad/reports/casia-depth-qa.json`.
 
-### E1 smoke
+### E1-Lite smoke (pilot lịch sử)
 
 - Run: `CASIA_E1_SMOKE_seed42_20260921T023804Z`.
 - Một epoch hoàn tất; loss hữu hạn, checkpoint và depth snapshot tồn tại.
@@ -68,7 +68,7 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
   EER 33,3333%, AUC 0,689815.
 - Smoke chỉ là kiểm tra pipeline, không phải kết quả mô hình cuối.
 
-### E1 full
+### E1-Lite full (pilot lịch sử, không phải official CDCN)
 
 - Run: `CASIA_E1_CDCN_seed42_20260921T024300Z`.
 - 30 epoch; train loss giảm từ `0.383147` xuống `0.085622`, validation loss
@@ -86,14 +86,14 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 - Training curves: `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png`.
 - Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`.
 
-## So sánh đóng băng E0–E1
+## So sánh lịch sử E0–E1-Lite pilot
 
 | Model | APCER | BPCER | ACER | EER | AUC |
 |---|---:|---:|---:|---:|---:|
 | E0 MobileNetV3 | 0,0000% | 11,1111% | **5,5556%** | **2,4074%** | **0,997984** |
-| E1 CDCN + pseudo-depth | 19,2593% | **8,8889%** | 14,0741% | 11,1111% | 0,956420 |
+| E1-Lite compact CDCN-style + pseudo-depth | 19,2593% | **8,8889%** | 14,0741% | 11,1111% | 0,956420 |
 
-E1 cải thiện BPCER 2,2222 điểm phần trăm nhưng làm APCER tăng 19,2593 điểm
+E1-Lite cải thiện BPCER 2,2222 điểm phần trăm nhưng làm APCER tăng 19,2593 điểm
 phần trăm và ACER tăng **8,5185 điểm phần trăm**. Trên protocol CASIA giữa kỳ,
 E0 là mô hình tốt nhất. Pseudo-depth E1 học được tín hiệu hình học nhưng chưa tổng
 quát hóa tốt với replay attack và live chất lượng thấp.
@@ -112,9 +112,11 @@ Comparison CSV:
 - Một E1-50 trong tương lai phải được xem là thí nghiệm mới và chọn hoàn toàn bằng
   validation; test hiện tại không còn là holdout chưa quan sát cho việc phát triển đó.
 
-## Việc còn lại sau Lượt 3
+## Việc còn lại để đóng lại Lượt 3
 
-1. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
-2. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
-3. Chuyển sang viết nội dung báo cáo giữa kỳ, rồi mới dựng slide từ các số đã khóa.
-4. Chờ quyền truy cập OULU-NPU/Replay-Attack để chốt benchmark cuối và bắt đầu các lượt sau.
+1. Chạy `Face_PAD_Official_CDCN_E1_Rerun.ipynb`, qua smoke gate và chọn checkpoint chỉ bằng validation.
+2. Chỉ sau khi config/checkpoint/threshold đã khóa mới score CASIA test đúng một lần.
+3. Thay bảng E1-Lite pilot bằng official-E1 trong kết luận giữa kỳ; vẫn giữ pilot như lịch sử kỹ thuật.
+4. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
+5. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
+6. Sau đó mới viết báo cáo/slide và chờ benchmark cuối được duyệt.
