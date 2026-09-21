@@ -651,7 +651,7 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 - [x] Queue 3DDFA hoàn tất 3.000 frame bona fide và 9.000 attack zero-map, không có persistent failure; provenance và QA đã khóa.
 - [x] Official-CDCN E1 depth-only hoàn tất smoke và full 30 epoch; best checkpoint epoch 25, threshold validation và locked test đã đóng băng. Run compact cũ chỉ giữ nhãn E1-Lite Pilot.
 - [x] Có batch visualization, face-crop demo và 12 predicted-depth case validation official-E1 thực tế.
-- [ ] Có training curves và test score distributions E0–official-E1 sinh lại từ raw artifact sau correction run.
+- [x] Có training curves và test score distributions E0–official-E1 sinh lại từ raw artifact đóng băng.
 - [x] Hai thành viên đã phân lịch báo cáo luân phiên.
 
 ### 16.2 Nghiệm thu cuối

@@ -98,6 +98,8 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 - Test có 0/270 attack false accept và 5/90 bona fide false reject: high 1/30, low 2/30, normal 2/30.
 - Depth cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases`.
 - Comparison CSV: `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv`.
+- Training curves: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-training-curves.png`.
+- Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-test-score-distributions.png`.
 
 ## So sánh đóng băng
 
@@ -128,7 +130,6 @@ Comparison CSV:
 
 ## Việc còn lại sau khi đóng Lượt 3
 
-1. Sinh lại training curve và score distribution E0–official-E1 từ raw artifacts đã khóa.
-2. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
-3. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
-4. Viết báo cáo/slide và chờ benchmark cuối được duyệt.
+1. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
+2. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
+3. Viết báo cáo/slide và chờ benchmark cuối được duyệt.

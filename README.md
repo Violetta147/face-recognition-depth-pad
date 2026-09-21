@@ -139,10 +139,9 @@ scored once on locked test. The clean correction runbook is
 `notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb`. The executed notebook and all
 biometric artifacts remain private on Google Drive.
 
-1. Generate the final E0-versus-official-E1 report figures from frozen raw artifacts.
-2. Write the midterm report and build the deck from the corrected frozen artifacts.
-3. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
-4. Continue with E2-E4 only as new experiments selected on validation.
+1. Write the midterm report and build the deck from the corrected frozen artifacts.
+2. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
+3. Continue with E2-E4 only as new experiments selected on validation.
 
 ## Scope limits
 

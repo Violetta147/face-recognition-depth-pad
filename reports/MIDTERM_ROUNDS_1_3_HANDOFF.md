@@ -41,6 +41,8 @@ CASIA development protocol, chưa phải kết luận cross-dataset.
 - Official E1 full: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z`.
 - Official E1 cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases`.
 - Official comparison: `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv`.
+- Official training curves: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-training-curves.png`.
+- Official test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-test-score-distributions.png`.
 
 Run E1 full chứa đầy đủ `config.yaml`, `environment.txt`,
 `manifest_checksum.json`, `train_log.csv`, `best.ckpt`, validation/test frame and
@@ -59,7 +61,6 @@ video scores, `threshold.json`, `metrics.json`, `test_metrics.json` và
 
 ## Việc còn lại cần con người thực hiện
 
-1. Sinh figure E0–official-E1 cuối cùng từ raw artifact đóng băng.
-2. Commit notebook sạch và tài liệu đã đồng bộ.
-3. Viết báo cáo giữa kỳ rồi mới dựng slide.
-4. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
+1. Commit notebook sạch và tài liệu đã đồng bộ.
+2. Viết báo cáo giữa kỳ rồi mới dựng slide.
+3. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
