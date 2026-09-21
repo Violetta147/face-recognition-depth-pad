@@ -8,9 +8,10 @@ Lượt 1, Lượt 2 và Lượt 3 đã hoàn tất. Run compact cũ giữ nhãn
 kết quả E1 chính thức dùng kiến trúc/loss official CDCN đã kiểm chứng với upstream.
 Checkpoint và threshold được chọn trên validation trước khi locked test mở một lần.
 
-Fresh clone tại commit `1833d68` đã chạy **39 unit test, tất cả đều pass**.
-Notebook hoàn chỉnh, không chứa output sinh trắc học, nằm trong repository tại commit `d5a72d9`:
-`notebooks/Face_PAD_Midterm_L1_L2_L3.ipynb`.
+Unit-test gate đã pass trong correction workflow trên Colab. Port official CDCN
+được kiểm chứng số học với upstream: 73 state tensors khớp, `max_abs_error=0.0`.
+Hai notebook trong Git đều sạch output: notebook lịch sử L1–L3 và notebook
+correction `notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb`.
 
 ## Kết quả đóng băng
 
@@ -24,7 +25,7 @@ Official CDCN E1 giảm ACER 2,7778 điểm phần trăm so với E0, không fal
 attack và giảm false-reject bona fide từ 10 xuống 5 video. Đây là một seed trên
 CASIA development protocol, chưa phải kết luận cross-dataset.
 
-## Artifact trên Google Drive
+## Artifact lịch sử/pilot trên Google Drive
 
 - Batch protocol: `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`.
 - E0 frozen run: `/content/drive/MyDrive/face-pad/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z`.
@@ -37,6 +38,9 @@ CASIA development protocol, chưa phải kết luận cross-dataset.
 - Face-crop demo: `/content/drive/MyDrive/face-pad/reports/casia-3ddfa-face-crop-demo.png`.
 - Training curves: `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png`.
 - Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`.
+
+## Artifact official-E1 dùng cho báo cáo
+
 - Official E1 smoke: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z`.
 - Official E1 full: `/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z`.
 - Official E1 cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases`.
@@ -44,10 +48,10 @@ CASIA development protocol, chưa phải kết luận cross-dataset.
 - Official training curves: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-training-curves.png`.
 - Official test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-official-e1-test-score-distributions.png`.
 
-Run E1 full chứa đầy đủ `config.yaml`, `environment.txt`,
-`manifest_checksum.json`, `train_log.csv`, `best.ckpt`, validation/test frame and
-video scores, `threshold.json`, `metrics.json`, `test_metrics.json` và
-`depth_input_snapshot.json`.
+Run official E1 full chứa đầy đủ `config.yaml`, `environment.txt`,
+`manifest_checksum.json`, `model_provenance.json`, `train_log.csv`, `best.ckpt`,
+validation/test frame and video scores, `threshold.json`, `metrics.json`,
+`test_metrics.json` và `depth_input_snapshot.json`.
 
 ## Quy tắc đóng băng
 
@@ -61,6 +65,6 @@ video scores, `threshold.json`, `metrics.json`, `test_metrics.json` và
 
 ## Việc còn lại cần con người thực hiện
 
-1. Commit notebook sạch và tài liệu đã đồng bộ.
-2. Viết báo cáo giữa kỳ rồi mới dựng slide.
-3. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
+1. Viết báo cáo giữa kỳ rồi mới dựng slide.
+2. Chờ OULU-NPU/Replay-Attack được duyệt để chốt protocol benchmark cuối.
+3. E2–E4 tiếp tục ở các lượt sau, không thuộc điều kiện hoàn tất Lượt 1–3.

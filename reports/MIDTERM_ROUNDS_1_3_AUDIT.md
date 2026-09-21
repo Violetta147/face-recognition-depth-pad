@@ -114,8 +114,10 @@ giảm ACER **2,7778 điểm phần trăm**. EER cũng giảm nhẹ, trong khi A
 0,003540. Đây là kết quả một seed trên protocol CASIA phát triển, chưa phải bằng
 chứng cross-dataset hay kết luận production.
 
-Comparison CSV:
+Historical pilot comparison CSV:
 `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv`.
+Official comparison CSV:
+`/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv`.
 
 ## Tính hợp lệ và giới hạn diễn giải
 
@@ -130,6 +132,6 @@ Comparison CSV:
 
 ## Việc còn lại sau khi đóng Lượt 3
 
-1. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
-2. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
-3. Viết báo cáo/slide và chờ benchmark cuối được duyệt.
+1. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
+2. Viết báo cáo giữa kỳ rồi dựng slide từ artifact đã khóa.
+3. Chờ benchmark cuối được duyệt; E2–E4 thuộc các lượt sau, không phải thiếu sót Lượt 1–3.

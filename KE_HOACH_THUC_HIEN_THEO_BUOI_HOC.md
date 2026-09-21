@@ -768,13 +768,13 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 - [ ] A và B đã luân phiên báo cáo đúng lịch và đều tham dự.
 - [ ] Ba slide bắt buộc được cập nhật xuyên suốt.
 - [ ] Dataset và protocol được ghi rõ.
-- [ ] E1 CDCN baseline tái lập được.
+- [x] E1 CDCN baseline tái lập được trên CASIA development protocol, với official architecture/loss và provenance khóa.
 - [ ] CDCN MT Lite được triển khai và kiểm thử.
 - [ ] Có ablation learned head và training strategy.
 - [ ] Baseline cùng model tốt nhất có nhiều seed nếu tài nguyên cho phép.
-- [ ] Có APCER, BPCER, ACER, EER và AUC ở mức video.
+- [x] Có APCER, BPCER, ACER, EER và AUC ở mức video cho E0 và official E1.
 - [ ] Có params và latency.
-- [ ] Có error analysis.
+- [x] Có error analysis official E1 theo attack type, quality và failure video.
 - [ ] Có bảng so sánh CDCN, UCDCN, CASO-PAD và kết quả nhóm.
 - [ ] Có demo PAD; ArcFace là phần cộng thêm.
 - [ ] Có technical report hoặc paper draft.
