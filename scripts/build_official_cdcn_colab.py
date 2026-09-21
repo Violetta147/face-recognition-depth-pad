@@ -175,7 +175,21 @@ run([sys.executable, "scripts/validate_manifest.py", MANIFEST, "--data-root", DA
         '''#@title 1.3 Khôi phục cache depth từ Drive; không tái sinh map hợp lệ
 assert DEPTH_BACKUP.is_dir(), f"Thiếu depth checkpoint trên Drive: {DEPTH_BACKUP}"
 DEPTH_ROOT.mkdir(parents=True, exist_ok=True)
-shutil.copytree(DEPTH_BACKUP, DEPTH_ROOT, dirs_exist_ok=True)
+
+# Google Drive có độ trễ cao với hàng nghìn file nhỏ. Copy từng file, bỏ qua file
+# đã đủ byte và in tiến độ để cell có thể resume sau khi runtime bị ngắt.
+backup_files = [path for path in DEPTH_BACKUP.iterdir() if path.is_file()]
+copied = skipped = 0
+for index, source in enumerate(backup_files, start=1):
+    destination = DEPTH_ROOT / source.name
+    if destination.is_file() and destination.stat().st_size == source.stat().st_size:
+        skipped += 1
+    else:
+        shutil.copy2(source, destination)
+        copied += 1
+    if index % 250 == 0 or index == len(backup_files):
+        print(f"Depth restore {index}/{len(backup_files)} — copied={copied}, reused={skipped}", flush=True)
+
 assert DEPTH_LEDGER.is_file(), f"Thiếu ledger: {DEPTH_LEDGER}"
 
 ledger = pd.read_csv(DEPTH_LEDGER, keep_default_na=False, dtype={"sample_id": str})
