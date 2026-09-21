@@ -5,6 +5,7 @@ import json
 import platform
 import random
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -163,6 +164,7 @@ def run(config_path: str | Path) -> Path:
                 gamma=config["training"].get("gamma", 0.5),
             )
         for epoch in range(stage["epochs"]):
+            epoch_started = time.perf_counter()
             model.train(); losses = []
             for batch in loaders["train"]:
                 optimizer.zero_grad(); output = model(batch["image"].to(device)); loss = _loss(config, output, batch, stage["name"]); loss.backward(); optimizer.step(); losses.append(loss.item())
@@ -173,6 +175,22 @@ def run(config_path: str | Path) -> Path:
             if row["val_loss"] < best: best = row["val_loss"]; torch.save({"model": model.state_dict(), "config": config, "val_loss": best}, run_dir / "best.ckpt")
             if scheduler is not None:
                 scheduler.step()
+            # Persist and report every epoch. This gives Colab-visible progress and
+            # retains a valid partial log if a long GPU run is interrupted.
+            log_path = run_dir / "train_log.csv"
+            temporary_log = log_path.with_suffix(".csv.tmp")
+            pd.DataFrame(history).to_csv(temporary_log, index=False)
+            temporary_log.replace(log_path)
+            elapsed = time.perf_counter() - epoch_started
+            remaining = stage["epochs"] - epoch - 1
+            print(
+                f"[{stage['name']}] epoch {epoch + 1}/{stage['epochs']} "
+                f"train_loss={row['train_loss']:.6f} "
+                f"val_loss={row['val_loss']:.6f} "
+                f"best={best:.6f} elapsed={elapsed:.1f}s "
+                f"stage_eta={remaining * elapsed / 60:.1f}m",
+                flush=True,
+            )
     pd.DataFrame(history).to_csv(run_dir / "train_log.csv", index=False)
     checkpoint = torch.load(run_dir / "best.ckpt", map_location=device, weights_only=False); model.load_state_dict(checkpoint["model"])
     frame_scores = score_loader(model, loaders["val"], device); frame_scores.to_csv(run_dir / "val_frame_scores.csv", index=False)
