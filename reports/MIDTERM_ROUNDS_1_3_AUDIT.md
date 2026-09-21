@@ -10,7 +10,7 @@ E0/E1 và toàn bộ bằng chứng runtime trên Google Drive. Slide chưa thu�
 |---|---|---|
 | Lượt 1 | Hoàn tất cho giữa kỳ | Framing, literature, kiến trúc, metric, protocol CASIA và batch visualization thực tế đã có. Benchmark cuối vẫn chờ quyền truy cập. |
 | Lượt 2 | Hoàn tất và đóng băng | Manifest sạch, E0 đã chạy, threshold chọn trên validation và locked test đã mở đúng một lần. |
-| Lượt 3 | Mở lại một phần | 3DDFA queue/QA đã hoàn tất. Run E1 cũ là compact CDCN-style pilot, không phải official CDCN; cần chạy correction E1 trước khi chốt báo cáo. |
+| Lượt 3 | Hoàn tất và đóng băng | 3DDFA queue/QA và official-CDCN smoke/full đều hoàn tất; checkpoint/threshold chọn trên validation, locked test mở đúng một lần. |
 
 Fresh-clone verification tại commit `1833d68`: **39 passed**. Notebook hoàn chỉnh,
 không chứa output sinh trắc học, đã được đưa lên GitHub tại commit `d5a72d9`.
@@ -86,17 +86,31 @@ Manifest CASIA: **12.000 frame, 600 video, 50 subject, 0 video leakage,
 - Training curves: `/content/drive/MyDrive/face-pad/reports/e0-e1-training-curves.png`.
 - Test score distributions: `/content/drive/MyDrive/face-pad/reports/e0-e1-test-score-distributions.png`.
 
-## So sánh lịch sử E0–E1-Lite pilot
+### Official-CDCN E1 correction (kết quả chính thức)
+
+- Upstream `ZitongYu/CDCN` khóa tại commit `fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b`; port khớp 73 state tensors và có `max_abs_error=0.0`.
+- Smoke run: `CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z`; loss hữu hạn và predicted-depth không hằng.
+- Full run: `CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z`, 30 epoch trên A100.
+- Validation loss tốt nhất `0.0171712230582083` tại epoch 25; last-5 slope dương nên không extension.
+- Threshold validation khóa: `0.1916038803756237`.
+- Validation video-level: APCER 0%, BPCER 0%, ACER 0%, EER 0%, AUC 1,0.
+- Locked test: APCER 0%, BPCER 5,5556%, ACER 2,7778%, EER 2,2222%, AUC 0,994444.
+- Test có 0/270 attack false accept và 5/90 bona fide false reject: high 1/30, low 2/30, normal 2/30.
+- Depth cases: `/content/drive/MyDrive/face-pad/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases`.
+- Comparison CSV: `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv`.
+
+## So sánh đóng băng
 
 | Model | APCER | BPCER | ACER | EER | AUC |
 |---|---:|---:|---:|---:|---:|
 | E0 MobileNetV3 | 0,0000% | 11,1111% | **5,5556%** | **2,4074%** | **0,997984** |
-| E1-Lite compact CDCN-style + pseudo-depth | 19,2593% | **8,8889%** | 14,0741% | 11,1111% | 0,956420 |
+| E1-Lite Pilot | 19,2593% | 8,8889% | 14,0741% | 11,1111% | 0,956420 |
+| Official CDCN E1 | 0,0000% | **5,5556%** | **2,7778%** | **2,2222%** | 0,994444 |
 
-E1-Lite cải thiện BPCER 2,2222 điểm phần trăm nhưng làm APCER tăng 19,2593 điểm
-phần trăm và ACER tăng **8,5185 điểm phần trăm**. Trên protocol CASIA giữa kỳ,
-E0 là mô hình tốt nhất. Pseudo-depth E1 học được tín hiệu hình học nhưng chưa tổng
-quát hóa tốt với replay attack và live chất lượng thấp.
+Official CDCN giữ nguyên APCER 0% của E0, giảm BPCER 5,5555 điểm phần trăm và
+giảm ACER **2,7778 điểm phần trăm**. EER cũng giảm nhẹ, trong khi AUC thấp hơn
+0,003540. Đây là kết quả một seed trên protocol CASIA phát triển, chưa phải bằng
+chứng cross-dataset hay kết luận production.
 
 Comparison CSV:
 `/content/drive/MyDrive/face-pad/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv`.
@@ -112,11 +126,9 @@ Comparison CSV:
 - Một E1-50 trong tương lai phải được xem là thí nghiệm mới và chọn hoàn toàn bằng
   validation; test hiện tại không còn là holdout chưa quan sát cho việc phát triển đó.
 
-## Việc còn lại để đóng lại Lượt 3
+## Việc còn lại sau khi đóng Lượt 3
 
-1. Chạy `Face_PAD_Official_CDCN_E1_Rerun.ipynb`, qua smoke gate và chọn checkpoint chỉ bằng validation.
-2. Chỉ sau khi config/checkpoint/threshold đã khóa mới score CASIA test đúng một lần.
-3. Thay bảng E1-Lite pilot bằng official-E1 trong kết luận giữa kỳ; vẫn giữ pilot như lịch sử kỹ thuật.
-4. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
-5. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
-6. Sau đó mới viết báo cáo/slide và chờ benchmark cuối được duyệt.
+1. Sinh lại training curve và score distribution E0–official-E1 từ raw artifacts đã khóa.
+2. Commit notebook **không có output** và tài liệu closeout đã đồng bộ lên GitHub.
+3. Giữ notebook đã chạy, raw data, depth, checkpoint và biometric artifacts trên Drive; không đưa bản notebook có ảnh khuôn mặt lên Git.
+4. Viết báo cáo/slide và chờ benchmark cuối được duyệt.

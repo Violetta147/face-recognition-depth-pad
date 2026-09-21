@@ -377,6 +377,18 @@ display(comparison.style.format({"threshold":"{:.8f}", "apcer":"{:.4%}", "bpcer"
 COMPARISON = REPORTS_DIR / f"E0-vs-{OFFICIAL_E1.name}.csv"
 comparison.to_csv(COMPARISON)
 print("Saved:", COMPARISON)
+
+run([
+    sys.executable, "scripts/plot_frozen_comparison.py",
+    "--e0-run", E0_RUN,
+    "--e1-run", OFFICIAL_E1,
+    "--output-dir", REPORTS_DIR,
+], cwd=REPO_ROOT)
+
+TRAINING_FIGURE = REPORTS_DIR / "e0-official-e1-training-curves.png"
+SCORE_FIGURE = REPORTS_DIR / "e0-official-e1-test-score-distributions.png"
+display(DisplayImage(filename=str(TRAINING_FIGURE)))
+display(DisplayImage(filename=str(SCORE_FIGURE)))
 '''
     ),
     code(
@@ -391,6 +403,7 @@ artifact_table = pd.DataFrame([{"artifact": name, "exists": (OFFICIAL_E1 / name)
 display(artifact_table)
 assert artifact_table.exists.all()
 assert DEPTH_QA.is_file() and OFFICIAL_CASES.is_dir() and COMPARISON.is_file()
+assert TRAINING_FIGURE.is_file() and SCORE_FIGURE.is_file()
 print("✓ Official-CDCN E1 correction hoàn tất")
 print("Run:", OFFICIAL_E1)
 print("Cases:", OFFICIAL_CASES)
