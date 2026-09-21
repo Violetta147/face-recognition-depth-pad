@@ -28,9 +28,15 @@ def main() -> None:
 
     root = Path(args.official_root)
     source = root / OFFICIAL_CDCN_PROVENANCE["source_file"]
-    actual_hash = hashlib.sha256(source.read_bytes()).hexdigest()
-    expected_hash = OFFICIAL_CDCN_PROVENANCE["source_sha256"]
-    print(f"official source SHA256: {actual_hash}", flush=True)
+    source_bytes = source.read_bytes()
+    raw_hash = hashlib.sha256(source_bytes).hexdigest()
+    # Git may check text files out as CRLF on Windows and LF on Colab/Linux.
+    # Hash canonical LF bytes so provenance is portable across both platforms.
+    canonical_bytes = source_bytes.replace(b"\r\n", b"\n")
+    actual_hash = hashlib.sha256(canonical_bytes).hexdigest()
+    expected_hash = OFFICIAL_CDCN_PROVENANCE["source_sha256_lf"]
+    print(f"official source raw SHA256: {raw_hash}", flush=True)
+    print(f"official source canonical-LF SHA256: {actual_hash}", flush=True)
     if actual_hash != expected_hash:
         raise SystemExit(
             f"official source checksum mismatch: {actual_hash} != {expected_hash}"
@@ -73,7 +79,7 @@ def main() -> None:
             {
                 "verified": True,
                 "git_commit": OFFICIAL_CDCN_PROVENANCE["git_commit"],
-                "source_sha256": actual_hash,
+                "source_sha256_lf": actual_hash,
                 "max_abs_error": max_abs_error,
                 "output_shape": list(port_depth.shape),
             },

@@ -14,7 +14,7 @@ The previous `CASIA_E1_CDCN_seed42_20260921T024300Z` run is retained as
 - Repository: `https://github.com/ZitongYu/CDCN`
 - Commit: `fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b`
 - Source: `CVPR2020_paper_codes/models/CDCNs.py`
-- Source SHA256: `9edd5f4a4ea4d9c642b9777dbeb614d3fddae5821c2cde124798bc41fe24c331`
+- Source canonical-LF SHA256: `396b5c093b8f5af9ad1454257b583e75c3b846cc5da1379d84197e68c9828a45`
 - License notice: research use only; commercial use is not allowed by the
   upstream repository notice.
 
