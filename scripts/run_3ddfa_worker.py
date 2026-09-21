@@ -7,11 +7,44 @@ import json
 import os
 import subprocess
 import sys
+import types
 from pathlib import Path
 
 import numpy as np
+import torch
 
 from deepface_pad.depth_jobs import process_pending_depth_jobs
+
+
+def python_cpu_nms(detections: np.ndarray, threshold: float) -> list[int]:
+    """NumPy fallback matching the upstream FaceBoxes CPU NMS algorithm."""
+    detections = np.asarray(detections)
+    if detections.shape[0] == 0:
+        return []
+    x1, y1 = detections[:, 0], detections[:, 1]
+    x2, y2 = detections[:, 2], detections[:, 3]
+    scores = detections[:, 4]
+    areas = (x2 - x1 + 1) * (y2 - y1 + 1)
+    order = scores.argsort()[::-1]
+    keep: list[int] = []
+    while order.size > 0:
+        index = int(order[0])
+        keep.append(index)
+        xx1 = np.maximum(x1[index], x1[order[1:]])
+        yy1 = np.maximum(y1[index], y1[order[1:]])
+        xx2 = np.minimum(x2[index], x2[order[1:]])
+        yy2 = np.minimum(y2[index], y2[order[1:]])
+        width = np.maximum(0.0, xx2 - xx1 + 1)
+        height = np.maximum(0.0, yy2 - yy1 + 1)
+        intersection = width * height
+        overlap = intersection / (areas[index] + areas[order[1:]] - intersection)
+        remaining = np.where(overlap <= threshold)[0]
+        order = order[remaining + 1]
+    return keep
+
+
+def unavailable_soft_nms(*_args, **_kwargs):
+    raise RuntimeError("soft NMS is unavailable in the ONNX compatibility path")
 
 
 def write_worker_metadata(
@@ -41,6 +74,7 @@ def write_worker_metadata(
         "backend": "onnx" if onnx else "pytorch",
         "mode": mode,
         "output_size": output_size,
+        "worker_script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     }
     if destination.is_file():
         existing = json.loads(destination.read_text(encoding="utf-8"))
@@ -71,6 +105,29 @@ def build_reconstructor(root: Path, config: Path, *, onnx: bool, mode: str):
 
     cfg = yaml.safe_load(config.read_text(encoding="utf-8"))
     if onnx:
+        # PyTorch 2.10 defaults to the dynamo ONNX exporter, while this upstream
+        # checkout was authored for the legacy exporter. Keep the compatibility
+        # local to this worker process and cover both FaceBoxes and BFM conversion.
+        original_onnx_export = torch.onnx.export
+
+        def legacy_onnx_export(*export_args, **export_kwargs):
+            export_kwargs.setdefault("dynamo", False)
+            return original_onnx_export(*export_args, **export_kwargs)
+
+        torch.onnx.export = legacy_onnx_export
+        # Importing FaceBoxes.FaceBoxes_ONNX normally executes FaceBoxes/__init__.py
+        # first. Upstream imports the PyTorch detector there, which in turn requires
+        # the optional cpu_nms Cython extension even though the ONNX detector never
+        # uses it. Register a namespace package for this supported ONNX-only path so
+        # Python can load the submodule without executing that eager import.
+        faceboxes_package = types.ModuleType("FaceBoxes")
+        faceboxes_package.__path__ = [str(root / "FaceBoxes")]
+        faceboxes_package.__package__ = "FaceBoxes"
+        sys.modules["FaceBoxes"] = faceboxes_package
+        nms_module = types.ModuleType("FaceBoxes.utils.nms.cpu_nms")
+        nms_module.cpu_nms = python_cpu_nms
+        nms_module.cpu_soft_nms = unavailable_soft_nms
+        sys.modules["FaceBoxes.utils.nms.cpu_nms"] = nms_module
         from FaceBoxes.FaceBoxes_ONNX import FaceBoxes_ONNX
         from TDDFA_ONNX import TDDFA_ONNX
 

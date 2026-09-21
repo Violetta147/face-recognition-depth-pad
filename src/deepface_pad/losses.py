@@ -31,8 +31,10 @@ class ContrastiveDepthLoss(nn.Module):
         self.register_buffer("kernels", torch.stack(kernels)[:, None])
 
     def forward(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        pred_grad = F.conv2d(prediction, self.kernels, padding=1)
-        target_grad = F.conv2d(target, self.kernels, padding=1)
+        kernels = self.kernels.to(device=prediction.device, dtype=prediction.dtype)
+        target = target.to(device=prediction.device, dtype=prediction.dtype)
+        pred_grad = F.conv2d(prediction, kernels, padding=1)
+        target_grad = F.conv2d(target, kernels, padding=1)
         return F.l1_loss(pred_grad, target_grad)
 
 
@@ -51,4 +53,5 @@ class FocalLoss(nn.Module):
 
 
 def depth_loss(prediction: torch.Tensor, target: torch.Tensor, lambda_abs: float = 1.0, lambda_contrast: float = 0.5) -> torch.Tensor:
+    target = target.to(device=prediction.device, dtype=prediction.dtype)
     return lambda_abs * F.l1_loss(prediction, target) + lambda_contrast * ContrastiveDepthLoss()(prediction, target)

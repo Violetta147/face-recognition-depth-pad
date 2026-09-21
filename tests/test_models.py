@@ -34,6 +34,15 @@ def test_contrastive_depth_loss_has_eight_unique_neighbours():
     assert torch.all((kernels == -1).sum(dim=(1, 2)) == 1)
 
 
+def test_contrastive_depth_loss_matches_prediction_device_and_dtype():
+    prediction = torch.rand(2, 1, 8, 8, dtype=torch.float64, requires_grad=True)
+    target = torch.rand(2, 1, 8, 8, dtype=torch.float32)
+    loss = ContrastiveDepthLoss()(prediction, target)
+    assert loss.dtype == prediction.dtype
+    loss.backward()
+    assert prediction.grad is not None
+
+
 def test_e1_checkpoint_initializes_e2_backbone(tmp_path):
     e1 = CDCN(base_channels=4)
     checkpoint = tmp_path / "e1.ckpt"
