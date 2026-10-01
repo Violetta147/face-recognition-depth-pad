@@ -19,6 +19,7 @@ The implementation follows the research protocol rather than a product-style rec
 - [Audit of rounds 1-3](reports/MIDTERM_ROUNDS_1_3_AUDIT.md)
 - [Midterm handoff and required Colab evidence](reports/MIDTERM_ROUNDS_1_3_HANDOFF.md)
 - [Round 4: frozen head on the official E1 checkpoint](reports/ROUND_4_OFFICIAL_DEPTH_HEAD.md)
+- [Round 4 E2 result reported from Colab](reports/CASIA_E2_OFFICIAL_HEAD_FROZEN_seed42_summary.md)
 
 ## Mandatory study
 
@@ -69,6 +70,9 @@ Literature and protocol
 - [x] Official-CDCN E1 correction run completed and frozen. The pilot result is
       retained separately and is not reported as an official CDCN reproduction.
 - [ ] E2-E4 have completed end-to-end integration runs.
+- [x] Official-backbone frozen E2 run reported from Colab on 1 October 2026:
+      same ACER and same five false-rejected live videos as E1. The summary
+      records user-provided outputs; raw Drive artifacts still await independent audit.
 - [ ] Official dataset manifest created and validated.
 - [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
       12,000 uniformly sampled frames).

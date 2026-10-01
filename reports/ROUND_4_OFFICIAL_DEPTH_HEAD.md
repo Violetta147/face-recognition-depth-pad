@@ -72,8 +72,12 @@ suy luận. Kết quả chỉ kết luận trong protocol này; chưa tuyên b�
 
 ## Trạng thái
 
-Đã chuẩn bị implementation, config và kiểm thử. Chưa có kết quả train E2 thực
-trên CASIA; chỉ điền bảng bằng artifact từ run thực, không suy đoán improvement.
+Người dùng đã cung cấp log và sáu screenshot run E2 CASIA ngày 01/10/2026:
+`CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z`.
+E2 cùng ACER 2,7778% và cùng năm live video sai như E1; frozen head chưa cải thiện
+run này. Xem [báo cáo kết quả](CASIA_E2_OFFICIAL_HEAD_FROZEN_seed42_summary.md).
+Các số hiện được đối chiếu từ output người dùng; raw CSV/JSON/checkpoint trên
+Drive chưa được kiểm chứng độc lập trong workspace.
 
 Kiểm thử local: 49 tests pass, gồm một run E2 synthetic 1 epoch đi hết train,
 checkpoint, validation score và threshold. Test xác nhận mọi weight/BatchNorm
