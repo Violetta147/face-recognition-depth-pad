@@ -143,7 +143,9 @@ def run(config_path: str | Path) -> Path:
     }
     loaders = {split: DataLoader(ds, batch_size=config["training"].get("batch_size", 16), shuffle=split == "train", num_workers=config["training"].get("workers", 0)) for split, ds in datasets.items()}
     model = build_model(config).to(device); best = float("inf"); history = []
-    stages = config["training"].get("stages", [{"name": "joint", "epochs": config["training"]["epochs"], "lr": config["training"]["lr"]}])
+    stages = config["training"].get("stages")
+    if stages is None:
+        stages = [{"name": "joint", "epochs": config["training"]["epochs"], "lr": config["training"]["lr"]}]
     initial = config["training"].get("init_checkpoint")
     if initial:
         load_initial_weights(model, initial, device)

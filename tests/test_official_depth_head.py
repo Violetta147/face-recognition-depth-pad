@@ -1,11 +1,15 @@
 import pytest
+import json
+
+import pandas as pd
+from PIL import Image
 
 torch = pytest.importorskip("torch")
 pytest.importorskip("torchvision")
 
-from deepface_pad.data import depth_supervision_required
+from deepface_pad.data import MANIFEST_COLUMNS, depth_supervision_required
 from deepface_pad.models import CDCN, OfficialCDCN, OfficialCDCNWithDepthHead
-from deepface_pad.train import _set_stage, build_model, load_initial_weights
+from deepface_pad.train import _set_stage, build_model, load_initial_weights, run
 
 
 def test_frozen_official_head_preserves_maps_and_batchnorm_after_optimizer_step(tmp_path):
@@ -66,3 +70,37 @@ def test_official_head_requires_depth_targets_only_when_depth_loss_is_used():
     config["training"]["stages"] = [{"name": "joint"}]
     config["loss"]["lambda_abs"] = 1.
     assert depth_supervision_required(config)
+
+
+def test_official_head_training_run_saves_frozen_backbone_and_validation_artifacts(tmp_path):
+    import yaml
+
+    torch.manual_seed(42)
+    e1 = OfficialCDCN().eval()
+    initial = tmp_path / "e1.ckpt"
+    torch.save({"model": e1.state_dict()}, initial)
+    rows = []
+    for split in ("train", "val"):
+        for label in (0, 1):
+            name = f"{split}-{label}"
+            Image.new("RGB", (32, 32), (40 + label * 150, 80, 100)).save(tmp_path / f"{name}.png")
+            rows.append([name, split, name, name, 0, f"{name}.png", "", label, "live" if label else "print"])
+    manifest = tmp_path / "all.csv"
+    pd.DataFrame(rows, columns=MANIFEST_COLUMNS).to_csv(manifest, index=False)
+    config = {
+        "experiment_id": "E2_SYNTHETIC", "seed": 42, "runs_dir": str(tmp_path / "runs"),
+        "model": {"name": "cdcn_official_head", "theta": .7},
+        "data": {"manifest": str(manifest), "root": str(tmp_path), "image_size": 32, "normalization": "cdcn_official"},
+        "loss": {"classification": "bce", "lambda_abs": 0., "lambda_contrast": 0., "lambda_cls": 1.},
+        "training": {"init_checkpoint": str(initial), "batch_size": 2, "workers": 0, "stages": [{"name": "head", "epochs": 1, "lr": .001}]},
+        "evaluation": {"aggregation": "mean"},
+    }
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    folder = run(config_path)
+    trained = torch.load(folder / "best.ckpt", map_location="cpu", weights_only=False)
+    assert all(torch.equal(value, trained["model"]["backbone." + key]) for key, value in e1.state_dict().items())
+    assert json.loads((folder / "threshold.json").read_text())["source"] == "validation"
+    assert len(pd.read_csv(folder / "val_scores.csv")) == 2
+    assert len(json.loads((folder / "initial_checkpoint.json").read_text())["sha256"]) == 64
+    assert not (folder / "test_scores.csv").exists()

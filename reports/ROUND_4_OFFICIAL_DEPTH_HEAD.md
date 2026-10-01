@@ -26,6 +26,24 @@ Config thực chạy: `configs/casia_e2_official_head_frozen.yaml`.
 Config `configs/e2_head_frozen.yaml` là template legacy cho pilot,
 không dùng để so với Official E1.
 
+## Chạy trên Colab
+
+Mở `notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb`, chọn GPU và chạy tuần tự.
+Cell 0.2 yêu cầu `DeepFace-PAD-Round4-source.zip` chứa source đã commit khi tạo
+notebook. ZIP dùng để tránh phụ thuộc việc code mới đã push lên GitHub hay chưa.
+Không cần thay hoặc chạy lại notebook E1 đang có output.
+
+Notebook khôi phục dataset/depth bằng các cell setup từ bản E1 đã commit,
+kiểm tra checksum manifest khớp E1 và tái tính validation score E1 trước train.
+Nó chạy smoke 1 epoch rồi full 10 epoch, kiểm tra backbone bất biến, khóa artifact,
+score E2 test phát triển và xuất paired error analysis cùng params/latency.
+Train loop dùng epoch/lr từ stage head; không yêu cầu các khóa joint-training
+epoch/lr bên ngoài stage trong cấu hình E2.
+Run hoàn tất cùng config được tái dùng khi chạy lại cell; run khác config không
+được tự động xem là kết quả của thí nghiệm này.
+
+Output nằm ở `/content/drive/MyDrive/face-pad/reports/<E2_RUN_ID>`.
+
 ## Bằng chứng cần có trước khi gọi hoàn tất
 
 1. Checkpoint nạp đúng; mọi tensor và BatchNorm buffer backbone giữ nguyên.
@@ -56,3 +74,7 @@ suy luận. Kết quả chỉ kết luận trong protocol này; chưa tuyên b�
 
 Đã chuẩn bị implementation, config và kiểm thử. Chưa có kết quả train E2 thực
 trên CASIA; chỉ điền bảng bằng artifact từ run thực, không suy đoán improvement.
+
+Kiểm thử local: 49 tests pass, gồm một run E2 synthetic 1 epoch đi hết train,
+checkpoint, validation score và threshold. Test xác nhận mọi weight/BatchNorm
+buffer của Official CDCN không đổi; đây không phải số đo PAD trên CASIA.

@@ -369,6 +369,14 @@ Nếu 3DDFA chưa chạy toàn bộ dữ liệu, hoàn thành một subset có k
 
 ## 7. Lượt 4 Learned depth head
 
+Thực thi với E1 đã correction: dùng `cdcn_official_head` và
+`configs/casia_e2_official_head_frozen.yaml`, nạp checkpoint Official E1;
+template E2 compact cũ không dùng cho đối chứng này. Xem
+[runbook Lượt 4](reports/ROUND_4_OFFICIAL_DEPTH_HEAD.md) và notebook
+`notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb`.
+Implementation đã kiểm thử; các tiêu chí kết quả bên dưới chỉ đánh dấu sau run
+CASIA thực. CASIA test đã mở ở Lượt 3 nên so sánh E2 trên đó là đánh giá phát triển.
+
 **Người báo cáo:** B  
 **Phiên bản:** R3 First modification
 

@@ -105,6 +105,8 @@ For a comparison with the corrected official E1, use
 The legacy `e2_head_frozen.yaml` uses the compact pilot backbone.
 The official wrapper freezes BatchNorm statistics as well as parameters during
 head-only training; E1 and E2 must produce identical depth maps.
+The clean `notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb` restores the E1
+inputs, trains E2, and exports the paired development comparison and efficiency.
 Depth-supervised runs also perform manifest preflight before creating a run: every
 bona fide sample must reference an existing pseudo-depth target. Empty attack depth
 paths remain valid because their protocol target is an all-zero map.
