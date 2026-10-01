@@ -19,7 +19,7 @@ def _write_source_manifest(path: Path) -> None:
 
 def _depth_config(source: Path, ledger: Path, derived: Path, root: Path) -> dict:
     return {
-        "model": {"name": "cdcn"},
+        "model": {"name": "cdcn_official"},
         "data": {
             "manifest": str(derived),
             "source_manifest": str(source),

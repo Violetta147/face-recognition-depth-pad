@@ -26,9 +26,9 @@ def manifest_checksum(path: str | Path) -> str:
 def depth_supervision_required(config: dict) -> bool:
     """Return whether a training config consumes pseudo-depth targets."""
     model_name = config.get("model", {}).get("name")
-    if model_name in {"cdcn", "cdcn_lite", "cdcn_official"}:
+    if model_name == "cdcn_official":
         return True
-    if model_name not in {"cdcn_mt_lite", "cdcn_official_head"}:
+    if model_name != "cdcn_official_head":
         return False
     stages = config.get("training", {}).get("stages", [{"name": "joint"}])
     uses_depth_stage = any(stage.get("name") in {"depth", "joint"} for stage in stages)

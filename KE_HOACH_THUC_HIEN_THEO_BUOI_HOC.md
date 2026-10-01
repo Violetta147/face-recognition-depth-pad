@@ -37,7 +37,7 @@ Thứ tự ưu tiên của nhóm:
 
 1. Protocol và metric đúng.
 2. Reproduce CDCN baseline.
-3. Cải tiến CDCN MT Lite.
+3. Cải tiến Official CDCN + learned depth head.
 4. Ablation và nhiều seed.
 5. So sánh với paper.
 6. Error analysis.
@@ -88,7 +88,7 @@ Giảng viên yêu cầu bổ sung ngay ba slide. Ba slide này là phần cố 
 
 ### Slide 2 Phương pháp nhóm chọn và cải tiến
 
-**Tiêu đề:** Từ CDCN depth only đến CDCN MT Lite
+**Tiêu đề:** Từ CDCN depth only đến Official CDCN + learned depth head
 
 **Nội dung trên slide:**
 
@@ -151,7 +151,7 @@ Chia slide thành hai cột.
 - [ ] Deck giữa kỳ Lượt 1 đến Lượt 3 chỉ làm sau khi bằng chứng E1 đầy đủ.
 - [x] Literature matrix có ít nhất 5 paper.
 - [x] Deadline chốt benchmark chính thức là 27 tháng 9 năm 2026; CASIA chỉ dùng giữa kỳ.
-- [x] Sơ đồ CDCN MT Lite.
+- [x] Sơ đồ Official CDCN + learned depth head.
 - [x] Bảng metric có công thức APCER, BPCER và ACER.
 - [x] Dataset batch visualization đã xuất tại `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`.
 - [x] Lịch A/B luân phiên đã chốt trong kế hoạch; sẽ đưa lên slide sau khi hoàn tất dữ liệu.
@@ -168,7 +168,7 @@ Báo cáo giữa kỳ không cần pipeline cuối. Gói tối thiểu phải ch
 2. Ba slide bắt buộc về phương pháp hiện đại, phương pháp nhóm và paper gần nhất.
 3. Dataset và official protocol.
 4. CDCN baseline và pseudo depth.
-5. Modification CDCN MT Lite.
+5. Modification Official CDCN + learned depth head.
 6. Bộ metric và quy tắc threshold.
 7. Kết quả đầu tiên của E0 hoặc E1.
 8. Failure cases đầu tiên.
@@ -222,7 +222,7 @@ Thuyết phục giảng viên rằng nhóm đã thu hẹp đúng trọng tâm, n
 
 ### Công việc của B
 
-- Vẽ kiến trúc CDCN MT Lite.
+- Vẽ kiến trúc Official CDCN + learned depth head.
 - Chuẩn bị slide 2.
 - Chạy detector và crop mặt trên webcam hoặc sample dataset.
 - Tạo repository skeleton tối thiểu.
@@ -602,7 +602,7 @@ Trình bày dự án như một nghiên cứu nhỏ: vấn đề, khoảng trố
 1. Problem và threat model.
 2. Modern methods và literature gap.
 3. CDCN baseline.
-4. CDCN MT Lite.
+4. Official CDCN + learned depth head.
 5. Dataset, protocol và metrics.
 6. Main results.
 7. Ablation.
@@ -777,7 +777,7 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 - [ ] Ba slide bắt buộc được cập nhật xuyên suốt.
 - [ ] Dataset và protocol được ghi rõ.
 - [x] E1 CDCN baseline tái lập được trên CASIA development protocol, với official architecture/loss và provenance khóa.
-- [ ] CDCN MT Lite được triển khai và kiểm thử.
+- [x] Official CDCN + learned depth head E2 frozen đã triển khai, kiểm thử và có kết quả CASIA seed 42; E3/E4 chưa chạy benchmark.
 - [ ] Có ablation learned head và training strategy.
 - [ ] Baseline cùng model tốt nhất có nhiều seed nếu tài nguyên cho phép.
 - [x] Có APCER, BPCER, ACER, EER và AUC ở mức video cho E0 và official E1.
@@ -788,3 +788,10 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 - [ ] Có technical report hoặc paper draft.
 - [ ] Claim cuối không vượt quá protocol và attack đã thử.
 
+
+## Cập nhật backbone ngày 01/10/2026
+
+E1 và E2 thực chạy dùng Official CDCN. Model compact Lite/Pilot đã được gỡ khỏi
+mã chạy; mọi template E1–E4 dùng `cdcn_official` hoặc `cdcn_official_head`.
+E3/E4 là template chưa chạy trên benchmark. Việc dọn mã không thay đổi kết quả
+E1/E2 đã báo cáo. Xem `reports/OFFICIAL_BACKBONE_CLEANUP.md`.

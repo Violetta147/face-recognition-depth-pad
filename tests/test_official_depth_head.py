@@ -8,7 +8,7 @@ torch = pytest.importorskip("torch")
 pytest.importorskip("torchvision")
 
 from deepface_pad.data import MANIFEST_COLUMNS, depth_supervision_required
-from deepface_pad.models import CDCN, OfficialCDCN, OfficialCDCNWithDepthHead
+from deepface_pad.models import DepthHead, OfficialCDCN, OfficialCDCNWithDepthHead
 from deepface_pad.train import _set_stage, build_model, load_initial_weights, run
 
 
@@ -45,7 +45,7 @@ def test_frozen_official_head_preserves_maps_and_batchnorm_after_optimizer_step(
 
 def test_official_head_rejects_pilot_checkpoint(tmp_path):
     checkpoint = tmp_path / "pilot.ckpt"
-    torch.save({"model": CDCN(base_channels=4).state_dict()}, checkpoint)
+    torch.save({"model": {"encoder.0.0.weight": torch.zeros(4, 3, 3, 3), "depth.0.weight": torch.zeros(1, 8, 1, 1)}}, checkpoint)
     with pytest.raises(RuntimeError, match="incompatible init checkpoint"):
         load_initial_weights(OfficialCDCNWithDepthHead(), checkpoint, torch.device("cpu"))
 
@@ -104,3 +104,38 @@ def test_official_head_training_run_saves_frozen_backbone_and_validation_artifac
     assert len(pd.read_csv(folder / "val_scores.csv")) == 2
     assert len(json.loads((folder / "initial_checkpoint.json").read_text())["sha256"]) == 64
     assert not (folder / "test_scores.csv").exists()
+
+
+def test_extracted_head_preserves_checkpoint_schema_and_numerics():
+    torch.manual_seed(42)
+    legacy = torch.nn.Module()
+    legacy.layers = torch.nn.Sequential(torch.nn.Conv2d(1, 8, 3, padding=1), torch.nn.ReLU(inplace=True), torch.nn.Conv2d(8, 16, 3, padding=1), torch.nn.ReLU(inplace=True), torch.nn.AdaptiveAvgPool2d(1))
+    legacy.classifier = torch.nn.Linear(16, 1)
+    head = DepthHead()
+    head.load_state_dict(legacy.state_dict(), strict=True)
+    depth = torch.rand(2, 1, 32, 32)
+    expected = legacy.classifier(legacy.layers(depth).flatten(1)).flatten()
+    assert torch.equal(head(depth), expected)
+    assert sum(p.numel() for p in head.parameters()) == 1265
+
+
+@pytest.mark.parametrize("name", ["cdcn", "cdcn_lite", "cdcn_mt_lite"])
+def test_removed_pilot_model_names_fail_explicitly(name):
+    with pytest.raises(ValueError, match="Lite/Pilot was removed"):
+        build_model({"model": {"name": name}})
+
+
+def test_all_depth_experiment_configs_use_official_models():
+    from pathlib import Path
+    import yaml
+
+    root = Path(__file__).resolve().parents[1]
+    for path in (root / "configs").glob("*.yaml"):
+        cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if cfg["model"]["name"] == "mobilenet_v3_small":
+            continue
+        assert cfg["model"]["name"] in {"cdcn_official", "cdcn_official_head"}, path
+        assert cfg["data"]["normalization"] == "cdcn_official", path
+        if depth_supervision_required(cfg):
+            assert cfg["loss"]["implementation"] == "official_cdcn", path
+            assert cfg["loss"]["lambda_contrast"] == 1.0, path

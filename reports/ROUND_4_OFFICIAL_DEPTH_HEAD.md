@@ -23,8 +23,8 @@ learned classifier và staged training đã có tiền lệ trong UCDCN 2024.
   ngưỡng vì mean-depth score và sigmoid head có thang điểm khác nhau.
 
 Config thực chạy: `configs/casia_e2_official_head_frozen.yaml`.
-Config `configs/e2_head_frozen.yaml` là template legacy cho pilot,
-không dùng để so với Official E1.
+Config `configs/e2_head_frozen.yaml` hiện cũng dùng Official CDCN và yêu cầu
+checkpoint Official E1; config CASIA ở trên giữ nguyên cấu hình của run đã báo cáo.
 
 ## Chạy trên Colab
 

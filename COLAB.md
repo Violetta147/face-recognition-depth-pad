@@ -59,7 +59,7 @@ python scripts/audit_depth.py data/manifests/all-with-depth.csv --data-root /con
 python scripts/run_experiment.py configs/e1_cdcn.yaml
 ```
 
-## Consolidated CASIA midterm run
+## CASIA official CDCN run
 
 These commands finish the remaining Lượt 1 to Lượt 3 artifacts. Run them from
 `/content/face-recognition-depth-pad` after the Kaggle data exists at
@@ -150,10 +150,10 @@ python scripts/audit_depth.py \
   --data-root /content/datasets/casia-fasd \
   --report /content/drive/MyDrive/face-pad/reports/casia-depth-qa.json
 
-E1_SMOKE_RUN=$(python scripts/run_experiment.py configs/casia_e1_smoke.yaml)
+E1_SMOKE_RUN=$(python scripts/run_experiment.py configs/casia_e1_cdcn_official_smoke.yaml)
 echo "E1 smoke: $E1_SMOKE_RUN"
 
-E1_RUN=$(python scripts/run_experiment.py configs/casia_e1_cdcn.yaml)
+E1_RUN=$(python scripts/run_experiment.py configs/casia_e1_cdcn_official.yaml)
 echo "E1 full: $E1_RUN"
 
 python scripts/visualize_depth_cases.py \
@@ -198,3 +198,11 @@ and metrics under `runs/`. E1, E3, and E4 also write `depth_input_snapshot.json`
 containing the verified materialization provenance, QA report, and checksum of every
 explicit depth map as it existed when preflight passed. Keep this small JSON file with
 the run when copying artifacts from Colab; it does not contain image or depth pixels.
+
+## Current notebooks
+
+Use `notebooks/Face_PAD_Official_CDCN_E1_Clean.ipynb` for a clean official E1 runbook
+and `notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb` for E2.
+The original executed E1 notebook is preserved as evidence. The legacy combined
+Lite/Pilot notebook and compact-model configs have been removed. E3/E4 templates
+now use Official CDCN with official depth loss; they have no benchmark results yet.

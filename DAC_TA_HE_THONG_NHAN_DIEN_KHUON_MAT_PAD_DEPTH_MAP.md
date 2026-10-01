@@ -110,7 +110,7 @@ Nhóm không tuyên bố một phương pháp hoàn toàn mới trước khi là
 
 ### Tên tạm của phương pháp
 
-Trong tài liệu nội bộ gọi phương pháp là **CDCN MT Lite**, viết tắt của CDCN with Lightweight Multi Task Depth Head. Đây chỉ là tên làm việc, không hàm ý novelty.
+Trong tài liệu nội bộ gọi phương pháp là **Official CDCN + learned depth head**: CDCN của tác giả kèm bộ phân loại nhỏ đọc predicted depth map. Đây chỉ là tên làm việc, không hàm ý novelty.
 
 ### Tiêu chí để có thể phát triển thành paper
 
@@ -130,7 +130,7 @@ Chỉ bắt đầu viết claim mạnh khi có đủ:
 ### 5.1 Phần bắt buộc
 
 - Một dataset chính và một protocol chính thức.
-- Ba cấu hình cốt lõi: binary baseline, CDCN baseline, CDCN MT Lite.
+- Ba cấu hình cốt lõi: binary baseline, CDCN baseline, Official CDCN + learned depth head.
 - Pseudo depth cho bona fide và zero map cho print hoặc replay.
 - APCER, BPCER, ACER, EER và ROC AUC ở mức video.
 - Parameter count, latency và FPS trên cùng máy.
@@ -251,9 +251,9 @@ L_depth = lambda_abs * L_abs + lambda_contrast * L_contrast
 score_B1 = mean(D_pred trong face mask)
 ```
 
-### 7.4 Mô hình M1 CDCN MT Lite
+### 7.4 Mô hình M1 Official CDCN + learned depth head
 
-CDCN MT Lite giữ nguyên backbone và depth output của B1. Nhóm thêm một classifier nhỏ đọc predicted depth map:
+Official CDCN + learned depth head giữ nguyên backbone và depth output của B1. Nhóm thêm một classifier nhỏ đọc predicted depth map:
 
 ```text
 Predicted depth 1 x 32 x 32
@@ -422,9 +422,9 @@ Nếu không đủ các điều kiện trên, đưa kết quả paper vào bản
 |---|---|---|---|---|---|
 | E0 | MobileNetV3 | RGB head | BCE | End to end | Binary baseline |
 | E1 | CDCN | Không | Không | Depth only | Depth baseline |
-| E2 | CDCN MT Lite | Có | BCE | Freeze backbone rồi train head | Đo tác dụng của learned depth scoring |
-| E3 | CDCN MT Lite | Có | BCE | End to end | So sánh chiến lược train |
-| E4 | CDCN MT Lite | Có | Focal | Staged và fine-tune | Cấu hình đề xuất |
+| E2 | Official CDCN + learned depth head | Có | BCE | Freeze backbone rồi train head | Đo tác dụng của learned depth scoring |
+| E3 | Official CDCN + learned depth head | Có | BCE | End to end | So sánh chiến lược train |
+| E4 | Official CDCN + learned depth head | Có | Focal | Staged và fine-tune | Cấu hình đề xuất |
 
 ### 10.1 Run budget cho nhóm hai người
 
@@ -457,7 +457,7 @@ Run | Model | Seed | APCER | BPCER | ACER | EER | AUC | Params | Latency p50
 | CASO-PAD | 2026 | Điền đúng protocol | Binary RGB | Accuracy, AUC, HTER, EER | | Có thể chỉ contextual |
 | Deep Spatial Gradient and Temporal Depth | 2020 | OULU-NPU, SiW và cross-dataset | Spatial gradient và temporal depth | ACER, EER, HTER | | Contextual nếu khác protocol |
 | Dual-Cross Central Difference Network | 2021 | OULU-NPU, SiW, CASIA-MFSD và Replay-Attack | Static-dynamic CDC | ACER, EER, HTER | | Contextual nếu khác protocol |
-| CDCN MT Lite | 2026 | Protocol nhóm chọn | Depth và classification | APCER, BPCER, ACER, EER, AUC | | Kết quả nhóm |
+| Official CDCN + learned depth head | 2026 | Protocol nhóm chọn | Depth và classification | APCER, BPCER, ACER, EER, AUC | | Kết quả nhóm |
 
 Mọi ô kết quả từ paper phải được chép từ đúng bảng và kiểm tra lại trước khi đưa vào slide. Không dùng số từ abstract nếu abstract và protocol table không cùng cách đánh giá.
 
@@ -624,7 +624,7 @@ Tên này chỉ dùng nội bộ cho đến khi kết quả chứng minh đượ
 ### 15.3 Hình và bảng cần tích lũy từ đầu
 
 - Figure 1: pipeline tổng thể.
-- Figure 2: CDCN MT Lite.
+- Figure 2: Official CDCN + learned depth head.
 - Figure 3: RGB, target depth, predicted depth và error map.
 - Figure 4: ROC hoặc score distribution.
 - Table 1: so sánh paper.
@@ -749,3 +749,10 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 - [ ] Có cấu hình máy khi báo latency.
 - [ ] Claim trên slide không mạnh hơn bằng chứng.
 
+
+## Cập nhật backbone ngày 01/10/2026
+
+E1 và E2 thực chạy dùng Official CDCN. Model compact Lite/Pilot đã được gỡ khỏi
+mã chạy; mọi template E1–E4 dùng `cdcn_official` hoặc `cdcn_official_head`.
+E3/E4 là template chưa chạy trên benchmark. Việc dọn mã không thay đổi kết quả
+E1/E2 đã báo cáo. Xem `reports/OFFICIAL_BACKBONE_CLEANUP.md`.

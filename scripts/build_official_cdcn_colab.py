@@ -27,7 +27,6 @@ Notebook sạch để đóng lại Lượt 3 bằng **kiến trúc và depth los
 
 - Giữ nguyên manifest CASIA subject-disjoint, pseudo-depth 3DDFA V2, E0 và evaluator.
 - Giữ preprocessing face-centric frame của E0; 3DDFA depth đã được render trong cùng toạ độ frame.
-- Run compact cũ được giữ với nhãn `E1-Lite Pilot`; không ghi đè.
 - Không dùng test để chọn epoch, hyperparameter hoặc quyết định extension.
 - Không dùng **Run all** qua hai cổng thủ công.
 
@@ -364,12 +363,9 @@ analysis.to_csv(REPORTS_DIR / f"{OFFICIAL_E1.name}-error-analysis.csv", index=Fa
 '''
     ),
     code(
-        '''#@title 4.3 So sánh E0, E1-Lite pilot và official E1
+        '''#@title 4.3 So sánh E0 và official E1
 E0_RUN = Path("/content/drive/MyDrive/face-pad/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z")
-PILOT_RUN = Path("/content/drive/MyDrive/face-pad/runs/CASIA_E1_CDCN_seed42_20260921T024300Z")
 rows = {"E0_MobileNetV3": json.loads((E0_RUN / "test_metrics.json").read_text())}
-if (PILOT_RUN / "test_metrics.json").is_file():
-    rows["E1_Lite_Pilot"] = json.loads((PILOT_RUN / "test_metrics.json").read_text())
 rows["E1_Official_CDCN"] = test_metrics
 comparison = pd.DataFrame(rows).T[["threshold", "apcer", "bpcer", "acer", "eer", "auc"]]
 comparison["acer_delta_vs_E0"] = comparison.acer - comparison.loc["E0_MobileNetV3", "acer"]
@@ -438,6 +434,6 @@ notebook = {
     "nbformat_minor": 5,
 }
 
-destination = Path(__file__).resolve().parents[1] / "notebooks" / "Face_PAD_Official_CDCN_E1_Rerun.ipynb"
+destination = Path(__file__).resolve().parents[1] / "notebooks" / "Face_PAD_Official_CDCN_E1_Clean.ipynb"
 destination.write_text(json.dumps(notebook, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
 print(destination)

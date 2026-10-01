@@ -20,8 +20,6 @@ from .data import PadDataset, manifest_checksum
 from .losses import FocalLoss, depth_loss, official_cdcn_depth_loss
 from .metrics import aggregate_video_scores, evaluate_scores
 from .models import (
-    CDCN,
-    CDCNMultiTaskLite,
     MobileNetBaseline,
     OFFICIAL_CDCN_PROVENANCE,
     OfficialCDCN,
@@ -38,20 +36,15 @@ def seed_everything(seed: int) -> None:
 def build_model(config: dict) -> nn.Module:
     name = config["model"]["name"]
     if name == "mobilenet_v3_small": return MobileNetBaseline(config["model"].get("pretrained", True))
-    if name in {"cdcn", "cdcn_lite"}: return CDCN(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
     if name == "cdcn_official": return OfficialCDCN(config["model"].get("theta", 0.7))
     if name == "cdcn_official_head": return OfficialCDCNWithDepthHead(config["model"].get("theta", 0.7))
-    if name == "cdcn_mt_lite": return CDCNMultiTaskLite(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
+    if name in {"cdcn", "cdcn_lite", "cdcn_mt_lite"}:
+        raise ValueError("Legacy CDCN Lite/Pilot was removed; use cdcn_official or cdcn_official_head with an official checkpoint")
     raise ValueError(f"unknown model: {name}")
 
 
 def load_initial_weights(model: nn.Module, checkpoint_path: str | Path, device: torch.device) -> None:
-    """Load an E1 checkpoint into the compatible E2 backbone.
-
-    E1 stores a bare ``CDCN`` with keys such as ``encoder.0.0.weight``.  E2
-    wraps that same module under ``backbone``.  Remapping is explicit so a
-    frozen, randomly initialized E2 backbone can never pass unnoticed.
-    """
+    # Official E1 keys are explicitly mapped into the E2 backbone namespace.
     state = torch.load(checkpoint_path, map_location=device, weights_only=False)
     weights = state["model"]
     target_keys = set(model.state_dict())

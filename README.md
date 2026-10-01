@@ -28,8 +28,8 @@ The implementation follows the research protocol rather than a product-style rec
 | E0 | MobileNetV3 with BCE | Lightweight binary baseline |
 | E1 | CDCN depth-only with mean-depth scoring | Depth-supervised baseline |
 | E2 | CDCN plus frozen learned depth head with BCE | Isolate learned scoring |
-| E3 | CDCN MT Lite trained end-to-end with BCE | Test joint optimization |
-| E4 | CDCN MT Lite with staged training and Focal Loss | Proposed configuration |
+| E3 | Official CDCN + learned depth head trained end-to-end with BCE | Test joint optimization |
+| E4 | Official CDCN + learned depth head with staged training and Focal Loss | Proposed configuration |
 
 The project uses one public PAD benchmark and one official protocol. Primary metrics are video-level APCER, BPCER, ACER, EER and ROC AUC. It also reports parameter count, model size, latency and FPS.
 
@@ -61,14 +61,12 @@ Literature and protocol
 - [x] Manifest leakage validator and metric tests implemented.
 - [x] Resumable pseudo-depth queue, status ledger, QA audit, and failure reporting implemented.
 - [x] E0 MobileNetV3 baseline implemented.
-- [x] E1 compact CDCN-style pilot and resumable 3DDFA V2 worker implemented.
+- [x] Resumable 3DDFA V2 worker implemented.
 - [x] Official CDCN CVPR 2020 architecture/loss ported with pinned-source provenance
       and a numerical equivalence verifier.
 - [x] E1-to-E2 checkpoint transfer and staged-training code covered by unit tests.
-- [x] E1-Lite pilot completed a 30-epoch pseudo-depth run, validation threshold
-      selection, locked test evaluation, depth-case inspection, and E0 comparison.
-- [x] Official-CDCN E1 correction run completed and frozen. The pilot result is
-      retained separately and is not reported as an official CDCN reproduction.
+- [x] Official-CDCN E1 run completed and frozen.
+- [x] Legacy Lite/Pilot executable model, configs and combined notebook removed.
 - [ ] E2-E4 have completed end-to-end integration runs.
 - [x] Official-backbone frozen E2 run reported from Colab on 1 October 2026:
       same ACER and same five false-rejected live videos as E1. The summary
@@ -106,7 +104,8 @@ path in `training.init_checkpoint`; it fails instead of silently training a head
 random frozen backbone.
 For a comparison with the corrected official E1, use
 `configs/casia_e2_official_head_frozen.yaml` and `cdcn_official_head`.
-The legacy `e2_head_frozen.yaml` uses the compact pilot backbone.
+All E1-E4 templates now use the official backbone. Removed pilot model names fail explicitly.
+`DepthHead` is a separate module; its 1,265 parameters and checkpoint keys are unchanged.
 The official wrapper freezes BatchNorm statistics as well as parameters during
 head-only training; E1 and E2 must produce identical depth maps.
 The clean `notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb` restores the E1
@@ -145,15 +144,14 @@ For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.m
 
 ## Next deliverables
 
-Rounds 1-3 are technically complete. The former E1 result is retained as an
-E1-Lite pilot; the corrected official-CDCN E1 was selected on validation and
+Rounds 1-4 have reported CASIA development results. Official-CDCN E1 was selected on validation and
 scored once on locked test. The clean correction runbook is
-`notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb`. The executed notebook and all
+`notebooks/Face_PAD_Official_CDCN_E1_Clean.ipynb`. The original executed notebook and all
 biometric artifacts remain private on Google Drive.
 
 1. Write the midterm report and build the deck from the corrected frozen artifacts.
 2. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
-3. Continue with E2-E4 only as new experiments selected on validation.
+3. Continue with E3/E4 as untested official-backbone templates selected on validation.
 
 ## Scope limits
 
@@ -176,3 +174,8 @@ Webcam and ArcFace may be added at the end as a small integration demo. They are
 - Zero-depth spoof labels apply to the selected print/replay setting and do not support claims about 3D masks.
 - Test data is used only after configuration and threshold selection are frozen.
 
+
+## Model cleanup audit
+
+See [Official backbone audit and pilot removal](reports/OFFICIAL_BACKBONE_CLEANUP.md).
+Historical results remain in audit reports and Git history; they are not active experiments.

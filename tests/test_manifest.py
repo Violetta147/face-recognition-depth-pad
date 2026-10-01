@@ -30,11 +30,11 @@ def test_depth_supervision_rejects_missing_bona_fide_target(tmp_path: Path):
 
 
 def test_only_depth_consuming_configs_require_targets():
-    assert depth_supervision_required({"model": {"name": "cdcn"}})
+    assert depth_supervision_required({"model": {"name": "cdcn_official"}})
     assert depth_supervision_required({"model": {"name": "cdcn_official"}})
     assert depth_supervision_required(
         {
-            "model": {"name": "cdcn_mt_lite"},
+            "model": {"name": "cdcn_official_head"},
             "training": {"stages": [{"name": "joint"}]},
             "loss": {"lambda_abs": 1.0, "lambda_contrast": 0.5},
         }
@@ -42,7 +42,7 @@ def test_only_depth_consuming_configs_require_targets():
     assert not depth_supervision_required({"model": {"name": "mobilenet_v3_small"}})
     assert not depth_supervision_required(
         {
-            "model": {"name": "cdcn_mt_lite"},
+            "model": {"name": "cdcn_official_head"},
             "training": {"stages": [{"name": "head"}]},
             "loss": {"lambda_abs": 0.0, "lambda_contrast": 0.0},
         }

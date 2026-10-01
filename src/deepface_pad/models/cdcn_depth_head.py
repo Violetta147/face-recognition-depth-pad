@@ -3,7 +3,7 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from .cdcn import DepthHead
+from .depth_head import DepthHead
 from .cdcn_official import OfficialCDCN
 
 
