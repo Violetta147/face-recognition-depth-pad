@@ -18,6 +18,7 @@ The implementation follows the research protocol rather than a product-style rec
 - [Frozen CASIA E0 result](reports/CASIA_E0_BCE_5E_seed42_summary.md)
 - [Audit of rounds 1-3](reports/MIDTERM_ROUNDS_1_3_AUDIT.md)
 - [Midterm handoff and required Colab evidence](reports/MIDTERM_ROUNDS_1_3_HANDOFF.md)
+- [Round 4: frozen head on the official E1 checkpoint](reports/ROUND_4_OFFICIAL_DEPTH_HEAD.md)
 
 ## Mandatory study
 
@@ -99,6 +100,11 @@ All configurations use validation data to select the operating threshold. Test s
 must only be evaluated after the configuration is frozen. E2 requires the E1 checkpoint
 path in `training.init_checkpoint`; it fails instead of silently training a head on a
 random frozen backbone.
+For a comparison with the corrected official E1, use
+`configs/casia_e2_official_head_frozen.yaml` and `cdcn_official_head`.
+The legacy `e2_head_frozen.yaml` uses the compact pilot backbone.
+The official wrapper freezes BatchNorm statistics as well as parameters during
+head-only training; E1 and E2 must produce identical depth maps.
 Depth-supervised runs also perform manifest preflight before creating a run: every
 bona fide sample must reference an existing pseudo-depth target. Empty attack depth
 paths remain valid because their protocol target is an all-zero map.

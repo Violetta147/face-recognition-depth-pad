@@ -25,6 +25,7 @@ from .models import (
     MobileNetBaseline,
     OFFICIAL_CDCN_PROVENANCE,
     OfficialCDCN,
+    OfficialCDCNWithDepthHead,
 )
 from .preflight import inspect_training_inputs
 
@@ -39,6 +40,7 @@ def build_model(config: dict) -> nn.Module:
     if name == "mobilenet_v3_small": return MobileNetBaseline(config["model"].get("pretrained", True))
     if name in {"cdcn", "cdcn_lite"}: return CDCN(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
     if name == "cdcn_official": return OfficialCDCN(config["model"].get("theta", 0.7))
+    if name == "cdcn_official_head": return OfficialCDCNWithDepthHead(config["model"].get("theta", 0.7))
     if name == "cdcn_mt_lite": return CDCNMultiTaskLite(config["model"].get("theta", 0.7), config["model"].get("base_channels", 32))
     raise ValueError(f"unknown model: {name}")
 
@@ -116,9 +118,12 @@ def run(config_path: str | Path) -> Path:
     (run_dir / "environment.txt").write_text(f"python={sys.version}\nplatform={platform.platform()}\ntorch={torch.__version__}\ndevice={device}\n", encoding="utf-8")
     checksum = manifest_checksum(config["data"]["manifest"])
     (run_dir / "manifest_checksum.json").write_text(json.dumps({"sha256": checksum}, indent=2), encoding="utf-8")
-    if config["model"]["name"] == "cdcn_official":
+    if config["model"]["name"] in {"cdcn_official", "cdcn_official_head"}:
+        provenance = dict(OFFICIAL_CDCN_PROVENANCE)
+        if config["model"]["name"] == "cdcn_official_head":
+            provenance["modification"] = "DepthHead: Conv 1->8->16, global average pool, Linear 16->1"
         (run_dir / "model_provenance.json").write_text(
-            json.dumps(OFFICIAL_CDCN_PROVENANCE, indent=2) + "\n", encoding="utf-8"
+            json.dumps(provenance, indent=2) + "\n", encoding="utf-8"
         )
     if depth_snapshot is not None:
         (run_dir / "depth_input_snapshot.json").write_text(
@@ -142,6 +147,10 @@ def run(config_path: str | Path) -> Path:
     initial = config["training"].get("init_checkpoint")
     if initial:
         load_initial_weights(model, initial, device)
+        (run_dir / "initial_checkpoint.json").write_text(
+            json.dumps({"path": str(initial), "sha256": manifest_checksum(initial)}, indent=2) + "\n",
+            encoding="utf-8",
+        )
     elif any(stage["name"] == "head" for stage in stages):
         raise ValueError("head-only training requires training.init_checkpoint from E1")
     for stage in stages:
