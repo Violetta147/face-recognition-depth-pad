@@ -85,10 +85,10 @@ Không lấy checkpoint epoch 10 hoặc sửa ngưỡng để cải thiện test
 | Mô hình | Params | Latency p50 ms | Latency p95 ms | FPS từ p50 |
 |---|---:|---:|---:|---:|
 | E1 fixed mean | 2.245.016 | 4,519156 | 4,554083 | 221,280257 |
-| E2 frozen head | 2.246.281 | 4,256989 | 4,354813 | 234,907336 |
+| E2 frozen head | 2.246.281 | 4,242899 | 4,354813 | 235,687911 |
 
-Head tăng 1.265 tham số, tức 0,05635%. Trong lần đo này E2 p50 thấp hơn 0,262167
-ms (khoảng 5,80%), nhưng notebook đo E1 rồi E2 theo thứ tự cố định, mỗi model 10
+Head tăng 1.265 tham số, tức 0,05635%. Trong lần đo này E2 p50 thấp hơn 0,276257
+ms (khoảng 6,11%), nhưng notebook đo E1 rồi E2 theo thứ tự cố định, mỗi model 10
 warmup và 50 lần đo. Chưa có nhiều lượt hoặc thứ tự đảo để loại ảnh hưởng clock,
 warmup và tải GPU. Vì thế chỉ báo số quan sát, không khẳng định E2 nhanh hơn
 hoặc chứng minh latency không tăng dưới 10%. Có thể nói chưa quan sát thấy phần
