@@ -41,3 +41,35 @@ PPTX và các hình có biometric pixels được xuất vào `artifacts/present
 Nguồn nội dung không có pixel và test kiểm tra metric/count/chi phí được commit.
 Kiểm tra package, text geometry, editable tables, notes và render từng slide trước
 khi giao. Việc render không có nghĩa là đã mở thử trong PowerPoint.
+
+## Dựng lại và trạng thái kiểm tra
+
+Builder: `scripts/build_rounds1_4_presentation.mjs`, dùng `@oai/artifact-tool`.
+Cần runtime do `load_workspace_dependencies` trả về và skill Presentations.
+Đặt `SKILL_DIR`, `RUNTIME_NODE_MODULES`, `RUNTIME_PYTHON` theo máy hiện tại;
+copy builder vào `artifacts/.build-report-20261002/build.mjs` và tạo junction
+`node_modules` trong thư mục build tới `RUNTIME_NODE_MODULES`, rồi chạy Node
+từ repository root. Tham số tùy chọn: root tuyệt đối và tên PPTX mới.
+Finalizer không ghi đè file hoặc receipt đã tồn tại; muốn dựng lại hãy dùng tên mới.
+
+Output giao: `artifacts/presentations/DeepFace_PAD_Bao_cao_03-10-2026.pptx`
+và `artifacts/presentations/Loi_thuyet_trinh_Luot_1_4.md`.
+PPTX có 22 trang, 9 bảng native, sơ đồ chính native và 22 trang Notes.
+Hình notebook và sơ đồ gốc là PNG; không dựng lại các curve từ dữ liệu suy đoán.
+
+Kiểm tra ngày 02/10/2026:
+
+- `python -m pytest -q tests/test_presentation_evidence.py`: **3 passed**.
+  Test thứ ba kiểm tra PPTX thực: tác giả, AUC, video lỗi, Notes và bảng editable;
+  tự skip nếu máy khác không có artifact biometric được Git ignore.
+- Finalizer: package và geometry không có findings; font Arial; import lại đủ
+  22 slide; 9 bảng native. Receipt nằm trong thư mục build riêng.
+- Import chính PPTX cuối, render lại đủ 22 slide và đọc toàn bộ bản render.
+  Sửa mũi tên để luồng model đi từ RGB sang output trước khi giao.
+- Lệnh authoring kết thúc với exit code 1 nhưng không có exception sau khi
+  in đường dẫn final; không dùng exit code này làm bằng chứng PASS. Receipt,
+  test nội dung artifact và lệnh import/render độc lập (exit 0) là bằng chứng
+  kiểm tra ở trên.
+
+SHA-256 PPTX cuối:
+`11c4a6145f78499351197b584f8dde7aca3b5c873004ea4095f2cbc2486bea0b`.
