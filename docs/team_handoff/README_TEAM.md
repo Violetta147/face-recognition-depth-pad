@@ -1,40 +1,34 @@
-# DeepFace-PAD: bộ bàn giao nghiên cứu
+# DeepFace-PAD
 
-Bản bàn giao ngày 22/10/2026. Ngôn ngữ: tiếng Việt.
+Dự án nghiên cứu dùng Official CDCN và bộ phân loại từ bản đồ độ sâu để phân
+biệt mặt thật, ảnh in và video phát lại. Dữ liệu đang dùng là CASIA-FASD với
+split theo người của dự án. Đây là kết quả CASIA development, không dùng để
+xếp hạng trực tiếp với paper có protocol khác.
 
-Dự án kiểm tra khả năng dùng bản đồ độ sâu để phân biệt mặt thật với ảnh in
-và video phát lại. Mã nguồn và kết quả đã có đến Lượt 7. Dự án chưa hoàn tất.
+## Bắt đầu trên máy mới
 
-## Bắt đầu tại đây
+1. Pull main nếu đã có clone; nếu chưa có, clone repository.
+2. Đọc [trạng thái và việc còn lại](docs/PROJECT_STATUS.md).
+3. Làm theo [thiết lập máy mới](docs/SETUP.md).
+4. Xem [dữ liệu và video ngoài Git](docs/DATA_ASSETS.md) nếu công việc cần chúng.
 
-1. Đọc [bàn giao nhóm](docs/team_handoff/BAN_GIAO_NHOM.md).
-2. Đọc [danh mục giao nhận](docs/team_handoff/DANH_MUC_GIAO_NHAN.md).
-3. Làm theo [khôi phục và kiểm tra](docs/team_handoff/KHOI_PHUC_VA_KIEM_TRA.md).
-4. Chọn một việc trong bảng công việc còn lại.
-5. Lập [phiếu thí nghiệm mới](docs/team_handoff/THI_NGHIEM_MOI_MAU.md) trước khi thay phương pháp.
+Repository mô tả dự án và đủ ngữ cảnh để làm tiếp. Không cần lịch sử chat.
 
-Lượt 6 đã hoàn tất sáu lượt chạy và 138 epoch. E3 giảm ACER trung bình nhưng
-kém E1 ở seed 44. Chưa có bằng chứng cải thiện ổn định. Webcam đã có timing
-thực nhưng còn từ chối người thật. Giữ cả các kết quả không cải thiện.
+## Đã có
 
-## Kiểm tra bản nhận
+- Mã nguồn: src/deepface_pad/, scripts/, configs/, tests/.
+- Checkpoint, threshold, score của 12 lượt chạy chính: evidence/face-pad/runs/.
+- Manifest nguồn và manifest depth: data/manifests/.
+- Kết quả, hình, Word, paper và slide: reports/.
+- Bằng chứng số Lượt 6–7: các thư mục đã chọn trong artifacts/.
+- Danh mục tệp và SHA-256: delivery/FILES.json.
 
-```powershell
-python scripts/verify_team_handoff.py --root .
-```
+Lượt 6 đã có sáu model, 138 epoch và ba cặp seed E1/E3. E3 chỉ tốt hơn ở 2/3
+seed. Lượt 7 đã có phân tích lỗi, 20 panel, median window và FPS/TTD thực đo.
+Demo còn từ chối live, thiếu print và chưa kiểm quay lại đủ cửa sổ.
+Word/paper/slide hiện tại chỉ đến Lượt 5. Phần còn lại là hoàn tất Lượt 7–8
+theo kế hoạch; không có yêu cầu train mới.
 
-Tệp [delivery/FILES.json](delivery/FILES.json) liệt kê từng tệp, kích thước,
-SHA-256, nguồn và vai trò. Bản bàn giao cập nhật nhánh main hiện có trên GitHub.
-Commit bàn giao nối tiếp lịch sử remote; không nhập các commit cục bộ chứa hook.
-Mã commit cũ trong báo cáo được giữ làm thông tin nguồn.
-Dùng các source ZIP đi kèm để đọc phiên bản cũ; không giả định commit cũ có
-trong lịch sử của nhánh này.
-
-Bản GitHub có mã nguồn, kiểm thử nghiên cứu, bản thảo, hình, score CSV và
-checkpoint. Bộ dữ liệu ảnh đầy đủ và video webcam không nằm trong GitHub.
-Các điều kiện nhận chúng được ghi trong danh mục giao nhận. Bản clone đủ để
-kiểm hash và phân tích score trên CPU; dựng lại ảnh cần thêm archive dữ liệu.
-
-Tài liệu trong `reports/` là bằng chứng có ngày tháng. Chỉ tài liệu bàn giao
-nhóm này mô tả công việc hiện tại. Không dùng kế hoạch cũ làm lệnh chạy lại
-thí nghiệm đã hoàn tất. Bản Word/paper hiện tại chỉ đến Lượt 5.
+Đọc các tài liệu trên trước. Chỉ mở báo cáo hoặc notebook lịch sử liên quan
+đến việc đang làm. Chúng là bằng chứng của từng thời điểm, không phải lệnh
+chạy lại các lượt đã hoàn tất. Không đưa chat hoặc bản xuất chat vào repository.

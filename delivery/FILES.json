@@ -191,16 +191,16 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\ROUND6_COST_COLAB_GUIDE.md"
     },
     "docs/team_handoff/AGENTS_TEAM.md": {
-      "sha256": "bf5fc8f1a8ecf2a6f4ea4a9b22824dcabf5eb5cf8298bf887971616a4565fdf8",
-      "bytes": 995,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\AGENTS_TEAM.md"
+      "sha256": "811ef546561fc834eea3d83375e69b9683175ff5b20bea43c1ea4429085154c5",
+      "bytes": 1047,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/BAN_GIAO_NHOM.md": {
-      "sha256": "fe0fc5eb30ca3e337be94231156246f69fd7c45c63d143362861953484ee0163",
-      "bytes": 14455,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\BAN_GIAO_NHOM.md"
+      "sha256": "f7406dffcfe2b3422d41347092f9a0c728a92b497c6612d2514069885f28feb8",
+      "bytes": 94,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/COLAB_TEAM.md": {
       "sha256": "fd2c41cf0cdbb60ecd33b13f714b37aee1c6757b6f6e26e7f98bb4cf581de39e",
@@ -209,16 +209,16 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\COLAB_TEAM.md"
     },
     "docs/team_handoff/CURRENT_TEAM.md": {
-      "sha256": "19ab411e4c3c184c46830cdaeb2f63c2fb2e6ee127f99c9ce509c17bfcfb23b0",
-      "bytes": 697,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\CURRENT_TEAM.md"
+      "sha256": "426b16cfe589f697cca8a6220ceb6c676a38121daa2c499bfe63be3e9a97007d",
+      "bytes": 149,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/DANH_MUC_GIAO_NHAN.md": {
-      "sha256": "c013726ddd62c7b288490ba506fbdce7f20df32b8b64734c18b13ecf0b32948d",
-      "bytes": 5619,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\DANH_MUC_GIAO_NHAN.md"
+      "sha256": "931714c62f879187268eb5557f7431b8f80f0ea29495e76ae6c61648de0821ad",
+      "bytes": 91,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/GITIGNORE_TEAM.txt": {
       "sha256": "e1418be295f417ee4ae80533a2187a16e6155d5b01fdfee9d13718c5daf9d4e7",
@@ -227,22 +227,16 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\GITIGNORE_TEAM.txt"
     },
     "docs/team_handoff/KHOI_PHUC_VA_KIEM_TRA.md": {
-      "sha256": "57417d11af85929e05706eb37efb6d7757e3100840dd9b369c7af9c799e97d63",
-      "bytes": 8235,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\KHOI_PHUC_VA_KIEM_TRA.md"
+      "sha256": "8eb947728594283493087758d5780383e373fc24b08fd117860d8a2541627503",
+      "bytes": 85,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/README_TEAM.md": {
-      "sha256": "27027749846aab897fc533206efa62c52c7aa9bf35eec10c32741173efc2d3a1",
-      "bytes": 2306,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\README_TEAM.md"
-    },
-    "docs/team_handoff/THI_NGHIEM_MOI_MAU.md": {
-      "sha256": "35245bb299c2f570823fc0b8b1408bfe9745033a84a28db5ea6e5e2acddc46e5",
-      "bytes": 2380,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\THI_NGHIEM_MOI_MAU.md"
+      "sha256": "6ca0632bd21cbcb4cafc541ae3a1df95559af2ff6946d79b728bbc3a4e6c9c71",
+      "bytes": 1990,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "docs/team_handoff/requirements-cpu.txt": {
       "sha256": "e92ddce6410bda97a2cbdb2dd60d2b89747dd0c71c46ca1bbeb04d60b1872d7f",
@@ -315,12 +309,6 @@
       "bytes": 34963,
       "role": "Research source, test, config, manuscript or recorded evidence",
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\notebooks\\Face_PAD_Round6_Cost_E1_E3_E4_Executed.ipynb"
-    },
-    "notes/Quy_tac_chuan_hoa_van_phong_va_loc_nhat_ky_AI.md": {
-      "sha256": "957bfce684eb6353d50f24f50afc06c3f9741fd0c13fc1c2ca148f70c0fdc6b4",
-      "bytes": 15147,
-      "role": "Research source, test, config, manuscript or recorded evidence",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\notes\\Quy_tac_chuan_hoa_van_phong_va_loc_nhat_ky_AI.md"
     },
     "pyproject.toml": {
       "sha256": "d728e0fc5d034d6c7fb563b88221ab5028967cdb926abe711b3c77dcad878076",
@@ -1583,16 +1571,16 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\tests\\test_webcam.py"
     },
     "README.md": {
-      "sha256": "27027749846aab897fc533206efa62c52c7aa9bf35eec10c32741173efc2d3a1",
-      "bytes": 2306,
-      "role": "Portable team entry point",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\README_TEAM.md"
+      "sha256": "6ca0632bd21cbcb4cafc541ae3a1df95559af2ff6946d79b728bbc3a4e6c9c71",
+      "bytes": 1990,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "AGENTS.md": {
-      "sha256": "bf5fc8f1a8ecf2a6f4ea4a9b22824dcabf5eb5cf8298bf887971616a4565fdf8",
-      "bytes": 995,
-      "role": "Portable team entry point",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\AGENTS_TEAM.md"
+      "sha256": "811ef546561fc834eea3d83375e69b9683175ff5b20bea43c1ea4429085154c5",
+      "bytes": 1047,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     ".gitignore": {
       "sha256": "e1418be295f417ee4ae80533a2187a16e6155d5b01fdfee9d13718c5daf9d4e7",
@@ -1607,10 +1595,10 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\COLAB_TEAM.md"
     },
     "docs/handoffs/CURRENT.md": {
-      "sha256": "19ab411e4c3c184c46830cdaeb2f63c2fb2e6ee127f99c9ce509c17bfcfb23b0",
-      "bytes": 697,
-      "role": "Portable team entry point",
-      "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\team_handoff\\CURRENT_TEAM.md"
+      "sha256": "426b16cfe589f697cca8a6220ceb6c676a38121daa2c499bfe63be3e9a97007d",
+      "bytes": 149,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     },
     "reports/slides_round5/assets/case_s32_v2.png": {
       "sha256": "f82649f1cc87214c4de963b50002e8babc8465439910e357c9f10674e22bc84a",
@@ -4119,251 +4107,40 @@
       "bytes": 2567,
       "role": "Delivery validation and explicit limitations",
       "source": "Generated after successful clean-export tests"
+    },
+    "docs/PROJECT_STATUS.md": {
+      "sha256": "ba1ef9920e1792f8908e2cd16bc46cd79bc61d20947246802188cfd99cf5547f",
+      "bytes": 11073,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
+    },
+    "docs/SETUP.md": {
+      "sha256": "4bb332127151762a3cb4d95cd52f8d20c4cf1791b199a49933d10571de67a48c",
+      "bytes": 7327,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
+    },
+    "docs/DATA_ASSETS.md": {
+      "sha256": "f8da63a9f8d2db050af1190096e1da1f3bdbf532332e48c95d27bccb6ef4a518",
+      "bytes": 3355,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
+    },
+    "delivery/SELECTION_AUDIT.json": {
+      "sha256": "68d296987a47c2b72aac6b58ce7f807cf93a37500f5d3af008acde7c3c9f786d",
+      "bytes": 8327,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
+    },
+    "delivery/DOCUMENTATION_REVISION.json": {
+      "sha256": "9d4e4ffc52fbb13aef821450fbe5f145c20cb94f4a6b8b09de3ea66c864a70c7",
+      "bytes": 950,
+      "role": "Project documentation for a new device",
+      "source": "Verified project files and existing eight-round plan"
     }
   },
-  "excluded_tracked_files": [
-    {
-      "path": ".codex/evidence_manifest.json",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": ".codex/hooks.json",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": ".codex/publication_baseline.json",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": ".githooks/pre-commit",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": ".gitignore",
-      "reason": "Replaced by portable team entry point"
-    },
-    {
-      "path": "AGENTS.md",
-      "reason": "Replaced by portable team entry point"
-    },
-    {
-      "path": "COLAB.md",
-      "reason": "Replaced by portable team entry point"
-    },
-    {
-      "path": "KE_HOACH_HOOKS_VA_BAN_GIAO.md",
-      "reason": "Local agent automation only"
-    },
-    {
-      "path": "README.md",
-      "reason": "Replaced by portable team entry point"
-    },
-    {
-      "path": "docs/ARCHIVE_2026-10-21.json",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOKS.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOKS_CLOSEOUT_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOKS_QUARANTINE_2026-10-22.json",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOKS_VALIDATION_2026-10-21.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOK_EVIDENCE_MAP.json",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/HOOK_EVIDENCE_MAP.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/NATIVE_HOOK_FORK_INTERRUPT.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/NATIVE_HOOK_LIFECYCLE.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/NATIVE_HOOK_SMOKE.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/NOTEBOOK_IMPORT_2026-10-22.json",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/PROJECT_INVENTORY.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/PROJECT_INVENTORY_VALIDATION_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/PROJECT_REVIEW_FOR_ROUND6_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/THIRD_PARTY_HOOKS.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/CURRENT.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/ROUND6_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/ROUND6_CLOSEOUT_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/ROUND6_PACKAGE_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/ROUND7_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "docs/handoffs/archive/HOOKS_2026-10-22.md",
-      "reason": "Superseded local operating context; replaced by team handbook"
-    },
-    {
-      "path": "notes/Hỏi đáp 19102026.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/archive/briefings/face-pad-core-briefing.pptx",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/marp_slides_tutorial/PORTING.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/marp_slides_tutorial/SKILL.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/marp_slides_tutorial/assets/example.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/marp_slides_tutorial/references/troubleshooting.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "reports/marp_slides_tutorial/references/tutorial.md",
-      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
-    },
-    {
-      "path": "scripts/project_hooks/__init__.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/cli.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/common.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/entry.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/evidence.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/freshness.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/handoff.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/install.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/launch.ps1",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/pre-commit.ps1",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/precommit.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/runtime.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/seal-vault.ps1",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/validation.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_hooks/vault-acl.ps1",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/__init__.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/cli.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/core.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/entry.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/install.py",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "scripts/project_inventory/launch.ps1",
-      "reason": "Local agent automation or installed runtime"
-    },
-    {
-      "path": "tests/test_project_hooks.py",
-      "reason": "Local agent automation only"
-    },
-    {
-      "path": "tests/test_project_inventory.py",
-      "reason": "Local agent automation only"
-    }
-  ],
   "self_excluded": [
     "delivery/FILES.json"
-  ]
+  ],
+  "selection_audit": "delivery/SELECTION_AUDIT.json"
 }

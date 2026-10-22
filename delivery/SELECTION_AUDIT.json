@@ -1,0 +1,245 @@
+{
+  "purpose": "Technical audit; not required project context or work instructions",
+  "excluded_files": [
+    {
+      "path": ".codex/evidence_manifest.json",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": ".codex/hooks.json",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": ".codex/publication_baseline.json",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": ".githooks/pre-commit",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": ".gitignore",
+      "reason": "Replaced by portable team entry point"
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Replaced by portable team entry point"
+    },
+    {
+      "path": "COLAB.md",
+      "reason": "Replaced by portable team entry point"
+    },
+    {
+      "path": "KE_HOACH_HOOKS_VA_BAN_GIAO.md",
+      "reason": "Local agent automation only"
+    },
+    {
+      "path": "README.md",
+      "reason": "Replaced by portable team entry point"
+    },
+    {
+      "path": "docs/ARCHIVE_2026-10-21.json",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOKS.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOKS_CLOSEOUT_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOKS_QUARANTINE_2026-10-22.json",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOKS_VALIDATION_2026-10-21.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOK_EVIDENCE_MAP.json",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/HOOK_EVIDENCE_MAP.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/NATIVE_HOOK_FORK_INTERRUPT.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/NATIVE_HOOK_LIFECYCLE.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/NATIVE_HOOK_SMOKE.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/NOTEBOOK_IMPORT_2026-10-22.json",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/PROJECT_INVENTORY.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/PROJECT_INVENTORY_VALIDATION_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/PROJECT_REVIEW_FOR_ROUND6_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/THIRD_PARTY_HOOKS.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/CURRENT.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/ROUND6_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/ROUND6_CLOSEOUT_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/ROUND6_PACKAGE_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/ROUND7_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "docs/handoffs/archive/HOOKS_2026-10-22.md",
+      "reason": "Superseded local operating context; replaced by team handbook"
+    },
+    {
+      "path": "notes/Hỏi đáp 19102026.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/archive/briefings/face-pad-core-briefing.pptx",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/marp_slides_tutorial/PORTING.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/marp_slides_tutorial/SKILL.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/marp_slides_tutorial/assets/example.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/marp_slides_tutorial/references/troubleshooting.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "reports/marp_slides_tutorial/references/tutorial.md",
+      "reason": "Tutorial, early briefing or conversation; not experimental evidence"
+    },
+    {
+      "path": "scripts/project_hooks/__init__.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/cli.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/common.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/entry.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/evidence.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/freshness.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/handoff.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/install.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/launch.ps1",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/pre-commit.ps1",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/precommit.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/runtime.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/seal-vault.ps1",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/validation.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_hooks/vault-acl.ps1",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/__init__.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/cli.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/core.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/entry.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/install.py",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "scripts/project_inventory/launch.ps1",
+      "reason": "Local agent automation or installed runtime"
+    },
+    {
+      "path": "tests/test_project_hooks.py",
+      "reason": "Local agent automation only"
+    },
+    {
+      "path": "tests/test_project_inventory.py",
+      "reason": "Local agent automation only"
+    }
+  ]
+}
