@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "hash_algorithm": "sha256",
+  "source_manifest": {
+    "file": "casia_fasd_debug.csv",
+    "sha256": "58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192"
+  },
+  "ledger": {
+    "file": "depth_status.csv",
+    "sha256": "0b5039669c4478e5eb5919e6aac2c4da5b99971f6a233681671db5c5fc2d6c33"
+  },
+  "derived_manifest": {
+    "file": "casia_fasd_debug_with_depth.csv",
+    "sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+  },
+  "rows": 12000,
+  "bona_fide": 3000,
+  "attack": 9000,
+  "worker_metadata": {
+    "file": "depth_status.csv.worker.json",
+    "sha256": "c7dfaecbd647295beee9eaa47d4bf04f93a5d7b1c23463cdb228577023936378"
+  }
+}

@@ -1,0 +1,32 @@
+experiment_id: ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE
+seed: 44
+runs_dir: /content/drive/MyDrive/face-pad/runs
+model:
+  name: cdcn_official_head
+  theta: 0.7
+data:
+  manifest: data/manifests/casia_fasd_debug_with_depth.csv
+  source_manifest: data/manifests/casia_fasd_debug.csv
+  depth_ledger: /content/datasets/casia-fasd/depth/depth_status.csv
+  root: /content/datasets/casia-fasd
+  image_size: 256
+  normalization: cdcn_official
+loss:
+  implementation: official_cdcn
+  classification: bce
+  lambda_abs: 1.0
+  lambda_contrast: 1.0
+  lambda_cls: 1.0
+training:
+  selection_metric: classification_bce
+  batch_size: 8
+  workers: 2
+  optimizer: adam
+  weight_decay: 0.0001
+  stages:
+  - name: joint
+    epochs: 16
+    lr: 0.0001
+evaluation:
+  aggregation: mean
+round6_initializer: E1_44

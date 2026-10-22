@@ -1,0 +1,66 @@
+{
+  "source_sha256": "96c55b439d04b6b454e6748ca94e3bc0ca3dc8be7857847fd8787cd6bd241ef6",
+  "reference_sha256": "a94cd5a23fc1d68227688de8ba425642925b5e043dcd578305cc0394fb49c9da",
+  "source": "reports\\bao_cao_cuoi_ky\\ban_thao\\BAO_CAO_CUOI_KY.md",
+  "output": "reports\\bao_cao_cuoi_ky\\ban_thao\\Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016.docx",
+  "images": [
+    {
+      "path": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\validation-depth-case.png",
+      "sha256": "84ad135e6e6dfd7ea323e22aaa366787ec1cb134364ed95875f930d90c826b5b"
+    },
+    {
+      "path": "reports\\bao_cao_cuoi_ky\\hinh_anh\\hoan_thien\\pipeline.png",
+      "sha256": "d5400ab168714794cf788355841b75dbb4841038c1e758bd6cd821b29c914c26"
+    },
+    {
+      "path": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\e0-e1-curves.png",
+      "sha256": "87ab6d23fa8b88967e693d98714aeced8aa2585231834d2824e3b4079e69c63c"
+    },
+    {
+      "path": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\e1-e2-score-histograms.png",
+      "sha256": "42ad48bad621e3b7e156540e750ca38ea9963fe1498d27252358d3373ab52bf8"
+    }
+  ],
+  "evidence_sources": [
+    "reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.json",
+    "reports/ROUND_5_FULL_VALIDATION_2026-10-16.json",
+    "reports/ROUND_5_TEST_RESULTS_2026-10-16.json"
+  ],
+  "scope": "single seed 42 CASIA development to Round 5; Round 6-8 are plans",
+  "allocation": "Member responsibilities restored after cover and before abstract; professional descriptions; paper unchanged",
+  "teacher_source": "https://scv.udn.vn/hhhung",
+  "teacher_verified_title": "TS. Huỳnh Hữu Hưng",
+  "output_sha256": "65e28c6b6678f797f9003bd7ecdb03f848cfa09fd9dd77f10bc36a2d26db4d71",
+  "page_count": 24,
+  "field_refresh": "Microsoft Word COM; TOC and PAGEREF refreshed",
+  "qa_pdf_sha256": "1db4d722a0e12b381924d301b7fda7be87aff315f4e4dfc088e6168fd39e35b4",
+  "qa_tests": "16 related tests passed (8 report/scaffold, 5 paper, 3 academic editing)",
+  "previous_edition": {
+    "commit": "bb9d38a086953d0ad6c9f11b61460a3c1fae8ac7",
+    "output_sha256": "9458e236032c0dad7be267fadd8bc01b68e3abc987a387af6f331530bbf838c6",
+    "source_sha256": "b87259c2bfdfa3cfbc819c43c1be184f0b1946ad64ae480f623536e263ca9d98"
+  },
+  "revision_date": "2026-10-19",
+  "revision_input": {
+    "path": "C:\\Users\\LAPTOP T&T\\Downloads\\Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016_Revised.docx",
+    "sha256": "0fc34821743739fe9e26e0b00ba71527ec89be6cfa94a944d862c6ec8e50ddea"
+  },
+  "qa_directory": "artifacts/restore-allocation-20261019",
+  "review_log": "reports/BIEN_TAP_HOC_THUAT_2026-10-19.md",
+  "academic_edit": {
+    "date": "2026-10-19",
+    "rules": "notes/Quy_tac_chuan_hoa_van_phong_va_loc_nhat_ky_AI.md",
+    "baseline_commit": "0e04b2e",
+    "baseline_sha256": "66a4e35578557d9040c5c53ce3b3329daef455aef20394a71475c702ab494e12",
+    "note": "reports/BIEN_TAP_HOC_THUAT_2026-10-19.md",
+    "invariants": "reports/ACADEMIC_EDIT_INVARIANTS_2026-10-19.json"
+  },
+  "responsibility_restoration": {
+    "date": "2026-10-19",
+    "baseline_commit": "fd1715c",
+    "note": "reports/KHOI_PHUC_PHAN_CONG_REPORT_2026-10-19.md",
+    "position": "page 2, before abstract",
+    "scientific_tables_unchanged": true,
+    "paper_unchanged": true
+  }
+}

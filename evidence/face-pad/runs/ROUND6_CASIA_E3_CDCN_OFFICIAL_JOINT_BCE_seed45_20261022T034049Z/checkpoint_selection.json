@@ -1,0 +1,16 @@
+{
+  "criterion": "minimum declared validation criterion within each stage",
+  "configured_selection_metric": "classification_bce",
+  "reported_stage": "joint",
+  "stages": [
+    {
+      "stage": "joint",
+      "stage_index": 1,
+      "epoch": 14,
+      "global_epoch": 14,
+      "val_loss": 0.05042662086537651,
+      "selection_metric": "classification_bce",
+      "selection_value": 0.0319393686461505
+    }
+  ]
+}

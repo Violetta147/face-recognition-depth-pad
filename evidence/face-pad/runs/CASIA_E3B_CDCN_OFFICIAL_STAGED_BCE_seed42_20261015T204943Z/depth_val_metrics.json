@@ -1,0 +1,26 @@
+{
+  "target": "fixed pseudo-depth after PadDataset normalization; not true 3D",
+  "mask": "target > 1e-6; masked metric for live only",
+  "prediction_clipped": false,
+  "by_class": {
+    "attack": {
+      "frames": 720,
+      "videos": 36,
+      "frame_mean_mae_full": 0.016646123718886782,
+      "video_mean_mae_full": 0.016646123718886782,
+      "target_mask_pixels": 0,
+      "pixel_weighted_mae_target_mask": null
+    },
+    "live": {
+      "frames": 240,
+      "videos": 12,
+      "frame_mean_mae_full": 0.10442023780196905,
+      "video_mean_mae_full": 0.10442023780196903,
+      "target_mask_pixels": 203982,
+      "pixel_weighted_mae_target_mask": 0.12408936753173753
+    }
+  },
+  "split": "val",
+  "checkpoint_sha256": "a633af9634fde80a5916c1b9cc35f869354742b677ce104a69d4febff0d6f85b",
+  "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+}

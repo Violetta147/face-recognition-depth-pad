@@ -1,0 +1,105 @@
+{
+  "status": "PASS: cost registration reviewed; benchmark gate may open",
+  "review_date": "2026-10-22",
+  "source_commit": "d316f72ff2093fb336cc20c7a0e522cbda9363c6",
+  "registration_path": "G:\\My Drive\\face-pad\\reports\\round6-cost-d316f72ff209\\a100-01\\registration.json",
+  "registration_sha256": "c8567914f9c8d5b3cd1833cf1f88e55e2ab1698cd4b7c0237831caf97ee15258",
+  "checks": [
+    "source lock equals delivered ZIP",
+    "plan equals preregistration",
+    "three checkpoint/config hashes and static profiles equal CPU review",
+    "two validation sample IDs, labels, dtype and shape match",
+    "six balanced permutations match",
+    "A100 GPU and precision flags match separate cost runtime"
+  ],
+  "environment_without_package_list": {
+    "cuda": "13.0",
+    "cudnn": 92700,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": false,
+    "deterministic_algorithms": false,
+    "driver_inventory": "GPU-6e233774-f5a8-0a01-d08f-3eb145fc6890, NVIDIA A100-SXM4-40GB, 580.82.07, 40960 MiB",
+    "gpu": "NVIDIA A100-SXM4-40GB",
+    "gpu_memory": 42405855232,
+    "matmul_allow_tf32": false,
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130"
+  },
+  "inputs": [
+    {
+      "dtype": "torch.float32",
+      "image_path": "train/spoof/s4v3f0.png",
+      "image_sha256": "d39aabecdeebf8cadb5b3c25fc85fdf5f696109bd7ca9a61fb8d6bda0b011b3b",
+      "label": 0,
+      "original_size": [
+        112,
+        112
+      ],
+      "sample_id": "casia_s04_v3_f000000",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "split": "val",
+      "tensor_sha256": "8cfc1fcb3e90f8134631d8f2ffd55db2b60a0040d2acfacf9db11f1d41f27628"
+    },
+    {
+      "dtype": "torch.float32",
+      "image_path": "train/live/s4v1f0.png",
+      "image_sha256": "3f3db738d3c851e3ea4c5ae07663550ed00a0da246a0b5bbc204d3d1d920081a",
+      "label": 1,
+      "original_size": [
+        112,
+        112
+      ],
+      "sample_id": "casia_s04_v1_f000000",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "split": "val",
+      "tensor_sha256": "942bf4d1430ec6d47e7726c086d7722c17d20224f911988c8593936a3b762483"
+    }
+  ],
+  "model_orders": [
+    [
+      "E1",
+      "E4",
+      "E3"
+    ],
+    [
+      "E3",
+      "E4",
+      "E1"
+    ],
+    [
+      "E1",
+      "E3",
+      "E4"
+    ],
+    [
+      "E4",
+      "E1",
+      "E3"
+    ],
+    [
+      "E3",
+      "E1",
+      "E4"
+    ],
+    [
+      "E4",
+      "E3",
+      "E1"
+    ]
+  ],
+  "cpu_tests_evidence": "Raw CPU test stdout not included in user paste. GPU line matches notebook cell 0.2, which prints only after checked CPU test subprocess succeeds; retain executed notebook for final audit.",
+  "decision": "Run cell 2.1 once with RUN_BENCHMARK=True, unchanged BLOCK_ID a100-01. Preserve timing/failure; no rerun selection.",
+  "gpu_timing_reviewed": false
+}

@@ -1,0 +1,118 @@
+{
+  "candidate": "E3",
+  "registration_sha256": "3be390ec92ae69e3294d5970e624854fb46b8b8f90b4a5f3ede883b2c4df0378",
+  "runs": {
+    "E1_43": {
+      "hashes": {
+        "best.ckpt": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7",
+        "best_stage_01_joint.ckpt": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7",
+        "checkpoint_selection.json": "98999c0aad9372978df45bcd3af34a832112e2b03f0793ae4c75093162cab777",
+        "config.yaml": "5c41ef04e02556e7e11bcd71d921ee6ec850de6e66bed77eb52651cc0e104be2",
+        "depth_input_snapshot.json": "189da9019b147f7437cfb687f5f903e3347b7feb7f7c0a4ba305f4f695f052d1",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "922aae22862593f50919fb6487eb7e1c79be14431a5778846f657fd115785e0d",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "bfde3df5f6569f415c3a227c97a6151f9848ff707bd716a5bdf878741e1411a4",
+        "train_log.csv": "6fd623eb0ab088cac22644abc32fca308bfc30c9b6b025ae36bcdaa6045273cd",
+        "val_frame_scores.csv": "699560aad11644e4ff6cf5614289575507c73f707ae8455cb48903681fb8c1ad",
+        "val_scores.csv": "ec29586140338aacc900b4d3ceeb229e0cb0bbece5b68742831884822d8c897d"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z"
+    },
+    "E1_44": {
+      "hashes": {
+        "best.ckpt": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42",
+        "best_stage_01_joint.ckpt": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42",
+        "checkpoint_selection.json": "d8f4feac5b8e43e359700a36bfdd617b8ea7883d6089741896ba18a3147aaaf9",
+        "config.yaml": "cd5739d554eb6e6c93dfac158235e1473b328d479b583300517a056e43ce06a1",
+        "depth_input_snapshot.json": "6ff1cfe88a1b9b92ef9f3f55e35024474440766bfe5d99840503836aa5002b6c",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "df328916d03e40ff34bf6c5755ad45254843c51e671521f935467619bd72e231",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "dcbe3454fac76dfc3195e063b4a014f9df428c8a1c1e29045717f3f6c37ff4c2",
+        "train_log.csv": "9f6a0f920ea68887ead0051bd5cf60fbe45ef6c2dfa62698a590e2a406e6fba8",
+        "val_frame_scores.csv": "f7738651a7bdbb52549a1a10f2bd2c47c7d38f40fc5caa435dc0ac71ba4289ce",
+        "val_scores.csv": "33c6841f340e81273ddde896a9948f2e02d98b7e39f62b5e57360216a8bb37b1"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z"
+    },
+    "E1_45": {
+      "hashes": {
+        "best.ckpt": "e2dc4dd78b99d4e0c4c29a9ae39fc48914b6d9a7a5b6a1c5396f44144d01953e",
+        "best_stage_01_joint.ckpt": "e2dc4dd78b99d4e0c4c29a9ae39fc48914b6d9a7a5b6a1c5396f44144d01953e",
+        "checkpoint_selection.json": "91520e313390a9aeb1aa72272378fbab2df40fcc771bb9423144a4b33a5e5831",
+        "config.yaml": "8234b8a5095a02e03d298af32bc1afd40fc69989a2f9fe80d38962e9397b240d",
+        "depth_input_snapshot.json": "3eac56c4e0c68556a142b76b1d09419521b94b3672d8266681cf09a5d77b0c37",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "937f13edcb3ac6797886876051f8c171f57815598965dcdf6eba9cdcb374738d",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "633ce2fd12b0319d667da5f16c25487e1ad94ac1371d69a0b3aae36c0e91d425",
+        "train_log.csv": "e6def36d1ad5f06f648ff77b192877feb06008de70dbe074a5f5c15c526f8544",
+        "val_frame_scores.csv": "1c6f4d704cba60fe0b94b7734296fe7bc418ff6763094412cb8e919badbcac22",
+        "val_scores.csv": "96e76d7cb7dbe7003378edfb8f7254634a84c106df7f5aa2f6a3cfbde08bc7ff"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z"
+    },
+    "E3_43": {
+      "hashes": {
+        "best.ckpt": "9c7835aed57c4cefd3f04eb55c52caec9fd75803d25558b5539c758874e2ea4c",
+        "best_stage_01_joint.ckpt": "9c7835aed57c4cefd3f04eb55c52caec9fd75803d25558b5539c758874e2ea4c",
+        "checkpoint_selection.json": "24115b38a824f959e3dcd800bbab29004ec364b12e41b0598e9fc80f8c020d5f",
+        "config.yaml": "c88f82d13351b37091bbd42ceb3aef5607158a6b2e5da4a0535957730d734d67",
+        "depth_input_snapshot.json": "56622153d2f68f24420e16afb52772ce883363373ca42b783893ba61ca882ee6",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "initial_checkpoint.json": "44f84ab016768f80c3e2acbb7e0fa65428f34ce7ab29dfc69396f07a10404d20",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "a1d0197e55e0a6d2c943da7ffd61e0ae6bbc92c60cf429248f10e0efeab0a608",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "b2471bd5c980219eba1c5ec30e16b900a0a5ad6d84cd41b69c22456da26627d3",
+        "train_log.csv": "b8cccb1272289b288c8f3cf842cee8acb9d94f7a296f1830e63c007cb13ad0be",
+        "val_frame_scores.csv": "6980fd298508df96ea2c710cfce9db4776bee7b137d89e8e590e7d326289b4c5",
+        "val_scores.csv": "741574a03e807ef529a5c66bba9c6e8abae06f0d2d952842ec7a416101a9e52f"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z"
+    },
+    "E3_44": {
+      "hashes": {
+        "best.ckpt": "214e1ea24a350bf4382e1a3ce2866ad82d595aaca3ca52341f348d96728325f5",
+        "best_stage_01_joint.ckpt": "214e1ea24a350bf4382e1a3ce2866ad82d595aaca3ca52341f348d96728325f5",
+        "checkpoint_selection.json": "28c455e6fa1c70295c27c6a57a3f581968f559096a4c9f5cde30954ef03f88d6",
+        "config.yaml": "1e7e6c59fec7214c4d7efaf74c10911baa6b612731dcfd1f0156718e68920c81",
+        "depth_input_snapshot.json": "409a5a45c1c51b1d4f8a4b38b6289b80e4249baaf38ed41b64a2efd27a0f5bf3",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "initial_checkpoint.json": "496f84123f00b84d78dddb0d14bff6e006453f5e2981a5a68ea9fea44d0069b1",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "07fce2383a4af3c484f516d25c0fd579b219be46c2e26b151a8dd7022cc2bbd9",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "0d404145fcaf9c60d14e453745724218066cffa9183cbad2db6a4cc44024d5c0",
+        "train_log.csv": "ef1ae2c71e9510d33258b87a06681ece226d48870d7e022c1db3b31854d73b7e",
+        "val_frame_scores.csv": "23bb9c7d80907ce3b41919b2c4ac1fec6538338d0017b71af06d0c6bb49cd1c9",
+        "val_scores.csv": "b94e403ba6c29b5462b3712326f12f7041b1fcfd67c14d7480506bd70a6e43c5"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z"
+    },
+    "E3_45": {
+      "hashes": {
+        "best.ckpt": "a7c8bef52a0bb79fbcb0ff70aaf827cc5047f84a72b541c22b9312f26d35ca48",
+        "best_stage_01_joint.ckpt": "a7c8bef52a0bb79fbcb0ff70aaf827cc5047f84a72b541c22b9312f26d35ca48",
+        "checkpoint_selection.json": "b728b94d05066f67ed8591512448c607b4c33e6cdd282205940fb8bf577438a8",
+        "config.yaml": "0462f7e5c247e2f34400c9cdc728bf867485b00ee89911e257c616dc2bf85f27",
+        "depth_input_snapshot.json": "af693b3cce460112c8881f044107adeb80edb4eb3967be5fea8da992f6088fad",
+        "environment.txt": "17c483de67896d8cf4c1461d9a489c0325d2c1025ea467090a7a018e6899c73d",
+        "initial_checkpoint.json": "e917c5a3f6b196d0f7f7371274a6bd660d05e0e83a59ade60553853ec24427be",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b",
+        "metrics.json": "9b4ed88b296a053c24366a551599e89a3e6cb393165299fb2381a47617eb5d8e",
+        "round6_binding.json": "611962ea1f1fe4e5c6d3a2de160567b55c6c1608ac4b7d4c9d92610481991816",
+        "threshold.json": "72fa89323fd51e120f2522224093e0ef6daebc0dd00ae41cd4f0ed99ffccc73c",
+        "train_log.csv": "e93b2706766b7b9cd90de6ba578b34d0c4d4c757913a22be792b263abff61cfc",
+        "val_frame_scores.csv": "798181654eb1578b73f55409979558b8889522c8d3a91dc8a20022652a4d49de",
+        "val_scores.csv": "9cbc69be2258129666ea4827130c8756a0910c1df1f3326142b3c8801474bcb2"
+      },
+      "run": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z"
+    }
+  },
+  "selection_source": "validation"
+}

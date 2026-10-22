@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "frozen_paths": [
+    "reports/ROUND_5_TEST_RESULTS_2026-10-16.json",
+    "reports/ROUND_5_TEST_RESULTS_2026-10-16.md",
+    "reports/ROUND_5_FULL_VALIDATION_2026-10-16.json",
+    "reports/ROUND_5_FULL_VALIDATION_2026-10-16.md",
+    "reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.json",
+    "reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.md",
+    "reports/ACADEMIC_EDIT_INVARIANTS_2026-10-19.json",
+    "reports/bao_cao_cuoi_ky/BANG_BANG_CHUNG.md",
+    "reports/bao_cao_cuoi_ky/REPORT_PROVENANCE.json",
+    "reports/bao_cao_cuoi_ky/ban_thao/Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016.docx",
+    "reports/paper_round5/Nhom1_Paper_CDCN_E0_E4_20261016.docx",
+    "reports/paper_round5/paper_provenance.json",
+    "notebooks/E0.ipynb",
+    "notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb",
+    "notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb",
+    "artifacts/research-audit-20261016",
+    "artifacts/round5-smoke-audit-20261016",
+    "artifacts/round5-full-audit-20261016",
+    "artifacts/round5-test-audit-20261016",
+    "artifacts/figure-notebook-20261016"
+  ],
+  "validation_paths": ["src", "scripts", "tests", "configs", "pyproject.toml", ".codex"],
+  "academic_paths": ["reports", "diagrams", "notebooks"],
+  "pytest_timeout_seconds": 180,
+  "max_stop_continuations": 2
+}

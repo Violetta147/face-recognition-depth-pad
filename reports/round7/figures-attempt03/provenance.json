@@ -1,0 +1,129 @@
+{
+  "scope": "bounded CPU illustrations; frozen benchmark unchanged",
+  "selected_cases": 20,
+  "score_comparison_mode": "diagnostic",
+  "frame_score_reproduction_mismatches": 20,
+  "numeric_scope": "Diagnostic mode records failed original tolerances without widening them or claiming CUDA score reproduction. Cause unresolved; no original CUDA TF32 state captured.",
+  "forward_count": 40,
+  "device": "cpu",
+  "torch": "2.11.0+cpu",
+  "normalization": "RGB -> torchvision Resize(256,256), float /255, (x-.5)/(128/255)",
+  "depth_limits": [
+    0.0,
+    1.0
+  ],
+  "absolute_error_limits": [
+    0,
+    0.9920669794082642
+  ],
+  "sources": {
+    "reports\\round7\\analysis\\case_index.csv": "b2e8753b281e3c6ea0017479e3677081a1ace27b1e19d8a3eee9b7f8fabdfb33",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\best.ckpt": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\config.yaml": "5c41ef04e02556e7e11bcd71d921ee6ec850de6e66bed77eb52651cc0e104be2",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\depth_input_snapshot.json": "189da9019b147f7437cfb687f5f903e3347b7feb7f7c0a4ba305f4f695f052d1",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\best.ckpt": "9c7835aed57c4cefd3f04eb55c52caec9fd75803d25558b5539c758874e2ea4c",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\config.yaml": "c88f82d13351b37091bbd42ceb3aef5607158a6b2e5da4a0535957730d734d67",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\depth_input_snapshot.json": "56622153d2f68f24420e16afb52772ce883363373ca42b783893ba61ca882ee6",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\best.ckpt": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\config.yaml": "cd5739d554eb6e6c93dfac158235e1473b328d479b583300517a056e43ce06a1",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\depth_input_snapshot.json": "6ff1cfe88a1b9b92ef9f3f55e35024474440766bfe5d99840503836aa5002b6c",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\best.ckpt": "214e1ea24a350bf4382e1a3ce2866ad82d595aaca3ca52341f348d96728325f5",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\config.yaml": "1e7e6c59fec7214c4d7efaf74c10911baa6b612731dcfd1f0156718e68920c81",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\depth_input_snapshot.json": "409a5a45c1c51b1d4f8a4b38b6289b80e4249baaf38ed41b64a2efd27a0f5bf3",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\best.ckpt": "e2dc4dd78b99d4e0c4c29a9ae39fc48914b6d9a7a5b6a1c5396f44144d01953e",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\config.yaml": "8234b8a5095a02e03d298af32bc1afd40fc69989a2f9fe80d38962e9397b240d",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\depth_input_snapshot.json": "3eac56c4e0c68556a142b76b1d09419521b94b3672d8266681cf09a5d77b0c37",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\best.ckpt": "a7c8bef52a0bb79fbcb0ff70aaf827cc5047f84a72b541c22b9312f26d35ca48",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\config.yaml": "0462f7e5c247e2f34400c9cdc728bf867485b00ee89911e257c616dc2bf85f27",
+    "G:\\My Drive\\face-pad\\runs\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\depth_input_snapshot.json": "af693b3cce460112c8881f044107adeb80edb4eb3967be5fea8da992f6088fad",
+    "G:\\My Drive\\face-pad\\casia-fasd.zip": "84096c9734cf6120d36ed8f45d82864259420b2af0bd5ce4c7230fd9a572cd1b",
+    "G:\\My Drive\\face-pad\\depth-checkpoints\\casia-fasd-depth-checkpoint.tar": "26cfa7f26d61e3a71372404008f5dc9dd696af931172850986a8642e440b3d80"
+  },
+  "inputs": {
+    "casia_s21_v5_f000078": {
+      "rgb_sha256": "69c21db63e3789d57e7eddb942d523263c587b7af994a8251bdcf8278482f5c5",
+      "target_sha256": "7c47698ffea2d322733b704e935c8b6e5004d2dc29d766b802f3ff42f57416cb",
+      "target_restoration": "deterministic serialization of frozen attack zero target; exact snapshot SHA verified",
+      "rgb_member": "casia-fasd/test/spoof/s1v5f78.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "e4049d07994a128632349aa86f6b1ec839a5b2baf2968c6cafd7698406d4c74f",
+      "target_tensor_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+    },
+    "casia_s21_v1_f000084": {
+      "rgb_sha256": "aa97c0c1fe02ff0d809a77f9f2cefdb48afe853969b6eea82b4c0af72e19362c",
+      "target_sha256": "0f9f7df98e06ceaa77f24399a76146be988be1c12d97d75c31cf3b6faa006f4d",
+      "target_restoration": "existing snapshot-verified target",
+      "rgb_member": "casia-fasd/test/live/s1v1f84.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "634695cfbc090fb16dc6d2da297bac402ab41d25f557eebe0ff27ea240019ff9",
+      "target_tensor_sha256": "90262e9ff167a0e5e53c026b6b813c5c6bcb24d5a69dced4d53877aef774fa2e"
+    },
+    "casia_s21_v7_f000060": {
+      "rgb_sha256": "8dd8e3befe3f56e82bc6b6103010c390dd35fa5a3b79118a78ad5554b967d951",
+      "target_sha256": "7c47698ffea2d322733b704e935c8b6e5004d2dc29d766b802f3ff42f57416cb",
+      "target_restoration": "deterministic serialization of frozen attack zero target; exact snapshot SHA verified",
+      "rgb_member": "casia-fasd/test/spoof/s1v7f60.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "44a2e8d5efc03b128f0dcb193368f28d9a400c4c87fc0748c8aab41f1f3c4802",
+      "target_tensor_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+    },
+    "casia_s21_v3_f000112": {
+      "rgb_sha256": "01d34347ae2070e8608d3f5eaef49f638269d3fc38dfe47657f689464ab3b4da",
+      "target_sha256": "7c47698ffea2d322733b704e935c8b6e5004d2dc29d766b802f3ff42f57416cb",
+      "target_restoration": "deterministic serialization of frozen attack zero target; exact snapshot SHA verified",
+      "rgb_member": "casia-fasd/test/spoof/s1v3f112.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "ff4d121c769077bc7de1676b92a0bbb20ce54f782bdbeb050f2b55678104114a",
+      "target_tensor_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+    },
+    "casia_s21_vHR_1_f000069": {
+      "rgb_sha256": "f6942b34a4ac4707d4d4d838760dd0a3b5f59c29cd96dd4379b07673d7b31f01",
+      "target_sha256": "f1192b22175ccde0ba6d79e0c631759485b105751ce943762a94b004690333f4",
+      "target_restoration": "existing snapshot-verified target",
+      "rgb_member": "casia-fasd/test/spoof/s1vHR_1f69.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "316682393fc2cd3e2718acef563b3d9249d11cbb32a28e168e276a6d8c03343a",
+      "target_tensor_sha256": "972dd78a5e2fcec7ba11fe49a72831499ba0cbcaa303ea050135dc06f3fa0e66"
+    },
+    "casia_s25_v2_f000069": {
+      "rgb_sha256": "4fbe1db49bb7b934dfb9d7eea5b643eaf88cd9e5f14320e7cb9f1f8275141947",
+      "target_sha256": "7372d06bb7922d9020e0fcf0f4db61c1b099a661d9b39b993399d2c1cf1b8b6c",
+      "target_restoration": "existing snapshot-verified target",
+      "rgb_member": "casia-fasd/test/live/s5v2f69.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "400cf84e74cd8a0dc3185ac573a9ecddb899bd873af6f59ae498daa48b63be90",
+      "target_tensor_sha256": "6eeb0d242a0e23b5a8cec3e2dc6b6091b2d33486681977f32317c92a0246fef6"
+    },
+    "casia_s30_vHR_4_f000079": {
+      "rgb_sha256": "8ef7c6235ac9ce1d91801ccabea08ab8642b208e1a94ab4ba5bf04dc23ca5702",
+      "target_sha256": "7c47698ffea2d322733b704e935c8b6e5004d2dc29d766b802f3ff42f57416cb",
+      "target_restoration": "deterministic serialization of frozen attack zero target; exact snapshot SHA verified",
+      "rgb_member": "casia-fasd/test/spoof/s10vHR_4f79.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "bb61af167808968872f1dd7495fe22adaf0b85a3d8a7bea0623a3c1e4d8ebc88",
+      "target_tensor_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+    },
+    "casia_s31_v1_f000056": {
+      "rgb_sha256": "5584043b493571ad8c32e6481760c93de62eefc6dcbda0b3d1816236aa8430d2",
+      "target_sha256": "1fdccfbf69b818827d6286a03ffc8b9813952a5e59b4e47536496348baf8213d",
+      "target_restoration": "existing snapshot-verified target",
+      "rgb_member": "casia-fasd/test/live/s11v1f56.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "fcb67627c6a4f1c92e27b1de1d5133b54f8bc43bf608bc2ee00e8079aa4a253f",
+      "target_tensor_sha256": "0544360a9717244fb1c79a96c0ae393d029bb4e61d9e75e6fb6cb7b718901047"
+    },
+    "casia_s39_v2_f000111": {
+      "rgb_sha256": "a6b63d650cbe6b8627505a1fe0ea8acadac850d7d690ef1c37912277b4e19446",
+      "target_sha256": "3f49300ddb7873f9a292c13385de7be5bf48e669404762c8e422a669ca8bef7d",
+      "target_restoration": "existing snapshot-verified target",
+      "rgb_member": "casia-fasd/test/live/s19v2f111.png",
+      "rgb_identity": "ZIP member + CRC + newly recorded SHA; no preregistered per-RGB hash claimed",
+      "input_tensor_sha256": "0c9abe462296ffdb645298484d858fddf318dc2e3c15af4bc9523c4f29698507",
+      "target_tensor_sha256": "90a20348eb7788c7eebba1cc641d0e4ff4d43e3d4676f77d10078304fcd59264"
+    }
+  },
+  "raw_arrays": "artifacts\\round7\\figures-attempt03\\qualitative_arrays.npz",
+  "raw_arrays_sha256": "eb4b5e8b70e509209e29ace3e0f07252606ca4086927dee38026b19f3509c11e",
+  "target_semantics": "Snapshot-verified pseudo-depth; missing attack constants serialized as zero float32 maps and required to match exact frozen SHA. No new 3DDFA.",
+  "mae_scope": "Selected illustrative frames only, not full-test depth performance"
+}

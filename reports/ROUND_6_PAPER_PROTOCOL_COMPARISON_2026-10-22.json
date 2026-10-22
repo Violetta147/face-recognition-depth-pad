@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-22",
+  "purpose": "protocol context; no common leaderboard with custom CASIA",
+  "sources": {
+    "cdcn2020": {
+      "title": "Searching Central Difference Convolutional Networks for Face Anti-Spoofing",
+      "url": "https://arxiv.org/abs/2003.04092v1",
+      "local_pdf": "references/papers/2003.04092v1.pdf",
+      "version": "arXiv v1",
+      "pdf_sha256": "ca889ea7ec6b26e803f5cfc614f162bacfcafded366cc4d47fd040ecdeb7997c",
+      "pdf_bytes": 4841695
+    },
+    "ucdcn2024": {
+      "title": "UCDCN: a nested architecture based on central difference convolution for face anti-spoofing",
+      "url": "https://link.springer.com/article/10.1007/s40747-024-01397-0",
+      "pdf_url": "https://link.springer.com/content/pdf/10.1007/s40747-024-01397-0.pdf",
+      "local_pdf": "artifacts/round6-paper-protocol-20261022/UCDCN-2024.pdf",
+      "version": "publisher PDF",
+      "pdf_sha256": "39ca0e84efb1420fdb2c553126e4ec8107539bec205d5fe0c6a7d1841f321630",
+      "pdf_bytes": 2182054
+    },
+    "caso2026": {
+      "title": "Face presentation attack detection via content-adaptive spatial operators",
+      "url": "https://www.nature.com/articles/s41598-026-67944-6",
+      "pdf_url": "https://www.nature.com/articles/s41598-026-67944-6_reference.pdf",
+      "local_pdf": "artifacts/round6-paper-protocol-20261022/CASO-PAD-2026-reference.pdf",
+      "version": "publisher Article in Press",
+      "pdf_sha256": "0e051ca60f16dcd7a3142b5911b0a604d52a7d85acc5c276a6881b65245c2695",
+      "pdf_bytes": 3602829
+    }
+  },
+  "paper_rows": [
+    {
+      "key": "cdcn-oulu-p1",
+      "source_id": "cdcn2020",
+      "model": "CDCN",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 1, intra-dataset",
+      "split": "official train/dev/test",
+      "evaluation_unit": "aggregation not established in inspected sections",
+      "threshold": "not established in inspected sections",
+      "metrics_percent": {
+        "APCER": 0.4,
+        "BPCER": 1.7,
+        "ACER": 1
+      },
+      "source_location": "Table 4, local PDF page 7; sections 4.1-4.2",
+      "unverified_fields": [
+        "video aggregation",
+        "threshold procedure"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "cdcnpp-oulu-p1",
+      "source_id": "cdcn2020",
+      "model": "CDCN++",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 1, intra-dataset",
+      "split": "official train/dev/test",
+      "evaluation_unit": "aggregation not established in inspected sections",
+      "threshold": "not established in inspected sections",
+      "metrics_percent": {
+        "APCER": 0.4,
+        "BPCER": 0,
+        "ACER": 0.2
+      },
+      "source_location": "Table 4, local PDF page 7",
+      "unverified_fields": [
+        "video aggregation",
+        "threshold procedure"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "cdcn-replay-casia",
+      "source_id": "cdcn2020",
+      "model": "CDCN",
+      "dataset": "Replay-Attack -> CASIA-MFSD",
+      "protocol": "cross-dataset",
+      "split": "source Replay-Attack; target CASIA",
+      "evaluation_unit": "aggregation not established in inspected sections",
+      "threshold": "not established in inspected sections",
+      "metrics_percent": {
+        "HTER": 32.6
+      },
+      "source_location": "Table 7, local PDF page 8",
+      "unverified_fields": [
+        "video aggregation",
+        "threshold procedure"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "ucdcn-oulu-p1",
+      "source_id": "ucdcn2024",
+      "model": "UCDCN-L2",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 1, intra-dataset",
+      "split": "official protocol; Table 9",
+      "evaluation_unit": "video aggregation not established",
+      "threshold": "Table 5 threshold not established; 0.5 statement applies only to Table 7",
+      "metrics_percent": {
+        "ACER": 0.9
+      },
+      "source_location": "Table 5, PDF page 9 / journal 4825; Table 9 page 11",
+      "unverified_fields": [
+        "video aggregation",
+        "threshold for Table 5"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "ucdcn-oulu-p2",
+      "source_id": "ucdcn2024",
+      "model": "UCDCN-L2",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 2, intra-dataset",
+      "split": "official protocol; Table 9",
+      "evaluation_unit": "video aggregation not established",
+      "threshold": "Table 5 threshold not established; 0.5 statement applies only to Table 7",
+      "metrics_percent": {
+        "ACER": 0.9
+      },
+      "source_location": "Table 5, PDF page 9 / journal 4825; Table 9 page 11",
+      "unverified_fields": [
+        "video aggregation",
+        "threshold for Table 5"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "ucdcn-oulu-full",
+      "source_id": "ucdcn2024",
+      "model": "UCDCN Linear",
+      "dataset": "OULU-NPU",
+      "protocol": "whole train/test classifier comparison",
+      "split": "whole train/test; image counts Table 4",
+      "evaluation_unit": "images counted; video aggregation not established",
+      "threshold": "fixed 0.5 for Table 7",
+      "metrics_percent": {
+        "ACER": 1.82
+      },
+      "source_location": "Table 7 PDF page 10; threshold paragraph page 11",
+      "unverified_fields": [
+        "video aggregation"
+      ],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "caso-oulu-complete",
+      "source_id": "caso2026",
+      "model": "CASO-PAD",
+      "dataset": "OULU-NPU",
+      "protocol": "complete protocol",
+      "split": "20/15/20 train/dev/test subjects; 1800/1350/1800 videos (Table 1)",
+      "evaluation_unit": "one random frame per test video per trial; no frame-to-video fusion",
+      "threshold": "maximize Youden on official dev, or held-out training validation if no official dev; lock before test",
+      "metrics_percent": {
+        "APCER": 0,
+        "BPCER": 0.83,
+        "ACER": 0.42
+      },
+      "source_location": "Table 5 PDF page 14; evaluation pages 9-11",
+      "unverified_fields": [],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "caso-oulu-p1",
+      "source_id": "caso2026",
+      "model": "CASO-PAD",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 1",
+      "split": "protocol-specific train/dev/test, separate from complete protocol",
+      "evaluation_unit": "one random frame per test video per trial; no frame-to-video fusion",
+      "threshold": "maximize Youden on official dev, or held-out training validation if no official dev; lock before test",
+      "metrics_percent": {
+        "ACER": 4.38
+      },
+      "source_location": "Table 8 PDF page 16; evaluation pages 10-11",
+      "unverified_fields": [],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "caso-oulu-p2",
+      "source_id": "caso2026",
+      "model": "CASO-PAD",
+      "dataset": "OULU-NPU",
+      "protocol": "Protocol 2",
+      "split": "protocol-specific train/dev/test, separate from complete protocol",
+      "evaluation_unit": "one random frame per test video per trial; no frame-to-video fusion",
+      "threshold": "maximize Youden on official dev, or held-out training validation if no official dev; lock before test",
+      "metrics_percent": {
+        "ACER": 1.81
+      },
+      "source_location": "Table 8 PDF page 16; evaluation pages 10-11",
+      "unverified_fields": [],
+      "direct_comparison_with_round6": false
+    },
+    {
+      "key": "caso-omi-c",
+      "source_id": "caso2026",
+      "model": "CASO-PAD",
+      "dataset": "OULU + MSU + Replay -> CASIA",
+      "protocol": "leave-one-dataset-out O&M&I -> C",
+      "split": "three source datasets train; unseen target CASIA test",
+      "evaluation_unit": "one random frame per test video per trial; no frame-to-video fusion",
+      "threshold": "general validation rule stated; exact cross-domain development construction not established",
+      "metrics_percent": {
+        "HTER": 21.67,
+        "AUC": 79.27
+      },
+      "source_location": "Table 9 PDF page 17; general evaluation pages 10-11",
+      "unverified_fields": [
+        "cross-domain development construction"
+      ],
+      "direct_comparison_with_round6": false
+    }
+  ],
+  "round6": {
+    "source_report": "reports/ROUND_6_RESULTS_2026-10-22.json",
+    "freeze_sha256": "1a669e3878c561abfcd245a12eb2d4d8edb434af1a8854aecc1bcdd89a0e43a1",
+    "dataset": "CASIA-FASD / CASIA-MFSD",
+    "split_subjects": {
+      "train": 16,
+      "validation": 4,
+      "test": 30
+    },
+    "frames_per_video": 20,
+    "test_videos": 360,
+    "evaluation_unit": "video, mean frame scores",
+    "threshold": "minimum validation ACER, then minimum abs(APCER-BPCER), then lower threshold; frozen before test",
+    "seeds": [
+      43,
+      44,
+      45
+    ],
+    "summary_rates_auc_unitless": {
+      "E1": {
+        "apcer": {
+          "mean": 0.0012345679012345679,
+          "sample_sd_ddof1": 0.0021383343303319475
+        },
+        "bpcer": {
+          "mean": 0.08518518518518518,
+          "sample_sd_ddof1": 0.044905020936970894
+        },
+        "acer": {
+          "mean": 0.043209876543209874,
+          "sample_sd_ddof1": 0.021622567763132088
+        },
+        "eer": {
+          "mean": 0.025925925925925925,
+          "sample_sd_ddof1": 0.006415002990995841
+        },
+        "auc": {
+          "mean": 0.9939917695473252,
+          "sample_sd_ddof1": 0.0009571772304208254
+        }
+      },
+      "E3": {
+        "apcer": {
+          "mean": 0,
+          "sample_sd_ddof1": 0
+        },
+        "bpcer": {
+          "mean": 0.07407407407407407,
+          "sample_sd_ddof1": 0.012830005981991684
+        },
+        "acer": {
+          "mean": 0.037037037037037035,
+          "sample_sd_ddof1": 0.006415002990995842
+        },
+        "eer": {
+          "mean": 0.014814814814814815,
+          "sample_sd_ddof1": 0.006415002990995842
+        },
+        "auc": {
+          "mean": 0.9962688614540466,
+          "sample_sd_ddof1": 0.001654471121769518
+        }
+      }
+    },
+    "paired_delta_rate": {
+      "definition": "video ACER E3 - E1; stored as rate, multiply by 100 for percentage points",
+      "by_seed": {
+        "43": -0.03333333333333333,
+        "44": 0.020370370370370372,
+        "45": -0.005555555555555557
+      },
+      "delta_mean": -0.006172839506172839,
+      "delta_sample_sd_ddof1": 0.02685717273803345
+    }
+  },
+  "limits": [
+    "Only Round 6 E1/E3 allows a direct within-protocol change estimate.",
+    "Paper metrics are percent; AUC 79.27 is percent, not 0-1.",
+    "CDCN++ is not the E1 architecture.",
+    "Unverified fields denote evidence limits.",
+    "Historical Word/paper and six run results unchanged."
+  ]
+}

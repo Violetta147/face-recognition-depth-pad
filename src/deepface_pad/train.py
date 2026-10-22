@@ -4,6 +4,7 @@ import csv
 import json
 import platform
 import random
+import shutil
 import sys
 import time
 from datetime import datetime, timezone
@@ -84,11 +85,28 @@ def _loss(config: dict, output: dict[str, torch.Tensor], batch: dict[str, object
 
 
 def _set_stage(model: nn.Module, stage: str) -> None:
+    if stage not in {"depth", "head", "joint"}:
+        raise ValueError(f"unknown training stage: {stage}")
     for parameter in model.parameters(): parameter.requires_grad = True
     if stage == "head" and hasattr(model, "backbone"):
         for parameter in model.backbone.parameters(): parameter.requires_grad = False
     elif stage == "depth" and hasattr(model, "head"):
         for parameter in model.head.parameters(): parameter.requires_grad = False
+
+
+def _selection_loss(metric: str, output: dict[str, torch.Tensor],
+                    batch: dict[str, object], stage: str,
+                    objective: torch.Tensor) -> torch.Tensor:
+    # Depth-only warm-up has no trained classifier. In head/joint stages a
+    # common BCE criterion permits the same selection rule for BCE and Focal.
+    if metric == "val_loss" or stage == "depth":
+        return objective
+    if metric != "classification_bce":
+        raise ValueError(f"unknown checkpoint selection metric: {metric}")
+    if "logit" not in output:
+        raise ValueError("classification_bce selection requires classifier logits")
+    return nn.functional.binary_cross_entropy_with_logits(
+        output["logit"], batch["label"].to(output["logit"].device))
 
 
 @torch.no_grad()
@@ -103,10 +121,26 @@ def score_loader(model: nn.Module, loader: DataLoader, device: torch.device) -> 
 
 def run(config_path: str | Path) -> Path:
     config_path = Path(config_path); config = yaml.safe_load(config_path.read_text(encoding="utf-8")); seed_everything(config["seed"])
+    round6_binding = None
+    if config.get("round6_registration"):
+        from .round6 import Batch, environment, read
+        batch = Batch(Path(__file__).resolve().parents[2], Path(config["round6_registration"]).parent)
+        registration = batch.current()
+        key = ("E3" if config["model"]["name"] == "cdcn_official_head" else "E1") + f"_{config['seed']}"
+        folders = {}
+        if key.startswith("E3_"):
+            peer = "E1_" + str(config["seed"])
+            folders[peer] = Path(read(batch.output / f"{peer}-run.json")["run"])
+        if config != batch.config_for(key, folders, registration) or batch.freeze_path.exists():
+            raise ValueError("Round 6 configuration differs from registration or is already frozen")
+        round6_binding = {"registration_sha256": manifest_checksum(batch.registration_path),
+                          "environment": environment()}
     require_depth, depth_snapshot = inspect_training_inputs(config)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     run_id = f'{config["experiment_id"]}_seed{config["seed"]}_{datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")}'
     run_dir = Path(config.get("runs_dir", "runs")) / run_id; run_dir.mkdir(parents=True)
+    if round6_binding is not None:
+        (run_dir / "round6_binding.json").write_text(json.dumps(round6_binding, indent=2), encoding="utf-8")
     (run_dir / "config.yaml").write_text(config_path.read_text(encoding="utf-8"), encoding="utf-8")
     (run_dir / "environment.txt").write_text(f"python={sys.version}\nplatform={platform.platform()}\ntorch={torch.__version__}\ndevice={device}\n", encoding="utf-8")
     checksum = manifest_checksum(config["data"]["manifest"])
@@ -135,10 +169,14 @@ def run(config_path: str | Path) -> Path:
         for split in ("train", "val")
     }
     loaders = {split: DataLoader(ds, batch_size=config["training"].get("batch_size", 16), shuffle=split == "train", num_workers=config["training"].get("workers", 0)) for split, ds in datasets.items()}
-    model = build_model(config).to(device); best = float("inf"); history = []
+    model = build_model(config).to(device); history = []
     stages = config["training"].get("stages")
     if stages is None:
         stages = [{"name": "joint", "epochs": config["training"]["epochs"], "lr": config["training"]["lr"]}]
+    if not stages or any(stage.get("name") not in {"depth", "head", "joint"}
+                         or int(stage.get("epochs", 0)) <= 0
+                         or float(stage.get("lr", 0)) <= 0 for stage in stages):
+        raise ValueError("training stages require a known name, positive epochs and positive lr")
     initial = config["training"].get("init_checkpoint")
     if initial:
         load_initial_weights(model, initial, device)
@@ -148,7 +186,15 @@ def run(config_path: str | Path) -> Path:
         )
     elif any(stage["name"] == "head" for stage in stages):
         raise ValueError("head-only training requires training.init_checkpoint from E1")
-    for stage in stages:
+    selection_metric = config["training"].get("selection_metric", "val_loss")
+    if selection_metric not in {"val_loss", "classification_bce"}:
+        raise ValueError(f"unknown checkpoint selection metric: {selection_metric}")
+    selections = []
+    for stage_index, stage in enumerate(stages, 1):
+        # The objectives of depth, head and joint stages are different. Reset
+        # selection at every boundary and report only the final stage's best.
+        best = float("inf")
+        stage_checkpoint = run_dir / f"best_stage_{stage_index:02d}_{stage['name']}.ckpt"
         _set_stage(model, stage["name"])
         optimizer_class = (
             torch.optim.Adam
@@ -172,11 +218,27 @@ def run(config_path: str | Path) -> Path:
             model.train(); losses = []
             for batch in loaders["train"]:
                 optimizer.zero_grad(); output = model(batch["image"].to(device)); loss = _loss(config, output, batch, stage["name"]); loss.backward(); optimizer.step(); losses.append(loss.item())
-            model.eval(); val_losses = []
+            model.eval(); val_losses = []; selection_losses = []
             with torch.no_grad():
-                for batch in loaders["val"]: val_losses.append(_loss(config, model(batch["image"].to(device)), batch, stage["name"]).item())
-            row = {"stage": stage["name"], "epoch": epoch + 1, "train_loss": float(np.mean(losses)), "val_loss": float(np.mean(val_losses))}; history.append(row)
-            if row["val_loss"] < best: best = row["val_loss"]; torch.save({"model": model.state_dict(), "config": config, "val_loss": best}, run_dir / "best.ckpt")
+                for batch in loaders["val"]:
+                    output = model(batch["image"].to(device))
+                    objective = _loss(config, output, batch, stage["name"])
+                    val_losses.append(objective.item())
+                    selection_losses.append(_selection_loss(
+                        selection_metric, output, batch, stage["name"], objective).item())
+            row = {"stage": stage["name"], "epoch": epoch + 1,
+                   "train_loss": float(np.mean(losses)), "val_loss": float(np.mean(val_losses)),
+                   "val_selection_loss": float(np.mean(selection_losses))}; history.append(row)
+            if not np.isfinite([row["train_loss"], row["val_loss"], row["val_selection_loss"]]).all():
+                raise ValueError(f"non-finite loss in {stage['name']} epoch {epoch + 1}")
+            if row["val_selection_loss"] < best:
+                best = row["val_selection_loss"]
+                torch.save({"model": model.state_dict(), "config": config,
+                            "val_loss": row["val_loss"], "selection_value": best,
+                            "selection_metric": "val_loss" if stage["name"] == "depth" else selection_metric,
+                            "stage": stage["name"],
+                            "stage_index": stage_index, "epoch": epoch + 1,
+                            "global_epoch": len(history)}, stage_checkpoint)
             if scheduler is not None:
                 scheduler.step()
             # Persist and report every epoch. This gives Colab-visible progress and
@@ -195,6 +257,18 @@ def run(config_path: str | Path) -> Path:
                 f"stage_eta={remaining * elapsed / 60:.1f}m",
                 flush=True,
             )
+        selected = torch.load(stage_checkpoint, map_location=device, weights_only=False)
+        model.load_state_dict(selected["model"])
+        shutil.copyfile(stage_checkpoint, run_dir / "best.ckpt")
+        selections.append({key: selected[key] for key in
+                           ("stage", "stage_index", "epoch", "global_epoch", "val_loss")})
+        selections[-1].update({key: selected[key] for key in ("selection_metric", "selection_value")})
+        (run_dir / "checkpoint_selection.json").write_text(
+            json.dumps({"criterion": "minimum declared validation criterion within each stage",
+                        "configured_selection_metric": selection_metric,
+                        "reported_stage": stage["name"], "stages": selections}, indent=2) + "\n",
+            encoding="utf-8",
+        )
     pd.DataFrame(history).to_csv(run_dir / "train_log.csv", index=False)
     checkpoint = torch.load(run_dir / "best.ckpt", map_location=device, weights_only=False); model.load_state_dict(checkpoint["model"])
     frame_scores = score_loader(model, loaders["val"], device); frame_scores.to_csv(run_dir / "val_frame_scores.csv", index=False)

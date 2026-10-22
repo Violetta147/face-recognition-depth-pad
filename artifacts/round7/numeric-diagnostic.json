@@ -1,0 +1,9 @@
+{
+  "cpu_float32_batch1": 0.0015543275512754917,
+  "cpu_float32_batch2": 0.0015543275512754917,
+  "cpu_float32_mkldnn_off": 0.0015543063636869192,
+  "cpu_float64_batch1": 0.0015542918471432247,
+  "frozen_cuda_frame_score": 0.0015264383982867002,
+  "input_tensor_sha256": "e4049d07994a128632349aa86f6b1ec839a5b2baf2968c6cafd7698406d4c74f",
+  "scope": "Single selected frame numeric diagnostic only. No benchmark rewrite or new threshold. Original CUDA TF32 state was not captured; cause cannot be proven."
+}

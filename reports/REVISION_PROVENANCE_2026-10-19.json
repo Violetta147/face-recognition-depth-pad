@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-19",
+  "authorization": "User approved minimal factual corrections while preserving revised prose, then replacement of canonical documents.",
+  "review_scope": "Saved local documents and frozen audit JSON; no new training or checkpoint inference.",
+  "documents": {
+    "paper": {
+      "original_path": "reports/paper_round5/Nhom1_Paper_CDCN_E0_E4_20261016.docx",
+      "original_commit": "bb9d38a086953d0ad6c9f11b61460a3c1fae8ac7",
+      "original_sha256": "699aed26bb58f645489f7b8b4fe7f7954b21f85f26e1a1e8858cb49b60fbc0bb",
+      "submitted_path": "C:\\Users\\LAPTOP T&T\\Downloads\\Paper_CDCN_CASIA_FASD_Revised.docx",
+      "submitted_sha256": "267f3d56f638d8f6788ccdce9f64ee9a47fc109de7888577342fb9246c935b5c",
+      "accepted_sha256": "c0539b50632b89eaa7e4bcc983697e529924fcf9eb4f7cb10380f2be43b53618",
+      "page_count": 5,
+      "native_tables": 8,
+      "inline_images": 2,
+      "tables_unchanged_from_original": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "references_unchanged": 6,
+      "image_bytes_unchanged": true,
+      "qa_pdf_sha256": "7b55a9d698435b9e8cbf3499d328f52456bb2ed55af09f55afefd869f0d0b452",
+      "abstract_words": {
+        "vi": 196,
+        "en": 132
+      }
+    },
+    "report": {
+      "original_path": "reports/bao_cao_cuoi_ky/ban_thao/Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016.docx",
+      "original_commit": "bb9d38a086953d0ad6c9f11b61460a3c1fae8ac7",
+      "original_sha256": "9458e236032c0dad7be267fadd8bc01b68e3abc987a387af6f331530bbf838c6",
+      "submitted_path": "C:\\Users\\LAPTOP T&T\\Downloads\\Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016_Revised.docx",
+      "submitted_sha256": "0fc34821743739fe9e26e0b00ba71527ec89be6cfa94a944d862c6ec8e50ddea",
+      "accepted_sha256": "66a4e35578557d9040c5c53ce3b3329daef455aef20394a71475c702ab494e12",
+      "page_count": 29,
+      "native_tables": 14,
+      "inline_images": 4,
+      "tables_unchanged_from_original": [
+        1,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "references_unchanged": 7,
+      "image_bytes_unchanged": true,
+      "qa_pdf_sha256": "3c628cae43071ccfb826dc65668998c12463dc094500274b825a36dc42b0a5f1",
+      "abstract_words": 381
+    }
+  }
+}

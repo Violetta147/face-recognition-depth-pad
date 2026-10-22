@@ -1,0 +1,25 @@
+{
+  "status": "PASS: executed Round 6 cost notebook received and inspected",
+  "review_date": "2026-10-22",
+  "path": "notebooks\\Face_PAD_Round6_Cost_E1_E3_E4_Executed.ipynb",
+  "received": true,
+  "sha256": "37f941faa2398c40998c68e36492f6ef2f1504d3fa932d80a46804481a6b1a91",
+  "code_cells": 4,
+  "execution_counts": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "output_errors": [],
+  "source_comparison": "Matches clean delivered notebook; only RUN_BENCHMARK False -> True",
+  "completion_output": "18 blocks x 200 samples; COST COMPLETE path matches audited Drive block",
+  "cpu_test_evidence": "Cell 0.2 source calls subprocess.run(check=True) before GPU output; cell ran without error. Raw subprocess stdout is absent from notebook stream outputs.",
+  "cost_audit_report": "reports/ROUND_6_COST_RESULTS_2026-10-22.json",
+  "registration_sha256": "c8567914f9c8d5b3cd1833cf1f88e55e2ab1698cd4b7c0237831caf97ee15258",
+  "raw_sha256": "6034ac6f7133c5cee91a5f310fda0d79d68edb153a4b596453ab3b566cc83ce7",
+  "results_sha256": "500a7a1a5a789e4de17326fd7b5b4aa3a3da29f031d3c64aa156ae56347a78f4",
+  "independent_linear_quantile_check": "PASS",
+  "repository_tests": "................................................................................ [ 41%]\n.................s...................................................... [ 77%]\n...........................................                              [100%]\n194 passed, 1 skipped, 64 subtests passed in 93.29s (0:01:33)\n",
+  "training_notebook_sha256_unchanged": "de1f9f07f37fbc17db467a17d2248f3ddbd446ad0b1a12984c8948548d7dbe11"
+}

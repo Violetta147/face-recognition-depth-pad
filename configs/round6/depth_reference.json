@@ -1,0 +1,6 @@
+{
+  "artifact_digest": "cc2fd3980ab116e116ac686ad9f59672524d3e9458d80b7a9cb783cdb0727ab5",
+  "count": 12000,
+  "reference": "artifacts/round5-full-audit-20261016/CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z/depth_input_snapshot.json",
+  "snapshot_sha256": "ac62a81c337a64bc411fc350a8fa8aa728f243ccc613cb9a2795dcb38c0c164d"
+}

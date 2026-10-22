@@ -1,5 +1,25 @@
 # Dataset and protocol decision for the PAD study
 
+## Current continuation decision on 16 October 2026
+
+The user explicitly chose to keep the exact CASIA-FASD data used by Official E1
+and frozen-head E2 for the remaining E3/E4 experiments. Keep the existing 16/4/30
+subject split, 20 sampled frames per video, image preprocessing and pseudo-depth
+cache. Do not replace the dataset or retune the split during this sequence.
+
+The source manifest SHA-256 is
+`58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192`; the derived
+manifest SHA-256 is
+`4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd`.
+These were rechecked against saved Drive artifacts on 16 October. CASIA test has
+already been observed, so further results remain development evidence. Different
+paper protocols permit contextual comparison only.
+
+The benchmark alternatives, September deadline and access-request state below
+describe the earlier plan. They do not block the current CASIA continuation and
+do not establish the present approval status of OULU-NPU or Replay-Attack.
+See the [rounds 1-4 audit](../reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.md).
+
 The two-person project uses **one mandatory benchmark**. A second dataset is optional and must not delay the primary experiment table.
 
 Raw videos, extracted face frames and pseudo-depth maps are not committed to Git.

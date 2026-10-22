@@ -1,0 +1,8 @@
+{
+  "freeze_sha256": "1a669e3878c561abfcd245a12eb2d4d8edb434af1a8854aecc1bcdd89a0e43a1",
+  "hashes": {
+    "test_frame_scores.csv": "3e9be482379b6376742fe088d0d4f5aa6a2cd8c65bdaaf1919cb9153a87ecb3a",
+    "test_metrics.json": "2d2acb9eff9a131fa32bf4316063bfee5db8e8b898624f0376752085b5f78146",
+    "test_scores.csv": "7c640d1096ad35dc2b55fa3120a64b8ca863f0d8c89c5fb8e977c7b027fe6320"
+  }
+}

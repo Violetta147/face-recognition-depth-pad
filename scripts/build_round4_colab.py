@@ -300,6 +300,7 @@ if __name__ == "__main__":
     notebook = build(root)
     for index, cell in enumerate(notebook["cells"]):
         cell["id"] = f"round4-{index:02d}"
-    destination = root / "notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb"
+    # Keep the executed notebook owned by the user intact.
+    destination = root / "notebooks/Face_PAD_Round4_Official_Frozen_Head_Clean.ipynb"
     destination.write_text(json.dumps(notebook, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(destination)

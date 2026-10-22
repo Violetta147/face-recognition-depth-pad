@@ -8,6 +8,13 @@
 **Ngày cập nhật:** 19 tháng 9 năm 2026  
 **Kế hoạch theo lượt báo cáo:** [KE_HOACH_THUC_HIEN_THEO_BUOI_HOC.md](KE_HOACH_THUC_HIEN_THEO_BUOI_HOC.md)
 
+**Điểm nối hiện hành 22/10/2026:** Lượt 5 đã hoàn tất thực nghiệm/ablation;
+giữ kết quả âm tính và E3 chọn từ validation. Chuẩn bị Lượt 6 ba cặp E1/E3
+seed mới 43/44/45 với ngân sách người dùng xác nhận khoảng 2–3 giờ A100.
+Gói chạy/preflight chưa hoàn tất và chưa có kết quả nhiều seed. Xem
+[bàn giao Lượt 6](docs/handoffs/ROUND6_2026-10-22.md). Các mục tiêu thiết kế
+bên dưới không thay thế trạng thái và bằng chứng hiện hành này.
+
 ---
 
 ## 1. Quyết định phạm vi

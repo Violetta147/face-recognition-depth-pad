@@ -21,10 +21,21 @@ def main() -> None:
     parser.add_argument("--split", choices=["val", "test"], default="test")
     parser.add_argument("--manifest", help="optional manifest override")
     parser.add_argument("--data-root", help="optional data root override")
+    parser.add_argument("--round6-freeze", help="required six-run freeze for Round 6 test")
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir)
     config = yaml.safe_load((run_dir / "config.yaml").read_text(encoding="utf-8"))
+    if config.get("round6_registration") and args.split == "test":
+        from deepface_pad.round6 import Batch
+        if not args.round6_freeze or args.manifest or args.data_root:
+            raise SystemExit("Round 6 test requires --round6-freeze and no data overrides")
+        batch = Batch(Path(__file__).resolve().parents[1], Path(config["round6_registration"]).parent)
+        if Path(args.round6_freeze).resolve() != batch.freeze_path.resolve():
+            raise SystemExit("wrong Round 6 freeze path")
+        state = batch.verify_freeze()
+        if run_dir.resolve() not in {Path(item["run"]).resolve() for item in state["runs"].values()}:
+            raise SystemExit("run does not belong to the frozen six-run batch")
     manifest = args.manifest or config["data"]["manifest"]
     data_root = args.data_root or config["data"]["root"]
     config["data"]["manifest"] = manifest

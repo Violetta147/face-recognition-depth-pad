@@ -1,0 +1,48 @@
+{
+  "template_sha256": "bd23b81e4ece491892bb651b140fc0135a47cc2404aa2182f826a08c233def92",
+  "source_sha256": "512e015111a03a79a55742cb93450617d93c564ecbce94974fcefbbe766cc2ff",
+  "output_sha256": "69950bf5a07b21d870dc938befb5d48d90ec1467642e16a91385b477fa43ce09",
+  "tables": [
+    "split",
+    "schedule",
+    "results",
+    "depth",
+    "split_en",
+    "schedule_en",
+    "results_en",
+    "depth_en"
+  ],
+  "sources": [
+    "ROUND_5_TEST_RESULTS_2026-10-16.json",
+    "ROUND_5_FULL_VALIDATION_2026-10-16.json"
+  ],
+  "intentional_template_changes": [
+    "replace sample body",
+    "remove publication placeholder headers and author biographies",
+    "reuse two-column pattern for English appendix and full-width pattern for its figure",
+    "regenerate implementation schematic with English labels; source figure unchanged"
+  ],
+  "previous_edition": {
+    "commit": "bb9d38a086953d0ad6c9f11b61460a3c1fae8ac7",
+    "output_sha256": "699aed26bb58f645489f7b8b4fe7f7954b21f85f26e1a1e8858cb49b60fbc0bb",
+    "source_sha256": "22aad6dfae722b9c7488a62301f055f11a8ba5c8230ebe3a9bfff61b1a7ff40c"
+  },
+  "page_count": 5,
+  "revision_date": "2026-10-19",
+  "revision_input": {
+    "path": "C:\\Users\\LAPTOP T&T\\Downloads\\Paper_CDCN_CASIA_FASD_Revised.docx",
+    "sha256": "267f3d56f638d8f6788ccdce9f64ee9a47fc109de7888577342fb9246c935b5c"
+  },
+  "qa_pdf_sha256": "737c845d1fff097c2bc06f29f23142a753b25a9b90496bed54fbf5b04e10c2f2",
+  "qa_tests": "16 related tests passed (8 report/scaffold, 5 paper, 3 academic editing)",
+  "qa_directory": "artifacts/academic-edit-20261019",
+  "review_log": "reports/BIEN_TAP_HOC_THUAT_2026-10-19.md",
+  "academic_edit": {
+    "date": "2026-10-19",
+    "rules": "notes/Quy_tac_chuan_hoa_van_phong_va_loc_nhat_ky_AI.md",
+    "baseline_commit": "0e04b2e",
+    "baseline_sha256": "c0539b50632b89eaa7e4bcc983697e529924fcf9eb4f7cb10380f2be43b53618",
+    "note": "reports/BIEN_TAP_HOC_THUAT_2026-10-19.md",
+    "invariants": "reports/ACADEMIC_EDIT_INVARIANTS_2026-10-19.json"
+  }
+}

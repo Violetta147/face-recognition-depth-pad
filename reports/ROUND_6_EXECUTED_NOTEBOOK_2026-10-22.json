@@ -1,0 +1,33 @@
+{
+  "path": "notebooks/Face_PAD_Round6_CASIA_E1_E3_Executed.ipynb",
+  "sha256": "de1f9f07f37fbc17db467a17d2248f3ddbd446ad0b1a12984c8948548d7dbe11",
+  "bytes": 184701,
+  "code_cells_executed": 12,
+  "execution_counts": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "error_outputs": 0,
+  "source_differences_only_four_authorized_gates": [
+    9,
+    10,
+    11,
+    13
+  ],
+  "preserved_without_edit": true,
+  "training_source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+  "matches_paired_delta_pp": {
+    "mean": -0.6172839506172839,
+    "sample_sd_ddof1": 2.685717273803345
+  }
+}

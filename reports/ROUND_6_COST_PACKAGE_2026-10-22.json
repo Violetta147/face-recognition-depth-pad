@@ -1,0 +1,22 @@
+{
+  "package": {
+    "source_commit": "d316f72ff2093fb336cc20c7a0e522cbda9363c6",
+    "source_files": 31,
+    "zip_sha256": "ddef2dc1fbfb309c07b043f32dd82e8d8c5b6f109692bbd519caf337039598b9",
+    "notebook_sha256": "162819cc7b1b2557fe8fc7e7d240e7726d1c7d2794e15b5a1ec367def0f1ce7b",
+    "gpu_measurement_executed": false
+  },
+  "verification": {
+    "source_commit": "d316f72ff2093fb336cc20c7a0e522cbda9363c6",
+    "locked_files_verified": 31,
+    "isolated_package_cpu_tests_exit_code": 0,
+    "gpu_measurement_executed": false
+  },
+  "repository_tests": {
+    "passed": 186,
+    "feedback": "................................................................................ [ 42%]\n.................s...................................................... [ 81%]\n...................................                                      [100%]\n186 passed, 1 skipped, 64 subtests passed in 71.14s (0:01:11)\n",
+    "log": "artifacts/project-hooks/validation/af2f2e365db04558944af25ee3e4cd8a.log"
+  },
+  "delivery_directory": "artifacts/round6-cost-colab-20261022",
+  "status": "source ready; waiting for human A100 preflight and real GPU timing; no cloud upload by agent"
+}

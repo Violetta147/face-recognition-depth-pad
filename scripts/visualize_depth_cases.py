@@ -22,8 +22,14 @@ MEAN = np.asarray([0.485, 0.456, 0.406], dtype=np.float32)[:, None, None]
 STD = np.asarray([0.229, 0.224, 0.225], dtype=np.float32)[:, None, None]
 
 
-def _rgb_image(tensor: torch.Tensor, size: int) -> Image.Image:
-    array = tensor.detach().cpu().numpy() * STD + MEAN
+def _rgb_image(tensor: torch.Tensor, size: int, normalization: str = "imagenet") -> Image.Image:
+    if normalization == "imagenet":
+        mean, std = MEAN, STD
+    elif normalization == "cdcn_official":
+        mean, std = 0.5, 128 / 255
+    else:
+        raise ValueError(f"unknown normalization: {normalization}")
+    array = tensor.detach().cpu().numpy() * std + mean
     array = np.clip(array.transpose(1, 2, 0) * 255.0, 0, 255).astype(np.uint8)
     return ImageOps.fit(Image.fromarray(array, mode="RGB"), (size, size))
 
@@ -66,12 +72,13 @@ def _write_case(
     target: np.ndarray,
     prediction: np.ndarray,
     metadata: dict[str, object],
+    normalization: str = "imagenet",
 ) -> None:
     panel = 224
     caption = 72
     sheet = Image.new("RGB", (panel * 5, panel + caption), "white")
     panels = [
-        ("RGB", _rgb_image(sample["image"], panel)),
+        ("RGB", _rgb_image(sample["image"], panel, normalization)),
         ("target depth", _map_image(target, panel)),
         ("target mask", _map_image((target > 1e-6).astype(np.float32), panel)),
         ("predicted depth", _map_image(prediction, panel)),
@@ -176,7 +183,8 @@ def main() -> None:
             prediction = output["depth"][0, 0].detach().cpu().numpy()
             target = sample["depth"][0].detach().cpu().numpy()
             file_name = f"{order:02d}_{metadata['sample_id']}.png"
-            _write_case(destination / file_name, sample, target, prediction, metadata)
+            _write_case(destination / file_name, sample, target, prediction, metadata,
+                        config["data"].get("normalization", "imagenet"))
             index_rows.append({**metadata, "file": file_name})
 
     with (destination / "index.csv").open("w", newline="", encoding="utf-8") as handle:

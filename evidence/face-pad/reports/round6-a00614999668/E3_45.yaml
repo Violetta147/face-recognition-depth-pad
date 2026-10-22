@@ -1,0 +1,36 @@
+data:
+  depth_ledger: /content/datasets/casia-fasd/depth/depth_status.csv
+  image_size: 256
+  manifest: /content/round6-source/DeepFace-PAD/data/manifests/casia_fasd_debug_with_depth.csv
+  normalization: cdcn_official
+  root: /content/datasets/casia-fasd
+  source_manifest: /content/round6-source/DeepFace-PAD/data/manifests/casia_fasd_debug.csv
+evaluation:
+  aggregation: mean
+experiment_id: ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE
+loss:
+  classification: bce
+  implementation: official_cdcn
+  lambda_abs: 1.0
+  lambda_cls: 1.0
+  lambda_contrast: 1.0
+model:
+  name: cdcn_official_head
+  theta: 0.7
+round6_initializer: E1_45
+round6_registration: /content/drive/MyDrive/face-pad/reports/round6-a00614999668/registration.json
+runs_dir: /content/drive/MyDrive/face-pad/runs
+seed: 45
+source_commit: a006149996686cfc9e6dbd29f8fd5c90bf1997ba
+training:
+  batch_size: 8
+  optimizer: adam
+  selection_metric: classification_bce
+  stages:
+  - epochs: 16
+    lr: 0.0001
+    name: joint
+  weight_decay: 0.0001
+  workers: 2
+  init_checkpoint: /content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z/best.ckpt
+round6_initializer_sha256: e2dc4dd78b99d4e0c4c29a9ae39fc48914b6d9a7a5b6a1c5396f44144d01953e

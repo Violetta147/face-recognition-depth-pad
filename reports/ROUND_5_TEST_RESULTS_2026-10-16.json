@@ -1,0 +1,903 @@
+{
+  "status": "PASS: frozen development-test audit",
+  "selected_by_validation": "E3",
+  "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+  "runs": {
+    "E0": {
+      "run_id": "CASIA_E0_BCE_5E_seed42_20260920T082941Z",
+      "metrics": {
+        "threshold": 0.9900876432657242,
+        "apcer": 0.0,
+        "bpcer": 0.1111111111111111,
+        "acer": 0.05555555555555555,
+        "eer": 0.024074074074074074,
+        "auc": 0.9979835390946502
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 10,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s22_v1",
+        "casia_s23_v1",
+        "casia_s23_v2",
+        "casia_s30_v1",
+        "casia_s30_v2",
+        "casia_s31_vHR_1",
+        "casia_s39_v1",
+        "casia_s39_vHR_1",
+        "casia_s48_v2"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 3,
+          "error_rate": 0.1
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 3,
+          "error_rate": 0.1
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 4,
+          "error_rate": 0.13333333333333333
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "63fd5c301114ced79b9b08f68287b110a13cd23d8ce5d7018560b627f96fd790",
+        "test_scores.csv": "41612ea1f8996d7d0182321aec3a4ab937f6a350d028bddfe8b922278bfd734e",
+        "test_metrics.json": "f25089b2b201992ab594d92eed450685bba3aa9ba1b78e38ccd3bd866fd7b5ca"
+      }
+    },
+    "E1": {
+      "run_id": "CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z",
+      "metrics": {
+        "threshold": 0.1916038803756237,
+        "apcer": 0.0,
+        "bpcer": 0.05555555555555555,
+        "acer": 0.027777777777777776,
+        "eer": 0.022222222222222223,
+        "auc": 0.9944444444444445
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 5,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s39_v1"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 2,
+          "error_rate": 0.06666666666666667
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 2,
+          "error_rate": 0.06666666666666667
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "f5f0f9c8fbb29290fc3f4ea65e96c93f7e1748c62c720086b120b15fb7371615",
+        "test_scores.csv": "48df61d9a1d1249c7ef8b25e0853f75c56f8d0d99af5f8da92ac77abe5198368",
+        "test_metrics.json": "3e8f84d1f1f85ec62c567a54b8178ec3e16270c95c69a26598727ec077ec3c63"
+      }
+    },
+    "E2": {
+      "run_id": "CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z",
+      "metrics": {
+        "threshold": 0.4117791514843702,
+        "apcer": 0.0,
+        "bpcer": 0.05555555555555555,
+        "acer": 0.027777777777777776,
+        "eer": 0.022222222222222223,
+        "auc": 0.994320987654321
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 5,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s39_v1"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 2,
+          "error_rate": 0.06666666666666667
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 2,
+          "error_rate": 0.06666666666666667
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "ad458840c7c21a65d7a8698e0b7b375c14baaab746b0010e513f37b200bcd09f",
+        "test_scores.csv": "cc04c03dcc6b577bce548a98b6d93730ab5af63b30b4c6f9c6380adca761c0ba",
+        "test_metrics.json": "74ae4baa2f159d6b46e3ae5fa2a35e535c0a96d881f8c3dd404516e332b6ee7f"
+      }
+    },
+    "E3": {
+      "run_id": "CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z",
+      "metrics": {
+        "threshold": 0.8496189594268799,
+        "apcer": 0.0,
+        "bpcer": 0.1,
+        "acer": 0.05,
+        "eer": 0.022222222222222223,
+        "auc": 0.9941975308641975
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 9,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s32_v2",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 7,
+          "error_rate": 0.23333333333333334
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "44479b9813a235dec93c0ee2577b36ae41bf45b7e87569a8c020a026b39e1a01",
+        "test_scores.csv": "d831b363125a22fe9641f0b5b4dd3e45b751eaa574b2b791c7c329b79c8eedfa",
+        "test_metrics.json": "08cd382d26ce5da21c026c9465a3eaa5e6a3d6693803e03519f36e0e6a4dca14"
+      }
+    },
+    "E3b": {
+      "run_id": "CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z",
+      "metrics": {
+        "threshold": 0.7518128156661987,
+        "apcer": 0.0,
+        "bpcer": 0.1,
+        "acer": 0.05,
+        "eer": 0.03333333333333333,
+        "auc": 0.9925514403292182
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 9,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v1",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 6,
+          "error_rate": 0.2
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 2,
+          "error_rate": 0.06666666666666667
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "e0840675981d21fa830908119178df3277a9eced0df127b7660437a7bf182647",
+        "test_scores.csv": "f9816a029fe3cbdeeef1beb34e9dcf911b34b50f0d15648fd8d3939fc07301d2",
+        "test_metrics.json": "a409f5fa25c4b394a5d763166ed811df302782937b01962bdb3ea950c140572d"
+      }
+    },
+    "E4": {
+      "run_id": "CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z",
+      "metrics": {
+        "threshold": 0.418625445663929,
+        "apcer": 0.0,
+        "bpcer": 0.08888888888888889,
+        "acer": 0.044444444444444446,
+        "eer": 0.022222222222222223,
+        "auc": 0.9966255144032922
+      },
+      "attack_videos": 270,
+      "live_videos": 90,
+      "false_accepts": 0,
+      "false_rejects": 8,
+      "error_video_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "groups": [
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "cut_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "video_replay",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "high",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "low",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 0,
+          "attack_type": "warped_photo",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 0,
+          "error_rate": 0.0
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "high",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "low",
+          "videos": 30,
+          "errors": 6,
+          "error_rate": 0.2
+        },
+        {
+          "label": 1,
+          "attack_type": "live",
+          "quality": "normal",
+          "videos": 30,
+          "errors": 1,
+          "error_rate": 0.03333333333333333
+        }
+      ],
+      "test_artifact_hashes": {
+        "test_frame_scores.csv": "d7d6bea07192b9f5701ed6f3680b7f5a496fed3a4bb5a403b27ec5304b7f4fcb",
+        "test_scores.csv": "bb16ff2f745ef1bfcd3b7e503e496c50f7fc7355c1c62fd05e7df0894fd3b6f8",
+        "test_metrics.json": "db5ce66db9ba1dc8be00b7bb858bb8de5a6a361409bd64fa73ec37d34b9ab475"
+      }
+    }
+  },
+  "paired": {
+    "E1_vs_E2": {
+      "counts": {
+        "both_correct": 355,
+        "both_wrong": 5
+      },
+      "fixed_ids": [],
+      "new_error_ids": [],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s39_v1"
+      ]
+    },
+    "E1_vs_E3": {
+      "counts": {
+        "both_correct": 350,
+        "new_error": 5,
+        "both_wrong": 4,
+        "fixed": 1
+      },
+      "fixed_ids": [
+        "casia_s39_v1"
+      ],
+      "new_error_ids": [
+        "casia_s32_v2",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1"
+      ]
+    },
+    "E1_vs_E3b": {
+      "counts": {
+        "both_correct": 351,
+        "both_wrong": 5,
+        "new_error": 4
+      },
+      "fixed_ids": [],
+      "new_error_ids": [
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s39_v1"
+      ]
+    },
+    "E1_vs_E4": {
+      "counts": {
+        "both_correct": 351,
+        "both_wrong": 4,
+        "new_error": 4,
+        "fixed": 1
+      },
+      "fixed_ids": [
+        "casia_s39_v1"
+      ],
+      "new_error_ids": [
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1"
+      ]
+    },
+    "E3_vs_E3b": {
+      "counts": {
+        "both_correct": 350,
+        "both_wrong": 8,
+        "fixed": 1,
+        "new_error": 1
+      },
+      "fixed_ids": [
+        "casia_s32_v2"
+      ],
+      "new_error_ids": [
+        "casia_s39_v1"
+      ],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ]
+    },
+    "E3b_vs_E4": {
+      "counts": {
+        "both_correct": 351,
+        "both_wrong": 8,
+        "fixed": 1
+      },
+      "fixed_ids": [
+        "casia_s39_v1"
+      ],
+      "new_error_ids": [],
+      "both_wrong_ids": [
+        "casia_s21_vHR_1",
+        "casia_s23_v2",
+        "casia_s30_v2",
+        "casia_s31_v1",
+        "casia_s36_v2",
+        "casia_s38_v2",
+        "casia_s39_v2",
+        "casia_s48_v2"
+      ]
+    }
+  }
+}

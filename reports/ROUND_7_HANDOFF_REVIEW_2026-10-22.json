@@ -1,0 +1,103 @@
+{
+  "status": "PASS: Round 6 evidence and Round 7 handoff review",
+  "review_date": "2026-10-22",
+  "base_commit": "bc6e3d029d99024aa42596af9b883fadb44f41e2",
+  "files_checked": 96,
+  "key_artifact_hashes": {
+    "reports/ROUND_6_RESULTS_2026-10-22.json": "df4335dc6e63d531a6d73a7a08f4a4ae2710b8bf2e921f2660fb204a6119d64f",
+    "reports/ROUND_6_COST_RESULTS_2026-10-22.json": "01d121d1475ccb95313b5bdb9cd18df43624da4d951c1590f2b8e65b36c5f687",
+    "reports/ROUND_6_PAPER_PROTOCOL_COMPARISON_2026-10-22.json": "d1c6434cd2afe870daa95a943138ad400a6c129a05db323779c1ecb13bfb262b",
+    "notebooks/Face_PAD_Round6_CASIA_E1_E3_Executed.ipynb": "de1f9f07f37fbc17db467a17d2248f3ddbd446ad0b1a12984c8948548d7dbe11",
+    "notebooks/Face_PAD_Round6_Cost_E1_E3_E4_Executed.ipynb": "37f941faa2398c40998c68e36492f6ef2f1504d3fa932d80a46804481a6b1a91"
+  },
+  "runs": {
+    "E1_43": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z",
+      "threshold": 0.265095642209053,
+      "checkpoint_sha256": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7"
+    },
+    "E3_43": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z",
+      "threshold": 0.3983212910592556,
+      "checkpoint_sha256": "9c7835aed57c4cefd3f04eb55c52caec9fd75803d25558b5539c758874e2ea4c"
+    },
+    "E1_44": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z",
+      "threshold": 0.1520372174680233,
+      "checkpoint_sha256": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42"
+    },
+    "E3_44": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z",
+      "threshold": 0.4321130795404315,
+      "checkpoint_sha256": "214e1ea24a350bf4382e1a3ce2866ad82d595aaca3ca52341f348d96728325f5"
+    },
+    "E1_45": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z",
+      "threshold": 0.23987324237823487,
+      "checkpoint_sha256": "e2dc4dd78b99d4e0c4c29a9ae39fc48914b6d9a7a5b6a1c5396f44144d01953e"
+    },
+    "E3_45": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z",
+      "threshold": 0.38984894957393407,
+      "checkpoint_sha256": "a7c8bef52a0bb79fbcb0ff70aaf827cc5047f84a72b541c22b9312f26d35ca48"
+    }
+  },
+  "freeze_sha256": "1a669e3878c561abfcd245a12eb2d4d8edb434af1a8854aecc1bcdd89a0e43a1",
+  "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+  "paired_video_errors": {
+    "43": {
+      "corrected": 6,
+      "new_errors": 0,
+      "both_wrong": 6,
+      "both_correct": 348
+    },
+    "44": {
+      "corrected": 1,
+      "new_errors": 4,
+      "both_wrong": 4,
+      "both_correct": 351
+    },
+    "45": {
+      "corrected": 2,
+      "new_errors": 1,
+      "both_wrong": 5,
+      "both_correct": 352
+    }
+  },
+  "user_files_before": {
+    "DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md": "a8eea66ed165a8bd10d21e61ed31602389a08ea30021956780a32e032e71195e",
+    "KE_HOACH_HOOKS_VA_BAN_GIAO.md": "de54ecff2adf5f588b444b29143406445ec27b594b880efb58ddf764edb9b068"
+  },
+  "validation_snapshot": {
+    "status": "PASS",
+    "passed": 194,
+    "feedback": "............................................................................. [ 39%]\n....................s................................................... [ 76%]\n..............................................                           [100%]\n194 passed, 1 skipped, 67 subtests passed in 97.49s (0:01:37)\n",
+    "log": "artifacts/project-hooks/validation/6c2a17a214cb466b9feae8d8b6ef1804.log"
+  },
+  "checks": [
+    "96 saved metadata/CSV/notebook/Word files match recorded SHA-256",
+    "six runs retain 360 video and 7200 frame test rows each",
+    "Round 7 plan verified: A leads; error analysis before webcam; ArcFace optional",
+    "manifest has attack_type and quality, no measured lighting/blur metadata",
+    "legacy figure loader is bound to seed 42 and cannot be reused unchanged for Round 6",
+    "Drive dataset ZIP and depth TAR paths exist; archives not fully read or hashed in this review"
+  ],
+  "scope": "Handoff/document review only. No model forward, training, image restore, webcam capture, cloud upload, Git push or file moves.",
+  "phase7_status": "not started",
+  "findings_to_resolve_in_handoff": [
+    "CURRENT contained historical next-session Round 6 preparation instructions",
+    "next session needs a dedicated Round 7 source map, ordered work and acceptance checklist"
+  ],
+  "preserved_user_files": {
+    "DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md": "a8eea66ed165a8bd10d21e61ed31602389a08ea30021956780a32e032e71195e",
+    "KE_HOACH_HOOKS_VA_BAN_GIAO.md": "de54ecff2adf5f588b444b29143406445ec27b594b880efb58ddf764edb9b068"
+  },
+  "validation_after_timeout": {
+    "status": "PASS",
+    "passed": 194,
+    "feedback": "............................................................................. [ 39%]\n....................s................................................... [ 76%]\n..............................................                           [100%]\n194 passed, 1 skipped, 67 subtests passed in 130.36s (0:02:10)\n",
+    "log": "artifacts/project-hooks/validation/e5ac518f1f394c76bb476bbfe1438a34.log",
+    "initial_timeout_log": "artifacts/project-hooks/validation/f493b54a2a0b44df9aa0faf98b95a786.log",
+    "retry": "Genuine full-suite run(force=True), CPU with OMP/MKL threads=2; no hook timeout/config changes."
+  }
+}

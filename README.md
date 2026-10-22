@@ -1,181 +1,40 @@
-# DeepFace PAD
+# DeepFace-PAD: bộ bàn giao nghiên cứu
 
-Greenfield research project for RGB face presentation attack detection using pseudo-depth supervision.
+Bản bàn giao ngày 22/10/2026. Ngôn ngữ: tiếng Việt.
 
-The implementation follows the research protocol rather than a product-style recognition pipeline.
+Dự án kiểm tra khả năng dùng bản đồ độ sâu để phân biệt mặt thật với ảnh in
+và video phát lại. Mã nguồn và kết quả đã có đến Lượt 7. Dự án chưa hoàn tất.
 
-## Research question
+## Bắt đầu tại đây
 
-> Can a lightweight classifier learned on a predicted depth map improve CDCN over fixed mean-depth scoring without materially increasing inference cost?
+1. Đọc [bàn giao nhóm](docs/team_handoff/BAN_GIAO_NHOM.md).
+2. Đọc [danh mục giao nhận](docs/team_handoff/DANH_MUC_GIAO_NHAN.md).
+3. Làm theo [khôi phục và kiểm tra](docs/team_handoff/KHOI_PHUC_VA_KIEM_TRA.md).
+4. Chọn một việc trong bảng công việc còn lại.
+5. Lập [phiếu thí nghiệm mới](docs/team_handoff/THI_NGHIEM_MOI_MAU.md) trước khi thay phương pháp.
 
-## Documents
+Lượt 6 đã hoàn tất sáu lượt chạy và 138 epoch. E3 giảm ACER trung bình nhưng
+kém E1 ở seed 44. Chưa có bằng chứng cải thiện ổn định. Webcam đã có timing
+thực nhưng còn từ chối người thật. Giữ cả các kết quả không cải thiện.
 
-- [Research specification](DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md)
-- [Two-person alternating report plan](KE_HOACH_THUC_HIEN_THEO_BUOI_HOC.md)
-- [Dataset and protocol decision](data/README.md)
-- [Colab execution runbook](COLAB.md)
-- [Literature matrix for round 1](reports/LITERATURE_MATRIX.md)
-- [Frozen CASIA E0 result](reports/CASIA_E0_BCE_5E_seed42_summary.md)
-- [Audit of rounds 1-3](reports/MIDTERM_ROUNDS_1_3_AUDIT.md)
-- [Midterm handoff and required Colab evidence](reports/MIDTERM_ROUNDS_1_3_HANDOFF.md)
-- [Round 4: frozen head on the official E1 checkpoint](reports/ROUND_4_OFFICIAL_DEPTH_HEAD.md)
-- [Round 4 E2 result reported from Colab](reports/CASIA_E2_OFFICIAL_HEAD_FROZEN_seed42_summary.md)
+## Kiểm tra bản nhận
 
-## Mandatory study
-
-| ID | Configuration | Purpose |
-|---|---|---|
-| E0 | MobileNetV3 with BCE | Lightweight binary baseline |
-| E1 | CDCN depth-only with mean-depth scoring | Depth-supervised baseline |
-| E2 | CDCN plus frozen learned depth head with BCE | Isolate learned scoring |
-| E3 | Official CDCN + learned depth head trained end-to-end with BCE | Test joint optimization |
-| E4 | Official CDCN + learned depth head with staged training and Focal Loss | Proposed configuration |
-
-The project uses one public PAD benchmark and one official protocol. Primary metrics are video-level APCER, BPCER, ACER, EER and ROC AUC. It also reports parameter count, model size, latency and FPS.
-
-## Build order
-
-```text
-Literature and protocol
-    -> dataset manifests and leakage checks
-    -> PAD metrics
-    -> E0 binary baseline
-    -> pseudo-depth generation
-    -> E1 CDCN reproduction
-    -> E2 to E4 controlled modifications
-    -> multiple seeds and paper comparison
-    -> error analysis
-    -> optional webcam and ArcFace integration
+```powershell
+python scripts/verify_team_handoff.py --root .
 ```
 
-## Current status
+Tệp [delivery/FILES.json](delivery/FILES.json) liệt kê từng tệp, kích thước,
+SHA-256, nguồn và vai trò. Bản bàn giao cập nhật nhánh main hiện có trên GitHub.
+Commit bàn giao nối tiếp lịch sử remote; không nhập các commit cục bộ chứa hook.
+Mã commit cũ trong báo cáo được giữ làm thông tin nguồn.
+Dùng các source ZIP đi kèm để đọc phiên bản cũ; không giả định commit cũ có
+trong lịch sử của nhánh này.
 
-- [x] Research scope rewritten for a two-person lean study.
-- [x] Alternating A/B report schedule defined.
-- [x] Recent related work and evaluation rules documented.
-- [x] Three-slide core briefing retained as a reference; the final midterm deck is deferred until rounds 1-3 have complete evidence.
-- [x] Previous implementation and artifacts removed.
-- [x] Temporary midterm dataset and subject-disjoint CASIA development protocol recorded.
-- [ ] Final licensed benchmark locked; OULU-NPU and Replay-Attack approval is pending until 27 September 2026.
-- [x] Reproducible Python package and experiment configs created.
-- [x] Manifest leakage validator and metric tests implemented.
-- [x] Resumable pseudo-depth queue, status ledger, QA audit, and failure reporting implemented.
-- [x] E0 MobileNetV3 baseline implemented.
-- [x] Resumable 3DDFA V2 worker implemented.
-- [x] Official CDCN CVPR 2020 architecture/loss ported with pinned-source provenance
-      and a numerical equivalence verifier.
-- [x] E1-to-E2 checkpoint transfer and staged-training code covered by unit tests.
-- [x] Official-CDCN E1 run completed and frozen.
-- [x] Legacy Lite/Pilot executable model, configs and combined notebook removed.
-- [ ] E2-E4 have completed end-to-end integration runs.
-- [x] Official-backbone frozen E2 run reported from Colab on 1 October 2026:
-      same ACER and same five false-rejected live videos as E1. The summary
-      records user-provided outputs; raw Drive artifacts still await independent audit.
-- [ ] Official dataset manifest created and validated.
-- [x] Temporary CASIA-FASD debug manifest created and leakage-validated (600 videos,
-      12,000 uniformly sampled frames).
-- [x] CASIA E0 five-epoch baseline completed and test result frozen.
-- [ ] Full E0-E4 runs completed.
+Bản GitHub có mã nguồn, kiểm thử nghiên cứu, bản thảo, hình, score CSV và
+checkpoint. Bộ dữ liệu ảnh đầy đủ và video webcam không nằm trong GitHub.
+Các điều kiện nhận chúng được ghi trong danh mục giao nhận. Bản clone đủ để
+kiểm hash và phân tích score trên CPU; dựng lại ảnh cần thêm archive dữ liệu.
 
-## Quick start
-
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-pytest -q
-python scripts/validate_manifest.py data/manifests/all.csv --data-root /content/data
-python scripts/generate_depth.py data/manifests/all.csv --data-root /content/data --output-root /content/data/depth
-python scripts/run_3ddfa_worker.py --pending /content/data/depth/3ddfa_pending.csv --ledger /content/data/depth/depth_status.csv --3ddfa-root /content/3DDFA_V2 --mode gpu
-python scripts/visualize_depth_targets.py --ledger /content/data/depth/depth_status.csv --output reports/depth-smoke.png
-python scripts/materialize_depth_manifest.py data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --data-root /content/data --output data/manifests/all-with-depth.csv
-python scripts/verify_depth_provenance.py --source data/manifests/all.csv --ledger /content/data/depth/depth_status.csv --derived data/manifests/all-with-depth.csv
-python scripts/validate_manifest.py data/manifests/all-with-depth.csv --data-root /content/data --require-depth
-python scripts/audit_depth.py data/manifests/all-with-depth.csv --data-root /content/data --report reports/depth-qa.json
-python scripts/run_experiment.py configs/e0_mobilenet.yaml
-# After an E1 run is frozen:
-python scripts/visualize_depth_cases.py --run-dir runs/<E1_RUN_ID> --split val --count 10
-python scripts/score_checkpoint.py --run-dir runs/<E1_RUN_ID> --split test
-```
-
-All configurations use validation data to select the operating threshold. Test scores
-must only be evaluated after the configuration is frozen. E2 requires the E1 checkpoint
-path in `training.init_checkpoint`; it fails instead of silently training a head on a
-random frozen backbone.
-For a comparison with the corrected official E1, use
-`configs/casia_e2_official_head_frozen.yaml` and `cdcn_official_head`.
-All E1-E4 templates now use the official backbone. Removed pilot model names fail explicitly.
-`DepthHead` is a separate module; its 1,265 parameters and checkpoint keys are unchanged.
-The official wrapper freezes BatchNorm statistics as well as parameters during
-head-only training; E1 and E2 must produce identical depth maps.
-The clean `notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb` restores the E1
-inputs, trains E2, and exports the paired development comparison and efficiency.
-Depth-supervised runs also perform manifest preflight before creating a run: every
-bona fide sample must reference an existing pseudo-depth target. Empty attack depth
-paths remain valid because their protocol target is an all-zero map.
-E1, E3, and E4 additionally require `data.source_manifest` and `data.depth_ledger`
-in their configs. Training verifies the derived manifest provenance sidecar against
-those exact files before creating a run directory, so the byte-level check cannot be
-accidentally skipped when starting a paid run. `data.depth_provenance` may point to a
-non-default sidecar path when needed. The same preflight then audits every referenced
-depth artifact before creating a run directory, so a map changed in place after
-materialization cannot bypass validation. Bona fide maps must be readable, finite,
-two-dimensional and non-zero, while explicit attack maps must be zero. Each accepted
-depth-supervised run stores `depth_input_snapshot.json` with the verified provenance,
-full QA result, and SHA-256 plus byte size of every explicit depth target. This makes
-the exact pseudo-depth state used at startup auditable even if the shared cache later
-changes. Run the
-standalone audit before E1 when a JSON report is needed; it records the bona fide
-reconstruction failure rate by split and class-level depth statistics.
-Pseudo-depth preparation is resumable: `depth_status.csv` records pending, complete,
-and failed samples, while `3ddfa_pending.csv` contains only work still requiring
-3DDFA V2. Import a worker failure CSV with `--failure-report`; failed bona fide rows
-stay failed until `--retry-failed` is explicitly requested and are never replaced by
-zero maps.
-After the ledger is complete, materialize a separate manifest with verified depth
-paths. The command refuses pending or failed rows, invalid artifacts, stale ledger
-entries, and outputs outside the configured data root; it never edits the official
-source manifest. It also writes `<output>.provenance.json` with SHA-256 checksums for
-the exact source manifest, ledger, and derived manifest bytes. Verify that sidecar
-after copying or resuming in Colab, then use the derived manifest for the depth audit
-and E1/E3/E4 configs.
-
-For Colab Pro setup and the 300-credit budget guardrails, see [COLAB.md](COLAB.md).
-
-## Next deliverables
-
-Rounds 1-4 have reported CASIA development results. Official-CDCN E1 was selected on validation and
-scored once on locked test. The clean correction runbook is
-`notebooks/Face_PAD_Official_CDCN_E1_Clean.ipynb`. The original executed notebook and all
-biometric artifacts remain private on Google Drive.
-
-1. Write the midterm report and build the deck from the corrected frozen artifacts.
-2. Lock OULU-NPU Protocol 1 or Replay-Attack after the 27 September access deadline.
-3. Continue with E3/E4 as untested official-backbone templates selected on validation.
-
-## Scope limits
-
-The following are postponed until the experiment table is complete:
-
-- Face-recognition UI and enrollment.
-- ArcFace integration.
-- Web, mobile, API, cloud or database work.
-- Complex tracking.
-- Transformer, rPPG and temporal-network experiments.
-- Cross-dataset evaluation.
-
-Webcam and ArcFace may be added at the end as a small integration demo. They are not the research contribution.
-
-## Data and privacy
-
-- Do not commit raw datasets, extracted biometric frames, pseudo-depth caches or model weights.
-- Follow the official dataset license and protocol.
-- Pseudo-depth is not sensor depth.
-- Zero-depth spoof labels apply to the selected print/replay setting and do not support claims about 3D masks.
-- Test data is used only after configuration and threshold selection are frozen.
-
-
-## Model cleanup audit
-
-See [Official backbone audit and pilot removal](reports/OFFICIAL_BACKBONE_CLEANUP.md).
-Historical results remain in audit reports and Git history; they are not active experiments.
+Tài liệu trong `reports/` là bằng chứng có ngày tháng. Chỉ tài liệu bàn giao
+nhóm này mô tả công việc hiện tại. Không dùng kế hoạch cũ làm lệnh chạy lại
+thí nghiệm đã hoàn tất. Bản Word/paper hiện tại chỉ đến Lượt 5.

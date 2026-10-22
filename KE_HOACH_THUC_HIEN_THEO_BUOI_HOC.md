@@ -6,6 +6,37 @@
 **Mục tiêu:** Mỗi lượt có tiến bộ nghiên cứu quan sát được và tích lũy trực tiếp cho báo cáo giữa kỳ hoặc paper  
 **Đặc tả nghiên cứu:** [DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md](DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md)
 
+## Quyết định hiện hành ngày 16 tháng 10 năm 2026
+
+Tạm dừng điền báo cáo Word cuối kỳ để tiếp tục các thí nghiệm còn lại. Giữ
+CASIA-FASD, manifest, split và nhãn độ sâu đã dùng ở Official E1/E2; không đổi
+sang OULU-NPU hoặc Replay-Attack trong chuỗi E3/E4 này. Đây là protocol phát
+triển của nhóm, test đã được quan sát, không phải official benchmark protocol.
+
+Đã kiểm toán lại raw CSV/JSON và checkpoint trên Drive; xem
+[báo cáo rà soát Lượt 1–4](reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.md).
+Lõi thí nghiệm Lượt 1–4 đã có bằng chứng. E2 chưa giảm ACER so với E1. E3/E4
+đã chạy đủ 16 epoch mỗi nhánh và được kiểm toán full validation trên Drive;
+xem [full validation và freeze](reports/ROUND_5_FULL_VALIDATION_2026-10-16.md).
+E3 được chọn theo quy tắc validation đã đăng ký, cả ba run đã khóa trước test.
+[Test đã kiểm toán](reports/ROUND_5_TEST_RESULTS_2026-10-16.md): E3/E3b ACER 5%,
+E4 4,4444%, cao hơn E1/E2 2,7778%. Giữ kết quả âm tính và lựa chọn E3 từ validation.
+[Lượt 6](docs/handoffs/ROUND6_CLOSEOUT_2026-10-22.md) đã hoàn tất và kiểm toán
+ba seed mới, chi phí A100 và bảng đối chiếu protocol paper.
+
+Bước tiếp theo cập nhật 22/10/2026: Lượt 5 và 6 đã hoàn tất. Ba cặp E1/E3
+seed 43/44/45 đã xong 138 epoch và test sau freeze; E3 giảm ACER trung bình
+nhưng kém E1 ở seed 44. Phép đo mới đủ 1.200 mẫu/model cho E1/E3/E4, CUDA
+p50 của E3 tăng 0,7961%. Đọc closeout trước khi chuyển sang Lượt 7 ảnh lỗi/
+webcam. Hai Word hiện có giữ ở Lượt 5, kết quả Lượt 6 là addendum đã kiểm.
+Phân công A/B bên dưới vẫn là phân công dự kiến, không chứng nhận lịch sử.
+
+Đã đăng ký cấu hình CASIA và chuẩn bị notebook sạch tại
+[hướng dẫn Lượt 5](reports/ROUND_5_CASIA_RUNBOOK.md). Ba nhánh cùng E1 initializer,
+16 epoch và LR 10^-4; joint 16 so với depth 4 → head 4 → joint 8. Chọn checkpoint
+head/joint bằng cùng validation BCE, depth stage bằng depth loss. Đây là ngân
+sách ban đầu chưa chứng minh tối ưu; kết quả xấu vẫn phải giữ.
+
 ---
 
 ## 1. Nguyên tắc vận hành
@@ -125,7 +156,7 @@ Chia slide thành hai cột.
 
 - CDCN, CVPR 2020: baseline depth supervision.
 - UCDCN, 2024: gần nhất về cơ chế depth, classifier, Focal Loss và staged training.
-- CASO-PAD, Scientific Reports, 16 tháng 9 năm 2026: paper mới nhất gần bài toán, dùng MobileNetV3 và content-adaptive operator.
+- CASO-PAD, Scientific Reports, 16 tháng 9 năm 2026: công trình đã khảo sát về MobileNetV3 và content-adaptive operator; không coi là đối chứng đã chạy.
 
 **Cột phải Metrics:**
 
@@ -148,9 +179,9 @@ Chia slide thành hai cột.
 
 ### Artifact phải có trước lượt tiếp theo
 
-- [ ] Deck giữa kỳ Lượt 1 đến Lượt 3 chỉ làm sau khi bằng chứng E1 đầy đủ.
+- [x] Đã có deck Lượt 1–4 gồm 22 slide, lời thuyết trình và test minh chứng; việc đã trình bày/nộp cần xác nhận riêng.
 - [x] Literature matrix có ít nhất 5 paper.
-- [x] Deadline chốt benchmark chính thức là 27 tháng 9 năm 2026; CASIA chỉ dùng giữa kỳ.
+- [x] Quyết định 16/10: tiếp tục CASIA cố định của E1/E2; hạn đổi benchmark 27/09 thuộc kế hoạch lịch sử.
 - [x] Sơ đồ Official CDCN + learned depth head.
 - [x] Bảng metric có công thức APCER, BPCER và ACER.
 - [x] Dataset batch visualization đã xuất tại `/content/drive/MyDrive/face-pad/reports/casia-val-batch.png`.
@@ -166,7 +197,7 @@ Báo cáo giữa kỳ không cần pipeline cuối. Gói tối thiểu phải ch
 
 1. Bài toán và threat model.
 2. Ba slide bắt buộc về phương pháp hiện đại, phương pháp nhóm và paper gần nhất.
-3. Dataset và official protocol.
+3. Dataset và protocol CASIA phát triển đã khóa.
 4. CDCN baseline và pseudo depth.
 5. Modification Official CDCN + learned depth head.
 6. Bộ metric và quy tắc threshold.
@@ -245,13 +276,13 @@ Thuyết phục giảng viên rằng nhóm đã thu hẹp đúng trọng tâm, n
 ### Tiêu chí đạt
 
 - [x] Câu hỏi nghiên cứu chỉ có một biến chính là learned depth head.
-- [x] Nhóm giải thích được tại sao UCDCN gần về kỹ thuật còn CASO-PAD mới nhất về thời gian.
+- [x] Đã ghi UCDCN gần về cơ chế và CASO-PAD là công trình khảo sát; không tuyên bố đó là công trình mới nhất hiện tại.
 - [x] Không trộn số liệu khác protocol.
-- [ ] Dataset chính thức có nguồn và license rõ: yêu cầu truy cập vẫn đang chờ duyệt; CASIA giữa kỳ được ghi riêng.
+- [x] Dataset, nguồn và giới hạn CASIA đã ghi; theo quyết định 16/10 tiếp tục chính dữ liệu E1/E2. Không suy ra tình trạng hiện tại của yêu cầu truy cập dataset khác.
 
 ### Nếu bị chặn
 
-Nếu chưa được cấp OULU-NPU, đặt hạn chốt. Quá hạn chuyển sang Replay-Attack, không để toàn dự án dừng vì chờ dữ liệu.
+Giữ CASIA đã khóa cho chuỗi hiện tại. Nếu không khôi phục được đúng manifest hoặc cache độ sâu, dừng và tìm lại artifact; không tự đổi dataset hoặc split.
 
 ---
 
@@ -266,7 +297,7 @@ Có pipeline dữ liệu đúng và baseline MobileNetV3 E0 tạo được raw s
 
 ### Công việc của A
 
-- Tạo manifest theo official protocol.
+- Giữ manifest CASIA theo protocol phát triển đã khóa, tách người/video.
 - Viết leakage validator.
 - Viết APCER, BPCER, ACER, EER và AUC.
 - Unit test metric bằng một ví dụ tính tay.
@@ -352,8 +383,8 @@ Sinh pseudo depth đúng và có CDCN E1 chạy được. Đây là mốc nhóm 
 - [x] Không có NaN hoặc map live rỗng trong QA cuối.
 - [x] Failure rate của 3DDFA được báo cáo: 0 persistent failure trên 3.000 frame bona fide.
 - [x] Official-CDCN E1 xuất raw score ở mức frame và video cho validation và locked test; E1-Lite Pilot được lưu riêng.
-- [x] Có 12 predicted-depth case validation official-E1 gồm cả đúng và sai để xem.
-- [ ] Slide giữa kỳ đã cập nhật bằng số thật.
+- [x] Có 12 predicted-depth case validation Official E1; validation không có lỗi nên đây là các mẫu đúng, không phải năm video test cùng sai.
+- [x] Deck Lượt 1–4 đã cập nhật số thật, hình notebook và giới hạn protocol.
 
 Trạng thái chốt ngày 21 tháng 9 năm 2026: queue 3DDFA hoàn tất 3.000 frame bona
 fide và 9.000 attack zero-map, không có persistent failure. Kiến trúc/loss official
@@ -414,10 +445,10 @@ Kiểm tra thay đổi chính: learned depth head có tốt hơn mean-depth scor
 
 ### Tiêu chí đạt
 
-- [ ] E1 và E2 chỉ khác scoring head và training head.
-- [ ] Cùng validation threshold procedure.
-- [ ] Có delta params và latency.
-- [ ] Có error analysis cặp E1 và E2.
+- [x] E1 và E2 chỉ khác scoring head và training head.
+- [x] Cùng validation threshold procedure.
+- [x] Có delta 1.265 params và latency forward sơ bộ; cần đo lặp trước khi kết luận tốc độ.
+- [x] Có error analysis cặp E1 và E2.
 
 ### Nếu bị chặn
 
@@ -473,9 +504,9 @@ Chỉ cần một cấu hình trung gian để xác định nguồn thay đổi;
 
 ### Tiêu chí đạt
 
-- [ ] Có ablation hợp lệ.
-- [ ] Có kết luận riêng cho head, training strategy và loss.
-- [ ] Không chọn cấu hình chỉ dựa vào accuracy.
+- [x] Có ablation E3–E3b và E3b–E4, cùng data/budget/rule; một seed, kết quả sơ bộ.
+- [x] Có kết luận riêng cho head, training strategy và loss ở seed 42, gồm kết quả không cải thiện.
+- [x] Chọn cấu hình theo quy tắc validation đã đăng ký; không đổi theo thứ tự test.
 - [ ] Paper draft có Method và Experimental Setup bản đầu.
 
 ---
@@ -487,7 +518,9 @@ Chỉ cần một cấu hình trung gian để xác định nguồn thay đổi;
 
 ### Mục tiêu
 
-Kiểm tra improvement có ổn định và đặt kết quả cạnh CDCN, UCDCN, CASO-PAD theo cách trung thực.
+Kiểm tra chênh lệch E3–E1 có ổn định, kể cả khi âm tính, và đặt kết quả cạnh
+CDCN, UCDCN, CASO-PAD theo cách trung thực. Không dùng thứ tự test Lượt 5 để
+đổi ứng viên từ E3 sang E4.
 
 ### Công việc của A
 
@@ -520,10 +553,16 @@ Kiểm tra improvement có ổn định và đặt kết quả cạnh CDCN, UCDC
 
 ### Tiêu chí đạt
 
-- [ ] E1 và model tốt nhất có ít nhất 3 seed nếu compute cho phép.
-- [ ] Báo mean và standard deviation, không chỉ best run.
-- [ ] Mọi số paper có nguồn và table reference.
-- [ ] Không dùng từ `outperform` cho contextual comparison.
+- [x] E1 và ứng viên E3 chọn trước test đủ ba seed 43/44/45; không tuyên bố tốt nhất toàn cục.
+- [x] Báo mean/sample SD ddof=1 và paired delta, giữ seed bất lợi.
+- [x] Số paper đã đối chiếu có nguồn, table/page, protocol/unit/threshold và trường chưa xác minh.
+- [x] Contextual comparison không dùng làm bằng chứng outperform; xem báo cáo đối chiếu Lượt 6.
+- [x] Params/checkpoint size và p50/p95 đã đo cùng A100/input/thứ tự cân bằng; không suy FPS webcam.
+
+Bằng chứng: `reports/ROUND_6_RESULTS_2026-10-22.md`,
+`reports/ROUND_6_COST_RESULTS_2026-10-22.md` và
+`reports/ROUND_6_PAPER_PROTOCOL_COMPARISON_2026-10-22.md`.
+Các dấu đạt nói về artifact nghiên cứu, không chứng nhận A/B đã thuyết trình.
 
 ### Nếu bị chặn
 
@@ -532,6 +571,12 @@ Nếu compute không đủ ba seed hoàn chỉnh, báo số run thực tế và 
 ---
 
 ## 10. Lượt 7 Error analysis và webcam integration
+
+Điểm vào phiên mới: [bàn giao Lượt 7](docs/handoffs/ROUND7_2026-10-22.md).
+Đã phân tích saved CSV ba seed, giữ seed 44 và threshold; có 20 panel từ
+adapter Lượt 6 riêng, công khai sai khác số học CPU/CUDA. Webcam đã chạy thật,
+có median 5 frame, FPS/TTD và video; giữ failure case người thật bị từ chối
+và replay chưa đủ window. Xem [addendum Lượt 7](reports/round7/ADDENDUM_RESULTS_DISCUSSION_2026-10-22.md).
 
 **Người báo cáo:** A  
 **Phiên bản:** R6 Interpretable result
@@ -571,11 +616,12 @@ Giải thích model tốt và kém ở đâu, sau đó đưa model tốt nhất 
 
 ### Tiêu chí đạt
 
-- [ ] Có error analysis định lượng hoặc ít nhất có hệ thống.
-- [ ] Demo không được dùng làm số benchmark.
-- [ ] Có FPS và time to decision.
-- [ ] Có video dự phòng.
-- [ ] Paper draft có Results và Discussion.
+- [x] Có paired errors/subgroup ba seed 43/44/45 và 20 panel CPU; giữ bất lợi và giới hạn số học.
+- [x] Demo tách khỏi số benchmark CASIA đã khóa.
+- [x] Có FPS/TTD thực đo; lượt thiếu window ghi thiếu, không ghi 0.
+- [x] Có video dự phòng cho năm lượt đo, giữ cả lượt lỗi.
+- [ ] Ghép addendum Results/Discussion đã có vào paper/Word lịch sử.
+- [ ] Bổ sung print khi có mẫu giấy và kiểm quay lại đủ window; frontend/PAD còn lỗi.
 
 ---
 
@@ -704,11 +750,12 @@ Không dùng một biểu đồ mà thiếu trục, đơn vị, số mẫu hoặ
 
 | Run ID | Giả thuyết | Thay đổi duy nhất | Seed | Trạng thái | Artifact | Kết luận |
 |---|---|---|---:|---|---|---|
-| E0 S42 | Binary baseline chạy được | MobileNetV3 BCE | 42 | | | |
-| E1 S42 | Depth supervision tốt hơn E0 | CDCN depth only | 42 | | | |
-| E2 S42 | Learned head tốt hơn mean depth | Frozen head BCE | 42 | | | |
-| E3 S42 | Joint training tốt hơn frozen | End-to-end BCE | 42 | | | |
-| E4 S42 | Staged Focal cải thiện hard cases | Staged Focal | 42 | | | |
+| E0 S42 | Mô hình tham khảo RGB | MobileNetV3 BCE | 42 | Đã kiểm toán | Run 20260920T082941Z trên Drive | Test ACER 5,5556% |
+| E1 S42 | Đối chứng Official CDCN | Depth only và mean score | 42 | Đã kiểm toán | Run 20260921T114029Z trên Drive | Test ACER 2,7778%; không cô lập riêng depth khi so E0 |
+| E2 S42 | Head có giảm lỗi so với mean? | Frozen head BCE | 42 | Đã kiểm toán | Run 20261001T155213Z trên Drive | ACER 2,7778%; cùng sai 5 live |
+| E3 S42 | Joint training cải thiện cấu hình đã có? | Joint BCE từ checkpoint E1 | 42 | Full/test đã kiểm toán | Chọn joint/global epoch 10; BCE 0,010902 | Test ACER 5%; sửa 1/tạo 5 lỗi so E1; giữ lựa chọn validation |
+| E3b S42 | Staged khác joint thế nào ở BCE? | Staged BCE | 42 | Full/test đã kiểm toán | Chọn joint epoch 2/global 10; BCE 0,014566 | Test ACER 5%; sửa 0/tạo 4 lỗi so E1 |
+| E4 S42 | Focal khác BCE thế nào ở staged? | Staged Focal, đối chiếu E3b | 42 | Full/test đã kiểm toán | Chọn joint epoch 6/global 14; BCE 0,087385 | Test ACER 4,4444%; sửa 1/tạo 4 lỗi so E1; chưa vượt E1/E2 |
 
 Mỗi run phải trả lời một giả thuyết. Không train chỉ vì có model mới muốn thử.
 
@@ -760,7 +807,7 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 
 ### Những thứ không được cắt
 
-- Official protocol.
+- Protocol cố định, tách người/video, ghi đúng giới hạn phát triển.
 - Validation threshold.
 - CDCN baseline.
 - Learned depth head.
@@ -777,13 +824,13 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 - [ ] Ba slide bắt buộc được cập nhật xuyên suốt.
 - [ ] Dataset và protocol được ghi rõ.
 - [x] E1 CDCN baseline tái lập được trên CASIA development protocol, với official architecture/loss và provenance khóa.
-- [x] Official CDCN + learned depth head E2 frozen đã triển khai, kiểm thử và có kết quả CASIA seed 42; E3/E4 chưa chạy benchmark.
+- [x] Official CDCN + learned depth head E2 frozen có kết quả CASIA seed 42; E3/E3b/E4 đã xong development test Lượt 5.
 - [ ] Có ablation learned head và training strategy.
-- [ ] Baseline cùng model tốt nhất có nhiều seed nếu tài nguyên cho phép.
-- [x] Có APCER, BPCER, ACER, EER và AUC ở mức video cho E0 và official E1.
-- [ ] Có params và latency.
+- [x] Baseline E1 cùng ứng viên E3 chọn trước test đủ ba seed mới ở Lượt 6.
+- [x] Có APCER, BPCER, ACER, EER và AUC mức video cho E0, Official E1 và E2, đã tính lại từ CSV lưu trên Drive.
+- [x] Có params/latency E1/E2 sơ bộ; Lượt 6 bổ sung đo lặp có kiểm soát E1/E3/E4 trên A100.
 - [x] Có error analysis official E1 theo attack type, quality và failure video.
-- [ ] Có bảng so sánh CDCN, UCDCN, CASO-PAD và kết quả nhóm.
+- [x] Có bảng đối chiếu CDCN, UCDCN, CASO-PAD và kết quả nhóm, phân biệt protocol không so trực tiếp.
 - [ ] Có demo PAD; ArcFace là phần cộng thêm.
 - [ ] Có technical report hoặc paper draft.
 - [ ] Claim cuối không vượt quá protocol và attack đã thử.

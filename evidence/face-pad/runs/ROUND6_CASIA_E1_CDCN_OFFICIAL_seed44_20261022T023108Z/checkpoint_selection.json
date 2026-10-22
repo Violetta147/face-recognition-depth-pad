@@ -1,0 +1,16 @@
+{
+  "criterion": "minimum declared validation criterion within each stage",
+  "configured_selection_metric": "val_loss",
+  "reported_stage": "joint",
+  "stages": [
+    {
+      "stage": "joint",
+      "stage_index": 1,
+      "epoch": 28,
+      "global_epoch": 28,
+      "val_loss": 0.019056795985992872,
+      "selection_metric": "val_loss",
+      "selection_value": 0.019056795985992872
+    }
+  ]
+}
