@@ -1,0 +1,67 @@
+{
+  "source_template": "reports/Template-DUT-Total.pptx",
+  "template_sha256": "793fa6d6ef2340c8c8fc56b28efc5940e9b5a01db3528d301cc0814887837f8a",
+  "image_processing": "Exact byte copies. No crop, recolor or contrast changes.",
+  "figures": [
+    {
+      "asset": "pipeline.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/01_pipeline.png",
+      "sha256": "d8c9d0e994021b26d2b55973d8a7d7ee8c9aad07f27026088c46341792e21eb2"
+    },
+    {
+      "asset": "dataset.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/03_dataset_split.png",
+      "sha256": "88e6d677c56a9268e609fac80ef9013311908032c11ff1c81a70a7cc297f44b5"
+    },
+    {
+      "asset": "schedule.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/02_training_schedule.png",
+      "sha256": "ae49d0351666ee8ec09b3c76ed8de5a36fac3a4a829ab78e94ced3ec604872f3"
+    },
+    {
+      "asset": "test_error_rates.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/06_test_error_rates.png",
+      "sha256": "09093f3251458d7f190af838fa47151ddb046b78c2e61bcd4b66b155c6c9151e"
+    },
+    {
+      "asset": "paired_errors.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/12_paired_errors.png",
+      "sha256": "28ff11946ae8c3776904e34dee372ad75301a0b65d8e32a15f3b1a31cdf2ed66"
+    },
+    {
+      "asset": "quality_errors.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/13_quality_errors.png",
+      "sha256": "d5afe9499de7cca162857a499dae2445adac0a2bbe8ca9ad148107eb037718c6"
+    },
+    {
+      "asset": "test_metrics.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/05_test_metrics.png",
+      "sha256": "c79a020607fdab1dc2efb92ad479366f4fee10f7efd9971116e7b49d10965ea6"
+    },
+    {
+      "asset": "roc.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/07_ROC.png",
+      "sha256": "a6e39c8d25831ff2f053af1859abeadb14d9e9867b6e69526574084bdfca7f08"
+    },
+    {
+      "asset": "error_matrix.png",
+      "source": "artifacts/figure-notebook-20261016/numeric-final/png/14_error_video_matrix.png",
+      "sha256": "33ab8025ef5ba4ed9d42d7130fd5f6c40ef14c972a4f6556f4f5178cd83504e7"
+    },
+    {
+      "asset": "cdcn_architecture.png",
+      "source": "diagrams/Sơ đồ kiến trúc CDCN đa tỉ lệ.png",
+      "sha256": "0366f1feb57386e0a6232e381d3abee27c9bedb2dd8130aa9eaf689b7e401640"
+    },
+    {
+      "asset": "head_architecture.png",
+      "source": "diagrams/Kiến trúc CDCN cải tiến với Learned Depth Head.png",
+      "sha256": "733998e4bc6e6c58a2bde8ab7828d6aae49675665959af04977f7c198f658c91"
+    },
+    {
+      "asset": "case_s32_v2.png",
+      "source": "artifacts/figure-notebook-20261016/qualitative-preview/png/17_case_01_casia_s32_v2.png",
+      "sha256": "f82649f1cc87214c4de963b50002e8babc8465439910e357c9f10674e22bc84a"
+    }
+  ]
+}
