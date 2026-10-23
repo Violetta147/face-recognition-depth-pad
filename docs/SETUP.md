@@ -102,3 +102,5 @@ công cụ cài riêng, không có trong requirements Python. Asset đã có tro
 không cần xuất lại nền bằng PowerPoint. Chỉ script dựng lại nền mới cần
 PowerPoint trên Windows. Mở README của từng thư mục báo cáo để đọc quy trình
 lịch sử; dùng CURRENT để xác định kết quả cần bổ sung hiện nay.
+
+Phạm vi kiểm clone đã thực hiện: [VALIDATION_2026-10-23.md](VALIDATION_2026-10-23.md).
