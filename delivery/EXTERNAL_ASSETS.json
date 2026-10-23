@@ -61,5 +61,10 @@
     }
   ],
   "private_webcam_package": "artifacts/team-private-20261022/webcam-evidence-private.zip",
-  "original_manifest_status": "Bundled: blank-depth-path source manifest recovered with exact historical SHA-256; derived manifest also bundled."
+  "original_manifest_status": "Bundled: blank-depth-path source manifest recovered with exact historical SHA-256; derived manifest also bundled.",
+  "webcam_drive_status": {
+    "status": "Upload confirmed by project owner on 2026-10-23",
+    "independently_verified": false,
+    "recipient_access": "Owner is adding teammate email; access not yet verified"
+  }
 }

@@ -191,8 +191,8 @@
       "source": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\docs\\ROUND6_COST_COLAB_GUIDE.md"
     },
     "docs/team_handoff/AGENTS_TEAM.md": {
-      "sha256": "811ef546561fc834eea3d83375e69b9683175ff5b20bea43c1ea4429085154c5",
-      "bytes": 1047,
+      "sha256": "925f0524507712215d24821dc57394159d4e8c4c189fc6b22bda4849e1ca8625",
+      "bytes": 1180,
       "role": "Project documentation for a new device",
       "source": "Verified project files and existing eight-round plan"
     },
@@ -1577,8 +1577,8 @@
       "source": "Verified project files and existing eight-round plan"
     },
     "AGENTS.md": {
-      "sha256": "811ef546561fc834eea3d83375e69b9683175ff5b20bea43c1ea4429085154c5",
-      "bytes": 1047,
+      "sha256": "925f0524507712215d24821dc57394159d4e8c4c189fc6b22bda4849e1ca8625",
+      "bytes": 1180,
       "role": "Project documentation for a new device",
       "source": "Verified project files and existing eight-round plan"
     },
@@ -4079,8 +4079,8 @@
       "source": "G:\\My Drive\\face-pad\\handoffs\\figures-e0-e4-20261016\\DeepFace-PAD-Figures-source.zip"
     },
     "delivery/EXTERNAL_ASSETS.json": {
-      "sha256": "169a17cde242e8f1a998d6e9d68b425f74998cd4593282b6d55a279fa472019e",
-      "bytes": 3295,
+      "sha256": "5a66b9f479bf5fecdca11dc3ba91df05bd6d95720e38e8d01e4266da70f68707",
+      "bytes": 3516,
       "role": "External asset identities and explicit delivery/access limits",
       "source": "Generated from verified source archives and webcam receipt"
     },
@@ -4121,8 +4121,8 @@
       "source": "Verified project files and existing eight-round plan"
     },
     "docs/DATA_ASSETS.md": {
-      "sha256": "f8da63a9f8d2db050af1190096e1da1f3bdbf532332e48c95d27bccb6ef4a518",
-      "bytes": 3355,
+      "sha256": "fc69e598b9c3f05aed73ce5f6b05a8c7ef08cb35c07455ffb17c285cb35975ea",
+      "bytes": 4506,
       "role": "Project documentation for a new device",
       "source": "Verified project files and existing eight-round plan"
     },
@@ -4133,8 +4133,8 @@
       "source": "Verified project files and existing eight-round plan"
     },
     "delivery/DOCUMENTATION_REVISION.json": {
-      "sha256": "9d4e4ffc52fbb13aef821450fbe5f145c20cb94f4a6b8b09de3ea66c864a70c7",
-      "bytes": 950,
+      "sha256": "5472c2b3c0984d90b2e1aafa5ea1e81d01cfb05d1137064e59a14d49892fac3d",
+      "bytes": 1126,
       "role": "Project documentation for a new device",
       "source": "Verified project files and existing eight-round plan"
     }

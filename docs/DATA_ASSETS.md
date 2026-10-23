@@ -5,11 +5,11 @@ dataset chỉ để đọc báo cáo, sửa Word/paper/slide hoặc phân tích 
 
 ## Tệp cần nhận riêng
 
-| Tệp trong face-pad | Tình trạng tại máy nguồn ngày 22/10/2026 | Chủ dự án cần làm |
+| Tệp trong face-pad | Tình trạng, cập nhật ngày 23/10/2026 | Chủ dự án cần làm |
 | --- | --- | --- |
 | casia-fasd.zip | Đã có trên Drive, 2.198.264.547 byte. | Không upload lại; chia sẻ quyền tải nếu cần ảnh gốc. |
 | depth-checkpoints/casia-fasd-depth-checkpoint.tar | Đã có trên Drive, 20.439.040 byte. | Không upload lại; chia sẻ quyền tải nếu cần dựng lại target/hình. |
-| webcam-evidence-private.zip | Đã tạo ở máy nguồn; chưa thấy ở đường dẫn đích này trên Drive khi kiểm. | Upload ZIP một lần nếu dùng Drive để giao video, sau đó chia sẻ quyền tải. |
+| webcam-evidence-private.zip | Chủ dự án xác nhận đã upload lên Google Drive ngày 23/10/2026; bản trên Drive chưa được kiểm độc lập. | Chia sẻ quyền tải cho đồng đội. Không cần upload lại cùng tệp. |
 
 ZIP nguồn: C:/Users/LAPTOP T&T/VIOLETTA/Documents/DeepFace-PAD/artifacts/team-private-20261022/webcam-evidence-private.zip.
 ZIP có năm video cùng CSV/summary và danh mục SHA. Kích thước 62.254.973 byte.
@@ -51,3 +51,18 @@ có trong Git; không cần upload lên Drive.
 Bắt đầu từ README, PROJECT_STATUS, SETUP và tài liệu này. Chỉ đọc báo cáo hoặc
 notebook lịch sử khi việc đang làm cần bằng chứng đó. Không cần đưa danh sách
 tệp bị loại hoặc lịch sử công cụ máy nguồn vào context của agent.
+
+## Các tệp kiểm tra trong delivery dùng để làm gì
+
+- FILES.json: danh mục tệp Git, kích thước và SHA-256 để phát hiện tệp thiếu hoặc thay đổi.
+- EXTERNAL_ASSETS.json và PRIVATE_PACKAGE.json: tên, kích thước và SHA của dữ liệu/video nhận ngoài Git.
+- VALIDATION_DELIVERY.json và validation/: kết quả kiểm thử cùng phạm vi đã kiểm.
+- SELECTION_AUDIT.json và DOCUMENTATION_REVISION.json: ghi nhận cách chọn tệp và thay đổi tài liệu.
+
+Đây là thông tin để đối chiếu khi cần, không phải danh sách công việc hay chỉ thị
+cho agent. Không cần nạp toàn bộ nhóm này vào context để bắt đầu làm dự án.
+
+Lịch sử vận hành máy nguồn là cấu hình hook/agent, log chạy công cụ, cache và
+môi trường Python đã cài trên máy đó. Các nhóm này không được đưa vào bản dự án
+trên GitHub. Khái niệm này không chỉ lịch sử thí nghiệm: config, checkpoint,
+score và kết quả các lượt đã chạy vẫn được giữ để tiếp tục nghiên cứu.

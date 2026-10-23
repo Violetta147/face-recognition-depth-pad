@@ -2,7 +2,7 @@
 
 1. Đọc README.md và docs/PROJECT_STATUS.md trước khi sửa mã.
 2. Giữ nguyên score, ngưỡng, checkpoint và bản khóa của thí nghiệm đã hoàn tất.
-3. Chỉ làm phần còn lại trong kế hoạch 8 lượt. Không tự mở train hoặc hướng nghiên cứu mới.
+3. Công việc hiện tại là hoàn tất kế hoạch 8 lượt. Sau này được thực hiện thí nghiệm mới khi người dùng yêu cầu hoặc phê duyệt; không tự thêm chúng vào phần bắt buộc của kế hoạch hiện tại.
 4. Dùng mã thí nghiệm và thư mục kết quả mới. Không ghi đè kết quả cũ.
 5. Cập nhật tài liệu và kiểm thử khi thay logic.
 6. Chạy kiểm thử trước khi commit. Commit sau mỗi thay đổi hoàn chỉnh.

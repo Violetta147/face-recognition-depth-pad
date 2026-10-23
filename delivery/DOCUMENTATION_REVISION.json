@@ -19,5 +19,6 @@
     "delivery/SELECTION_AUDIT.json"
   ],
   "scientific_hashes": "All unchanged files verified against prior manifest",
-  "validation": "Documentation only; previous full pytest describes unchanged code snapshot"
+  "validation": "Documentation only; previous full pytest describes unchanged code snapshot",
+  "update_2026_10_23": "Explain audit files; record owner-confirmed webcam ZIP upload; permit future experiments when requested without extending current eight-round scope."
 }
