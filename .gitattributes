@@ -1,1 +1,6 @@
+# Preserve exact scientific evidence bytes across Windows and Linux checkout.
 * -text
+# Existing local operation controls keep their recorded LF bytes.
+configs/hook_policy.json text eol=lf
+.codex/*.json text eol=lf
+.githooks/* text eol=lf

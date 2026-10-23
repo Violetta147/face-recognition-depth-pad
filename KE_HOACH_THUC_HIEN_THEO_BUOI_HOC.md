@@ -572,7 +572,7 @@ Nếu compute không đủ ba seed hoàn chỉnh, báo số run thực tế và 
 
 ## 10. Lượt 7 Error analysis và webcam integration
 
-Điểm vào phiên mới: [bàn giao Lượt 7](docs/handoffs/ROUND7_2026-10-22.md).
+Điểm vào phiên mới: [bàn giao hiện hành Lượt 7–8](docs/handoffs/CURRENT.md).
 Đã phân tích saved CSV ba seed, giữ seed 44 và threshold; có 20 panel từ
 adapter Lượt 6 riêng, công khai sai khác số học CPU/CUDA. Webcam đã chạy thật,
 có median 5 frame, FPS/TTD và video; giữ failure case người thật bị từ chối

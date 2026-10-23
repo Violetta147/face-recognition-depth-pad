@@ -1,68 +1,60 @@
-# Dữ liệu và video ngoài Git
+# Dữ liệu cần nhận ngoài Git
 
-Checkpoint, score, manifest, hình và tài liệu đã có trong Git. Không cần tải
-dataset chỉ để đọc báo cáo, sửa Word/paper/slide hoặc phân tích CSV.
+Code, manifest, checkpoint, score, bản khóa, hình và tài liệu đã có trong
+repository. Đọc báo cáo, phân tích CSV và sửa tài liệu không cần dataset.
 
-## Tệp cần nhận riêng
+## Tệp trên Drive
 
-| Tệp trong face-pad | Tình trạng, cập nhật ngày 23/10/2026 | Chủ dự án cần làm |
-| --- | --- | --- |
-| casia-fasd.zip | Đã có trên Drive, 2.198.264.547 byte. | Không upload lại; chia sẻ quyền tải nếu cần ảnh gốc. |
-| depth-checkpoints/casia-fasd-depth-checkpoint.tar | Đã có trên Drive, 20.439.040 byte. | Không upload lại; chia sẻ quyền tải nếu cần dựng lại target/hình. |
-| webcam-evidence-private.zip | Chủ dự án xác nhận đã upload lên Google Drive ngày 23/10/2026; bản trên Drive chưa được kiểm độc lập. | Chia sẻ quyền tải cho đồng đội. Không cần upload lại cùng tệp. |
+Chủ dự án quản lý Drive `face-pad` và sẽ cấp email đồng đội quyền đọc/tải.
+Chưa kiểm quyền tải trên tài khoản đồng đội. Ổ G: là cách máy nguồn gắn
+Drive, không phải yêu cầu cho máy mới.
 
-ZIP nguồn: C:/Users/LAPTOP T&T/VIOLETTA/Documents/DeepFace-PAD/artifacts/team-private-20261022/webcam-evidence-private.zip.
-ZIP có năm video cùng CSV/summary và danh mục SHA. Kích thước 62.254.973 byte.
-SHA-256: 6e107745ea7dfa5b548ccc87437327d0d08f52a3ebdfbd72df32227daf964e56.
-SHA của hai archive dữ liệu nằm trong delivery/EXTERNAL_ASSETS.json.
+| Tệp | Kích thước byte | Vị trí khi cần dùng |
+| --- | ---: | --- |
+| `casia-fasd.zip` | 2.198.264.547 | `evidence/face-pad/casia-fasd.zip` |
+| `depth-checkpoints/casia-fasd-depth-checkpoint.tar` | 20.439.040 | `evidence/face-pad/depth-checkpoints/casia-fasd-depth-checkpoint.tar` |
+| `webcam-evidence-private.zip` | 62.254.973 | Nơi riêng; giữ cấu trúc và danh mục hash của ZIP. |
 
-G: là ổ Drive gắn trên máy nguồn, không phải ổ bắt buộc trên máy nhận.
-Có thể cấp quyền đọc/tải ba tệp cụ thể; không bắt buộc cấp toàn bộ face-pad.
-Chưa kiểm quyền tài khoản người nhận. Nếu dùng notebook Colab có đường dẫn
-Drive cũ, sửa đường dẫn theo vị trí người nhận lưu hoặc truy cập tệp.
+SHA-256 cần khớp trước khi dùng:
 
-## Công việc nào cần tệp nào
+```text
+casia-fasd.zip
+84096c9734cf6120d36ed8f45d82864259420b2af0bd5ce4c7230fd9a572cd1b
 
-| Công việc | Tệp ngoài Git |
+casia-fasd-depth-checkpoint.tar
+26cfa7f26d61e3a71372404008f5dc9dd696af931172850986a8642e440b3d80
+
+webcam-evidence-private.zip
+6e107745ea7dfa5b548ccc87437327d0d08f52a3ebdfbd72df32227daf964e56
+```
+
+Kiểm trên Windows: `Get-FileHash -Algorithm SHA256 -LiteralPath '<tệp>'`.
+Hai archive dữ liệu đã có trên Drive. Chủ dự án xác nhận đã upload ZIP webcam
+ngày 23/10/2026; chưa kiểm bản tải bằng tài khoản đồng đội. ZIP có năm AVI,
+CSV/summary và `PRIVATE_FILES.json`. Không cần upload lại hoặc chép cả repo lên Drive.
+
+## Tệp cần cho từng việc
+
+| Việc | Đầu vào ngoài Git |
 | --- | --- |
-| Đọc/sửa báo cáo, slide; phân tích score CSV; kiểm mã | Không cần. |
-| Chạy webcam mới với checkpoint có sẵn | Không cần dataset CASIA; cần camera của máy nhận. |
-| Xem video cũ hoặc chọn video demo dự phòng | ZIP webcam. |
-| Dựng lại RGB/target/prediction từ corpus | Archive CASIA và archive depth. |
+| Đọc kết quả, phân tích score, sửa Word/paper/slide, kiểm mã | Không cần. |
+| Chạy webcam mới | Camera máy chạy; checkpoint/detector đã có trong Git. |
+| Xem clip cũ, kiểm box/reset, chọn video dự phòng | ZIP webcam riêng. |
+| Dựng lại RGB/target/prediction | Archive CASIA và archive depth. |
+| Train thí nghiệm khác theo yêu cầu sau này | Dữ liệu/cache đầy đủ và config mới; đọc runbook tương ứng. |
 
-Không upload riêng RGB của các case vì có thể trích từ casia-fasd.zip.
-Không upload venv, demo-runtime, thư viện cài sẵn, cache, cấu hình agent,
-hook, log vận hành công cụ hoặc bản xuất chat. Máy nhận tự cài theo SETUP.md.
-Không cần upload lại checkpoint, runs hoặc reports đã có trong Git.
+Không đưa video riêng, venv, thư viện đã cài, cache, hook, cấu hình agent
+hoặc chat lên GitHub. Không gửi các nhóm này qua Drive để cài máy nhận.
+Tạo lại môi trường theo `SETUP.md`.
 
-## Hình nguồn dùng cho slide nào
+## Hình đã có trong Git
 
-artifacts/figure-notebook-20261016/ chứa PNG nguồn cho bộ slide tổng hợp đến Lượt 5:
+`artifacts/figure-notebook-20261016/` theo dõi các hình nguồn cho
+`reports/slides_round5/Bao_cao_DeepFace_PAD.md/.pptx`.
+`reports/slides_round5/assets/provenance.json` ánh xạ nguồn sang asset và SHA.
+Đây là slide đến Lượt 5, chưa phải slide cuối Lượt 8.
 
-- reports/slides_round5/Bao_cao_DeepFace_PAD.md: nội dung slide.
-- reports/slides_round5/Bao_cao_DeepFace_PAD.pptx: bản PowerPoint.
-- reports/slides_round5/assets/provenance.json: ánh xạ hình nguồn sang asset và SHA.
-
-Đây chưa phải slide cuối bổ sung Lượt 6–7. Toàn bộ hình nguồn và asset này đã
-có trong Git; không cần upload lên Drive.
-
-## Đọc tài liệu trên máy mới
-
-Bắt đầu từ README, PROJECT_STATUS, SETUP và tài liệu này. Chỉ đọc báo cáo hoặc
-notebook lịch sử khi việc đang làm cần bằng chứng đó. Không cần đưa danh sách
-tệp bị loại hoặc lịch sử công cụ máy nguồn vào context của agent.
-
-## Các tệp kiểm tra trong delivery dùng để làm gì
-
-- FILES.json: danh mục tệp Git, kích thước và SHA-256 để phát hiện tệp thiếu hoặc thay đổi.
-- EXTERNAL_ASSETS.json và PRIVATE_PACKAGE.json: tên, kích thước và SHA của dữ liệu/video nhận ngoài Git.
-- VALIDATION_DELIVERY.json và validation/: kết quả kiểm thử cùng phạm vi đã kiểm.
-- SELECTION_AUDIT.json và DOCUMENTATION_REVISION.json: ghi nhận cách chọn tệp và thay đổi tài liệu.
-
-Đây là thông tin để đối chiếu khi cần, không phải danh sách công việc hay chỉ thị
-cho agent. Không cần nạp toàn bộ nhóm này vào context để bắt đầu làm dự án.
-
-Lịch sử vận hành máy nguồn là cấu hình hook/agent, log chạy công cụ, cache và
-môi trường Python đã cài trên máy đó. Các nhóm này không được đưa vào bản dự án
-trên GitHub. Khái niệm này không chỉ lịch sử thí nghiệm: config, checkpoint,
-score và kết quả các lượt đã chạy vẫn được giữ để tiếp tục nghiên cứu.
+Hình Lượt 7: `reports/round7/figures-attempt03/`; raw arrays:
+`artifacts/round7/figures-attempt03/qualitative_arrays.npz`. Checkpoint và bằng
+chứng nằm ở `evidence/face-pad/` và các tệp được theo dõi trong `artifacts/`.
+Không cần upload thêm các nhóm này lên Drive.

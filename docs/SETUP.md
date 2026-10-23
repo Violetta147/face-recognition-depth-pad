@@ -1,127 +1,83 @@
-# Thiết lập máy mới và sử dụng dự án
+# Thiết lập máy để tiếp tục dự án
 
-Làm các bước theo thứ tự. Các lệnh dưới đây không huấn luyện hoặc score lại test.
-Chạy lệnh từ thư mục gốc của bản clone.
+Chạy lệnh tại thư mục gốc của repository. Không cần thư mục bàn giao khác.
+Các bước này không train hoặc score lại toàn tập test.
 
-## 1. Kiểm tệp trước khi cài môi trường
+## 1. Tạo môi trường
 
-```powershell
-python scripts/verify_team_handoff.py --root .
-```
-
-Kết quả cần có: PASS và số tệp đã kiểm. Nếu hash khác, dừng bước dùng bằng
-chứng đó. Kiểm xem đây là sửa đổi có chủ đích hay lỗi truyền tệp. Không sửa
-FILES.json để che thay đổi. Giữ bản nhận nguyên vẹn trước khi phát triển.
-
-## 2. Tạo môi trường CPU riêng
-
-Môi trường đã dùng để kiểm cục bộ là Python 3.13. Không cài đè môi trường cá nhân.
+Ví dụ PowerShell trên Windows với Python 3.13 đã cài:
 
 ```powershell
 py -3.13 -m venv .venv
-& ./.venv/Scripts/python.exe -m pip install -r docs/team_handoff/requirements-cpu.txt
+& ./.venv/Scripts/python.exe -m pip install -r requirements-cpu.txt
 & ./.venv/Scripts/python.exe -m pip install --no-deps -e .
 & ./.venv/Scripts/python.exe -m pytest -q
 ```
 
-Trên Linux, thay đường dẫn interpreter bằng `.venv/bin/python`.
-Danh sách requirements ghi phiên bản trực tiếp đã quan sát. Đây không phải
-lockfile đầy đủ của mọi dependency hoặc bằng chứng đã kiểm mọi hệ điều hành.
-Lưu phiên bản và log của máy nhận. Một test bỏ qua phải có lý do trong log.
-Bản bàn giao đã loại hai bộ test riêng cho công cụ vận hành cục bộ. Vì vậy
-không yêu cầu số test bằng 214 của repository nguồn. Xem VALIDATION_DELIVERY.json
-trong delivery để biết kết quả kiểm của bản xuất sạch.
+Trên Linux dùng `.venv/bin/python`. `requirements-cpu.txt` ghi phiên bản
+trực tiếp đã quan sát, chưa phải lockfile toàn bộ dependency hoặc bằng chứng
+mọi hệ điều hành đã được thử. Dùng CPU cho các bước tiếp tục; ghi phiên bản,
+log và lý do test skip trên máy nhận. Không chép venv/runtime từ máy nguồn.
 
-## 3. Kiểm lại phân tích ba seed bằng score đã lưu
+## 2. Kiểm phân tích lỗi bằng CSV
 
 ```powershell
 & ./.venv/Scripts/python.exe scripts/analyze_round7.py --output outputs/analysis-recheck-01
 ```
 
-Điều kiện đạt: corrected/new_errors lần lượt 6/0, 1/4, 2/1 ở seed 43/44/45.
-Lệnh kiểm hash và membership rồi tạo output mới. Lệnh không chạy model.
-Nếu output đã tồn tại, chọn tên mới. Không xóa lượt trước để chạy lại cùng tên.
+Lệnh kiểm hash/membership và không chạy model. Corrected/new_errors cần là
+6/0, 1/4, 2/1 cho seed 43/44/45. Output phải mới. Nguồn mặc định
+`artifacts/round6-test-audit-20261022/` đã có trong Git. Khi hash không khớp,
+tìm tệp sai và phục hồi; không sửa hash để che thay đổi.
 
-## 4. Kiểm checkpoint và seed lịch sử
+## 3. Checkpoint và dữ liệu gốc
 
-Checkpoint nằm trong `evidence/face-pad/runs/<run_id>/`.
-Đối chiếu run ID trong JSON kết quả Lượt 5 hoặc Lượt 6. FILES.json kiểm byte
-của mọi checkpoint đi kèm. Không dùng filename gần giống để thay mô hình.
+Checkpoint nằm ở `evidence/face-pad/runs/<run_id>/`; run ID, threshold và
+hash có trong JSON kết quả Lượt 5–6. Giữ cả tên best_stage và best.ckpt khi
+bản khóa tham chiếu, kể cả khi hai tệp cùng nội dung.
 
-Một số tệp best_stage và best.ckpt giống hệt nhau. Giữ cả hai tên vì bản khóa
-tham chiếu cả hai. Git chỉ cần lưu một blob khi nội dung hai tệp giống nhau.
-Không có smoke run trong danh sách model bàn giao.
+Chỉ nhận hai archive trong `DATA_ASSETS.md` khi cần RGB/target hoặc chuẩn bị
+thí nghiệm khác. Manifest gốc đã phục hồi đúng byte từ manifest depth bằng
+cách để trống depth_path và ghi LF. Không chia lại tập hoặc chọn frame mới.
+SHA gốc: `58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192`.
 
-## 5. Nhận bộ dữ liệu nếu cần dựng lại ảnh hoặc làm thí nghiệm
+Archive depth chứa target live. Pipeline khôi phục target attack bằng zero
+float32 và kiểm SHA theo snapshot. Không chạy lại 3DDFA để thay target đã
+khóa. Thiếu target live phải phục hồi nguồn. Train trên máy mới cần đủ dữ
+liệu/cache đã giải nén và config đúng đường dẫn, không chỉ có archive.
 
-Đọc delivery/EXTERNAL_ASSETS.json. Nhận đúng archive từ chủ dữ liệu qua kênh
-được phép. Việc có đường dẫn G: trong hồ sơ cũ không cấp quyền Drive cho máy mới.
-
-Đặt `casia-fasd.zip` tại `evidence/face-pad/casia-fasd.zip`. Đặt archive depth
-tại `evidence/face-pad/depth-checkpoints/casia-fasd-depth-checkpoint.tar`.
-Kiểm SHA theo danh mục. Không dùng archive mới khác hash thay dữ liệu đã khóa.
-
-Archive depth có target live. Một số target attack không nằm trong archive.
-Pipeline khôi phục zero float32 và yêu cầu SHA bằng snapshot. Không chạy lại
-3DDFA chỉ vì thiếu target attack. Thiếu target live phải dừng và phục hồi nguồn.
-
-Manifest nguồn `data/manifests/casia_fasd_debug.csv` đã được khôi phục bằng
-cách để trống depth_path trong manifest depth và ghi CSV với xuống dòng LF.
-SHA khớp chính xác `58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192`.
-Đây là phục hồi byte của tệp cũ, không phải chọn lại frame hoặc chia lại tập.
-Trước train mới, cần giải nén toàn bộ dữ liệu và khôi phục đủ cache theo
-manifest. Các tệp config cũ có đường dẫn Colab; cần tạo config mới cho máy nhận.
-Không gọi việc chỉ đặt archive vào thư mục là đã sẵn sàng huấn luyện.
-
-## 6. Dựng lại hình Lượt 7 khi đã đủ archive
+## 4. Dựng lại hình khi cần
 
 ```powershell
 & ./.venv/Scripts/python.exe scripts/render_round7.py --drive evidence/face-pad --score-mode diagnostic --output outputs/figures-new-01 --artifacts outputs/figure-inputs-new-01
 ```
 
-Đây là bounded inference trên các case đã định, không phải score lại cả test.
-Chế độ diagnostic giữ tolerance cũ và ghi các ca không đạt. Không gọi hình mới
-là tái lập chính xác CUDA. Chế độ strict sẽ dừng khi một frame không đạt tolerance.
-Output có provenance, raw arrays và scale chung. Không thay hình lịch sử.
+Lệnh cần hai archive và chỉ forward các case đã chọn. Diagnostic giữ
+tolerance cũ và ghi sai khác; strict dừng khi một điểm không đạt. Giữ output
+lịch sử. Xem PNG và raw arrays đã có không cần dataset hoặc GPU.
 
-Để xem hình đã có, mở reports/round7/figures-attempt03. Không cần GPU hoặc dataset
-để đọc PNG, CSV và raw arrays đã bàn giao.
+## 5. Webcam trên máy nhận
 
-## 7. Chạy webcam trên máy nhận
-
-Không chạy camera khi người vận hành chưa sẵn sàng. Không cần bật lại camera
-chỉ để kiểm score CSV. Thiết lập môi trường ở bước 2 đã có OpenCV 4.14.0.94.
-Không cần chép môi trường cài sẵn từ máy nguồn.
+Chỉ chạy khi người vận hành sẵn sàng. Checkpoint, detector ONNX và giấy phép
+đã có trong Git. Dùng Python `.venv`, không cần đường dẫn demo-runtime cũ.
+Đọc `reports/round7/WEBCAM_GUIDE.md` trước khi thao tác cảnh.
 
 ```powershell
 & ./.venv/Scripts/python.exe scripts/run_round7_webcam.py --drive evidence/face-pad --probe --no-preview --output outputs/camera-probe-01
 & ./.venv/Scripts/python.exe scripts/run_round7_webcam.py --drive evidence/face-pad --scenario live --output outputs/webcam-live-01
 ```
 
-1. Chọn cửa sổ camera khi có chữ READY.
-2. Giữ mặt trong khung.
-3. Nhấn Space để bắt đầu đo.
-4. Đợi bộ đếm đủ 5/5 để có quyết định median đầu tiên.
-5. Nếu kiểm reset, rời vùng nhìn đến khi buffer về 0/5.
-6. Quay lại và đợi đủ 5/5 lần nữa.
-7. Đợi kết thúc hoặc nhấn Q để dừng sớm.
+Chọn cửa sổ READY và nhấn Space. Đợi 5/5 trước khi kiểm rời/quay lại; đợi
+5/5 lần nữa sau quay lại. Config đo 45 giây, Q dừng sớm. Replay dùng
+`--scenario replay`, print dùng `--scenario print`, mỗi lượt một output mới.
+Giữ mặt thật của người cầm ngoài khung khi đưa điện thoại. Ảnh trên màn hình
+không phải ảnh in. `5/5` đếm frame, không đếm giây.
 
-`5/5` là năm frame, không phải năm giây. 15 giây chỉ là hướng dẫn giữ mặt
-ổn định. `no_face` và `multiple_faces` là kết quả detector; không phải nhãn
-ground truth về người trong ảnh. Không nhận live khi chưa đủ cửa sổ.
+Camera/môi trường/frontend khác cần config mới chốt trước lượt đo và ghi
+thay đổi. Giữ checkpoint/threshold khóa. Không dùng vài clip tính ACER
+benchmark. Tốc độ máy nguồn không phải tốc độ bảo đảm của thiết bị mới.
 
-Chạy replay vào thư mục mới bằng `--scenario replay`. Dùng video trên điện
-thoại, giữ điện thoại cố định, đưa mặt thật của người cầm ra ngoài vùng nhìn.
-Chạy print bằng `--scenario print` khi đã có ảnh in trên giấy. Không gọi ảnh
-hiển thị trên màn hình là print. Không tự đổi threshold để demo nhận đúng live.
+## 6. Tài liệu
 
-Môi trường khác hoặc frontend khác phải có config mới, chốt trước lượt đo.
-Giữ model/threshold khóa nếu mục tiêu là kiểm pipeline gốc. Ghi cả config cũ
-và config mới nếu mục tiêu là nghiên cứu frontend.
-
-## 8. Hoàn thiện tài liệu
-
-Tạo phiên bản mới của Word/paper/slide. Giữ các file lịch sử.
-Các builder có sẵn trong scripts. Chạy test tương ứng sau khi sửa nội dung.
-Render Word thành PDF và kiểm từng trang. Kiểm mục lục, hình, bảng, font,
-đơn vị và nguồn. Việc test nội dung đạt không chứng minh bố cục đã đạt.
+Tiếp tục theo `handoffs/CURRENT.md`, mục 4–5. Nguồn Word/paper/slide và builder
+đã có. Sau sửa, chạy test liên quan, render và kiểm bố cục; ghi phạm vi đã kiểm.

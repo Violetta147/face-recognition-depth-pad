@@ -1,4 +1,4 @@
-# Direct versions observed locally; transitive dependencies are resolved by pip.
+# Direct versions observed during the study; not a complete dependency lock.
 torch==2.11.0
 torchvision==0.26.0
 numpy==2.4.3
