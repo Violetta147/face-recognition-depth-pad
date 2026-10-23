@@ -1,0 +1,7 @@
+{
+  "config_sha256": "4bf85370a27160104ac990c3fe9655155755b8823a27204d80878c056c3b7323",
+  "checkpoint_sha256": "a49d7c717e4cde27eac075de2d848c8816df3d27fcb0c01ea76ef752e15ff1b5",
+  "threshold_sha256": "5cf33d07f116e6bf1a907112e2d844d5d669a7299b71cb9f21bce862e60c19dd",
+  "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+  "evaluation_status": "CASIA development test already observed in round 3"
+}

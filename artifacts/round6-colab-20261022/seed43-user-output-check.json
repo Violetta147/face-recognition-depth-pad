@@ -1,0 +1,94 @@
+{
+  "source": "mapped Drive files",
+  "runs": {
+    "E1_43": {
+      "seed": 43,
+      "source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+      "training": {
+        "batch_size": 8,
+        "epochs": 30,
+        "gamma": 0.5,
+        "lr": 0.0001,
+        "optimizer": "adam",
+        "step_size": 500,
+        "weight_decay": 5e-05,
+        "workers": 2
+      },
+      "selection": {
+        "criterion": "minimum declared validation criterion within each stage",
+        "configured_selection_metric": "val_loss",
+        "reported_stage": "joint",
+        "stages": [
+          {
+            "stage": "joint",
+            "stage_index": 1,
+            "epoch": 29,
+            "global_epoch": 29,
+            "val_loss": 0.016190698028712328,
+            "selection_metric": "val_loss",
+            "selection_value": 0.016190698028712328
+          }
+        ]
+      },
+      "epochs": 30,
+      "log_min": {
+        "stage": "joint",
+        "epoch": 29,
+        "train_loss": 0.0039980222059133,
+        "val_loss": 0.0161906980287123,
+        "val_selection_loss": 0.0161906980287123
+      },
+      "checkpoint_sha256": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7",
+      "test_artifacts": []
+    },
+    "E3_43": {
+      "seed": 43,
+      "source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+      "training": {
+        "batch_size": 8,
+        "optimizer": "adam",
+        "selection_metric": "classification_bce",
+        "stages": [
+          {
+            "epochs": 16,
+            "lr": 0.0001,
+            "name": "joint"
+          }
+        ],
+        "weight_decay": 0.0001,
+        "workers": 2,
+        "init_checkpoint": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z/best.ckpt"
+      },
+      "selection": {
+        "criterion": "minimum declared validation criterion within each stage",
+        "configured_selection_metric": "classification_bce",
+        "reported_stage": "joint",
+        "stages": [
+          {
+            "stage": "joint",
+            "stage_index": 1,
+            "epoch": 15,
+            "global_epoch": 15,
+            "val_loss": 0.06103585198385796,
+            "selection_metric": "classification_bce",
+            "selection_value": 0.04288270420859893
+          }
+        ]
+      },
+      "epochs": 16,
+      "log_min": {
+        "stage": "joint",
+        "epoch": 15,
+        "train_loss": 0.0090569992037975,
+        "val_loss": 0.0610358519838579,
+        "val_selection_loss": 0.0428827042085989
+      },
+      "checkpoint_sha256": "9c7835aed57c4cefd3f04eb55c52caec9fd75803d25558b5539c758874e2ea4c",
+      "test_artifacts": [],
+      "initializer": {
+        "path": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z/best.ckpt",
+        "sha256": "5b320e67f0087359cf5c9bc3960266bb05afd3aaceb934ca50ed3118826360a7"
+      }
+    }
+  }
+}

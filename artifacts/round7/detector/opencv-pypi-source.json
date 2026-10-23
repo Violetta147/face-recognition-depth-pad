@@ -1,0 +1,311 @@
+{
+  "info": {
+    "author": null,
+    "author_email": null,
+    "bugtrack_url": null,
+    "classifiers": [
+      "Development Status :: 5 - Production/Stable",
+      "Environment :: Console",
+      "Intended Audience :: Developers",
+      "Intended Audience :: Education",
+      "Intended Audience :: Information Technology",
+      "Intended Audience :: Science/Research",
+      "License :: OSI Approved :: Apache Software License",
+      "Operating System :: MacOS",
+      "Operating System :: Microsoft :: Windows",
+      "Operating System :: POSIX",
+      "Operating System :: Unix",
+      "Programming Language :: C++",
+      "Programming Language :: Python",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3 :: Only",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+      "Programming Language :: Python :: 3.12",
+      "Programming Language :: Python :: 3.13",
+      "Programming Language :: Python :: 3.14",
+      "Programming Language :: Python :: 3.6",
+      "Programming Language :: Python :: 3.7",
+      "Programming Language :: Python :: 3.8",
+      "Programming Language :: Python :: 3.9",
+      "Programming Language :: Python :: Implementation :: CPython",
+      "Topic :: Scientific/Engineering",
+      "Topic :: Scientific/Engineering :: Image Recognition",
+      "Topic :: Software Development"
+    ],
+    "description": "[![Downloads](https://static.pepy.tech/badge/opencv-python)](http://pepy.tech/project/opencv-python)\r\n\r\n### Keep OpenCV Free\r\n\r\nOpenCV is raising funds to keep the library free for everyone, and we need the support of the entire community to do it. [Donate to OpenCV on Github](https://github.com/sponsors/opencv) to show your support.\r\n\r\n- [OpenCV on Wheels](#opencv-on-wheels)\r\n  - [Installation and Usage](#installation-and-usage)\r\n- [Frequently Asked Questions](#frequently-asked-questions)\r\n- [Documentation for opencv-python](#documentation-for-opencv-python)\r\n  - [CI build process](#ci-build-process)\r\n  - [Manual builds](#manual-builds)\r\n    - [Manual debug builds](#manual-debug-builds)\r\n    - [Source distributions](#source-distributions)\r\n  - [Licensing](#licensing)\r\n  - [Versioning](#versioning)\r\n  - [Releases](#releases)\r\n  - [Development builds](#development-builds)\r\n  - [Manylinux wheels](#manylinux-wheels)\r\n  - [Supported Python versions](#supported-python-versions)\r\n  - [Backward compatibility](#backward-compatibility)\r\n\r\n## OpenCV on Wheels\r\n\r\nPre-built CPU-only OpenCV packages for Python.\r\n\r\nCheck the manual build section if you wish to compile the bindings from source to enable additional modules such as CUDA.\r\n\r\n### Installation and Usage\r\n\r\n1. If you have previous/other manually installed (= not installed via ``pip``) version of OpenCV installed (e.g. cv2 module in the root of Python's site-packages), remove it before installation to avoid conflicts.\r\n2. Make sure that your `pip` version is up-to-date (19.3 is the minimum supported version): `pip install --upgrade pip`. Check version with `pip -V`. For example Linux distributions ship usually with very old `pip` versions which cause a lot of unexpected problems especially with the `manylinux` format.\r\n3. Select the correct package for your environment:\r\n\r\n    There are four different packages (see options 1, 2, 3 and 4 below) and you should **SELECT ONLY ONE OF THEM**. Do not install multiple different packages in the same environment. There is no plugin architecture: all the packages use the same namespace (`cv2`). If you installed multiple different packages in the same environment, uninstall them all with ``pip uninstall`` and reinstall only one package.\r\n\r\n    **a.** Packages for standard desktop environments (Windows, macOS, almost any GNU/Linux distribution)\r\n\r\n    - Option 1 - Main modules package: ``pip install opencv-python``\r\n    - Option 2 - Full package (contains both main modules and contrib/extra modules): ``pip install opencv-contrib-python`` (check contrib/extra modules listing from [OpenCV documentation](https://docs.opencv.org/master/))\r\n\r\n    **b.** Packages for server (headless) environments (such as Docker, cloud environments etc.), no GUI library dependencies\r\n\r\n    These packages are smaller than the two other packages above because they do not contain any GUI functionality (not compiled with Qt / other GUI components). This means that the packages avoid a heavy dependency chain to X11 libraries and you will have for example smaller Docker images as a result. You should always use these packages if you do not use `cv2.imshow` et al. or you are using some other package (such as PyQt) than OpenCV to create your GUI.\r\n\r\n    - Option 3 - Headless main modules package: ``pip install opencv-python-headless``\r\n    - Option 4 - Headless full package (contains both main modules and contrib/extra modules): ``pip install opencv-contrib-python-headless`` (check contrib/extra modules listing from [OpenCV documentation](https://docs.opencv.org/master/))\r\n\r\n4. Import the package:\r\n\r\n    ``import cv2``\r\n\r\n    All packages contain Haar cascade files. ``cv2.data.haarcascades`` can be used as a shortcut to the data folder. For example:\r\n\r\n    ``cv2.CascadeClassifier(cv2.data.haarcascades + \"haarcascade_frontalface_default.xml\")``\r\n\r\n5. Read [OpenCV documentation](https://docs.opencv.org/master/)\r\n\r\n6. Before opening a new issue, read the FAQ below and have a look at the other issues which are already open.\r\n\r\nFrequently Asked Questions\r\n--------------------------\r\n\r\n**Q: Do I need to install also OpenCV separately?**\r\n\r\nA: No, the packages are special wheel binary packages and they already contain statically built OpenCV binaries.\r\n\r\n**Q: Pip install fails with ``ModuleNotFoundError: No module named 'skbuild'``?**\r\n\r\nSince ``opencv-python`` version 4.3.0.\\*, ``manylinux1`` wheels were replaced by ``manylinux2014`` wheels. If your pip is too old, it will try to use the new source distribution introduced in 4.3.0.38 to manually build OpenCV because it does not know how to install ``manylinux2014`` wheels. However, source build will also fail because of too old ``pip`` because it does not understand build dependencies in ``pyproject.toml``. To use the new ``manylinux2014`` pre-built wheels (or to build from source), your ``pip`` version must be >= 19.3. Please upgrade ``pip`` with ``pip install --upgrade pip``.\r\n\r\n**Q: Import fails on Windows: ``ImportError: DLL load failed: The specified module could not be found.``?**\r\n\r\nA: If the import fails on Windows, make sure you have [Visual C++ redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145) installed. If you are using older Windows version than Windows 10 and latest system updates are not installed, [Universal C Runtime](https://support.microsoft.com/en-us/help/2999226/update-for-universal-c-runtime-in-windows) might be also required.\r\n\r\nWindows N and KN editions do not include Media Feature Pack which is required by OpenCV. If you are using Windows N or KN edition, please install also [Windows Media Feature Pack](https://support.microsoft.com/en-us/help/3145500/media-feature-pack-list-for-windows-n-editions).\r\n\r\nIf you have Windows Server 2012+, media DLLs are probably missing too; please install the Feature called \"Media Foundation\" in the Server Manager. Beware, some posts advise to install \"Windows Server Essentials Media Pack\", but this one requires the \"Windows Server Essentials Experience\" role, and this role will deeply affect your Windows Server configuration (by enforcing active directory integration etc.); so just installing the \"Media Foundation\" should be a safer choice.\r\n\r\nIf the above does not help, check if you are using Anaconda. Old Anaconda versions have a bug which causes the error, see [this issue](https://github.com/opencv/opencv-python/issues/36) for a manual fix.\r\n\r\nIf you still encounter the error after you have checked all the previous solutions, download [Dependencies](https://github.com/lucasg/Dependencies) and open the ``cv2.pyd`` (located usually at ``C:\\Users\\username\\AppData\\Local\\Programs\\Python\\PythonXX\\Lib\\site-packages\\cv2``) file with it to debug missing DLL issues.\r\n\r\n**Q: I have some other import errors?**\r\n\r\nA: Make sure you have removed old manual installations of OpenCV Python bindings (cv2.so or cv2.pyd in site-packages).\r\n\r\n**Q: Function foo() or method bar() returns wrong result, throws exception or crashes interpreter. What should I do?**\r\n\r\nA: The repository contains only OpenCV-Python package build scripts, but not OpenCV itself. Python bindings for OpenCV are developed in official OpenCV repository and it's the best place to report issues. Also please check [OpenCV wiki](https://github.com/opencv/opencv/wiki) and [the official OpenCV forum](https://forum.opencv.org/) before file new bugs.\r\n\r\n**Q: Why the packages do not include non-free algorithms?**\r\n\r\nA: Non-free algorithms such as SURF are not included in these packages because they are patented / non-free and therefore cannot be distributed as built binaries. Note that SIFT is included in the builds due to patent expiration since OpenCV versions 4.3.0 and 3.4.10. See this issue for more info: https://github.com/skvark/opencv-python/issues/126\r\n\r\n**Q: Why the package and import are different (opencv-python vs. cv2)?**\r\n\r\nA: It's easier for users to understand ``opencv-python`` than ``cv2`` and it makes it easier to find the package with search engines. `cv2` (old interface in old OpenCV versions was named as `cv`) is the name that OpenCV developers chose when they created the binding generators. This is kept as the import name to be consistent with different kind of tutorials around the internet. Changing the import name or behaviour would be also confusing to experienced users who are accustomed to the ``import cv2``.\r\n\r\n## Documentation for opencv-python\r\n\r\n[![Windows Build Status](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_windows.yml/badge.svg)](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_windows.yml)\r\n[![(Linux Build status)](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_linux.yml/badge.svg)](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_linux.yml)\r\n[![(Mac OS Build status)](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_macos.yml/badge.svg)](https://github.com/opencv/opencv-python/actions/workflows/build_wheels_macos.yml)\r\n\r\nThe aim of this repository is to provide means to package each new [OpenCV release](https://github.com/opencv/opencv/releases) for the most used Python versions and platforms.\r\n\r\n### CI build process\r\n\r\nThe project is structured like a normal Python package with a standard ``setup.py`` file.\r\nThe build process for a single entry in the build matrices is as follows (see for example `.github/workflows/build_wheels_linux.yml` file):\r\n\r\n0. In Linux and MacOS build: get OpenCV's optional C dependencies that we compile against\r\n\r\n1. Checkout repository and submodules\r\n\r\n   -  OpenCV is included as submodule and the version is updated\r\n      manually by maintainers when a new OpenCV release has been made\r\n   -  Contrib modules are also included as a submodule\r\n\r\n2. Find OpenCV version from the sources\r\n\r\n3. Build OpenCV\r\n\r\n   -  tests are disabled, otherwise build time increases too much\r\n   -  there are 4 build matrix entries for each build combination: with and without contrib modules, with and without GUI (headless)\r\n   -  Linux builds run in manylinux Docker containers (CentOS 5)\r\n   -  source distributions are separate entries in the build matrix\r\n\r\n4. Rearrange OpenCV's build result, add our custom files and generate wheel\r\n\r\n5. Linux and macOS wheels are transformed with auditwheel and delocate, correspondingly\r\n\r\n6. Install the generated wheel\r\n7. Test that Python can import the library and run some sanity checks\r\n8. Use twine to upload the generated wheel to PyPI (only in release builds)\r\n\r\nSteps 1--4 are handled by ``pip wheel``.\r\n\r\nThe build can be customized with environment variables. In addition to any variables that OpenCV's build accepts, we recognize:\r\n\r\n- ``CI_BUILD``. Set to ``1`` to emulate the CI environment build behaviour. Used only in CI builds to force certain build flags on in ``setup.py``. Do not use this unless you know what you are doing.\r\n- ``ENABLE_CONTRIB`` and ``ENABLE_HEADLESS``. Set to ``1`` to build the contrib and/or headless version\r\n- ``ENABLE_JAVA``, Set to ``1`` to enable the Java client build.  This is disabled by default.\r\n- ``CMAKE_ARGS``. Additional arguments for OpenCV's CMake invocation. You can use this to make a custom build.\r\n\r\nSee the next section for more info about manual builds outside the CI environment.\r\n\r\n### Manual builds\r\n\r\nIf some dependency is not enabled in the pre-built wheels, you can also run the build locally to create a custom wheel.\r\n\r\n1. Clone this repository: `git clone --recursive https://github.com/opencv/opencv-python.git`\r\n2. ``cd opencv-python``\r\n    - you can use `git` to checkout some other version of OpenCV in the `opencv` and `opencv_contrib` submodules if needed\r\n3. Add custom Cmake flags if needed, for example: `export CMAKE_ARGS=\"-DSOME_FLAG=ON -DSOME_OTHER_FLAG=OFF\"` (in Windows you need to set environment variables differently depending on Command Line or PowerShell)\r\n4. Select the package flavor which you wish to build with `ENABLE_CONTRIB` and `ENABLE_HEADLESS`: i.e. `export ENABLE_CONTRIB=1` if you wish to build `opencv-contrib-python`\r\n5. Run ``pip wheel . --verbose``. NOTE: make sure you have the latest ``pip`` version, the ``pip wheel`` command replaces the old ``python setup.py bdist_wheel`` command which does not support ``pyproject.toml``.\r\n    - this might take anything from 5 minutes to over 2 hours depending on your hardware\r\n6. Pip will print fresh wheel location at the end of build procedure. If you use old approach with `setup.py` file wheel package will be placed in `dist` folder. Package is ready and you can do with that whatever you wish.\r\n    - Optional: on Linux use some of the `manylinux` images as a build hosts if maximum portability is needed and run `auditwheel` for the wheel after build\r\n    - Optional: on macOS use ``delocate`` (same as ``auditwheel`` but for macOS) for better portability\r\n\r\n#### Manual debug builds\r\n\r\nIn order to build `opencv-python` in an unoptimized debug build, you need to side-step the normal process a bit.\r\n\r\n1. Install the packages `scikit-build` and `numpy` via pip.\r\n2. Run the command `python setup.py bdist_wheel --build-type=Debug`.\r\n3. Install the generated wheel file in the `dist/` folder with `pip install dist/wheelname.whl`.\r\n\r\nIf you would like the build produce all compiler commands, then the following combination of flags and environment variables has been tested to work on Linux:\r\n```\r\nexport CMAKE_ARGS='-DCMAKE_VERBOSE_MAKEFILE=ON'\r\nexport VERBOSE=1\r\n\r\npython3 setup.py bdist_wheel --build-type=Debug\r\n```\r\n\r\nSee this issue for more discussion: https://github.com/opencv/opencv-python/issues/424\r\n\r\n#### Source distributions\r\n\r\nSince OpenCV version 4.3.0, also source distributions are provided in PyPI. This means that if your system is not compatible with any of the wheels in PyPI, ``pip`` will attempt to build OpenCV from sources. If you need a OpenCV version which is not available in PyPI as a source distribution, please follow the manual build guidance above instead of this one.\r\n\r\nYou can also force ``pip`` to build the wheels from the source distribution. Some examples:\r\n\r\n- ``pip install --no-binary opencv-python opencv-python``\r\n- ``pip install --no-binary :all: opencv-python``\r\n\r\nIf you need contrib modules or headless version, just change the package name (step 4 in the previous section is not needed). However, any additional CMake flags can be provided via environment variables as described in step 3 of the manual build section. If none are provided, OpenCV's CMake scripts will attempt to find and enable any suitable dependencies. Headless distributions have hard coded CMake flags which disable all possible GUI dependencies.\r\n\r\nOn slow systems such as Raspberry Pi the full build may take several hours. On a 8-core Ryzen 7 3700X the build takes about 6 minutes.\r\n\r\n### Licensing\r\n\r\nOpencv-python package (scripts in this repository) is available under MIT license.\r\n\r\nOpenCV itself is available under [Apache 2](https://github.com/opencv/opencv/blob/master/LICENSE) license.\r\n\r\nThird party package licenses are at [LICENSE-3RD-PARTY.txt](https://github.com/opencv/opencv-python/blob/master/LICENSE-3RD-PARTY.txt).\r\n\r\nAll wheels ship with [FFmpeg](http://ffmpeg.org) licensed under the [LGPLv2.1](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).\r\n\r\nNon-headless Linux wheels ship with [Qt 5](http://doc.qt.io/qt-5/lgpl.html) licensed under the [LGPLv3](http://www.gnu.org/licenses/lgpl-3.0.html).\r\n\r\nThe packages include also other binaries. Full list of licenses can be found from [LICENSE-3RD-PARTY.txt](https://github.com/opencv/opencv-python/blob/master/LICENSE-3RD-PARTY.txt).\r\n\r\n### Versioning\r\n\r\n``find_version.py`` script searches for the version information from OpenCV sources and appends also a revision number specific to this repository to the version string. It saves the version information to ``version.py`` file under ``cv2`` in addition to some other flags.\r\n\r\n### Releases\r\n\r\nA release is made and uploaded to PyPI when a new tag is pushed to master branch. These tags differentiate packages (this repo might have modifications but OpenCV version stays same) and should be incremented sequentially. In practice, release version numbers look like this:\r\n\r\n``cv_major.cv_minor.cv_revision.package_revision`` e.g. ``3.1.0.0``\r\n\r\nThe master branch follows OpenCV master branch releases. 3.4 branch follows OpenCV 3.4 bugfix releases.\r\n\r\n### Development builds\r\n\r\nEvery commit to the master branch of this repo will be built. Possible build artifacts use local version identifiers:\r\n\r\n``cv_major.cv_minor.cv_revision+git_hash_of_this_repo`` e.g. ``3.1.0+14a8d39``\r\n\r\nThese artifacts can't be and will not be uploaded to PyPI.\r\n\r\n### Manylinux wheels\r\n\r\nLinux wheels are built using [manylinux2014](https://github.com/pypa/manylinux). These wheels should work out of the box for most of the distros (which use GNU C standard library) out there since they are built against an old version of glibc.\r\n\r\nThe default ``manylinux2014`` images have been extended with some OpenCV dependencies. See [Docker folder](https://github.com/skvark/opencv-python/tree/master/docker) for more info.\r\n\r\n### Supported Python versions\r\n\r\nPython 3.x compatible pre-built wheels are provided for the officially supported Python versions (not in EOL):\r\n\r\n- 3.7\r\n- 3.8\r\n- 3.9\r\n- 3.10\r\n- 3.11\r\n- 3.12\r\n- 3.13\r\n- 3.14\r\n\r\n### Backward compatibility\r\n\r\nStarting from 4.2.0 and 3.4.9 builds the macOS Travis build environment was updated to XCode 9.4. The change effectively dropped support for older than 10.13 macOS versions.\r\n\r\nStarting from 4.3.0 and 3.4.10 builds the Linux build environment was updated from `manylinux1` to `manylinux2014`. This dropped support for old Linux distributions.\r\n\r\nStarting from version 4.7.0 the Mac OS GitHub Actions build environment was update to version 11. Mac OS 10.x support deprecated. See https://github.com/actions/runner-images/issues/5583\r\n\r\nStarting from version 4.9.0 the Mac OS GitHub Actions build environment was update to version 12. Mac OS 10.x support deprecated by Brew and most of used packages.\r\n\r\n\r\n",
+    "description_content_type": "text/markdown",
+    "docs_url": null,
+    "download_url": null,
+    "downloads": {
+      "last_day": -1,
+      "last_month": -1,
+      "last_week": -1
+    },
+    "dynamic": null,
+    "home_page": "https://github.com/opencv/opencv-python",
+    "keywords": null,
+    "license": "Apache 2.0",
+    "license_expression": null,
+    "license_files": null,
+    "maintainer": "OpenCV Team",
+    "maintainer_email": null,
+    "name": "opencv-python",
+    "package_url": "https://pypi.org/project/opencv-python/",
+    "platform": null,
+    "project_url": "https://pypi.org/project/opencv-python/",
+    "project_urls": {
+      "Homepage": "https://github.com/opencv/opencv-python"
+    },
+    "provides_extra": null,
+    "release_url": "https://pypi.org/project/opencv-python/4.14.0.94/",
+    "requires_dist": [
+      "numpy<2.0; python_version < \"3.9\"",
+      "numpy>=2; python_version >= \"3.9\""
+    ],
+    "requires_python": ">=3.6",
+    "summary": "Wrapper package for OpenCV python bindings.",
+    "version": "4.14.0.94",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  "last_serial": 39473835,
+  "ownership": {
+    "organization": null,
+    "roles": [
+      {
+        "role": "Owner",
+        "user": "asmorkalov"
+      },
+      {
+        "role": "Owner",
+        "user": "sergregory"
+      },
+      {
+        "role": "Owner",
+        "user": "skvark"
+      },
+      {
+        "role": "Maintainer",
+        "user": "andrey.senyaev"
+      }
+    ]
+  },
+  "urls": [
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "1991e4fd7c2b64fda9792bc1f5dcb5a6cbdb54d50c3a2fa9dccc3943fd47afcf",
+        "md5": "5e8ce98e918998b0357b787486b720e3",
+        "sha256": "04456937c8f12ca64ff94df8bfd813ca98f5c9767da792948969a759c716ebe2"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-macosx_13_0_arm64.whl",
+      "has_sig": false,
+      "md5_digest": "5e8ce98e918998b0357b787486b720e3",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 46491087,
+      "upload_time": "2026-07-29T03:52:01",
+      "upload_time_iso_8601": "2026-07-29T03:52:01.842333Z",
+      "url": "https://files.pythonhosted.org/packages/19/91/e4fd7c2b64fda9792bc1f5dcb5a6cbdb54d50c3a2fa9dccc3943fd47afcf/opencv_python-4.14.0.94-cp37-abi3-macosx_13_0_arm64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "f4a78895ca8731f741925acf238f87ccb21fa8f47378d5291792e932b9a4ab71",
+        "md5": "3ca2ff5f457e8a58eabe62e5b844f384",
+        "sha256": "6a49842cc0ba9f43e35a289e61c0e15a1f8be8df60145ee5c7d42593b0d4f4b8"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-macosx_14_0_x86_64.whl",
+      "has_sig": false,
+      "md5_digest": "3ca2ff5f457e8a58eabe62e5b844f384",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 33084035,
+      "upload_time": "2026-07-28T20:05:52",
+      "upload_time_iso_8601": "2026-07-28T20:05:52.63332Z",
+      "url": "https://files.pythonhosted.org/packages/f4/a7/8895ca8731f741925acf238f87ccb21fa8f47378d5291792e932b9a4ab71/opencv_python-4.14.0.94-cp37-abi3-macosx_14_0_x86_64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "84ec5777752567986b99222d52e22306e9616829480cc2d48ab241daa9d7e9ef",
+        "md5": "1df0881174c9122ede8c3eac963c475c",
+        "sha256": "3198fcbcb8f98fd68063bf2c75d129b0f50d46e555a4e47578a6eb086eb38e1f"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+      "has_sig": false,
+      "md5_digest": "1df0881174c9122ede8c3eac963c475c",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 49513397,
+      "upload_time": "2026-07-28T19:17:28",
+      "upload_time_iso_8601": "2026-07-28T19:17:28.309353Z",
+      "url": "https://files.pythonhosted.org/packages/84/ec/5777752567986b99222d52e22306e9616829480cc2d48ab241daa9d7e9ef/opencv_python-4.14.0.94-cp37-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "1309c05887c383caa9080ef612febffd08c5da1c283418687a3bea6ef7fb6faa",
+        "md5": "03243890aab96a8c2e8b2d7f5986282e",
+        "sha256": "4ae0b5a2acbcfb9813035f1644cfba751edd02797fac994e32180813eeef8420"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "has_sig": false,
+      "md5_digest": "03243890aab96a8c2e8b2d7f5986282e",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 72049625,
+      "upload_time": "2026-07-28T19:18:11",
+      "upload_time_iso_8601": "2026-07-28T19:18:11.767436Z",
+      "url": "https://files.pythonhosted.org/packages/13/09/c05887c383caa9080ef612febffd08c5da1c283418687a3bea6ef7fb6faa/opencv_python-4.14.0.94-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "ed0bdf7ac73ed46258d569e4334c03b42515fbc2f901d40831e64414ac0da66a",
+        "md5": "1e5592bc8a12cb7f875d87a475c69b29",
+        "sha256": "add600736d0d65a39e797a9ceeb494f3cdc5736d4bd96b4f89d65a8c92451528"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-manylinux_2_28_aarch64.whl",
+      "has_sig": false,
+      "md5_digest": "1e5592bc8a12cb7f875d87a475c69b29",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 53432460,
+      "upload_time": "2026-07-28T19:18:43",
+      "upload_time_iso_8601": "2026-07-28T19:18:43.878694Z",
+      "url": "https://files.pythonhosted.org/packages/ed/0b/df7ac73ed46258d569e4334c03b42515fbc2f901d40831e64414ac0da66a/opencv_python-4.14.0.94-cp37-abi3-manylinux_2_28_aarch64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "d8396ac0cdbe486e33c4880bd8147a97b7132c4854a4ea1efbf00c77bb910011"
+      },
+      "digests": {
+        "blake2b_256": "8f9697f176047c56726a61ddd02300b45b35d1451278c6182688a1fb27035e81",
+        "md5": "a168dc3e816e0c7036c6379d94177dc2",
+        "sha256": "726a2b40c1120a0bbd0116394c6a5b2aa0a4dfa4e609a81ee10d12c6a34cd372"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-manylinux_2_28_x86_64.whl",
+      "has_sig": false,
+      "md5_digest": "a168dc3e816e0c7036c6379d94177dc2",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 77393698,
+      "upload_time": "2026-07-28T19:19:14",
+      "upload_time_iso_8601": "2026-07-28T19:19:14.745362Z",
+      "url": "https://files.pythonhosted.org/packages/8f/96/97f176047c56726a61ddd02300b45b35d1451278c6182688a1fb27035e81/opencv_python-4.14.0.94-cp37-abi3-manylinux_2_28_x86_64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "8dbd67136cb48f292277a149a30bd28d2879c008ff236728fda006e6f0139fff"
+      },
+      "digests": {
+        "blake2b_256": "8b2c42491165dea74fcefa9a438ccf9ab6c7f3a52d595688ac90e87c4c1e9774",
+        "md5": "f5720e3e08479bfd05b350668a1bbcc5",
+        "sha256": "549c2401f8654708c702bdf0e26d45816b9c411369a0efa41907ec2b4ec0e707"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-win32.whl",
+      "has_sig": false,
+      "md5_digest": "f5720e3e08479bfd05b350668a1bbcc5",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 33162505,
+      "upload_time": "2026-07-28T18:32:23",
+      "upload_time_iso_8601": "2026-07-28T18:32:23.48804Z",
+      "url": "https://files.pythonhosted.org/packages/8b/2c/42491165dea74fcefa9a438ccf9ab6c7f3a52d595688ac90e87c4c1e9774/opencv_python-4.14.0.94-cp37-abi3-win32.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": {
+        "sha256": "8dbd67136cb48f292277a149a30bd28d2879c008ff236728fda006e6f0139fff"
+      },
+      "digests": {
+        "blake2b_256": "08f0ebf59732b54b4dd8a9e23f3b453ad73e11ec2230faf25ff4b1befa191ce0",
+        "md5": "ddbeb52aa8b87b2ebf743b8bc61839ec",
+        "sha256": "ace53616cdffc9643e17e075397b493e607c427d388c7508798ef7ad2ed577cc"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94-cp37-abi3-win_amd64.whl",
+      "has_sig": false,
+      "md5_digest": "ddbeb52aa8b87b2ebf743b8bc61839ec",
+      "packagetype": "bdist_wheel",
+      "python_version": "cp37",
+      "requires_python": ">=3.6",
+      "size": 41166165,
+      "upload_time": "2026-07-28T18:32:19",
+      "upload_time_iso_8601": "2026-07-28T18:32:19.031818Z",
+      "url": "https://files.pythonhosted.org/packages/08/f0/ebf59732b54b4dd8a9e23f3b453ad73e11ec2230faf25ff4b1befa191ce0/opencv_python-4.14.0.94-cp37-abi3-win_amd64.whl",
+      "yanked": false,
+      "yanked_reason": null
+    },
+    {
+      "comment_text": null,
+      "core-metadata": false,
+      "digests": {
+        "blake2b_256": "ede8c2959c0f969ea4ae96b55ad10c108c0410de4e8b3550d9941a4cfdd52703",
+        "md5": "c107468a882244acca350ca627683075",
+        "sha256": "afadc76a38a07713a4c2b4702da917cf0ed489be57e2a40a34e670189731de7d"
+      },
+      "downloads": -1,
+      "filename": "opencv_python-4.14.0.94.tar.gz",
+      "has_sig": false,
+      "md5_digest": "c107468a882244acca350ca627683075",
+      "packagetype": "sdist",
+      "python_version": "source",
+      "requires_python": ">=3.6",
+      "size": 96400225,
+      "upload_time": "2026-07-28T19:23:09",
+      "upload_time_iso_8601": "2026-07-28T19:23:09.546157Z",
+      "url": "https://files.pythonhosted.org/packages/ed/e8/c2959c0f969ea4ae96b55ad10c108c0410de4e8b3550d9941a4cfdd52703/opencv_python-4.14.0.94.tar.gz",
+      "yanked": false,
+      "yanked_reason": null
+    }
+  ],
+  "vulnerabilities": []
+}

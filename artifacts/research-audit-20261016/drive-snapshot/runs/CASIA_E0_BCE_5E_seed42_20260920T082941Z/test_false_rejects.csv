@@ -1,0 +1,11 @@
+video_id,label,score,subject_id,attack_type,quality,prediction,correct
+casia_s23_v2,1,0.0019060372604144504,casia_s23,live,low,0,False
+casia_s30_v2,1,0.05186873117745563,casia_s30,live,low,0,False
+casia_s23_v1,1,0.06655946509272326,casia_s23,live,normal,0,False
+casia_s22_v1,1,0.93113853931427,casia_s22,live,normal,0,False
+casia_s39_v1,1,0.9468290746212006,casia_s39,live,normal,0,False
+casia_s30_v1,1,0.9699711561203003,casia_s30,live,normal,0,False
+casia_s21_vHR_1,1,0.9746980160474777,casia_s21,live,high,0,False
+casia_s31_vHR_1,1,0.9824085533618927,casia_s31,live,high,0,False
+casia_s48_v2,1,0.9894563406705856,casia_s48,live,low,0,False
+casia_s39_vHR_1,1,0.9899882793426513,casia_s39,live,high,0,False

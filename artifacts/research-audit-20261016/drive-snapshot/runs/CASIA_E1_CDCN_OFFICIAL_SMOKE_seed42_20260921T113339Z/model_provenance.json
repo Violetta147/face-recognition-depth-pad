@@ -1,0 +1,16 @@
+{
+  "implementation": "ZitongYu/CDCN",
+  "repository": "https://github.com/ZitongYu/CDCN",
+  "git_commit": "fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b",
+  "source_file": "CVPR2020_paper_codes/models/CDCNs.py",
+  "source_sha256_lf": "396b5c093b8f5af9ad1454257b583e75c3b846cc5da1379d84197e68c9828a45",
+  "architecture": "CDCN",
+  "paper": "Searching Central Difference Convolutional Networks for Face Anti-Spoofing (CVPR 2020)",
+  "adaptations": [
+    "dictionary output compatible with deepface-pad",
+    "depth channel retained as Bx1x32x32 instead of squeezing to Bx32x32",
+    "frame score is the spatial mean because protocol-independent PRNet masks are unavailable",
+    "CASIA subject-disjoint manifest and 3DDFA V2 pseudo-depth replace the paper's OULU/PRNet pipeline",
+    "frozen face-centric CASIA frames are resized without a new crop to preserve E0 preprocessing compatibility"
+  ]
+}

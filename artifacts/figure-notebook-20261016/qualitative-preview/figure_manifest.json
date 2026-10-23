@@ -1,0 +1,33 @@
+{
+  "phase": "local one-case QA only; not full validation MAE or GPU timing",
+  "depth_color_limits": [
+    0,
+    1.0
+  ],
+  "absolute_error_color_limits": [
+    0,
+    0.941031813621521
+  ],
+  "figures": [
+    {
+      "name": "17_case_01_casia_s32_v2",
+      "caption": "Selected illustration, not aggregate performance. Middle frame; displayed decisions/scores are frozen VIDEO-level results. Shared color scales, no per-image normalization or prediction clipping. Native depth resolution 32×32.",
+      "files": [
+        "png\\17_case_01_casia_s32_v2.png",
+        "pdf\\17_case_01_casia_s32_v2.pdf",
+        "svg\\17_case_01_casia_s32_v2.svg"
+      ],
+      "width_inches": 15.0,
+      "height_inches": 9.0,
+      "png_dpi": 300
+    }
+  ],
+  "exported_files": {
+    "CAPTIONS.csv": "fe59636b4030bdddf8af6913ac17dafe238406c075e1ae0cb85067a030f5a8d2",
+    "data\\qualitative_depth_arrays.npz": "eb53178fca9ec9d685d435891027b32b5be048ca531769d834cf0ae98a90d0aa",
+    "INDEX.html": "d07b96a6217f19998836928e43ae77bf5b559c4e808530a3f734646a2a4af652",
+    "pdf\\17_case_01_casia_s32_v2.pdf": "0fc219b1d8055d79b2503298553305e1a4e85cdbfa212f0dfaf6bce3cb07dada",
+    "png\\17_case_01_casia_s32_v2.png": "f82649f1cc87214c4de963b50002e8babc8465439910e357c9f10674e22bc84a",
+    "svg\\17_case_01_casia_s32_v2.svg": "7f06c3b851fc41fc632e8467d29e7ce34ec76c75201a56f2ff96124a4eae34ad"
+  }
+}

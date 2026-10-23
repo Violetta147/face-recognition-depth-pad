@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "implementation": "cleardusk/3DDFA_V2",
+  "git_commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+  "config_file": "mb1_120x120.yml",
+  "config_sha256": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+  "backend": "onnx",
+  "mode": "gpu",
+  "output_size": 32,
+  "worker_script_sha256": "0426ffebbf89d5aca0d76a034e92d3cc8abe0b93b86f7728fc80cd99b07ee26a"
+}

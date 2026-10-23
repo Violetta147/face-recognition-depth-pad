@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-10-23",
+  "scope": "Historical saved notebook bytes; no notebook was executed or cleared during publication.",
+  "notebooks": [
+    {
+      "path": "notebooks/E0.ipynb",
+      "sha256": "49e540f744631a711d4e23e79a9bfd1b54db6bb954fac772532775d26edb0266",
+      "bytes": 161020,
+      "cells_with_outputs": 24,
+      "saved_errors": 1
+    },
+    {
+      "path": "notebooks/Face_PAD_Official_CDCN_E1_Rerun.ipynb",
+      "sha256": "b78e73136f7249d8f7fd219d3aa639844b71e2e6d245782e34459606e9e79857",
+      "bytes": 2188098,
+      "cells_with_outputs": 27,
+      "saved_errors": 1
+    },
+    {
+      "path": "notebooks/Face_PAD_Round4_Official_Frozen_Head.ipynb",
+      "sha256": "5b9679062bbb569754dd80e1deff483281ac07fef8d13c5bcc11dca13d7363e8",
+      "bytes": 161689,
+      "cells_with_outputs": 12,
+      "saved_errors": 0
+    },
+    {
+      "path": "notebooks/Face_PAD_Round5_CASIA_E3_E4_Executed_20261022.ipynb",
+      "sha256": "5c7e7968cb686b54e92aafbf538919c2eb128b9c7c91ac47d009557de858d29d",
+      "bytes": 1080546,
+      "cells_with_outputs": 11,
+      "saved_errors": 0
+    },
+    {
+      "path": "notebooks/Face_PAD_Round6_CASIA_E1_E3_Executed.ipynb",
+      "sha256": "de1f9f07f37fbc17db467a17d2248f3ddbd446ad0b1a12984c8948548d7dbe11",
+      "bytes": 184701,
+      "cells_with_outputs": 10,
+      "saved_errors": 0
+    },
+    {
+      "path": "notebooks/Face_PAD_Round6_Cost_E1_E3_E4_Executed.ipynb",
+      "sha256": "37f941faa2398c40998c68e36492f6ef2f1504d3fa932d80a46804481a6b1a91",
+      "bytes": 34963,
+      "cells_with_outputs": 4,
+      "saved_errors": 0
+    }
+  ],
+  "usage": "Read historical outputs. Saved RUN/OPEN gates do not authorize rerunning training or test."
+}

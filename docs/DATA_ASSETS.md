@@ -58,3 +58,33 @@ Hình Lượt 7: `reports/round7/figures-attempt03/`; raw arrays:
 `artifacts/round7/figures-attempt03/qualitative_arrays.npz`. Checkpoint và bằng
 chứng nằm ở `evidence/face-pad/` và các tệp được theo dõi trong `artifacts/`.
 Không cần upload thêm các nhóm này lên Drive.
+
+## Nguồn để kiểm và phát triển tiếp
+
+Hai PDF UCDCN/CASO-PAD và hai ảnh bảng trích nằm trong
+`artifacts/round6-paper-protocol-20261022/`, đã có trong Git. Đường dẫn và SHA
+PDF khớp `reports/ROUND_6_PAPER_PROTOCOL_COMPARISON_2026-10-22.json`.
+Có thể mở nguồn để kiểm protocol, vị trí bảng và các trường chưa xác minh;
+không chỉ dựa vào phần tóm tắt. PDF CDCN nằm ở `references/papers/`.
+
+Git cũng giữ đầy đủ tệp kiểm toán khoa học trong
+`artifacts/research-audit-20261016/`, `artifacts/round5-smoke-audit-20261016/`,
+`artifacts/round5-full-audit-20261016/`, `artifacts/round5-test-audit-20261016/`
+và tệp nguồn hình trong `artifacts/figure-notebook-20261016/`.
+Ngoại lệ là archive depth dạng tar: nhận đúng archive qua Drive theo bảng
+ở trên. Smoke và các lần kiểm lỗi là hồ sơ lịch sử, không thuộc bảng kết quả
+chính. Giữ checkpoint và config theo run ID, không suy ra model từ tên gần giống.
+
+Các notebook có output đã lưu được theo dõi trong Git, gồm notebook executed
+Lượt 5 và hai notebook executed Lượt 6. Danh mục SHA và số output/error nằm
+ở `reports/EXECUTED_NOTEBOOKS_2026-10-23.json`. Giữ nguyên output, metadata,
+execution count và cả lỗi lịch sử trong notebook E0/E1; không chạy lại hoặc
+xóa lỗi để làm bản lưu trông sạch hơn. Các cổng RUN/OPEN đã lưu không cấp quyền
+chạy lại train hoặc test.
+
+Slide cuối Lượt 5, gồm bản `Khong_HTML.pptx` đã khóa, PDF và các bản xuất
+lịch sử, có trong `reports/slides_round5/exports/`. Bộ trình bày Lượt 1–4 đã
+chốt và lời thuyết trình nằm ở `artifacts/presentations/`. Bản giải nén thử
+của gói code có thể không còn tại máy nguồn; các ZIP nguồn tương ứng vẫn giữ
+để phục hồi đúng phiên bản. Không cần chép môi trường hoặc bản giải nén thử
+từ máy nguồn để phát triển tiếp.

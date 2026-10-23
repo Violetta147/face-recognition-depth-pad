@@ -1,0 +1,47 @@
+{
+  "by_split": {
+    "test": {
+      "attack_samples": 5400,
+      "bona_fide_failure_rate": 0.0,
+      "bona_fide_failures": 0,
+      "bona_fide_samples": 1800,
+      "samples": 7200
+    },
+    "train": {
+      "attack_samples": 2880,
+      "bona_fide_failure_rate": 0.0,
+      "bona_fide_failures": 0,
+      "bona_fide_samples": 960,
+      "samples": 3840
+    },
+    "val": {
+      "attack_samples": 720,
+      "bona_fide_failure_rate": 0.0,
+      "bona_fide_failures": 0,
+      "bona_fide_samples": 240,
+      "samples": 960
+    }
+  },
+  "depth_statistics": {
+    "attack": {
+      "map_count": 9000,
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "pixel_count": 9216000
+    },
+    "bona_fide": {
+      "map_count": 3000,
+      "max": 0.9999950528144836,
+      "mean": 0.5068286398263643,
+      "min": 0.0,
+      "pixel_count": 3072000
+    }
+  },
+  "explicit_maps_checked": 12000,
+  "implicit_attack_zero_maps": 0,
+  "issues": [],
+  "manifest": "/content/face-recognition-depth-pad/data/manifests/casia_fasd_debug_with_depth.csv",
+  "samples": 12000,
+  "valid": true
+}

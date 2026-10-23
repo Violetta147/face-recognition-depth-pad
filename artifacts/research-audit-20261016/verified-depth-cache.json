@@ -1,0 +1,9 @@
+{
+  "live_maps_in_saved_tar": 3000,
+  "live_map_hash_mismatches": [],
+  "archive_sha256": "26cfa7f26d61e3a71372404008f5dc9dd696af931172850986a8642e440b3d80",
+  "saved_attack_maps": 9000,
+  "attack_maps_matching_numpy_zero32_float32": 9000,
+  "attack_zero_reference_sha256": "7c47698ffea2d322733b704e935c8b6e5004d2dc29d766b802f3ff42f57416cb",
+  "scope": "archive live bytes compared to E1 snapshot; zero target bytes reconstructed, not a reread of every physical attack file"
+}

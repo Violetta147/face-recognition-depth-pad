@@ -1,0 +1,505 @@
+{
+  "date": "2026-10-16",
+  "scope": "saved artifacts; no retraining or new test scoring",
+  "snapshot_manifest": "artifacts/research-audit-20261016/snapshot-manifest.json",
+  "derived_manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+  "reconstructed_source_manifest_sha256": "58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192",
+  "split_counts": {
+    "test": {
+      "subjects": 30,
+      "videos": 360,
+      "frames": 7200,
+      "attack_videos": 270,
+      "live_videos": 90
+    },
+    "train": {
+      "subjects": 16,
+      "videos": 192,
+      "frames": 3840,
+      "attack_videos": 144,
+      "live_videos": 48
+    },
+    "val": {
+      "subjects": 4,
+      "videos": 48,
+      "frames": 960,
+      "attack_videos": 36,
+      "live_videos": 12
+    }
+  },
+  "subjects": {
+    "test": [
+      "casia_s21",
+      "casia_s22",
+      "casia_s23",
+      "casia_s24",
+      "casia_s25",
+      "casia_s26",
+      "casia_s27",
+      "casia_s28",
+      "casia_s29",
+      "casia_s30",
+      "casia_s31",
+      "casia_s32",
+      "casia_s33",
+      "casia_s34",
+      "casia_s35",
+      "casia_s36",
+      "casia_s37",
+      "casia_s38",
+      "casia_s39",
+      "casia_s40",
+      "casia_s41",
+      "casia_s42",
+      "casia_s43",
+      "casia_s44",
+      "casia_s45",
+      "casia_s46",
+      "casia_s47",
+      "casia_s48",
+      "casia_s49",
+      "casia_s50"
+    ],
+    "train": [
+      "casia_s01",
+      "casia_s02",
+      "casia_s03",
+      "casia_s05",
+      "casia_s06",
+      "casia_s07",
+      "casia_s08",
+      "casia_s10",
+      "casia_s11",
+      "casia_s12",
+      "casia_s13",
+      "casia_s15",
+      "casia_s16",
+      "casia_s17",
+      "casia_s18",
+      "casia_s20"
+    ],
+    "val": [
+      "casia_s04",
+      "casia_s09",
+      "casia_s14",
+      "casia_s19"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "CASIA_E0_BCE_5E_seed42_20260920T082941Z",
+      "seed": 42,
+      "model": "mobilenet_v3_small",
+      "file_count": 14,
+      "manifest_sha256": "58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.9900876432657242,
+            "apcer": 0.0,
+            "bpcer": 0.0,
+            "acer": 0.0,
+            "eer": 0.0,
+            "auc": 1.0
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 0,
+          "scores_sha256": "cbec50adb6b73a31a22d89860e71b5249ff3c5e1c3c81386ff660086a7901114"
+        },
+        "test": {
+          "videos": 360,
+          "frames": 7200,
+          "metrics": {
+            "threshold": 0.9900876432657242,
+            "apcer": 0.0,
+            "bpcer": 0.1111111111111111,
+            "acer": 0.05555555555555555,
+            "eer": 0.024074074074074074,
+            "auc": 0.9979835390946502
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 10,
+          "scores_sha256": "41612ea1f8996d7d0182321aec3a4ab937f6a350d028bddfe8b922278bfd734e"
+        }
+      },
+      "checkpoint": {
+        "sha256": "b8057fc7f7b3cce74fca079377f09ece1277dc9c8bfd10bb25f78b507c83502c",
+        "bytes": 6202025,
+        "val_loss": 0.002805523785840099,
+        "state_tensors": 244
+      },
+      "status": "test_complete",
+      "epochs_logged": 5,
+      "best_epoch_from_log": 5,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 0.002805523785840099
+    },
+    {
+      "run_id": "CASIA_E0_SMOKE_seed42_20260920T081731Z",
+      "seed": 42,
+      "model": "mobilenet_v3_small",
+      "file_count": 9,
+      "manifest_sha256": "58fffcc2fb29649af1b8424d78b85067eefbd0321fde6b27fbd0803ef0fd7192",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 3.986435517617792e-05,
+            "apcer": 0.0,
+            "bpcer": 0.0,
+            "acer": 0.0,
+            "eer": 0.0,
+            "auc": 1.0
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 0,
+          "scores_sha256": "3f1d3d8a44454379e2b8c036c72bdc77702dc758990ae82e8ef3d4863c2abfb8"
+        }
+      },
+      "checkpoint": {
+        "sha256": "dd8c5661507544c249a80ffa1f6e481eec7b22a72335cebf75ce8eef140c47f4",
+        "bytes": 6202025,
+        "val_loss": 1.4955422341823579,
+        "state_tensors": 244
+      },
+      "status": "validation_complete",
+      "epochs_logged": 1,
+      "best_epoch_from_log": 1,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 1.4955422341823579
+    },
+    {
+      "run_id": "CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z",
+      "seed": 42,
+      "model": "cdcn_official",
+      "file_count": 14,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.1916038803756237,
+            "apcer": 0.0,
+            "bpcer": 0.0,
+            "acer": 0.0,
+            "eer": 0.0,
+            "auc": 1.0
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 0,
+          "scores_sha256": "36193c3fe41fd336e6fb018620addbd34a161cbdbf10fb0f1fbb9d750f7215cc"
+        },
+        "test": {
+          "videos": 360,
+          "frames": 7200,
+          "metrics": {
+            "threshold": 0.1916038803756237,
+            "apcer": 0.0,
+            "bpcer": 0.05555555555555555,
+            "acer": 0.027777777777777776,
+            "eer": 0.022222222222222223,
+            "auc": 0.9944444444444445
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 5,
+          "scores_sha256": "48df61d9a1d1249c7ef8b25e0853f75c56f8d0d99af5f8da92ac77abe5198368"
+        }
+      },
+      "checkpoint": {
+        "sha256": "679810c001e526cafed8685fe731a7d5c539fd3fb9c5a9fb31725b7dbdf57024",
+        "bytes": 9015451,
+        "val_loss": 0.017171223058208323,
+        "state_tensors": 73
+      },
+      "status": "test_complete",
+      "epochs_logged": 30,
+      "best_epoch_from_log": 25,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 0.017171223058208323
+    },
+    {
+      "run_id": "CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z",
+      "seed": 42,
+      "model": "cdcn_official",
+      "file_count": 11,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.12576441764831542,
+            "apcer": 0.027777777777777776,
+            "bpcer": 0.5,
+            "acer": 0.2638888888888889,
+            "eer": 0.3333333333333333,
+            "auc": 0.7731481481481481
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 1,
+          "false_rejects": 6,
+          "scores_sha256": "b0f3c2533efd7fbddd5168307dd4a0a7bd8b68a2e299bfd3dd50ff0540aab584"
+        }
+      },
+      "checkpoint": {
+        "sha256": "7e5a9915816025c7404c3fae6230241c6fc3614c800605477b656be3b7b0bdc8",
+        "bytes": 9015451,
+        "val_loss": 0.07293833478664359,
+        "state_tensors": 73
+      },
+      "status": "validation_complete",
+      "epochs_logged": 1,
+      "best_epoch_from_log": 1,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 0.07293833478664359
+    },
+    {
+      "run_id": "CASIA_E1_CDCN_seed42_20260921T024300Z",
+      "seed": 42,
+      "model": "cdcn",
+      "file_count": 13,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.0412299589253962,
+            "apcer": 0.05555555555555555,
+            "bpcer": 0.08333333333333333,
+            "acer": 0.06944444444444445,
+            "eer": 0.08333333333333333,
+            "auc": 0.9814814814814815
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 2,
+          "false_rejects": 1,
+          "scores_sha256": "a6306413e45786f232703e5101f6411c49ccf14dc580ea594d83461475ada6fd"
+        },
+        "test": {
+          "videos": 360,
+          "frames": 7200,
+          "metrics": {
+            "threshold": 0.0412299589253962,
+            "apcer": 0.1925925925925926,
+            "bpcer": 0.08888888888888889,
+            "acer": 0.14074074074074075,
+            "eer": 0.1111111111111111,
+            "auc": 0.9564197530864198
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 52,
+          "false_rejects": 8,
+          "scores_sha256": "dacc74cce734f107c85a49fc2880f53a1c2b2bc6b48101b67f26bff5a2e1ca7c"
+        }
+      },
+      "checkpoint": {
+        "sha256": "7a23e3d37b618456a8f5b5dfea6a8c4025d561765b6b069151460a459ca45e1e",
+        "bytes": 680629,
+        "val_loss": 0.08482502506424984,
+        "state_tensors": 26
+      },
+      "status": "test_complete",
+      "epochs_logged": 30,
+      "best_epoch_from_log": 30,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 0.08482502506424984
+    },
+    {
+      "run_id": "CASIA_E1_SMOKE_seed42_20260921T023118Z",
+      "seed": 42,
+      "model": "cdcn",
+      "file_count": 4,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {},
+      "checkpoint": null,
+      "status": "incomplete"
+    },
+    {
+      "run_id": "CASIA_E1_SMOKE_seed42_20260921T023804Z",
+      "seed": 42,
+      "model": "cdcn",
+      "file_count": 10,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.3268132984638214,
+            "apcer": 0.5277777777777778,
+            "bpcer": 0.08333333333333333,
+            "acer": 0.3055555555555556,
+            "eer": 0.3333333333333333,
+            "auc": 0.6898148148148148
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 19,
+          "false_rejects": 1,
+          "scores_sha256": "0efe980672818371adc494cfbbf767b096d5204f352e97d61f61ccd2f1dc2c00"
+        }
+      },
+      "checkpoint": {
+        "sha256": "3db8137691551a9799f7056bed6639248d6b35d14f4324f92e29656bba2eae2e",
+        "bytes": 680629,
+        "val_loss": 0.3357425202926,
+        "state_tensors": 26
+      },
+      "status": "validation_complete",
+      "epochs_logged": 1,
+      "best_epoch_from_log": 1,
+      "best_stage_from_log": "joint",
+      "best_val_loss_from_log": 0.3357425202926
+    },
+    {
+      "run_id": "CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z",
+      "seed": 42,
+      "model": "cdcn_official_head",
+      "file_count": 15,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.4117791514843702,
+            "apcer": 0.0,
+            "bpcer": 0.0,
+            "acer": 0.0,
+            "eer": 0.0,
+            "auc": 1.0
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 0,
+          "scores_sha256": "3d6d01b9cff269e9d3badb0db1881120e539645c7a3714c6adde11c0a2cdcd21"
+        },
+        "test": {
+          "videos": 360,
+          "frames": 7200,
+          "metrics": {
+            "threshold": 0.4117791514843702,
+            "apcer": 0.0,
+            "bpcer": 0.05555555555555555,
+            "acer": 0.027777777777777776,
+            "eer": 0.022222222222222223,
+            "auc": 0.994320987654321
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 5,
+          "scores_sha256": "cc04c03dcc6b577bce548a98b6d93730ab5af63b30b4c6f9c6380adca761c0ba"
+        }
+      },
+      "checkpoint": {
+        "sha256": "a49d7c717e4cde27eac075de2d848c8816df3d27fcb0c01ea76ef752e15ff1b5",
+        "bytes": 9023671,
+        "val_loss": 0.03145312305702343,
+        "state_tensors": 79
+      },
+      "status": "test_complete",
+      "epochs_logged": 10,
+      "best_epoch_from_log": 1,
+      "best_stage_from_log": "head",
+      "best_val_loss_from_log": 0.03145312305702343
+    },
+    {
+      "run_id": "CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z",
+      "seed": 42,
+      "model": "cdcn_official_head",
+      "file_count": 11,
+      "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+      "splits": {
+        "val": {
+          "videos": 48,
+          "frames": 960,
+          "metrics": {
+            "threshold": 0.41177910249680283,
+            "apcer": 0.0,
+            "bpcer": 0.0,
+            "acer": 0.0,
+            "eer": 0.0,
+            "auc": 1.0
+          },
+          "max_metric_error": 0.0,
+          "max_aggregation_error": 0.0,
+          "false_accepts": 0,
+          "false_rejects": 0,
+          "scores_sha256": "1e92a03002dda249e0d7e95fe237f211cabe7f472b937c6776a2447b533738c8"
+        }
+      },
+      "checkpoint": {
+        "sha256": "b137aff24e2f5801487b7ae128f04e0c75451e73aac79206cbd3018e2f46e6e3",
+        "bytes": 9023671,
+        "val_loss": 0.03145312624061868,
+        "state_tensors": 79
+      },
+      "status": "validation_complete",
+      "epochs_logged": 1,
+      "best_epoch_from_log": 1,
+      "best_stage_from_log": "head",
+      "best_val_loss_from_log": 0.03145312624061868
+    }
+  ],
+  "e1_e2_backbone_tensors_identical": 73,
+  "e2_initial_checkpoint_matches_e1": true,
+  "e2_freeze_hashes_match": true,
+  "paired_errors": {
+    "both_correct": 355,
+    "fixed_by_e2": 0,
+    "new_error_e2": 0,
+    "both_wrong": 5
+  },
+  "both_wrong_videos": [
+    {
+      "video_id": "casia_s21_vHR_1",
+      "label": 1,
+      "score_e1": 0.086989301815629,
+      "score_e2": 0.043981666583567856
+    },
+    {
+      "video_id": "casia_s23_v2",
+      "label": 1,
+      "score_e1": 0.11092206872999669,
+      "score_e2": 0.08368728533387185
+    },
+    {
+      "video_id": "casia_s30_v2",
+      "label": 1,
+      "score_e1": 0.00873868454946205,
+      "score_e2": 0.0029879039619117977
+    },
+    {
+      "video_id": "casia_s31_v1",
+      "label": 1,
+      "score_e1": 0.17362117320299147,
+      "score_e2": 0.31187819316983223
+    },
+    {
+      "video_id": "casia_s39_v1",
+      "label": 1,
+      "score_e1": 0.1790608823299408,
+      "score_e2": 0.385063324123621
+    }
+  ]
+}

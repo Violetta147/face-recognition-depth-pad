@@ -1,0 +1,34 @@
+{
+  "criterion": "minimum declared validation criterion within each stage",
+  "configured_selection_metric": "classification_bce",
+  "reported_stage": "joint",
+  "stages": [
+    {
+      "stage": "depth",
+      "stage_index": 1,
+      "epoch": 1,
+      "global_epoch": 1,
+      "val_loss": 0.021377562763882214,
+      "selection_metric": "val_loss",
+      "selection_value": 0.021377562763882214
+    },
+    {
+      "stage": "head",
+      "stage_index": 2,
+      "epoch": 1,
+      "global_epoch": 2,
+      "val_loss": 0.5004344301919142,
+      "selection_metric": "classification_bce",
+      "selection_value": 0.5004344301919142
+    },
+    {
+      "stage": "joint",
+      "stage_index": 3,
+      "epoch": 1,
+      "global_epoch": 3,
+      "val_loss": 0.2578119859099388,
+      "selection_metric": "classification_bce",
+      "selection_value": 0.22907143253833057
+    }
+  ]
+}

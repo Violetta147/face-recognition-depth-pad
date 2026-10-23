@@ -1,0 +1,10 @@
+{
+  "source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+  "zip_sha256": "fdc0de363b3db2822a380790e112ba4111eebd6e9ee3615501e36f280750afdc",
+  "zip_bytes": 107775,
+  "source_files": 67,
+  "notebook_sha256": "c8fe472414ebc062fa1b3565449db3050e05e9e24b21f0fc029c5d9a242a7609",
+  "notebook_clean": true,
+  "gpu_training_executed": false,
+  "test_scoring_executed": false
+}

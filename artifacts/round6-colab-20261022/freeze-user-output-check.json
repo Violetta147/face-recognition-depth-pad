@@ -1,0 +1,38 @@
+{
+  "source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+  "freeze_sha256": "1a669e3878c561abfcd245a12eb2d4d8edb434af1a8854aecc1bcdd89a0e43a1",
+  "runs": {
+    "E1_43": {
+      "run": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z",
+      "frozen_files_verified": 13
+    },
+    "E1_44": {
+      "run": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z",
+      "frozen_files_verified": 13
+    },
+    "E1_45": {
+      "run": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z",
+      "frozen_files_verified": 13
+    },
+    "E3_43": {
+      "run": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z",
+      "frozen_files_verified": 14
+    },
+    "E3_44": {
+      "run": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z",
+      "frozen_files_verified": 14
+    },
+    "E3_45": {
+      "run": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z",
+      "frozen_files_verified": 14
+    }
+  },
+  "checks": {
+    "exactly_six_runs": true,
+    "all_frozen_hashes_match": true,
+    "registration_and_environment_binding_matches": true,
+    "paired_initializer_hashes_match": true,
+    "no_test_artifacts_before_test": true,
+    "candidate_fixed_E3": true
+  }
+}

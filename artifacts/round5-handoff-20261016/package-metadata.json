@@ -1,0 +1,22 @@
+{
+  "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+  "excluded_executed_notebooks": [
+    "DeepFace-PAD/notebooks/E0.ipynb"
+  ],
+  "files": {
+    "DeepFace-PAD-Round5-source.zip": {
+      "sha256": "5cc476f61c28afa2fcbd8cbe27ec2155d9e190492abfe64d538296c0e18fb0fa",
+      "bytes": 468232
+    },
+    "Face_PAD_Round5_CASIA_E3_E4.ipynb": {
+      "sha256": "d501840a6c4637cb259f8b490b594b7bb27d6ba7475d4dfce17417278cdeb1f9",
+      "bytes": 20528
+    }
+  },
+  "source_bundle_validation": {
+    "passed": 70,
+    "skipped": 1,
+    "subtests_passed": 26,
+    "skip_reason": "private presentation binary is intentionally not in the source archive"
+  }
+}

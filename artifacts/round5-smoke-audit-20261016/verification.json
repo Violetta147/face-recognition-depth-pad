@@ -1,0 +1,128 @@
+{
+  "status": "PASS: technical smoke gate; not evidence of improvement",
+  "runs": {
+    "E3": {
+      "run_id": "CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_SMOKE_seed42_20261015T201251Z",
+      "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+      "config_sha256": "55c136f75eb175dbc760644e4a45350b4793436ac97ef6d532dd427f1bb4cd5c",
+      "checkpoint_sha256": "d0aa5fa4d67b5da12bbfac933ac8e15240ade6854d94536f7566c6f281c69de7",
+      "stages": [
+        {
+          "stage": "joint",
+          "epoch": 1,
+          "train_loss": 0.6265258020410935,
+          "val_loss": 0.5191971190273762,
+          "val_selection_loss": 0.4893147165576617
+        }
+      ],
+      "validation": {
+        "threshold": 0.5008602112531662,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "validation_frames": 960,
+      "validation_videos": 48,
+      "validation_frame_errors": 16,
+      "classification_bce_from_scores": 0.48931471083475336,
+      "frozen_stage_check": null,
+      "test_artifacts_present": false
+    },
+    "E3b": {
+      "run_id": "CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_SMOKE_seed42_20261015T201352Z",
+      "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+      "config_sha256": "46e189cb6845727b4eae983803854bafa104665503294498b2e66be2e25c9fd1",
+      "checkpoint_sha256": "ae40bdc4df8a45fa673d2b7333f8c870214032415b4072a8e94fa97611020881",
+      "stages": [
+        {
+          "stage": "depth",
+          "epoch": 1,
+          "train_loss": 0.006727550663223762,
+          "val_loss": 0.021377562763882214,
+          "val_selection_loss": 0.021377562763882214
+        },
+        {
+          "stage": "head",
+          "epoch": 1,
+          "train_loss": 0.6181119024753571,
+          "val_loss": 0.5004344301919142,
+          "val_selection_loss": 0.5004344301919142
+        },
+        {
+          "stage": "joint",
+          "epoch": 1,
+          "train_loss": 0.3450088983712097,
+          "val_loss": 0.2578119859099388,
+          "val_selection_loss": 0.22907143253833057
+        }
+      ],
+      "validation": {
+        "threshold": 0.4941986545920372,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "validation_frames": 960,
+      "validation_videos": 48,
+      "validation_frame_errors": 16,
+      "classification_bce_from_scores": 0.2290714279914989,
+      "frozen_stage_check": {
+        "head_stage_backbone_tensors_unchanged": 73,
+        "head_changed": true,
+        "joint_backbone_changed": true
+      },
+      "test_artifacts_present": false
+    },
+    "E4": {
+      "run_id": "CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_SMOKE_seed42_20261015T201557Z",
+      "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+      "config_sha256": "9629ac21b199b9930fabf4cdfef2839f8757c192667ba716ad644e62dabfb804",
+      "checkpoint_sha256": "815100c80fc6f91d89ca325d5457830046e7d80d804c4e2bedab123f56deb13e",
+      "stages": [
+        {
+          "stage": "depth",
+          "epoch": 1,
+          "train_loss": 0.006699073522759136,
+          "val_loss": 0.021267253100397506,
+          "val_selection_loss": 0.021267253100397506
+        },
+        {
+          "stage": "head",
+          "epoch": 1,
+          "train_loss": 0.08380041184524695,
+          "val_loss": 0.0508560659053425,
+          "val_selection_loss": 0.5237137620647748
+        },
+        {
+          "stage": "joint",
+          "epoch": 1,
+          "train_loss": 0.03337613731467475,
+          "val_loss": 0.03811322155719002,
+          "val_selection_loss": 0.32966356799006463
+        }
+      ],
+      "validation": {
+        "threshold": 0.3917343780398369,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "validation_frames": 960,
+      "validation_videos": 48,
+      "validation_frame_errors": 11,
+      "classification_bce_from_scores": 0.32966356960896775,
+      "frozen_stage_check": {
+        "head_stage_backbone_tensors_unchanged": 73,
+        "head_changed": true,
+        "joint_backbone_changed": true
+      },
+      "test_artifacts_present": false
+    }
+  }
+}

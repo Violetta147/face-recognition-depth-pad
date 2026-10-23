@@ -1,0 +1,37 @@
+{
+  "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+  "selection_source": "validation",
+  "selected_variant": "E3",
+  "runs": {
+    "E3": {
+      "run": "CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z",
+      "hashes": {
+        "config.yaml": "0877306f04c6fcae3d0cf2a02df238471ec7289f518f13760ed37c3a527be87b",
+        "best.ckpt": "0e63d29420f1d7d816ea203ff35db03dc60ed6245cb86d7a5a332f32ddcffe8f",
+        "threshold.json": "91e43ecd2b764f3223f76ae6f780eadd477bca814a3db1fea0698123eb5c6277",
+        "metrics.json": "d7e66f425074b9f756cb0be2e31144aff67fbdc39d23aa784e205b280f2f1cf6",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    },
+    "E3b": {
+      "run": "CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z",
+      "hashes": {
+        "config.yaml": "2310ba00cf4191ada38883a9956f77a87ddbfd14f6064a354e5facabd91dd85b",
+        "best.ckpt": "a633af9634fde80a5916c1b9cc35f869354742b677ce104a69d4febff0d6f85b",
+        "threshold.json": "a1f455e4370e30315276d88d582783b494e9955e0545ed35b523b5337d217dcc",
+        "metrics.json": "305d63706005b8140fd87914125c6f91f169273133c23d09b7a4dc976760d445",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    },
+    "E4": {
+      "run": "CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z",
+      "hashes": {
+        "config.yaml": "733e91a27b93894ed6e3bae20b0a3ee99562abdca4a0a8be630e4eaa96a3edc5",
+        "best.ckpt": "5dd4bda1153fe79fcfe590eb488c70dd63d39e89421729b88ad9d36140154231",
+        "threshold.json": "612a88ec9d8d076a1cdfadca434d1dd78dcec373624903769ce239ef0f2f4f8e",
+        "metrics.json": "4feb12550f255c00cc54cfa504df62ef321691aaf036f5b7ade29a6b19f46739",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    }
+  }
+}

@@ -27,7 +27,9 @@ mẫu, giữ artwork nền/master, xuất trang 1/6/15 thành cover/content/clos
 Template gốc không thay đổi. Font nội dung Arial có dấu tiếng Việt; font UTM
 Neutra của mẫu chưa có trên máy. Ảnh khoa học được chép nguyên byte, không crop,
 đổi màu, thay tương phản hoặc dựng lại dữ liệu. File `assets/provenance.json`
-ghi nguồn và SHA-256. Asset chứa ảnh CASIA nên không đưa vào Git công khai.
+ghi nguồn và SHA-256. Asset và các bản xuất đã được đưa vào Git ngày
+23/10/2026 để tiếp tục nghiên cứu. Bản đã khóa là
+`exports/Bao_cao_DeepFace_PAD_Khong_HTML.pptx`; đây vẫn là nội dung đến Lượt 5.
 
 Xuất với Marp CLI 4.5.1 (đã dùng khi kiểm tra):
 

@@ -1,0 +1,8 @@
+{
+  "reason": "Official ONNX backend; NumPy NMS fallback; legacy torch.onnx exporter for PyTorch 2.x",
+  "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+  "torch": "2.11.0+cu128",
+  "three_ddfa_commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+  "worker_script_sha256": "0426ffebbf89d5aca0d76a034e92d3cc8abe0b93b86f7728fc80cd99b07ee26a",
+  "removed_invalid_onnx": []
+}

@@ -1,0 +1,5 @@
+{
+  "reason": "Move contrastive kernels and target to prediction device and dtype",
+  "torch": "2.11.0+cu128",
+  "losses_sha256": "d34ee4555235d60b385ffbde8a414b98644a930b7012d39caa43c9b016f57fde"
+}

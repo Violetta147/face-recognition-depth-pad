@@ -30,7 +30,6 @@ data/manifests/*.csv
 *.egg-info/
 .codex/runtime.local.json
 .codex/inventory.local.json
-/notebooks/Face_PAD_Round5_CASIA_E3_E4_Executed_20261022.ipynb
 
 # New measurements stay local until their evidence is explicitly selected.
 outputs/

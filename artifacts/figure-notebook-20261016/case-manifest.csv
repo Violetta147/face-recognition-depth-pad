@@ -1,0 +1,2 @@
+sample_id,split,subject_id,video_id,frame_index,image_path,depth_path,label,attack_type,quality,source_split,role
+casia_s32_v2_f000069,test,casia_s32,casia_s32_v2,69,test/live/s12v2f69.png,depth/casia_s32_v2_f000069.npy,1,live,low,test,E3_new_error

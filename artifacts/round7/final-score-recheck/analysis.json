@@ -1,0 +1,55 @@
+{
+  "status": "PASS: saved CSV analysis only",
+  "paired_counts": {
+    "43": {
+      "corrected": 6,
+      "new_errors": 0,
+      "both_wrong": 6,
+      "both_correct": 348
+    },
+    "44": {
+      "corrected": 1,
+      "new_errors": 4,
+      "both_wrong": 4,
+      "both_correct": 351
+    },
+    "45": {
+      "corrected": 2,
+      "new_errors": 1,
+      "both_wrong": 5,
+      "both_correct": 352
+    }
+  },
+  "selection_rule": "Within each seed/outcome/attack_type, lexicographically first video_id; frame at sorted temporal index len//2 (11th of 20); no RGB inspection.",
+  "selected_cases": 20,
+  "sources": {
+    "artifacts\\round6-test-audit-20261022\\comparison_freeze.json": "1a669e3878c561abfcd245a12eb2d4d8edb434af1a8854aecc1bcdd89a0e43a1",
+    "artifacts\\round6-test-audit-20261022\\registration.json": "3be390ec92ae69e3294d5970e624854fb46b8b8f90b4a5f3ede883b2c4df0378",
+    "artifacts\\round6-test-audit-20261022\\casia_fasd_debug_with_depth.csv": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\test_scores.csv": "7fb54ca16f4520dfcd1c6edecbefb5f9ca874e45ba756745da5e912f2a2becb7",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\test_frame_scores.csv": "35f7760163c31809fbc7a49a3c288d6ad132cd0653d67077c54e65f825c651ad",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\threshold.json": "bfde3df5f6569f415c3a227c97a6151f9848ff707bd716a5bdf878741e1411a4",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z\\config.yaml": "5c41ef04e02556e7e11bcd71d921ee6ec850de6e66bed77eb52651cc0e104be2",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\test_scores.csv": "7c640d1096ad35dc2b55fa3120a64b8ca863f0d8c89c5fb8e977c7b027fe6320",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\test_frame_scores.csv": "3e9be482379b6376742fe088d0d4f5aa6a2cd8c65bdaaf1919cb9153a87ecb3a",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\threshold.json": "b2471bd5c980219eba1c5ec30e16b900a0a5ad6d84cd41b69c22456da26627d3",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z\\config.yaml": "c88f82d13351b37091bbd42ceb3aef5607158a6b2e5da4a0535957730d734d67",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\test_scores.csv": "eae49c03206b960c26338a0e298e72b262b00c68c1833d704ed7525bbb1f281c",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\test_frame_scores.csv": "c34236ce55481db7a447e6cda04c2a891052c1e258a6c38625604a42482f13ad",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\threshold.json": "dcbe3454fac76dfc3195e063b4a014f9df428c8a1c1e29045717f3f6c37ff4c2",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z\\config.yaml": "cd5739d554eb6e6c93dfac158235e1473b328d479b583300517a056e43ce06a1",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\test_scores.csv": "6326e553107db8791d35ae9bc0dd29784b170258c58e79abd4ac98b38c4db100",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\test_frame_scores.csv": "472eaa7122ac2e69a14a90cb05519b278af595ca83ac620800970183cd61f428",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\threshold.json": "0d404145fcaf9c60d14e453745724218066cffa9183cbad2db6a4cc44024d5c0",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z\\config.yaml": "1e7e6c59fec7214c4d7efaf74c10911baa6b612731dcfd1f0156718e68920c81",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\test_scores.csv": "928a8e1ca39c723f2d9509f8fed0f160871cd82b2b01757941ed80f1a9978211",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\test_frame_scores.csv": "4401d0d320c5dd5e6b163e07342d4a09a956e412133fa5b2c4ba82725f69b3e7",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\threshold.json": "633ce2fd12b0319d667da5f16c25487e1ad94ac1371d69a0b3aae36c0e91d425",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z\\config.yaml": "8234b8a5095a02e03d298af32bc1afd40fc69989a2f9fe80d38962e9397b240d",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\test_scores.csv": "4f5af90c886dd52fc5fc14b63230c5a546c8e54ab70a0685218f10ad2c88c4f2",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\test_frame_scores.csv": "1c8fab51653b8d82ca5f141fb2740ee4ebc77b63a64dd1ddc41fb3522b1e4cc3",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\threshold.json": "72fa89323fd51e120f2522224093e0ef6daebc0dd00ae41cd4f0ed99ffccc73c",
+    "artifacts\\round6-test-audit-20261022\\ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z\\config.yaml": "0462f7e5c247e2f34400c9cdc728bf867485b00ee89911e257c616dc2bf85f27"
+  },
+  "scope": "Same 360 videos repeated over seeds, not 1080 independent videos. Quality is metadata, not lighting/blur measurement."
+}

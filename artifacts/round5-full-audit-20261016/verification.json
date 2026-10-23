@@ -1,0 +1,242 @@
+{
+  "status": "PASS: full validation audit",
+  "source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+  "selected_variant": "E3",
+  "selection_source": "validation",
+  "runs": {
+    "E3": {
+      "run_id": "CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z",
+      "epochs_trained": 16,
+      "checkpoint": {
+        "stage": "joint",
+        "epoch": 10,
+        "global_epoch": 10,
+        "val_loss": 0.02766356567541758,
+        "selection_metric": "classification_bce",
+        "selection_value": 0.01090198225332036
+      },
+      "validation": {
+        "threshold": 0.8496189594268799,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "classification_bce_recomputed": 0.010901959350528245,
+      "depth_validation": {
+        "target": "fixed pseudo-depth after PadDataset normalization; not true 3D",
+        "mask": "target > 1e-6; masked metric for live only",
+        "prediction_clipped": false,
+        "by_class": {
+          "attack": {
+            "frames": 720,
+            "videos": 36,
+            "frame_mean_mae_full": 0.017944513956369215,
+            "video_mean_mae_full": 0.017944513956369215,
+            "target_mask_pixels": 0,
+            "pixel_weighted_mae_target_mask": null
+          },
+          "live": {
+            "frames": 240,
+            "videos": 12,
+            "frame_mean_mae_full": 0.09842875571921468,
+            "video_mean_mae_full": 0.09842875571921468,
+            "target_mask_pixels": 203982,
+            "pixel_weighted_mae_target_mask": 0.11706189215992667
+          }
+        },
+        "split": "val",
+        "checkpoint_sha256": "0e63d29420f1d7d816ea203ff35db03dc60ed6245cb86d7a5a332f32ddcffe8f",
+        "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+      },
+      "stages_selected": [
+        {
+          "stage": "joint",
+          "stage_index": 1,
+          "epoch": 10,
+          "global_epoch": 10,
+          "val_loss": 0.02766356567541758,
+          "selection_metric": "classification_bce",
+          "selection_value": 0.01090198225332036
+        }
+      ],
+      "test_artifacts_present": false,
+      "hashes": {
+        "config.yaml": "0877306f04c6fcae3d0cf2a02df238471ec7289f518f13760ed37c3a527be87b",
+        "best.ckpt": "0e63d29420f1d7d816ea203ff35db03dc60ed6245cb86d7a5a332f32ddcffe8f",
+        "threshold.json": "91e43ecd2b764f3223f76ae6f780eadd477bca814a3db1fea0698123eb5c6277",
+        "metrics.json": "d7e66f425074b9f756cb0be2e31144aff67fbdc39d23aa784e205b280f2f1cf6",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    },
+    "E3b": {
+      "run_id": "CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z",
+      "epochs_trained": 16,
+      "checkpoint": {
+        "stage": "joint",
+        "epoch": 2,
+        "global_epoch": 10,
+        "val_loss": 0.031229962130115987,
+        "selection_metric": "classification_bce",
+        "selection_value": 0.0145661915349289
+      },
+      "validation": {
+        "threshold": 0.7518128156661987,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "classification_bce_recomputed": 0.014566181694433704,
+      "depth_validation": {
+        "target": "fixed pseudo-depth after PadDataset normalization; not true 3D",
+        "mask": "target > 1e-6; masked metric for live only",
+        "prediction_clipped": false,
+        "by_class": {
+          "attack": {
+            "frames": 720,
+            "videos": 36,
+            "frame_mean_mae_full": 0.016646123718886782,
+            "video_mean_mae_full": 0.016646123718886782,
+            "target_mask_pixels": 0,
+            "pixel_weighted_mae_target_mask": null
+          },
+          "live": {
+            "frames": 240,
+            "videos": 12,
+            "frame_mean_mae_full": 0.10442023780196905,
+            "video_mean_mae_full": 0.10442023780196903,
+            "target_mask_pixels": 203982,
+            "pixel_weighted_mae_target_mask": 0.12408936753173753
+          }
+        },
+        "split": "val",
+        "checkpoint_sha256": "a633af9634fde80a5916c1b9cc35f869354742b677ce104a69d4febff0d6f85b",
+        "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+      },
+      "stages_selected": [
+        {
+          "stage": "depth",
+          "stage_index": 1,
+          "epoch": 1,
+          "global_epoch": 1,
+          "val_loss": 0.019637357337239793,
+          "selection_metric": "val_loss",
+          "selection_value": 0.019637357337239793
+        },
+        {
+          "stage": "head",
+          "stage_index": 2,
+          "epoch": 4,
+          "global_epoch": 8,
+          "val_loss": 0.05544937097001821,
+          "selection_metric": "classification_bce",
+          "selection_value": 0.05544937097001821
+        },
+        {
+          "stage": "joint",
+          "stage_index": 3,
+          "epoch": 2,
+          "global_epoch": 10,
+          "val_loss": 0.031229962130115987,
+          "selection_metric": "classification_bce",
+          "selection_value": 0.0145661915349289
+        }
+      ],
+      "test_artifacts_present": false,
+      "hashes": {
+        "config.yaml": "2310ba00cf4191ada38883a9956f77a87ddbfd14f6064a354e5facabd91dd85b",
+        "best.ckpt": "a633af9634fde80a5916c1b9cc35f869354742b677ce104a69d4febff0d6f85b",
+        "threshold.json": "a1f455e4370e30315276d88d582783b494e9955e0545ed35b523b5337d217dcc",
+        "metrics.json": "305d63706005b8140fd87914125c6f91f169273133c23d09b7a4dc976760d445",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    },
+    "E4": {
+      "run_id": "CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z",
+      "epochs_trained": 16,
+      "checkpoint": {
+        "stage": "joint",
+        "epoch": 6,
+        "global_epoch": 14,
+        "val_loss": 0.022527026072718098,
+        "selection_metric": "classification_bce",
+        "selection_value": 0.08738543752891322
+      },
+      "validation": {
+        "threshold": 0.418625445663929,
+        "apcer": 0.0,
+        "bpcer": 0.0,
+        "acer": 0.0,
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "classification_bce_recomputed": 0.08738543722911093,
+      "depth_validation": {
+        "target": "fixed pseudo-depth after PadDataset normalization; not true 3D",
+        "mask": "target > 1e-6; masked metric for live only",
+        "prediction_clipped": false,
+        "by_class": {
+          "attack": {
+            "frames": 720,
+            "videos": 36,
+            "frame_mean_mae_full": 0.007809127068544007,
+            "video_mean_mae_full": 0.007809127068544007,
+            "target_mask_pixels": 0,
+            "pixel_weighted_mae_target_mask": null
+          },
+          "live": {
+            "frames": 240,
+            "videos": 12,
+            "frame_mean_mae_full": 0.13075966111694773,
+            "video_mean_mae_full": 0.13075966111694773,
+            "target_mask_pixels": 203982,
+            "pixel_weighted_mae_target_mask": 0.15584574891079256
+          }
+        },
+        "split": "val",
+        "checkpoint_sha256": "5dd4bda1153fe79fcfe590eb488c70dd63d39e89421729b88ad9d36140154231",
+        "manifest_sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+      },
+      "stages_selected": [
+        {
+          "stage": "depth",
+          "stage_index": 1,
+          "epoch": 1,
+          "global_epoch": 1,
+          "val_loss": 0.020240555446412144,
+          "selection_metric": "val_loss",
+          "selection_value": 0.020240555446412144
+        },
+        {
+          "stage": "head",
+          "stage_index": 2,
+          "epoch": 4,
+          "global_epoch": 8,
+          "val_loss": 0.005542108420680355,
+          "selection_metric": "classification_bce",
+          "selection_value": 0.18222731867184241
+        },
+        {
+          "stage": "joint",
+          "stage_index": 3,
+          "epoch": 6,
+          "global_epoch": 14,
+          "val_loss": 0.022527026072718098,
+          "selection_metric": "classification_bce",
+          "selection_value": 0.08738543752891322
+        }
+      ],
+      "test_artifacts_present": false,
+      "hashes": {
+        "config.yaml": "733e91a27b93894ed6e3bae20b0a3ee99562abdca4a0a8be630e4eaa96a3edc5",
+        "best.ckpt": "5dd4bda1153fe79fcfe590eb488c70dd63d39e89421729b88ad9d36140154231",
+        "threshold.json": "612a88ec9d8d076a1cdfadca434d1dd78dcec373624903769ce239ef0f2f4f8e",
+        "metrics.json": "4feb12550f255c00cc54cfa504df62ef321691aaf036f5b7ade29a6b19f46739",
+        "manifest_checksum.json": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+      }
+    }
+  }
+}

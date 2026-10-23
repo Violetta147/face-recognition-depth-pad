@@ -1,0 +1,11 @@
+model,stage,start,epochs
+E0,joint,0,5
+E1,depth,0,30
+E2,head,0,10
+E3,joint,0,16
+E3b,depth,0,4
+E3b,head,4,4
+E3b,joint,8,8
+E4,depth,0,4
+E4,head,4,4
+E4,joint,8,8

@@ -1,0 +1,25 @@
+{
+  "source_commit": "a006149996686cfc9e6dbd29f8fd5c90bf1997ba",
+  "source_lock_files_verified": 67,
+  "zip_read_verified": true,
+  "notebook_clean_verified": true,
+  "isolated_cpu_exit_code": 0,
+  "command": [
+    "C:\\Users\\violet\\miniconda3\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_round6.py",
+    "tests/test_round6_notebook.py",
+    "tests/test_preflight.py",
+    "tests/test_training_stages.py",
+    "tests/test_official_depth_head.py",
+    "tests/test_metrics.py",
+    "tests/test_manifest.py",
+    "tests/test_depth_jobs.py",
+    "tests/test_depth_qa.py"
+  ],
+  "training_executed": false,
+  "casia_inference_executed": false,
+  "feedback": "..................................................................       [100%]\n66 passed in 36.96s\n"
+}

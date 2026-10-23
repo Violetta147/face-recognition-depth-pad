@@ -1,0 +1,392 @@
+{
+  "scope": "verified frozen single-seed numeric figures",
+  "source_files": {
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\config.yaml": "64b5758279c11fdb699bac76ea5806194b7053003ba85b4797e5c6ca76ea512d",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\best.ckpt": "b8057fc7f7b3cce74fca079377f09ece1277dc9c8bfd10bb25f78b507c83502c",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\threshold.json": "446012e4662dcfb1272a81f42de2d7feda582ccae92123d80f5f872707b2f7cf",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\train_log.csv": "d359c31d98eaf8f270b5ea490cc7ac3d26425e2fe2852f387182af53e26ea9ea",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\metrics.json": "8b0b8e126fa7a779596d6d0bd93d45a31be6b92c03207ff19c677878d8ce24f8",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_metrics.json": "f25089b2b201992ab594d92eed450685bba3aa9ba1b78e38ccd3bd866fd7b5ca",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\val_scores.csv": "cbec50adb6b73a31a22d89860e71b5249ff3c5e1c3c81386ff660086a7901114",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_scores.csv": "41612ea1f8996d7d0182321aec3a4ab937f6a350d028bddfe8b922278bfd734e",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\val_frame_scores.csv": "79cfd3b670b68bd8a619cf4d42b9c75805ccf816bb8a37082212cc8a9a80d0bb",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_frame_scores.csv": "63fd5c301114ced79b9b08f68287b110a13cd23d8ce5d7018560b627f96fd790",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\config.yaml": "bea4dd0a2ab157aa0e74958ecaafaa45681855f46a1c9543ccb6effe08e7d819",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\best.ckpt": "679810c001e526cafed8685fe731a7d5c539fd3fb9c5a9fb31725b7dbdf57024",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\threshold.json": "3b7d640081f53f5f6ae5ff38dfbabb3bca0f1bbb98891a41f353a9122de2e34b",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\train_log.csv": "fd06ffa174282ae678019da2ca8c13ac18c2fe4280a07713317866358e5464e0",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\metrics.json": "f14a4bf8faa078469bed3ac0045678f1488ff1178a7741b2e0b1fe87490d0905",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_metrics.json": "3e8f84d1f1f85ec62c567a54b8178ec3e16270c95c69a26598727ec077ec3c63",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\val_scores.csv": "36193c3fe41fd336e6fb018620addbd34a161cbdbf10fb0f1fbb9d750f7215cc",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_scores.csv": "48df61d9a1d1249c7ef8b25e0853f75c56f8d0d99af5f8da92ac77abe5198368",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\val_frame_scores.csv": "83b1a20ed97325acf5058f46ec86c557134d3ce8f5c8b7e72f40ef39f62fbeb2",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_frame_scores.csv": "f5f0f9c8fbb29290fc3f4ea65e96c93f7e1748c62c720086b120b15fb7371615",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\config.yaml": "4bf85370a27160104ac990c3fe9655155755b8823a27204d80878c056c3b7323",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\best.ckpt": "a49d7c717e4cde27eac075de2d848c8816df3d27fcb0c01ea76ef752e15ff1b5",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\threshold.json": "5cf33d07f116e6bf1a907112e2d844d5d669a7299b71cb9f21bce862e60c19dd",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\train_log.csv": "7e0727a26c0fb14318b12bf580b75add9c59d90cd6f968c7e0327ae729cea127",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\metrics.json": "c52b178ba6cb43de1d7d49900c5873efec32980d11ac8fd9120517de121b81be",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_metrics.json": "74ae4baa2f159d6b46e3ae5fa2a35e535c0a96d881f8c3dd404516e332b6ee7f",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\val_scores.csv": "3d6d01b9cff269e9d3badb0db1881120e539645c7a3714c6adde11c0a2cdcd21",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_scores.csv": "cc04c03dcc6b577bce548a98b6d93730ab5af63b30b4c6f9c6380adca761c0ba",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\val_frame_scores.csv": "4f18eb495efee0baf6937092bfe5eb7ddb814c3258e672a313c68146a7482922",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_frame_scores.csv": "ad458840c7c21a65d7a8698e0b7b375c14baaab746b0010e513f37b200bcd09f",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\config.yaml": "0877306f04c6fcae3d0cf2a02df238471ec7289f518f13760ed37c3a527be87b",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\best.ckpt": "0e63d29420f1d7d816ea203ff35db03dc60ed6245cb86d7a5a332f32ddcffe8f",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\threshold.json": "91e43ecd2b764f3223f76ae6f780eadd477bca814a3db1fea0698123eb5c6277",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\train_log.csv": "6244c95cc72560c9e64164e73d670c2fce4fda77ec7fdc754753328e0daef0a7",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\metrics.json": "d7e66f425074b9f756cb0be2e31144aff67fbdc39d23aa784e205b280f2f1cf6",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\test_metrics.json": "08cd382d26ce5da21c026c9465a3eaa5e6a3d6693803e03519f36e0e6a4dca14",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\val_scores.csv": "9babb9c118607a9a720f83e26f6ab6f796520b21714ed6ee43bc7af0fcd848c5",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\test_scores.csv": "d831b363125a22fe9641f0b5b4dd3e45b751eaa574b2b791c7c329b79c8eedfa",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\val_frame_scores.csv": "d89bd6d369ac2654983fc90c390fc4c375fa39ba725b3a0f5074524231ae1220",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed42_20261015T203645Z\\test_frame_scores.csv": "44479b9813a235dec93c0ee2577b36ae41bf45b7e87569a8c020a026b39e1a01",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\config.yaml": "2310ba00cf4191ada38883a9956f77a87ddbfd14f6064a354e5facabd91dd85b",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\best.ckpt": "a633af9634fde80a5916c1b9cc35f869354742b677ce104a69d4febff0d6f85b",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\threshold.json": "a1f455e4370e30315276d88d582783b494e9955e0545ed35b523b5337d217dcc",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\train_log.csv": "108a12d09599183759b87d3a9d298bc5a4272ac3a49d145506ee331cf5281ca5",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\metrics.json": "305d63706005b8140fd87914125c6f91f169273133c23d09b7a4dc976760d445",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\test_metrics.json": "a409f5fa25c4b394a5d763166ed811df302782937b01962bdb3ea950c140572d",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\val_scores.csv": "2c7fd73d87311cb045856196bc84ac6ab0510e6e7aed8a9c09f956df255ac559",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\test_scores.csv": "f9816a029fe3cbdeeef1beb34e9dcf911b34b50f0d15648fd8d3939fc07301d2",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\val_frame_scores.csv": "a0411d774c40054f67707dfa72fed9dd8bbc3c74074d9fda33837b49b8756d9a",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E3B_CDCN_OFFICIAL_STAGED_BCE_seed42_20261015T204943Z\\test_frame_scores.csv": "e0840675981d21fa830908119178df3277a9eced0df127b7660437a7bf182647",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\config.yaml": "733e91a27b93894ed6e3bae20b0a3ee99562abdca4a0a8be630e4eaa96a3edc5",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\best.ckpt": "5dd4bda1153fe79fcfe590eb488c70dd63d39e89421729b88ad9d36140154231",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\threshold.json": "612a88ec9d8d076a1cdfadca434d1dd78dcec373624903769ce239ef0f2f4f8e",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\train_log.csv": "72948b85ae88ac0bfda7375b2a5cbe8da6b5b1939f88a1baa7b5a44671435f7d",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\metrics.json": "4feb12550f255c00cc54cfa504df62ef321691aaf036f5b7ade29a6b19f46739",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\test_metrics.json": "db5ce66db9ba1dc8be00b7bb858bb8de5a6a361409bd64fa73ec37d34b9ab475",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\val_scores.csv": "669be4e88b563640fcf37f964d03cebb88c3fc264ccf6030b3d24ba3f79d868a",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\test_scores.csv": "bb16ff2f745ef1bfcd3b7e503e496c50f7fc7355c1c62fd05e7df0894fd3b6f8",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\val_frame_scores.csv": "c55f56604a6b12a33ae97b90ea72ba460af571e08e0fc164969ecbc481841fc8",
+    "G:\\My Drive\\face-pad\\runs\\CASIA_E4_CDCN_OFFICIAL_STAGED_FOCAL_seed42_20261015T210039Z\\test_frame_scores.csv": "d7d6bea07192b9f5701ed6f3680b7f5a496fed3a4bb5a403b27ec5304b7f4fcb"
+  },
+  "figures": [
+    {
+      "name": "01_pipeline",
+      "caption": "Schematic of implemented code, not measured performance. Solid arrows: inference; dashed arrows: training supervision. E0 and CDCN use different input sizes/preprocessing.",
+      "files": [
+        "png\\01_pipeline.png",
+        "pdf\\01_pipeline.pdf",
+        "svg\\01_pipeline.svg"
+      ],
+      "width_inches": 14.0,
+      "height_inches": 7.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "02_training_schedule",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. E0 joint means binary BCE training; E1 depth-only. E0/E1/E2 budgets differ from the 16-epoch E3/E3b/E4 ablation.",
+      "files": [
+        "png\\02_training_schedule.png",
+        "pdf\\02_training_schedule.pdf",
+        "svg\\02_training_schedule.svg"
+      ],
+      "width_inches": 12.0,
+      "height_inches": 5.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "03_dataset_split",
+      "caption": "50 people, 600 videos, 12,000 sampled frames. Validation subjects 4, 9, 14, 19. No detected subject/video overlap; 20 frames/video.",
+      "files": [
+        "png\\03_dataset_split.png",
+        "pdf\\03_dataset_split.pdf",
+        "svg\\03_dataset_split.svg"
+      ],
+      "width_inches": 12.0,
+      "height_inches": 4.5,
+      "png_dpi": 300
+    },
+    {
+      "name": "04_depth_QA",
+      "caption": "Recorded E1 preflight: 12,000 targets; 0 QA issues. QA verifies readable finite nonzero live / zero attack maps, not true 3D accuracy.",
+      "files": [
+        "png\\04_depth_QA.png",
+        "pdf\\04_depth_QA.pdf",
+        "svg\\04_depth_QA.svg"
+      ],
+      "width_inches": 9.0,
+      "height_inches": 4.5,
+      "png_dpi": 300
+    },
+    {
+      "name": "05_val_metrics",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Fixed validation thresholds. No multi-seed uncertainty; E3 was selected before test.",
+      "files": [
+        "png\\05_val_metrics.png",
+        "pdf\\05_val_metrics.pdf",
+        "svg\\05_val_metrics.svg"
+      ],
+      "width_inches": 14.0,
+      "height_inches": 4.2,
+      "png_dpi": 300
+    },
+    {
+      "name": "05_test_metrics",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Fixed validation thresholds. No multi-seed uncertainty; E3 was selected before test.",
+      "files": [
+        "png\\05_test_metrics.png",
+        "pdf\\05_test_metrics.pdf",
+        "svg\\05_test_metrics.svg"
+      ],
+      "width_inches": 14.0,
+      "height_inches": 4.2,
+      "png_dpi": 300
+    },
+    {
+      "name": "06_test_error_rates",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. All APCER values are zero in this sample. E1/E2 ACER 2.7778%; E3/E3b 5%; E4 4.4444%.",
+      "files": [
+        "png\\06_test_error_rates.png",
+        "pdf\\06_test_error_rates.pdf",
+        "svg\\06_test_error_rates.svg"
+      ],
+      "width_inches": 14.0,
+      "height_inches": 5.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "07_ROC",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. ROC/AUC uses video ranking across thresholds; ACER uses each model's fixed validation threshold. Right panel is an explicitly labelled zoom.",
+      "files": [
+        "png\\07_ROC.png",
+        "pdf\\07_ROC.pdf",
+        "svg\\07_ROC.svg"
+      ],
+      "width_inches": 13.0,
+      "height_inches": 5.5,
+      "png_dpi": 300
+    },
+    {
+      "name": "08_score_distributions",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Common 25 bins, normalized within each class. E1 mean depth and head sigmoid are different score scales; thresholds are model-specific.",
+      "files": [
+        "png\\08_score_distributions.png",
+        "pdf\\08_score_distributions.pdf",
+        "svg\\08_score_distributions.svg"
+      ],
+      "width_inches": 14.0,
+      "height_inches": 8.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "09_confusion_matrices",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Counts and row percentages; common color scale 0–270 videos. A live predicted as attack is a false rejection.",
+      "files": [
+        "png\\09_confusion_matrices.png",
+        "pdf\\09_confusion_matrices.pdf",
+        "svg\\09_confusion_matrices.svg"
+      ],
+      "width_inches": 13.0,
+      "height_inches": 8.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E0",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E0.png",
+        "pdf\\10_learning_E0.pdf",
+        "svg\\10_learning_E0.svg"
+      ],
+      "width_inches": 8.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E1",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E1.png",
+        "pdf\\10_learning_E1.pdf",
+        "svg\\10_learning_E1.svg"
+      ],
+      "width_inches": 8.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E2",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E2.png",
+        "pdf\\10_learning_E2.pdf",
+        "svg\\10_learning_E2.svg"
+      ],
+      "width_inches": 8.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E3",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E3.png",
+        "pdf\\10_learning_E3.pdf",
+        "svg\\10_learning_E3.svg"
+      ],
+      "width_inches": 8.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E3b",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E3b.png",
+        "pdf\\10_learning_E3b.pdf",
+        "svg\\10_learning_E3b.svg"
+      ],
+      "width_inches": 13.799999999999999,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "10_learning_E4",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Raw unsmoothed logs. Stage objectives differ: panels are separate and their losses are not comparable across stages/models.",
+      "files": [
+        "png\\10_learning_E4.png",
+        "pdf\\10_learning_E4.pdf",
+        "svg\\10_learning_E4.svg"
+      ],
+      "width_inches": 13.799999999999999,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "11_checkpoint_selection",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Common validation BCE criterion, including Focal training. Selection is within the final joint stage; E3 trained 16 joint epochs, staged models 8.",
+      "files": [
+        "png\\11_checkpoint_selection.png",
+        "pdf\\11_checkpoint_selection.pdf",
+        "svg\\11_checkpoint_selection.svg"
+      ],
+      "width_inches": 13.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "12_paired_errors",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Same 360 videos paired by ID; improved and newly wrong videos are both shown.",
+      "files": [
+        "png\\12_paired_errors.png",
+        "pdf\\12_paired_errors.pdf",
+        "svg\\12_paired_errors.svg"
+      ],
+      "width_inches": 10.0,
+      "height_inches": 4.8,
+      "png_dpi": 300
+    },
+    {
+      "name": "13_quality_errors",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Each quality group has 30 live videos. Bar labels are error counts. Quality is manifest metadata, not a new measured blur/lighting cause.",
+      "files": [
+        "png\\13_quality_errors.png",
+        "pdf\\13_quality_errors.pdf",
+        "svg\\13_quality_errors.svg"
+      ],
+      "width_inches": 12.0,
+      "height_inches": 5.0,
+      "png_dpi": 300
+    },
+    {
+      "name": "14_error_video_matrix",
+      "caption": "CASIA development protocol · seed 42 · video mean of 20 frames · 270 attack / 90 live test videos. Filtered to the union of error videos, all live in these runs; not the complete test set. × = false rejection, dot = correct.",
+      "files": [
+        "png\\14_error_video_matrix.png",
+        "pdf\\14_error_video_matrix.pdf",
+        "svg\\14_error_video_matrix.svg"
+      ],
+      "width_inches": 12.0,
+      "height_inches": 5.2,
+      "png_dpi": 300
+    }
+  ],
+  "exported_files": {
+    "CAPTIONS.csv": "d8f161fb8bcd26323e76fa8b7fb9e718b1082058458a002f95ae68ea9bdc32e3",
+    "data\\02_training_schedule.csv": "4234917cffe5332583694151e1cc6672c02d6352c2fb1ccc7e56a927c2269f42",
+    "data\\03_dataset_split.csv": "61beff60f628af3f3f27f79858d5fc7cd6278a0a6c0056be02e6d083d5f03cab",
+    "data\\04_depth_QA.csv": "df53aa00b54fa95797d7d7785e4eb26b12be4bec84bd7ed75a91983a2d661561",
+    "data\\05_test_metrics.csv": "f05dfe5935ea21a986e5e17c0c1fcd39faf72f53b525a4fa86bbe486c3c78863",
+    "data\\05_val_metrics.csv": "e59659927d3076903bd2f489d91f75d07df3cf34afa734a48ae99c6ec98a7bf9",
+    "data\\06_test_error_rates.csv": "f05dfe5935ea21a986e5e17c0c1fcd39faf72f53b525a4fa86bbe486c3c78863",
+    "data\\07_ROC.csv": "3a6c032e563f85990b8ed914843cc0c66890db49bc0a8e6143b31402a67f257a",
+    "data\\08_score_distributions.csv": "c00bfe18bdeca7fb2e778b952a9abd187c781180811e0749e497d87a1966fb06",
+    "data\\09_confusion_matrices.csv": "a30973828e712c31c9adedbe8643997ebaf464d2041830fb4d01a5e591ebb14e",
+    "data\\10_learning_E0.csv": "d702e29b160863cbd8db550fc30f49a98ce3d922177ae1daccd711f218d822a2",
+    "data\\10_learning_E1.csv": "155d2e0e955bc6491ac3339cfc2ed323fb26d1df9d0decc6a40fb9bba8717ebf",
+    "data\\10_learning_E2.csv": "de51526f0a28ddb36260ad043be8b8bee099c6e1571913c7a8efa10bf379b817",
+    "data\\10_learning_E3.csv": "5977db7d21f58ba7b3309589529857c58fac9c72bb51499ed6f9b0558a63f9b1",
+    "data\\10_learning_E3b.csv": "3ee451eacc54e58522f6461970d89283ee7b3ad960af4382c33d647da736563c",
+    "data\\10_learning_E4.csv": "daecaea7ae4ade65151af3e034b0691c5975a2152283bdee5e8310092e1f142b",
+    "data\\11_checkpoint_selection.csv": "46db6fd9dc6b524e2163fa77a5e315058b4c3b389dd51cd643a7072e06de65c3",
+    "data\\12_paired_errors.csv": "9cb1755c9fb085193e5c800d123d895c7b1412dbe6687e0abd780dbbcc1706f2",
+    "data\\13_quality_errors.csv": "74ce1cd6549b043136c473f7cc66e5698d9544a9dad478c0ea44d892dbaf8004",
+    "data\\14_error_video_matrix.csv": "7314abb6ee291cf04546471a642bd5bb342a14c97ab693e755d97f96d6e5a35a",
+    "data\\case_selection.csv": "c64878c5c30f0bed2a37c55e626c6c7b02ce8b7c861f6cc483a13b7bfd83ba40",
+    "data\\histogram_bins.csv": "2d06aa45abe4595a17f33ef526bf48ae3f4a2b0351176a9a29efc2d5a0c92870",
+    "INDEX.html": "df4a362c22c521f48ed04105d52290c1a4410a83e51b76541211985039cf8e9d",
+    "pdf\\01_pipeline.pdf": "41673ec2755ea7ba01f53590ea98944707ecee80405600312d08db9068d16b64",
+    "pdf\\02_training_schedule.pdf": "3c9f0621a76c85d3501551b99dfbecf638f09f6640d26c7d20f1423c3b6e206a",
+    "pdf\\03_dataset_split.pdf": "eeed972af1040badffe6fdb63e71d2163e50119d22c60b5b3c809f4a14175b72",
+    "pdf\\04_depth_QA.pdf": "edab9cc2e4532ef282a4ab7a4435d296e740201cd04f73c0796f2cb55ac3d8a9",
+    "pdf\\05_test_metrics.pdf": "f17fdf36fbad09927ca985f755ee5d9fab553bbfd81b82f6429feccb41b970a5",
+    "pdf\\05_val_metrics.pdf": "14b6638b034752eaf64de216a89c16dce4b0160049f8356dfae0c8212c7b7934",
+    "pdf\\06_test_error_rates.pdf": "e41eefde05cc8e848580cc90aaa2339dcd596f8fe70a5937271e04e8fbb75843",
+    "pdf\\07_ROC.pdf": "f5c8aa16c0e4503ac217bcb061fe29c7ba84f3b5b30ae6e0f5eced0b2825ab95",
+    "pdf\\08_score_distributions.pdf": "379f8ece59c2cd3273287676920d4bc4df9b3f0f71a5500429ca231eacf12a2f",
+    "pdf\\09_confusion_matrices.pdf": "9a09076db805bebfd90504e46f93f573d9aaef9b525cd06242ff4634e656e99f",
+    "pdf\\10_learning_E0.pdf": "0077fd2405d68db38c0e2513d1b5d6fd247e9e62a5668e9fd7a02edefedf78bb",
+    "pdf\\10_learning_E1.pdf": "34181bcbe38540994e6d4d19ffc3865b65856a146ea6db729d4556a98586bac3",
+    "pdf\\10_learning_E2.pdf": "4e99c1d7e1da20d00429941c09f197c5e2145301ddc00b89fc31ef6cd8f61ec3",
+    "pdf\\10_learning_E3.pdf": "3234f15714a5ac021011998423da022d8ed42ef8f82116bc2a0fff44c01756d3",
+    "pdf\\10_learning_E3b.pdf": "8f34abf3048550c7f628916385310d72113fb139103a949b1e41fa494356453a",
+    "pdf\\10_learning_E4.pdf": "9005a5b6496b9d4228a825f921b1ab5fb8b4a3ebf9d07d462fbd090b5ae180ee",
+    "pdf\\11_checkpoint_selection.pdf": "42ef1e7dcec2fb35bb37f748164b4a8b12f34ca45fea6905dcd848a25615d4c2",
+    "pdf\\12_paired_errors.pdf": "477236e16fe1a40ae1b7eab5ac21a97173e3c46fe7f856e75386fce11f52586b",
+    "pdf\\13_quality_errors.pdf": "2fdb21cbea7bd483928c569c0fd3943e1ce4038907852ec55922274369556a96",
+    "pdf\\14_error_video_matrix.pdf": "8e6a9b716b06c26db55ccb2a385ba53c2c527c994d6b7028ca30fc308b73f7d4",
+    "png\\01_pipeline.png": "1f59e5c43f5e6d4a16d282abc43962ce17e85a76af24069c2b5a4aae17552495",
+    "png\\02_training_schedule.png": "ae49d0351666ee8ec09b3c76ed8de5a36fac3a4a829ab78e94ced3ec604872f3",
+    "png\\03_dataset_split.png": "88e6d677c56a9268e609fac80ef9013311908032c11ff1c81a70a7cc297f44b5",
+    "png\\04_depth_QA.png": "bd2aa3187c4f943d51e6c538bca26dc6796ddd6e4948e7a4af598d2caf3822e9",
+    "png\\05_test_metrics.png": "c79a020607fdab1dc2efb92ad479366f4fee10f7efd9971116e7b49d10965ea6",
+    "png\\05_val_metrics.png": "8cf93112186b7ce8b4e85326c1fb89502637e2a05d62114eacd8321d6d03bfe2",
+    "png\\06_test_error_rates.png": "09093f3251458d7f190af838fa47151ddb046b78c2e61bcd4b66b155c6c9151e",
+    "png\\07_ROC.png": "9f9943694db08c18ed1f5a4c41bef2ee9a72ebe1b35b896b7c0d87d3121ea850",
+    "png\\08_score_distributions.png": "a384becc0b303ff879c206344213ff79cba3569fd15d6b65e509dac33fbed7fb",
+    "png\\09_confusion_matrices.png": "fecbc0d0e5b9ca9f275cbbea3def1a8ba0a63cd680af22c50ffefe16a1d5144c",
+    "png\\10_learning_E0.png": "7dc19478fced45198fbcd54e05e60b5af06fbc69407b3060d7d73967083b03e2",
+    "png\\10_learning_E1.png": "e3ed4e1dd8e4a9505a28dcd35a1c8c9c03247052fe4d352654a779abacaab4f5",
+    "png\\10_learning_E2.png": "10bc9c68b71c848fcd36ea327e516cea9506a29e2af559a14d2d75112e512bbe",
+    "png\\10_learning_E3.png": "46ea257a9eda64a5030ef6a2e946db1eacca81928d270d15290d2f759de4a908",
+    "png\\10_learning_E3b.png": "7b7691ccc6bcaa4a59bec4695533ab9309840bb4613272fca2b3c1ba16b459af",
+    "png\\10_learning_E4.png": "45df7774c63d491b55a4ece3ada9017bc857f32e8231d695625115cf7600a8a3",
+    "png\\11_checkpoint_selection.png": "171236d215f29e5702a421bae7886979b21054c38e1750822429312be1999c24",
+    "png\\12_paired_errors.png": "28ff11946ae8c3776904e34dee372ad75301a0b65d8e32a15f3b1a31cdf2ed66",
+    "png\\13_quality_errors.png": "98b6b45c83f61508e6a95dc7448fcbc0e70b6c4616bd46c1d15ce1c4a8c5ad9c",
+    "png\\14_error_video_matrix.png": "33ab8025ef5ba4ed9d42d7130fd5f6c40ef14c972a4f6556f4f5178cd83504e7",
+    "svg\\01_pipeline.svg": "1855be0f25ea95842b443bd5cc5a9466164d4d083d25b58ae99287e6bc5df2b1",
+    "svg\\02_training_schedule.svg": "61c7cfbe20cba140fb0db6dfdba034a6e1d72f88e6032387d9b22c769d6750a4",
+    "svg\\03_dataset_split.svg": "b5fa80730e5489984dc7148f0846b0ce28bf3f7831891fd9b9bca08557307d23",
+    "svg\\04_depth_QA.svg": "d7b5d5afde59b60152dbc7239513e7c89b938736c0ba5be1af655beede18b01f",
+    "svg\\05_test_metrics.svg": "9a7acfb7b7c3dc2410f8d7f11258ecd4ce2c3ff27fd8a102b2a022f1c480fd12",
+    "svg\\05_val_metrics.svg": "cc4ab49d4222b67c660ad44137f9b68b255d10cb29921254536f127ff383024d",
+    "svg\\06_test_error_rates.svg": "4f96bf8a80e78e6fa69c1e62c42086856048ad564a8b5347e334092cb551cd18",
+    "svg\\07_ROC.svg": "aaa78a800cb63dcde52a52f52d784216b8943b169fcf7e78ce3635ea12a8f4c5",
+    "svg\\08_score_distributions.svg": "9ee2e9cf9500079e7317cde3bc48757e38822a330ef29df4fb3fa909763fd843",
+    "svg\\09_confusion_matrices.svg": "2bfabf823c41c622cf27a66577dd82cc6b0c0569f356530ad0d003afabc0f57d",
+    "svg\\10_learning_E0.svg": "c693ff5de48a9a0e305e3c4a2ca18a5e14a26e90fdedb444ebf07af23de2de15",
+    "svg\\10_learning_E1.svg": "4e756861a1b6776da74c17079f91172191c70d03a2a8da31f77a15d689912637",
+    "svg\\10_learning_E2.svg": "9e6d29d368f152e073e828a249547cf7a6f1f6c2d118816283136f7c78f5c267",
+    "svg\\10_learning_E3.svg": "88a715e8c5595274cf92b3e3aec09e6e875ef291720995ee9b74bf17190532f4",
+    "svg\\10_learning_E3b.svg": "4f4d2478d4108c5babda51c6ff9fa021a48db0f0793f3253f51f4b2bbf4a1ac9",
+    "svg\\10_learning_E4.svg": "13a1d5c3941127ffd0674313ea06c87af9a2a11d96fc167755a9845bfdd28857",
+    "svg\\11_checkpoint_selection.svg": "2451bdca85dc18bea02b9e0986d82ce02fa577048d879793a26b374b668672af",
+    "svg\\12_paired_errors.svg": "001655b96d710a65c5e1736113245c1c0ec65df36d1b17a488d5b58d76bc3254",
+    "svg\\13_quality_errors.svg": "bdbb944472a8765c922301248d750465f76ec8e8e0695c9be822c371e96b8dfb",
+    "svg\\14_error_video_matrix.svg": "3b525e215321e8b2440660b52eeb66fa5ef01b920d9ac244c419f92ed9233a3c"
+  }
+}

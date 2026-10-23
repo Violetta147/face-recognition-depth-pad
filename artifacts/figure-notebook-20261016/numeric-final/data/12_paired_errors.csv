@@ -1,0 +1,5 @@
+model,fixed,new_error,both_wrong
+E2,0,0,5
+E3,1,5,4
+E3b,0,4,5
+E4,1,4,4

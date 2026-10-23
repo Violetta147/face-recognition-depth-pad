@@ -1,0 +1,740 @@
+[
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/best.ckpt",
+    "bytes": 6202025,
+    "sha256": "b8057fc7f7b3cce74fca079377f09ece1277dc9c8bfd10bb25f78b507c83502c"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/config.yaml",
+    "bytes": 415,
+    "sha256": "64b5758279c11fdb699bac76ea5806194b7053003ba85b4797e5c6ca76ea512d"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "f65be3a7f35705af98b0efcb93e11f18768102728395389f2a585c167b8aa08d"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/metrics.json",
+    "bytes": 112,
+    "sha256": "8b0b8e126fa7a779596d6d0bd93d45a31be6b92c03207ff19c677878d8ce24f8"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_error_analysis.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/test_error_analysis.csv",
+    "bytes": 25227,
+    "sha256": "f2f09c1d4113ca20c0ed2c093a8258b5e836a337234a42c7cb084b2c4d0eaed7"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_false_rejects.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/test_false_rejects.csv",
+    "bytes": 708,
+    "sha256": "1d7693dd26b433364569c179de8d635294415863421017500dacbbaa5908e24a"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/test_frame_scores.csv",
+    "bytes": 427680,
+    "sha256": "63fd5c301114ced79b9b08f68287b110a13cd23d8ce5d7018560b627f96fd790"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/test_metrics.json",
+    "bytes": 175,
+    "sha256": "f25089b2b201992ab594d92eed450685bba3aa9ba1b78e38ccd3bd866fd7b5ca"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\test_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/test_scores.csv",
+    "bytes": 13437,
+    "sha256": "41612ea1f8996d7d0182321aec3a4ab937f6a350d028bddfe8b922278bfd734e"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/threshold.json",
+    "bytes": 63,
+    "sha256": "446012e4662dcfb1272a81f42de2d7feda582ccae92123d80f5f872707b2f7cf"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/train_log.csv",
+    "bytes": 277,
+    "sha256": "d359c31d98eaf8f270b5ea490cc7ac3d26425e2fe2852f387182af53e26ea9ea"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/val_frame_scores.csv",
+    "bytes": 57082,
+    "sha256": "79cfd3b670b68bd8a619cf4d42b9c75805ccf816bb8a37082212cc8a9a80d0bb"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_BCE_5E_seed42_20260920T082941Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_BCE_5E_seed42_20260920T082941Z/val_scores.csv",
+    "bytes": 1819,
+    "sha256": "cbec50adb6b73a31a22d89860e71b5249ff3c5e1c3c81386ff660086a7901114"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/best.ckpt",
+    "bytes": 6202025,
+    "sha256": "dd8c5661507544c249a80ffa1f6e481eec7b22a72335cebf75ce8eef140c47f4"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/config.yaml",
+    "bytes": 414,
+    "sha256": "ae03e8d8bc98998fd41b7698cb8dce778344cf70f0ee4daaf1ef99a17a3706bd"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "f65be3a7f35705af98b0efcb93e11f18768102728395389f2a585c167b8aa08d"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/metrics.json",
+    "bytes": 115,
+    "sha256": "8110c833cd1b982387fa73d316be21678540c78dfc2ea06af6c4294479c606f2"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/threshold.json",
+    "bytes": 66,
+    "sha256": "cbccaf138329ca071bf414ccbed227d2989d376ebc2cf28afdb39f086fd81aa0"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/train_log.csv",
+    "bytes": 79,
+    "sha256": "98480c1d229025420b3630eb682cd6e3389eeda59ccbc1fb221a20bda230c90f"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/val_frame_scores.csv",
+    "bytes": 57683,
+    "sha256": "9ae74301d9f24a114d702bb6acbb5cb06a7d1cabfbe35c95615e4cdbb9cf1188"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E0_SMOKE_seed42_20260920T081731Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E0_SMOKE_seed42_20260920T081731Z/val_scores.csv",
+    "bytes": 1843,
+    "sha256": "3f1d3d8a44454379e2b8c036c72bdc77702dc758990ae82e8ef3d4863c2abfb8"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/best.ckpt",
+    "bytes": 9015451,
+    "sha256": "679810c001e526cafed8685fe731a7d5c539fd3fb9c5a9fb31725b7dbdf57024"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/config.yaml",
+    "bytes": 658,
+    "sha256": "bea4dd0a2ab157aa0e74958ecaafaa45681855f46a1c9543ccb6effe08e7d819"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\depth_input_snapshot.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/depth_input_snapshot.json",
+    "bytes": 3341904,
+    "sha256": "c23192c84d94b60ec0ea1a49bb45b09e68b6f34ea0bfc0f0c7f86cd72f421b79"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/metrics.json",
+    "bytes": 112,
+    "sha256": "f14a4bf8faa078469bed3ac0045678f1488ff1178a7741b2e0b1fe87490d0905"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\model_provenance.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/model_provenance.json",
+    "bytes": 893,
+    "sha256": "bf692af3b875c28fc993dd777ece480bac81f79011746562f93e98292d187fe4"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/test_frame_scores.csv",
+    "bytes": 412660,
+    "sha256": "f5f0f9c8fbb29290fc3f4ea65e96c93f7e1748c62c720086b120b15fb7371615"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/test_metrics.json",
+    "bytes": 178,
+    "sha256": "3e8f84d1f1f85ec62c567a54b8178ec3e16270c95c69a26598727ec077ec3c63"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\test_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/test_scores.csv",
+    "bytes": 13198,
+    "sha256": "48df61d9a1d1249c7ef8b25e0853f75c56f8d0d99af5f8da92ac77abe5198368"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/threshold.json",
+    "bytes": 63,
+    "sha256": "3b7d640081f53f5f6ae5ff38dfbabb3bca0f1bbb98891a41f353a9122de2e34b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/train_log.csv",
+    "bytes": 1528,
+    "sha256": "fd06ffa174282ae678019da2ca8c13ac18c2fe4280a07713317866358e5464e0"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/val_frame_scores.csv",
+    "bytes": 55115,
+    "sha256": "83b1a20ed97325acf5058f46ec86c557134d3ce8f5c8b7e72f40ef39f62fbeb2"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z/val_scores.csv",
+    "bytes": 1787,
+    "sha256": "36193c3fe41fd336e6fb018620addbd34a161cbdbf10fb0f1fbb9d750f7215cc"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/best.ckpt",
+    "bytes": 9015451,
+    "sha256": "7e5a9915816025c7404c3fae6230241c6fc3614c800605477b656be3b7b0bdc8"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/config.yaml",
+    "bytes": 663,
+    "sha256": "2dcec72fc21032ee192c2d4f2a96de8c6fed62a2c10b2b7a79c7fc64f9e3864b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\depth_input_snapshot.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/depth_input_snapshot.json",
+    "bytes": 3341904,
+    "sha256": "0750137d9e8ff65a2fd05b158bbe1292abc2e0eea9bb7e450af1702756bfa243"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/metrics.json",
+    "bytes": 175,
+    "sha256": "54bf37abde50ac5a50c23ee1844d2a754bf27d98aba797cedc5daa113f034e14"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\model_provenance.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/model_provenance.json",
+    "bytes": 893,
+    "sha256": "bf692af3b875c28fc993dd777ece480bac81f79011746562f93e98292d187fe4"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/threshold.json",
+    "bytes": 64,
+    "sha256": "4530f9457719d8bc094a22088386a7c40bf4cb80ba9f2104039d8c28c9df59bc"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/train_log.csv",
+    "bytes": 80,
+    "sha256": "6d9c2c79c62c4724a3b464183a041cd7d6e1efed4eab055e5e63ebaaf2fdbe8c"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/val_frame_scores.csv",
+    "bytes": 55534,
+    "sha256": "2b67bab3a2fd2e9e19ffbf2d60f5532789b1187d75623b7f7c94dc0f0b9372cb"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z/val_scores.csv",
+    "bytes": 1742,
+    "sha256": "b0f3c2533efd7fbddd5168307dd4a0a7bd8b68a2e299bfd3dd50ff0540aab584"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/best.ckpt",
+    "bytes": 680629,
+    "sha256": "7a23e3d37b618456a8f5b5dfea6a8c4025d561765b6b069151460a459ca45e1e"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/config.yaml",
+    "bytes": 542,
+    "sha256": "d5509485a358a1edb0b3ea5bf2f2f8e5347eed62c5a34968f10362cb19cbfaee"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\depth_input_snapshot.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/depth_input_snapshot.json",
+    "bytes": 3341904,
+    "sha256": "b6fd31b4b30b6c50f0250a50fd41f58b8bba212b9ec3cb756375a804a1c27403"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/metrics.json",
+    "bytes": 191,
+    "sha256": "d00cec9ef0962196e60259fc5872684ce615cebd349935f1f7cc015e4103c318"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\test_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/test_frame_scores.csv",
+    "bytes": 421301,
+    "sha256": "9dd7802a787872c28d3af75cf3f153c0f4057d848ea839a457bdb1b396466456"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\test_metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/test_metrics.json",
+    "bytes": 190,
+    "sha256": "60ab67649941adb60ceb4320c51bad2c717a27d86fd23675e1444e1bfdb17abf"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\test_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/test_scores.csv",
+    "bytes": 13166,
+    "sha256": "dacc74cce734f107c85a49fc2880f53a1c2b2bc6b48101b67f26bff5a2e1ca7c"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/threshold.json",
+    "bytes": 63,
+    "sha256": "68f87d962c87433eb05cfc71ba5835c07ac413c000d81291be7ed55fc41c4eb9"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/train_log.csv",
+    "bytes": 1478,
+    "sha256": "4f6ac7526d6bde1bef47dc9808924f1ab85164b95a36ec369620751b84ecdb4a"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/val_frame_scores.csv",
+    "bytes": 56257,
+    "sha256": "d2896b429e3deae0db2602218ec8b3f809897aaffdd80b7caa9a6eefa9840b67"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_CDCN_seed42_20260921T024300Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_CDCN_seed42_20260921T024300Z/val_scores.csv",
+    "bytes": 1776,
+    "sha256": "a6306413e45786f232703e5101f6411c49ccf14dc580ea594d83461475ada6fd"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023118Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023118Z/config.yaml",
+    "bytes": 542,
+    "sha256": "0c0a360e57630326ec1038832438b3ea22c9c0802cb25462ed7d9809419b6342"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023118Z\\depth_input_snapshot.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023118Z/depth_input_snapshot.json",
+    "bytes": 3341904,
+    "sha256": "7a3ab1755ab81c45fa92bc5f8f3bca2d33676076aeededf3210551508f6136f9"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023118Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023118Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023118Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023118Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/best.ckpt",
+    "bytes": 680629,
+    "sha256": "3db8137691551a9799f7056bed6639248d6b35d14f4324f92e29656bba2eae2e"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/config.yaml",
+    "bytes": 542,
+    "sha256": "0c0a360e57630326ec1038832438b3ea22c9c0802cb25462ed7d9809419b6342"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\depth_input_snapshot.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/depth_input_snapshot.json",
+    "bytes": 3341904,
+    "sha256": "905e6295f587c8ec9a3f5d185d720df186b2808838d86ae6024922cbbe31c2c0"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/metrics.json",
+    "bytes": 188,
+    "sha256": "c1df46bc1361f3cb1999825589e7d8c24e1ec294479f48b3f10a2ce9570a299d"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/threshold.json",
+    "bytes": 63,
+    "sha256": "1e5278d341818fce143cb6512c969f63faedfc89d1f0650714f5bb3ba272d9d9"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/train_log.csv",
+    "bytes": 76,
+    "sha256": "0db3d473a1348a2bf4439920c928e413975ba56fe36df46c5332fdb9529b57a4"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/val_frame_scores.csv",
+    "bytes": 55111,
+    "sha256": "180b35d3cdeb385a70ff0c4375ad1e98f6f1aaac6f1273d2909c9a95aa2a5886"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E1_SMOKE_seed42_20260921T023804Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E1_SMOKE_seed42_20260921T023804Z/val_scores.csv",
+    "bytes": 1714,
+    "sha256": "0efe980672818371adc494cfbbf767b096d5204f352e97d61f61ccd2f1dc2c00"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/best.ckpt",
+    "bytes": 9023671,
+    "sha256": "a49d7c717e4cde27eac075de2d848c8816df3d27fcb0c01ea76ef752e15ff1b5"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\comparison_freeze.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/comparison_freeze.json",
+    "bytes": 436,
+    "sha256": "cb1a663250f712ccd8a124e627ca497262a26646c6a5264d70989b6d1932a0d5"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/config.yaml",
+    "bytes": 706,
+    "sha256": "4bf85370a27160104ac990c3fe9655155755b8823a27204d80878c056c3b7323"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\initial_checkpoint.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/initial_checkpoint.json",
+    "bytes": 190,
+    "sha256": "c8b98c155f8a5fe83570ff982c79b1ccb2e3038c4afea28a90a15d258348a387"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/metrics.json",
+    "bytes": 112,
+    "sha256": "c52b178ba6cb43de1d7d49900c5873efec32980d11ac8fd9120517de121b81be"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\model_provenance.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/model_provenance.json",
+    "bytes": 974,
+    "sha256": "b1221bd1ad06258d7d22ed6a497aefc9808d9015dcaf58d5d2a44efca92d4e35"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/test_frame_scores.csv",
+    "bytes": 422996,
+    "sha256": "ad458840c7c21a65d7a8698e0b7b375c14baaab746b0010e513f37b200bcd09f"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/test_metrics.json",
+    "bytes": 177,
+    "sha256": "74ae4baa2f159d6b46e3ae5fa2a35e535c0a96d881f8c3dd404516e332b6ee7f"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\test_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/test_scores.csv",
+    "bytes": 13216,
+    "sha256": "cc04c03dcc6b577bce548a98b6d93730ab5af63b30b4c6f9c6380adca761c0ba"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/threshold.json",
+    "bytes": 63,
+    "sha256": "5cf33d07f116e6bf1a907112e2d844d5d669a7299b71cb9f21bce862e60c19dd"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/train_log.csv",
+    "bytes": 523,
+    "sha256": "7e0727a26c0fb14318b12bf580b75add9c59d90cd6f968c7e0327ae729cea127"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/val_frame_scores.csv",
+    "bytes": 56462,
+    "sha256": "4f18eb495efee0baf6937092bfe5eb7ddb814c3258e672a313c68146a7482922"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/val_scores.csv",
+    "bytes": 1785,
+    "sha256": "3d6d01b9cff269e9d3badb0db1881120e539645c7a3714c6adde11c0a2cdcd21"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\best.ckpt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/best.ckpt",
+    "bytes": 9023671,
+    "sha256": "b137aff24e2f5801487b7ae128f04e0c75451e73aac79206cbd3018e2f46e6e3"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\config.yaml",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/config.yaml",
+    "bytes": 711,
+    "sha256": "44be10f5ec0fa2f49a5aa4223c0c7cbc2a36a99fcc66e6aad05905a978d729f2"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\environment.txt",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/environment.txt",
+    "bytes": 135,
+    "sha256": "9d0a225d83b68a406f03b9c896cafc0e5375f160b5fe58f838c9b9c15bee2321"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\initial_checkpoint.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/initial_checkpoint.json",
+    "bytes": 190,
+    "sha256": "c8b98c155f8a5fe83570ff982c79b1ccb2e3038c4afea28a90a15d258348a387"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\manifest_checksum.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/manifest_checksum.json",
+    "bytes": 82,
+    "sha256": "d9b63098591bf9cfa7b0716ed941e73c30542d0f48453a4f20b5c048895d9b8b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\metrics.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/metrics.json",
+    "bytes": 113,
+    "sha256": "274e6e0cbf09288e9d4168ecd7bda0903497fd6d984550ffd5aa01f0ace1e893"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\model_provenance.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/model_provenance.json",
+    "bytes": 974,
+    "sha256": "b1221bd1ad06258d7d22ed6a497aefc9808d9015dcaf58d5d2a44efca92d4e35"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\threshold.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/threshold.json",
+    "bytes": 64,
+    "sha256": "66e1949e25f4d63c4efbe7ce96663615567ab31df5360a6beaa0d8b9d6d9a160"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\train_log.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/train_log.csv",
+    "bytes": 79,
+    "sha256": "a1c06622799bb6619cab4a882fbac5d47110e61fdf7b9b2ebe0595378f32d774"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\val_frame_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/val_frame_scores.csv",
+    "bytes": 56502,
+    "sha256": "779f6e8ec316b6e9beb1d8963af1c60b5e16686060f4e580c0c238e07901c462"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\runs\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z\\val_scores.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/runs/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_SMOKE_seed42_20261001T155146Z/val_scores.csv",
+    "bytes": 1778,
+    "sha256": "1e92a03002dda249e0d7e95fe237f211cabe7f472b937c6776a2447b533738c8"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\3ddfa-worker-compatibility.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/3ddfa-worker-compatibility.json",
+    "bytes": 388,
+    "sha256": "27511b5c514c1b65e35d732fc3b3f9f8e5e9ee629fb917ab09c653c8c6d0f357"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\3ddfa_failures.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/3ddfa_failures.csv",
+    "bytes": 16,
+    "sha256": "1c26f540d6027f4e445ea0c0b69b5ad9534181bdd625083d374b75de138a33af"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\casia-depth-qa-official-e1.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/casia-depth-qa-official-e1.json",
+    "bytes": 1087,
+    "sha256": "d132968427d25dfbda5f516f7d982c47aff8bb5cc1c52c7eb7c89a978d8aae1b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\casia-depth-qa-round4.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/casia-depth-qa-round4.json",
+    "bytes": 1087,
+    "sha256": "cb0262ed2cff3c047de5744f5694e8816f630da235aac7c46a44c46e110f6ef3"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\casia-depth-qa.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/casia-depth-qa.json",
+    "bytes": 1087,
+    "sha256": "d132968427d25dfbda5f516f7d982c47aff8bb5cc1c52c7eb7c89a978d8aae1b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases\\index.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-depth-cases/index.csv",
+    "bytes": 1397,
+    "sha256": "ab4b6d8c3d532e61c9595f8503dea4cb93d6a2e9e0a877c5cf9f70243529d336"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-error-analysis.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z-error-analysis.csv",
+    "bytes": 24417,
+    "sha256": "f27b19f0c7e14d468712c038af2a9a30e940b3f9d487675b22847fc2dbca94d6"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z-depth-cases\\index.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_CDCN_OFFICIAL_SMOKE_seed42_20260921T113339Z-depth-cases/index.csv",
+    "bytes": 1457,
+    "sha256": "d09d72f99db4a6c42c96584969b2b3210a70310c7d7a7fad9b13c4dc9b7aebfe"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases\\index.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-depth-cases/index.csv",
+    "bytes": 1437,
+    "sha256": "aea5b1f7a689686ebe0e09f328f7418cb0169c3d50305f88f260160e04ec65e2"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_CDCN_seed42_20260921T024300Z-test-error-analysis.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_CDCN_seed42_20260921T024300Z-test-error-analysis.csv",
+    "bytes": 24422,
+    "sha256": "61c25b355933b575bac8ce358bb7a47563269ce121a66159049f8292c2b0c165"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E1_SMOKE_seed42_20260921T023804Z-depth-cases\\index.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E1_SMOKE_seed42_20260921T023804Z-depth-cases/index.csv",
+    "bytes": 1221,
+    "sha256": "ab567d3f54575e729451f73a1573dc91f04b109f9b3095c8990f7431234ef492"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\e1-e2-development-test.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/e1-e2-development-test.csv",
+    "bytes": 302,
+    "sha256": "ba21e9d7fb5a19b962442fa59cd8cdd1a020c4066d3881169e04cf04f2083be2"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\e1-e2-efficiency.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/e1-e2-efficiency.csv",
+    "bytes": 215,
+    "sha256": "bf1e3ebdd261a0a014a7529defe2e11e0ff582102216f7c1bdc8fb0b6bf50a7e"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\e1-e2-paired-errors.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/e1-e2-paired-errors.csv",
+    "bytes": 34833,
+    "sha256": "cd5c801facdaa39a450e654386d8f343ce4e36eac23785af1e57da4953bfe33b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z\\e1-e2-validation-paired-errors.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/CASIA_E2_CDCN_OFFICIAL_HEAD_FROZEN_seed42_20261001T155213Z/e1-e2-validation-paired-errors.csv",
+    "bytes": 4726,
+    "sha256": "95a67d9eebf00ed4dc8e732366f8b7ded885a835a26533f4b6b900e26ba8671d"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\casia_fasd_debug_with_depth.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/casia_fasd_debug_with_depth.csv",
+    "bytes": 1617545,
+    "sha256": "4c302c9039e48a8ea6baedf426b26e1b0a6663bc295c661bb71fefccdb9b37fd"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\casia_fasd_debug_with_depth.csv.provenance.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/casia_fasd_debug_with_depth.csv.provenance.json",
+    "bytes": 699,
+    "sha256": "10ce3971df750ad7e573dc3a1ece8578535596b246760241fa94f38cb1b928ab"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\depth_status.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/depth_status.csv",
+    "bytes": 1991561,
+    "sha256": "0b5039669c4478e5eb5919e6aac2c4da5b99971f6a233681671db5c5fc2d6c33"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\depth_status.csv.worker.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/depth_status.csv.worker.json",
+    "bytes": 404,
+    "sha256": "c7dfaecbd647295beee9eaa47d4bf04f93a5d7b1c23463cdb228577023936378"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/E0-vs-CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z.csv",
+    "bytes": 466,
+    "sha256": "14bee1da8e2d24aacdd20b670b353ba5e3178979db9a97259228d849a5e0747b"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/E0-vs-CASIA_E1_CDCN_seed42_20260921T024300Z.csv",
+    "bytes": 317,
+    "sha256": "9205efe9c3f1448e6247bd300b2836d26bea16f855527b87b8b38dd67365aceb"
+  },
+  {
+    "source": "G:\\My Drive\\face-pad\\reports\\e1-loss-device-compatibility.json",
+    "snapshot": "artifacts/research-audit-20261016/drive-snapshot/reports/e1-loss-device-compatibility.json",
+    "bytes": 199,
+    "sha256": "03915aa57d72cde21c96e90a92619e83ec6378d8b1ce16f0a08496752285ea59"
+  }
+]

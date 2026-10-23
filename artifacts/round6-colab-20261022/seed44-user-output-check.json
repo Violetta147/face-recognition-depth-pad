@@ -1,0 +1,31 @@
+{
+  "runs": {
+    "E1_44": {
+      "run": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z",
+      "epochs": 30,
+      "selected_epoch": 28,
+      "selection_metric": "val_loss",
+      "selection_value": 0.019056795985992872,
+      "checkpoint_sha256": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42"
+    },
+    "E3_44": {
+      "run": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z",
+      "epochs": 16,
+      "selected_epoch": 11,
+      "selection_metric": "classification_bce",
+      "selection_value": 0.04322826944057852,
+      "checkpoint_sha256": "214e1ea24a350bf4382e1a3ce2866ad82d595aaca3ca52341f348d96728325f5",
+      "initializer": {
+        "path": "/content/drive/MyDrive/face-pad/runs/ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z/best.ckpt",
+        "sha256": "a6c059d7b408324be80ab6c2cd4ff396a22afb06724cb9e5770d396b8161bb42"
+      }
+    }
+  },
+  "checks": {
+    "epoch_logs_finite_and_complete": true,
+    "selection_matches_log_minimum": true,
+    "registration_environment_binding_matches": true,
+    "paired_initializer_hash_matches": true,
+    "test_artifacts_absent": true
+  }
+}

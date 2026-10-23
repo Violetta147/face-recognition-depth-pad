@@ -1,0 +1,4 @@
+split,frames,videos,subjects
+train,3840,192,16
+val,960,48,4
+test,7200,360,30

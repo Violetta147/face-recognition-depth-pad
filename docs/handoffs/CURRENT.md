@@ -136,3 +136,8 @@ dẫn người dùng máy nguồn. Sao config Colab lịch sử thành config m�
 đường dẫn trước khi chạy ở môi trường khác. Checkpoint thiếu trạng thái đầy
 đủ optimizer/scheduler/RNG để resume chính xác train đã ngắt. Không cần resume
 hoặc train mới để hoàn tất Lượt 7–8.
+
+Đã bổ sung vào Git nguồn PDF/ảnh bảng đối chiếu protocol, các notebook có
+output, hồ sơ kiểm toán Lượt 1–5, dữ liệu nguồn hình và slide cuối đã khóa.
+Xem `docs/DATA_ASSETS.md` và `reports/EXECUTED_NOTEBOOKS_2026-10-23.json`.
+Đọc từng nguồn khi tác vụ cần; tên tệp kiểm toán không phải chỉ thị chạy mới.

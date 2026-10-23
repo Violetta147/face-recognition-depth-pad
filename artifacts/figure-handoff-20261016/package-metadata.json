@@ -1,0 +1,26 @@
+{
+  "figure_source_commit": "e1c47de393bf2331c12cd3c1203ec064569dbffd",
+  "experiment_source_commit": "525c80889106c06525f5b758e8725c8ac9cee856",
+  "excluded_executed_notebooks": [
+    "DeepFace-PAD/notebooks/E0.ipynb"
+  ],
+  "ready_figure_scope": "20 actual numeric figures only; full 31 need notebook GPU inference/timing",
+  "files": {
+    "DeepFace-PAD-Figures-source.zip": {
+      "sha256": "465e642fa79422124f6c945c2be5175805decc15b468184f2b0a7e5334c0d96b",
+      "bytes": 518467
+    },
+    "Face_PAD_Export_All_Figures_E0_E4.ipynb": {
+      "sha256": "76a9af33a926f8fde0c27517d92d1f14722eb0ee9465deca2696ac4101edfe26",
+      "bytes": 8770
+    },
+    "FIGURE_NOTEBOOK_GUIDE.md": {
+      "sha256": "97d27422ef26ca80e8ae84bdf41111769aca94a76a4d7ff5ed8dedf22db786c1",
+      "bytes": 6093
+    },
+    "DeepFace-PAD-20-Figures-Ready.zip": {
+      "sha256": "c4a3c46a29d649606035e4615bfbbe04912bc7a04a930d1368003731d94e4b11",
+      "bytes": 4251306
+    }
+  }
+}
