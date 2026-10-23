@@ -35,3 +35,20 @@ OpenCV riêng; kiểm tra lần này không bật camera hoặc đo lại FPS/TT
 Chưa train, score lại toàn tập, nhận dữ liệu bằng tài khoản đồng đội, kiểm
 quyền Drive, sửa báo cáo Lượt 8 hoặc nộp bài trong tác vụ đồng bộ này.
 Các việc còn lại được ghi rõ trong `handoffs/CURRENT.md`.
+
+## Kiểm sau khi bổ sung nguồn bằng chứng
+
+Snapshot `7e32aec`: bổ sung notebook executed Lượt 5, PDF/ảnh bảng nguồn
+so sánh protocol, hồ sơ kiểm toán khoa học, dữ liệu hình và bản slide cuối.
+Các notebook có output giữ nguyên byte; danh mục ở
+`reports/EXECUTED_NOTEBOOKS_2026-10-23.json`. Không chạy lại notebook.
+
+Root gồm công cụ cục bộ: 214 passed, 1 skipped (quyền symlink Windows).
+Clone sạch: **168 passed, 0 skipped, 34 subtests**, 57,15 giây.
+Test bản PPTX lịch sử đã chạy được vì bản cuối đã có trong Git.
+JUnit: [pytest-complete-evidence.xml](validation/pytest-complete-evidence.xml).
+Phân tích CSV trong clone vẫn khớp 6/0, 1/4, 2/1 và 20 case.
+
+Phạm vi môi trường vẫn như lần kiểm trên: dùng Python hiện có trên máy nguồn
+với module từ clone, chưa phải kiểm cài venv rỗng trên thiết bị của đồng đội.
+Không thay kết quả Lượt 6, đo camera hoặc nộp bài trong bước này.
