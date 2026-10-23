@@ -81,3 +81,24 @@ benchmark. Tốc độ máy nguồn không phải tốc độ bảo đảm của
 
 Tiếp tục theo `handoffs/CURRENT.md`, mục 4–5. Nguồn Word/paper/slide và builder
 đã có. Sau sửa, chạy test liên quan, render và kiểm bố cục; ghi phạm vi đã kiểm.
+
+Builder Word/paper lịch sử có đường dẫn output cố định. Trước khi dựng bản
+Lượt 8, tạo nguồn mới và đổi đường dẫn input/output sang phiên bản mới; không
+chạy mặc định để ghi đè Word đã khóa. Các builder chính là
+`scripts/build_final_report_completed.py` và `scripts/build_round5_paper.py`.
+
+Để xuất slide bằng script hiện có, cài Node.js và npm, rồi cài Marp CLI đúng
+phiên bản đã dùng cho deck lịch sử:
+
+```powershell
+npm install --prefix artifacts/marp-report-20261016/tooling --no-audit --no-fund @marp-team/marp-cli@4.5.1
+powershell -NoProfile -File scripts/render_marp_report.ps1
+```
+
+Lệnh render mặc định xuất deck Lượt 5. Khi làm deck Lượt 8, đổi đường dẫn
+Markdown và output trong bản script dành cho deck mới trước khi chạy. Marp
+cần trình duyệt Chrome/Edge hoặc Chromium phù hợp để render PDF/PPTX. Đây là
+công cụ cài riêng, không có trong requirements Python. Asset đã có trong Git;
+không cần xuất lại nền bằng PowerPoint. Chỉ script dựng lại nền mới cần
+PowerPoint trên Windows. Mở README của từng thư mục báo cáo để đọc quy trình
+lịch sử; dùng CURRENT để xác định kết quả cần bổ sung hiện nay.

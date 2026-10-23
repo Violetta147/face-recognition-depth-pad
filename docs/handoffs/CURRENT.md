@@ -113,6 +113,8 @@ ArcFace chưa làm và là tùy chọn. Không bắt buộc mở nghiên cứu h
 5. Dựng Word bằng builder tương ứng trong `scripts/`, chạy test liên quan,
    render và kiểm từng trang: font, bảng, hình, mục lục và nguồn. Lưu bản chỉnh
    sửa được cùng bản xuất. Test nội dung không xác nhận bố cục đạt.
+   Kiểm đường dẫn vào/ra trước khi chạy: builder lịch sử có thể ghi vào tên
+   Word đã khóa. Đổi đường dẫn sang phiên bản mới; không ghi đè bản lịch sử.
 6. Tạo slide cuối từ `reports/slides_round5/`, bổ sung Lượt 6–7 theo cấu trúc
    mục 11 của kế hoạch. Lưu nguồn của số/hình, script nói, Q&A và video dự phòng.
 7. Cả hai thành viên tập báo cáo và trả lời về data, model, metric, protocol,
