@@ -1,0 +1,73 @@
+{
+  "source": "reports\\round8_documents_20261023\\BAO_CAO.md",
+  "source_sha256": "bddf42a0b122d16f0eeb2efcac0c372f62ccbd65303f8fa696dece9cbcff1aa7",
+  "output": "Nhom1_Bao_cao_DeepFace_PAD_20261023.docx",
+  "output_sha256_before_field_refresh": "5cc2c343a43a3faefdc0f2b91ef3fa190770af8cef4d585d176cbc742e5b5b65",
+  "historical_read_only_sha256": {
+    "reports\\bao_cao_cuoi_ky\\ban_thao\\BAO_CAO_CUOI_KY.md": "96c55b439d04b6b454e6748ca94e3bc0ca3dc8be7857847fd8787cd6bd241ef6",
+    "reports\\bao_cao_cuoi_ky\\ban_thao\\Nhom1_Bao_cao_cuoi_ky_DeepFace_PAD_20261016.docx": "65e28c6b6678f797f9003bd7ecdb03f848cfa09fd9dd77f10bc36a2d26db4d71",
+    "reports\\paper_round5\\PAPER.md": "512e015111a03a79a55742cb93450617d93c564ecbce94974fcefbbe766cc2ff",
+    "reports\\paper_round5\\Nhom1_Paper_CDCN_E0_E4_20261016.docx": "69950bf5a07b21d870dc938befb5d48d90ec1467642e16a91385b477fa43ce09"
+  },
+  "images": [
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\validation-depth-case.png",
+      "sha256": "84ad135e6e6dfd7ea323e22aaa366787ec1cb134364ed95875f930d90c826b5b"
+    },
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\pipeline.png",
+      "sha256": "d5400ab168714794cf788355841b75dbb4841038c1e758bd6cd821b29c914c26"
+    },
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\e0-e1-curves.png",
+      "sha256": "87ab6d23fa8b88967e693d98714aeced8aa2585231834d2824e3b4079e69c63c"
+    },
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\e1-e2-score-histograms.png",
+      "sha256": "42ad48bad621e3b7e156540e750ca38ea9963fe1498d27252358d3373ab52bf8"
+    },
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\case_12_seed44_casia_s30_vHR_4.png",
+      "sha256": "472c9982e70482d0f5e48630d515a9bcc813238848f6ec50b0400d69a6d40ff6"
+    },
+    {
+      "path": "reports\\round8_documents_20261023\\assets\\case_13_seed44_casia_s31_v1.png",
+      "sha256": "dc6a68612cfec27002bf7fe3652ff756bd91641095a8492138f7b89d2e350f93"
+    }
+  ],
+  "evidence": {
+    "reports/RESEARCH_AUDIT_ROUNDS_1_4_2026-10-16.json": "a293c30b12aac1ab509ff7f0fe999dd1b740e72855ba74c78c256c271a12eb1b",
+    "reports/ROUND_5_FULL_VALIDATION_2026-10-16.json": "539a0a5ca31834e6a92059267323f9a43492e61d898106fc6e4e1f6f699dc93a",
+    "reports/ROUND_5_TEST_RESULTS_2026-10-16.json": "ec9e2ed41a913b3299713b17d0d8a2e18e3bf218caf124a55de52f25d544de57",
+    "reports/ROUND_6_RESULTS_2026-10-22.json": "df4335dc6e63d531a6d73a7a08f4a4ae2710b8bf2e921f2660fb204a6119d64f",
+    "reports/ROUND_6_COST_RESULTS_2026-10-22.json": "01d121d1475ccb95313b5bdb9cd18df43624da4d951c1590f2b8e65b36c5f687",
+    "reports/ROUND_6_PAPER_PROTOCOL_COMPARISON_2026-10-22.json": "d1c6434cd2afe870daa95a943138ad400a6c129a05db323779c1ecb13bfb262b",
+    "reports/round7/analysis/analysis.json": "c622cf11527e351aa4924d29de903b9597baee3fb5a618c0c24a5f5a98abe75d",
+    "reports/round7/analysis/subgroups.csv": "e581f3e11c94762c1169ef8076773715d3cd243bf6e28a10d6c789a2b3dcadff",
+    "reports/round7/figures-attempt03/provenance.json": "03fb2e38e70c89e4c3f148b6ae3c1d9449e0138d81a09551bd5e394e37595f17",
+    "reports/round7/FIGURES_QA.json": "b152bf7e178b56f31cea4fdc6639bba215ab19656e9692cbb5cc0f314bdf460b",
+    "reports/round7/WEBCAM_RESULTS.json": "d2d11354b8d0f3126853579ccd17f62e98828c8802f6de6966d177cd12fce8ed"
+  },
+  "scope": "existing Rounds 1-7 evidence only; no training, scoring, webcam acquisition, slides or submission",
+  "paper_format": null,
+  "output_sha256": "3046c05f8d5cd8cc0777b9d79afaca5362b519427d1839a48cd5d13b84e0f234",
+  "render": {
+    "kind": "report",
+    "word_pages": 35,
+    "starts": {
+      "Chuong1": 7,
+      "Chuong2": 12,
+      "Chuong3": 22,
+      "KetLuan": 33,
+      "TaiLieu": 34
+    },
+    "docx_sha256": "3046c05f8d5cd8cc0777b9d79afaca5362b519427d1839a48cd5d13b84e0f234",
+    "pdf": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\artifacts\\round8-documents-20261023\\attempt06\\report.pdf",
+    "chapter_pages": [
+      5,
+      10,
+      11
+    ],
+    "main_including_conclusion": 27
+  }
+}

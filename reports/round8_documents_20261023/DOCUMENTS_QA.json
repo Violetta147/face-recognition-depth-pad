@@ -1,0 +1,142 @@
+{
+  "renderer": "Microsoft Word COM hidden and Poppler",
+  "documents": [
+    {
+      "kind": "report",
+      "word_pages": 35,
+      "starts": {
+        "Chuong1": 7,
+        "Chuong2": 12,
+        "Chuong3": 22,
+        "KetLuan": 33,
+        "TaiLieu": 34
+      },
+      "docx_sha256": "3046c05f8d5cd8cc0777b9d79afaca5362b519427d1839a48cd5d13b84e0f234",
+      "pdf": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\artifacts\\round8-documents-20261023\\attempt06\\report.pdf",
+      "chapter_pages": [
+        5,
+        10,
+        11
+      ],
+      "main_including_conclusion": 27,
+      "native_tables": 19,
+      "figures": 6,
+      "source_sha256": "bddf42a0b122d16f0eeb2efcac0c372f62ccbd65303f8fa696dece9cbcff1aa7",
+      "qa_pdf_sha256": "89feb2ba34726a129a308ca3a392f203859b65ea304bbb254c7c2123d6abe4fc",
+      "visual_review": {
+        "pages_reviewed": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "changed_pages_opened": [
+          6,
+          26,
+          27,
+          28,
+          34,
+          35
+        ],
+        "identical_to_previously_reviewed_pixels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "method": "Original-resolution PNG review. Unchanged pixels reuse prior inspected pages; every changed page was opened and checked."
+      }
+    },
+    {
+      "kind": "paper",
+      "word_pages": 6,
+      "starts": {},
+      "docx_sha256": "b02f24d9e5c2990ff7f742b73ae5a9e282f8415e0dfce54e28f43d625a251597",
+      "pdf": "C:\\Users\\LAPTOP T&T\\VIOLETTA\\Documents\\DeepFace-PAD\\artifacts\\round8-documents-20261023\\attempt06\\paper.pdf",
+      "native_tables": 9,
+      "figures": 2,
+      "source_sha256": "922e8545ba174091cf3133f33be88d27328b8ba4c662de908b29a8de8c081fd4",
+      "qa_pdf_sha256": "b6b4823c1d15afaa9e81d9f5e53c486f16fafee03b7b553864b6637431f3971e",
+      "visual_review": {
+        "pages_reviewed": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "changed_pages_opened": [
+          6
+        ],
+        "identical_to_previously_reviewed_pixels": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "method": "Original-resolution PNG review. Unchanged pixels reuse prior inspected pages; every changed page was opened and checked."
+      }
+    }
+  ],
+  "date": "2026-10-23",
+  "status": "PASS: saved numbers, accepted Word tables, historical hashes, page limits and visual review",
+  "review_note": "All 35 report pages and all 6 paper pages were checked. QA PDF/PNG files are internal."
+}

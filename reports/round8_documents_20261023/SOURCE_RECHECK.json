@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "date": "2026-10-23",
+  "scope": "Saved CSV arithmetic and hashes only; no model forward or data acquisition",
+  "round6_runs": {
+    "E1_43": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z",
+      "video_csv_sha256": "7fb54ca16f4520dfcd1c6edecbefb5f9ca874e45ba756745da5e912f2a2becb7",
+      "frame_csv_sha256": "35f7760163c31809fbc7a49a3c288d6ad132cd0653d67077c54e65f825c651ad",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 0,
+      "FR": 12,
+      "ACER": 0.06666666666666667,
+      "AUC": 0.9938271604938271
+    },
+    "E3_43": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z",
+      "video_csv_sha256": "7c640d1096ad35dc2b55fa3120a64b8ca863f0d8c89c5fb8e977c7b027fe6320",
+      "frame_csv_sha256": "3e9be482379b6376742fe088d0d4f5aa6a2cd8c65bdaaf1919cb9153a87ecb3a",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 0,
+      "FR": 6,
+      "ACER": 0.03333333333333333,
+      "AUC": 0.997119341563786
+    },
+    "E1_44": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z",
+      "video_csv_sha256": "eae49c03206b960c26338a0e298e72b262b00c68c1833d704ed7525bbb1f281c",
+      "frame_csv_sha256": "c34236ce55481db7a447e6cda04c2a891052c1e258a6c38625604a42482f13ad",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 1,
+      "FR": 4,
+      "ACER": 0.024074074074074074,
+      "AUC": 0.9950205761316873
+    },
+    "E3_44": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z",
+      "video_csv_sha256": "6326e553107db8791d35ae9bc0dd29784b170258c58e79abd4ac98b38c4db100",
+      "frame_csv_sha256": "472eaa7122ac2e69a14a90cb05519b278af595ca83ac620800970183cd61f428",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 0,
+      "FR": 8,
+      "ACER": 0.044444444444444446,
+      "AUC": 0.9973251028806585
+    },
+    "E1_45": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z",
+      "video_csv_sha256": "928a8e1ca39c723f2d9509f8fed0f160871cd82b2b01757941ed80f1a9978211",
+      "frame_csv_sha256": "4401d0d320c5dd5e6b163e07342d4a09a956e412133fa5b2c4ba82725f69b3e7",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 0,
+      "FR": 7,
+      "ACER": 0.03888888888888889,
+      "AUC": 0.993127572016461
+    },
+    "E3_45": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z",
+      "video_csv_sha256": "4f5af90c886dd52fc5fc14b63230c5a546c8e54ab70a0685218f10ad2c88c4f2",
+      "frame_csv_sha256": "1c8fab51653b8d82ca5f141fb2740ee4ebc77b63a64dd1ddc41fb3522b1e4cc3",
+      "frames": 7200,
+      "videos": 360,
+      "FA": 0,
+      "FR": 6,
+      "ACER": 0.03333333333333333,
+      "AUC": 0.9943621399176955
+    }
+  },
+  "cost_rows": 3600,
+  "cost_csv_sha256": "6034ac6f7133c5cee91a5f310fda0d79d68edb153a4b596453ab3b566cc83ce7",
+  "images": {
+    "case_12_seed44_casia_s30_vHR_4.png": {
+      "source": "reports\\round7\\figures-attempt03\\case_12_seed44_casia_s30_vHR_4.png",
+      "sha256": "472c9982e70482d0f5e48630d515a9bcc813238848f6ec50b0400d69a6d40ff6"
+    },
+    "case_13_seed44_casia_s31_v1.png": {
+      "source": "reports\\round7\\figures-attempt03\\case_13_seed44_casia_s31_v1.png",
+      "sha256": "dc6a68612cfec27002bf7fe3652ff756bd91641095a8492138f7b89d2e350f93"
+    },
+    "e0-e1-curves.png": {
+      "source": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\e0-e1-curves.png",
+      "sha256": "87ab6d23fa8b88967e693d98714aeced8aa2585231834d2824e3b4079e69c63c"
+    },
+    "e1-e2-score-histograms.png": {
+      "source": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\e1-e2-score-histograms.png",
+      "sha256": "42ad48bad621e3b7e156540e750ca38ea9963fe1498d27252358d3373ab52bf8"
+    },
+    "pipeline.png": {
+      "source": "reports\\bao_cao_cuoi_ky\\hinh_anh\\hoan_thien\\pipeline.png",
+      "sha256": "d5400ab168714794cf788355841b75dbb4841038c1e758bd6cd821b29c914c26"
+    },
+    "validation-depth-case.png": {
+      "source": "reports\\bao_cao_cuoi_ky\\hinh_anh\\notebook\\validation-depth-case.png",
+      "sha256": "84ad135e6e6dfd7ea323e22aaa366787ec1cb134364ed95875f930d90c826b5b"
+    }
+  },
+  "note": "Historical seed 42 remains a separate cohort; webcam findings are taken from the existing integrity/state audit, not new trials."
+}

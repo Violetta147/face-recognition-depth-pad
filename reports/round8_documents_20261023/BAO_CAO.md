@@ -32,13 +32,11 @@ Trách nhiệm chuyên môn và công việc phối hợp của hai thành viên
 | Trịnh Minh Đạt (102230180) | Tổng quan tài liệu và xây dựng câu hỏi nghiên cứu; chuẩn bị và phân chia dữ liệu, tạo nhãn giả độ sâu; xây dựng tiêu chí đánh giá; thiết kế đối chứng E3 và phân tích kết quả, sai số. | Biên soạn cơ sở lý thuyết, phương pháp đánh giá và thảo luận; đối chiếu số liệu, kiểm tra cấu hình; cùng hoàn thiện báo cáo, bài báo và nội dung trình bày. |
 | Nguyễn Hữu Minh Quân (102230208) | Thiết kế và triển khai các mô hình E0, E1, E2, E3b và E4; xây dựng quy trình huấn luyện, hàm mất mát và nhánh phân loại; đánh giá chi phí mô hình và thời gian suy luận. | Biên soạn kiến trúc, thiết lập thực nghiệm và kết quả; kiểm tra mã nguồn, khả năng tái lập; cùng hoàn thiện báo cáo, bài báo và nội dung trình bày. |
 
-[[PAGE_BREAK]]
-
 # Tóm tắt đề tài
 
-Báo cáo đánh giá nhánh phân loại học sâu trên bản đồ giả độ sâu cho bài toán phát hiện tấn công trình diện khuôn mặt (Presentation Attack Detection, PAD). Nghiên cứu sử dụng CASIA-FASD gồm 600 video của 50 chủ thể, lấy 20 khung hình mỗi video và chia độc lập theo chủ thể thành 16 người huấn luyện, 4 người kiểm định và 30 người kiểm tra. Trọng số và ngưỡng được chọn từ tập kiểm định. Thực nghiệm seed 42 so sánh sáu cấu hình E0–E4; CDCN dùng trung bình không gian E1 và nhánh phân loại đóng băng mạng khung E2 cùng đạt ACER 2,7778%, trong khi E3/E3b đạt 5,0000% và E4 đạt 4,4444%. Với ba seed mới 43–45 trong cùng môi trường, E1 đạt ACER 4,3210 ± 2,1623% và E3 đạt 3,7037 ± 0,6415% (trung bình ± độ lệch chuẩn mẫu). Chênh lệch ghép cặp E3 − E1 là −0,6173 ± 2,6857 điểm phần trăm; E3 kém hơn tại seed 44. Nhánh phân loại bổ sung 1.265 tham số và tăng trung vị thời gian forward trên A100 khoảng 0,7961%. Phân tích hình lỗi và các lượt webcam đã đo cho thấy giới hạn của nhãn giả độ sâu, sai khác số học CPU/CUDA và lỗi từ chối người thật. Bằng chứng hiện có chưa xác nhận cải thiện ổn định hoặc khả năng triển khai xác thực khuôn mặt đáng tin cậy.
+Báo cáo đánh giá nhánh phân loại học sâu trên bản đồ giả độ sâu cho bài toán phát hiện tấn công trình diện khuôn mặt (Presentation Attack Detection, PAD). Nghiên cứu sử dụng CASIA-FASD gồm 600 video của 50 chủ thể, lấy 20 khung hình mỗi video và chia độc lập theo chủ thể thành 16 người huấn luyện, 4 người kiểm định và 30 người kiểm tra. Trọng số và ngưỡng được chọn từ tập kiểm định. Thực nghiệm seed 42 so sánh sáu cấu hình E0–E4; mạng tích chập sai phân trung tâm (CDCN) dùng trung bình không gian E1 và nhánh phân loại đóng băng mạng khung E2 cùng đạt tỷ lệ lỗi phân loại trung bình (Average Classification Error Rate, ACER) 2,7778%, trong khi E3/E3b đạt 5,0000% và E4 đạt 4,4444%. Với ba seed mới 43–45 trong cùng môi trường, E1 đạt ACER 4,3210 ± 2,1623% và E3 đạt 3,7037 ± 0,6415% (trung bình ± độ lệch chuẩn mẫu). Chênh lệch ghép cặp E3 − E1 là −0,6173 ± 2,6857 điểm phần trăm; E3 kém hơn tại seed 44. Nhánh phân loại bổ sung 1.265 tham số và tăng trung vị thời gian forward trên A100 khoảng 0,7961%. Phân tích hình lỗi và các lượt webcam đã đo cho thấy giới hạn của nhãn giả độ sâu, sai khác số học CPU/CUDA và lỗi từ chối người thật. Bằng chứng hiện có chưa xác nhận cải thiện ổn định hoặc khả năng triển khai xác thực khuôn mặt đáng tin cậy.
 
-Từ khóa: chống giả mạo khuôn mặt; phát hiện tấn công trình diện (PAD); mạng CDCN; bản đồ giả độ sâu (pseudo-depth); bộ phân loại độ sâu; nghiên cứu thực nghiệm.
+Từ khóa: Face anti-spoofing; Presentation attack detection; Central difference convolution; Pseudo-depth; Auxiliary supervision.
 
 # Mục lục
 
@@ -155,7 +153,7 @@ Phân chia nêu trên là giao thức phát triển (development protocol) đư�
 
 Các khung hình của phiên bản dữ liệu đã tập trung vào vùng khuôn mặt; tiền xử lý giữ cùng vùng ảnh và thay đổi kích thước đầu vào theo từng nhóm mô hình. E0 sử dụng ảnh RGB 224 × 224 với chuẩn hóa ImageNet. Các cấu hình E1–E4 sử dụng ảnh RGB 256 × 256, chuẩn hóa từng kênh bằng trung bình 0,5 và độ lệch chuẩn 128/255. Phép lật ngang trong huấn luyện được áp dụng đồng bộ cho ảnh và bản đồ mục tiêu.
 
-Trong pha huấn luyện, kỹ thuật tăng cường dữ liệu lật ngang ngẫu nhiên (random horizontal flip) với xác suất 0,5 được áp dụng đồng bộ cho cả ảnh đầu vào RGB và bản đồ độ sâu mục tiêu. Trong pha kiểm định và kiểm tra, dữ liệu được giữ nguyên hoàn toàn mà không áp dụng phép biến đổi ngẫu nhiên nào. Bản đồ độ sâu mục tiêu được đưa về kích thước 32 × 32; trong trường hợp giá trị cực đại trên bản đồ vượt quá 1, toàn bộ bản đồ được chuẩn hóa bằng cách chia cho giá trị cực đại đó. Tất cả các cấu hình mô hình trong nghiên cứu đều tuân thủ nghiêm ngặt quy trình tiền xử lý này.
+Trong pha huấn luyện, kỹ thuật tăng cường dữ liệu lật ngang ngẫu nhiên (random horizontal flip) với xác suất 0,5 được áp dụng đồng bộ cho cả ảnh đầu vào RGB và bản đồ độ sâu mục tiêu. Trong pha kiểm định và kiểm tra, dữ liệu được giữ nguyên hoàn toàn mà không áp dụng phép biến đổi ngẫu nhiên nào. Bản đồ độ sâu mục tiêu được đưa về kích thước 32 × 32; trong trường hợp giá trị cực đại trên bản đồ vượt quá 1, toàn bộ bản đồ được chuẩn hóa bằng cách chia cho giá trị cực đại đó. Các cấu hình dựa trên độ sâu tuân thủ quy trình tiền xử lý này.
 
 ## 2.4 Xây dựng nhãn giả độ sâu
 
@@ -184,9 +182,7 @@ Tính hữu hạn và cấu trúc khác không chỉ xác nhận điều kiện 
 
 Nhãn phân loại được quy ước bằng 1 cho khung hình người thật và bằng 0 cho khung hình tấn công. Mọi khung hình trong cùng video có cùng nhãn và thuộc cùng phân tập. Các cấu hình E0–E4 sử dụng cùng danh sách video và cùng phân chia chủ thể, nhằm duy trì điều kiện dữ liệu thống nhất khi đối sánh hiệu năng.
 
-## 2.7 Kiến trúc và luồng xử lý
-
-## 2.8 Quy trình xử lý và các phương án
+## 2.7 Quy trình xử lý và các phương án
 
 Quy trình xử lý tổng thể tiếp nhận đầu vào là các khung hình RGB, dự đoán điểm số phân loại cho từng khung hình riêng lẻ, sau đó lấy giá trị trung bình cộng của 20 khung hình để tạo thành điểm số quyết định ở cấp độ video. Trong hệ thống thực nghiệm của nhóm, cấu hình E0 là mô hình MobileNetV3-Small thực hiện phân loại nhị phân trực tiếp từ ảnh RGB. Cấu hình E1 là mô hình CDCN tiêu chuẩn sử dụng phép lấy trung bình không gian trên bản đồ độ sâu. Cấu hình E2 giữ nguyên mạng khung tạo bản đồ độ sâu của E1 nhưng thay thế phép tính trung bình bằng một nhánh phân loại tích chập nhỏ gọn. Các cấu hình E3, E3b và E4 sử dụng chung kiến trúc mạng có nhánh phân loại của E2 nhưng áp dụng các chiến lược huấn luyện và hàm mất mát khác nhau nhằm đánh giá tác động của việc tinh chỉnh đồng thời hoặc chia giai đoạn.
 
@@ -194,13 +190,13 @@ Quy trình xử lý tổng thể tiếp nhận đầu vào là các khung hình 
 
 Hình 2 trình bày luồng suy luận và giám sát huấn luyện. Mạng khung (backbone) chuyển ảnh RGB thành bản đồ độ sâu kích thước 1 × 32 × 32; cơ chế trích xuất điểm phân loại chuyển bản đồ này thành điểm số người thật. E1 dùng trung bình không gian, còn E2–E4 sử dụng nhánh phân loại đầu ra (classification head) có tham số. Các mũi tên nét liền biểu thị suy luận; mũi tên nét đứt biểu thị tín hiệu giám sát từ nhãn giả độ sâu và nhãn thật/giả.
 
-## 2.9 Đối chứng RGB E0
+## 2.8 Đối chứng RGB E0
 
 Cấu hình đối chứng E0 sử dụng kiến trúc mạng gọn nhẹ MobileNetV3-Small [4], được khởi tạo từ bộ trọng số tiền huấn luyện (pre-trained weights) và thay thế tầng phân loại cuối bằng một nút đầu ra nhị phân duy nhất. Giá trị đầu ra thô (logit) được đưa qua hàm kích hoạt Sigmoid để ánh xạ về miền xác suất trong khoảng (0, 1). Mô hình E0 được huấn luyện trực tiếp bằng hàm mất mát entropy chéo nhị phân (Binary Cross-Entropy – BCE) trên nhãn thật/giả.
 
 Cấu hình E0 đóng vai trò làm mốc tham chiếu cho hướng tiếp cận phân loại ảnh RGB thuần túy. Do E0 và E1 khác biệt toàn diện về kiến trúc mạng khung, độ phân giải đầu vào, phương pháp chuẩn hóa và hàm mất mát mục tiêu, phép so sánh giữa E0 và E1 chỉ mang ý nghĩa đối chiếu tổng thể giữa hai hướng tiếp cận chứ không nhằm cô lập riêng rẽ tác động nhân quả của cơ chế giám sát độ sâu. Để đánh giá chính xác vai trò của cơ chế trích xuất điểm phân loại từ bản đồ độ sâu, phép đối sánh có kiểm soát chặt chẽ nhất trong nghiên cứu này là giữa E1 và E2 trên cùng một mạng khung đã cố định.
 
-## 2.10 CDCN tính điểm bằng trung bình không gian E1
+## 2.9 CDCN tính điểm bằng trung bình không gian E1
 
 Phép tích chập hai chiều truyền thống (vanilla convolution) tính tổng có trọng số của các điểm ảnh trong vùng lân cận cục bộ để trích xuất đặc trưng cường độ sáng. Phép tích chập sai phân trung tâm (Central Difference Convolution – CDC) mở rộng cơ chế này bằng cách bổ sung thêm thành phần chênh lệch (gradient) giữa các điểm ảnh lân cận so với điểm ảnh trung tâm. Xét tại tọa độ tâm p₀ cùng các vector độ lệch p trong cửa sổ lân cận R, phép toán CDC được xác định bởi công thức:
 
@@ -221,17 +217,17 @@ Bảng 4 Kích thước chính của CDCN trên một ảnh RGB 256
 
 Cấu trúc mạng CDCN trích xuất đặc trưng qua ba khối đa mức (low-level, mid-level và high-level). Các bản đồ đặc trưng từ ba khối này được nội suy song tuyến (bilinear interpolation) về cùng kích thước không gian 32 × 32, sau đó ghép nối theo chiều kênh (concatenation) để tạo thành tensor hợp nhất 384 × 32 × 32, trước khi đi qua chuỗi lớp tích chập giảm chiều kênh 384 → 128 → 64 → 1 để sinh ra bản đồ độ sâu cuối cùng. Lớp kích hoạt ReLU ở đầu ra đảm bảo các giá trị độ sâu dự đoán luôn không âm. Ở cấu hình E1, điểm số phân loại được tính bằng trung bình cộng trên toàn bộ 32 × 32 điểm ảnh của bản đồ dự đoán mà không sử dụng mặt nạ khuôn mặt (face mask).
 
-## 2.11 Phạm vi kế thừa kiến trúc CDCN
+## 2.10 Phạm vi kế thừa kiến trúc CDCN
 
 Mô hình đối chứng kế thừa kiến trúc CDCN tiêu chuẩn từ công trình gốc [1] và mã nguồn tác giả [7]. Nghiên cứu sử dụng quy trình phân chia dữ liệu, sinh nhãn giả độ sâu, huấn luyện và đánh giá riêng cho CASIA-FASD. Vì vậy, các kết quả phản ánh phép đối sánh trong thiết lập hiện tại, thay vì tái lập toàn bộ giao thức đánh giá của công trình gốc.
 
-## 2.12 Nhánh phân loại học sâu trên bản đồ độ sâu E2
+## 2.11 Nhánh phân loại học sâu trên bản đồ độ sâu E2
 
 Cấu hình E2 sử dụng trọng số mạng khung được chọn từ E1, cố định toàn bộ tham số cùng thống kê chuẩn hóa theo lô (Batch Normalization) trong quá trình huấn luyện. Nhánh phân loại tiếp nhận bản đồ độ sâu 1 × 32 × 32, lần lượt đi qua Conv(1 → 8) và Conv(8 → 16), đều có bộ lọc 3 × 3, đệm biên bằng 1 và hàm ReLU. Tầng gộp trung bình toàn cục (Global Average Pooling – GAP) tạo vector đặc trưng cho lớp tuyến tính Linear(16 → 1); hàm Sigmoid chuyển đầu ra thành điểm số phân loại.
 
 Nhánh phân loại bổ sung 1.265 tham số: 80 ở lớp tích chập thứ nhất, 1.168 ở lớp tích chập thứ hai và 17 ở lớp tuyến tính cuối. Tổng số tham số tăng từ 2.245.016 lên 2.246.281. Do 100% tham số và thống kê mạng khung được giữ cố định, E1 và E2 sử dụng cùng bản đồ độ sâu; khác biệt nằm ở phép ánh xạ bản đồ sang điểm số phân loại.
 
-## 2.13 Hàm mất mát và tham số được cập nhật
+## 2.12 Hàm mất mát và tham số được cập nhật
 
 Quá trình huấn luyện mạng dựa trên việc tối thiểu hóa hàm mất mát (loss function) phản ánh độ sai lệch giữa dự đoán của mô hình và nhãn mục tiêu. Hàm mất mát độ sâu (depth loss) trong kiến trúc CDCN chính thức là sự kết hợp giữa sai số bình phương trung bình (Mean Squared Error – MSE) trên toàn bản đồ độ sâu và sai số MSE tương phản trên tám hướng sai phân lân cận:
 
@@ -249,7 +245,7 @@ Trong công thức trên, toán tử Δ đại diện cho bộ tám bộ lọc c
 
 Trong công thức Focal, p_t là xác suất dự đoán cho lớp nhãn đúng và γ = 2 là hệ số điều biến. Hệ số cân bằng lớp α_t bằng 0,25 đối với người thật và 0,75 đối với tấn công. Thừa số (1 − p_t)^γ giảm đóng góp của các khung hình được phân loại đúng với độ tự tin cao, qua đó tăng vai trò tương đối của những khung hình khó. Phép đối sánh E3b–E4 đánh giá thay đổi này trên cùng lịch trình huấn luyện theo giai đoạn.
 
-## 2.14 Cấu hình và lịch trình huấn luyện
+## 2.13 Cấu hình và lịch trình huấn luyện
 
 Trong thiết lập huấn luyện, mỗi chu kỳ (epoch) tương ứng với một lượt duyệt qua toàn bộ tập huấn luyện; kích thước lô (batch size) quy định số lượng mẫu xử lý trong mỗi bước cập nhật trọng số. Các nhánh mô hình dựa trên độ sâu được tối ưu hóa bằng thuật toán Adam với tốc độ học (learning rate – LR) và hệ số suy giảm trọng số (weight decay – WD) được chuẩn hóa rõ ràng trong tệp cấu hình. Để đảm bảo tính nhất quán và khả năng tái lập kết quả, đợt khảo sát sáu cấu hình sử dụng hạt giống (seed) 42; đợt lặp E1/E3 sử dụng ba seed 43, 44 và 45.
 
@@ -268,29 +264,29 @@ Khởi đầu từ bộ trọng số mạng khung đã huấn luyện của E1, 
 
 Quy tắc lựa chọn trọng số mô hình (checkpoint selection) được thiết lập chặt chẽ dựa trên tập kiểm định: mô hình E1 và các giai đoạn huấn luyện độ sâu lựa chọn checkpoint tại epoch có giá trị hàm mất mát độ sâu (validation depth loss) thấp nhất; trong khi E2 cùng các giai đoạn huấn luyện nhánh phân loại hoặc huấn luyện đồng thời của E3, E3b và E4 lựa chọn checkpoint dựa trên giá trị hàm mất mát phân loại BCE trên tập kiểm định thấp nhất (áp dụng thống nhất thước đo BCE ngay cả khi E4 được huấn luyện bằng Focal loss). Theo quy tắc này, E3b đạt trạng thái tốt nhất tại epoch thứ 2 của giai đoạn kết hợp (tương ứng chu kỳ toàn cục – global epoch 10), và E4 đạt trạng thái tốt nhất tại epoch thứ 6 của giai đoạn kết hợp (global epoch 14), thay vì lấy mặc định trọng số ở chu kỳ cuối cùng.
 
-## 2.15 Tổng hợp điểm số video và ngưỡng quyết định
+## 2.14 Tổng hợp điểm số video và ngưỡng quyết định
 
 Trong pha suy luận, điểm số của mỗi video được tính bằng giá trị trung bình cộng điểm số của 20 khung hình thuộc video đó. Điểm số càng cao biểu thị mức dự đoán nghiêng về lớp người thật; riêng trung bình độ sâu E1 không phải xác suất đã hiệu chuẩn và không bị chặn trên tại 1; một video được phân loại là người thật nếu điểm số lớn hơn hoặc bằng ngưỡng quyết định (threshold). Bộ đánh giá tự động xác lập ngưỡng quyết định trên tập kiểm định sao cho tối thiểu hóa chỉ số ACER; trong trường hợp có nhiều mức ngưỡng đạt cùng giá trị ACER thấp nhất, quy tắc phá vỡ thế hòa (tie-breaking rule) sẽ ưu tiên chọn ngưỡng có độ chênh lệch tuyệt đối |APCER − BPCER| nhỏ hơn, và tiếp đến là ưu tiên giá trị ngưỡng nhỏ hơn. Do phân phối thang điểm đầu ra của mỗi mô hình khác nhau, mỗi cấu hình sở hữu một ngưỡng tối ưu riêng biệt được khóa cố định hoàn toàn trước khi tiến hành chấm điểm trên tập kiểm tra.
 
-## 2.16 Thiết kế lặp lại trên ba seed
+## 2.15 Thiết kế lặp lại trên ba seed
 
 Đợt đánh giá tiếp theo giữ cùng danh sách 600 video, phân chia chủ thể và nhãn giả độ sâu. Mỗi seed 43, 44 và 45 có một lần huấn luyện E1 đủ 30 epoch; từ trọng số E1 được chọn theo validation, E3 được tinh chỉnh đồng thời thêm 16 epoch. Cả sáu lần dùng A100-SXM4-40GB, PyTorch 2.11.0+cu130, CUDA 13.0 và cuDNN 92700. Tổng số chu kỳ là 138. E3 được xác định từ lựa chọn validation của đợt seed 42, trước khi đánh giá test của đợt mới.
 
 E1 giữ Adam, LR 10⁻⁴, batch 8 và weight decay 5×10⁻⁵; E3 giữ LR 10⁻⁴, batch 8 và weight decay 10⁻⁴. Mỗi lần huấn luyện có trọng số và ngưỡng validation riêng. Thống kê trung bình và độ lệch chuẩn mẫu chỉ tính trên ba seed mới; seed 42 được trình bày tách biệt vì thuộc đợt khảo sát và môi trường lịch sử khác. Ba lần dự đoán trên cùng 360 video không tạo thành 1.080 video độc lập.
 
-## 2.17 Thiết kế đo chi phí suy luận
+## 2.16 Thiết kế đo chi phí suy luận
 
 Chi phí được đo riêng cho E1 và E3 seed 43 cùng E4 seed 42 trên một phiên A100-SXM4-40GB, PyTorch 2.11.0+cu130. Dữ liệu vào là tensor RGB 256 × 256, float32, batch 1, với hai khung hình validation luân phiên. Sáu hoán vị thứ tự của ba mô hình được sử dụng; mỗi mô hình xuất hiện hai lần ở mỗi vị trí. Mỗi lượt gồm 50 forward khởi động và 200 forward có đo, tổng cộng 1.200 phép đo mỗi mô hình. Tất cả phép đo, kể cả giá trị chậm, tham gia thống kê.
 
 CUDA event đo thời gian forward trên stream GPU; thời gian host đo cùng forward có đồng bộ GPU. Hai đại lượng mô tả cùng tác vụ từ hai phía và không được cộng lại. Decode, resize, chuẩn hóa, truyền tensor lên GPU, detector và crop nằm ngoài phạm vi đo. Mô hình chạy ở chế độ đánh giá, không autocast, TF32, compile hoặc CUDA Graph. p50 và p95 được tính trên toàn bộ 1.200 giá trị của mỗi mô hình bằng nội suy tuyến tính.
 
-## 2.18 Thiết kế phân tích lỗi và minh họa độ sâu
+## 2.17 Thiết kế phân tích lỗi và minh họa độ sâu
 
 Quyết định E1/E3 được đối chiếu theo cùng seed, video và nhãn. Trong mỗi nhóm kết quả và loại tấn công, video đầu theo thứ tự định danh được chọn trước khi quan sát RGB. Khung hình thứ 11 trong 20 khung hình theo thời gian đại diện cho mỗi video. Quy tắc tạo 20 trường hợp trên ba seed; đây là lựa chọn minh họa có chủ đích, không phải mẫu ngẫu nhiên để ước lượng tỷ lệ lỗi.
 
 Các panel sử dụng cùng thang độ sâu [0,1] và cùng thang sai số tuyệt đối [0;0,9920669794]. Dự đoán độ sâu là kết quả CPU đã có của một khung hình; điểm và quyết định cấp video vẫn là trung bình 20 điểm CUDA của phép đánh giá đã cố định. Sai số tuyệt đối được tính từ bản đồ dự đoán và mục tiêu tương ứng. Sự khác nhau giữa một khung hình minh họa và quyết định toàn video được giữ rõ trong diễn giải.
 
-## 2.19 Thiết lập nguyên mẫu webcam đã đo
+## 2.18 Thiết lập nguyên mẫu webcam đã đo
 
 Nguyên mẫu sử dụng E3 seed 43, là seed đầu của đợt đã đăng ký, với ngưỡng validation 0,3983212910592556. Máy đo có Intel Core i5-7200U, hai thread CPU, PyTorch 2.11.0 CPU và webcam laptop MSMF 640 × 480. Sau lượt thăm dò Haar, bốn lượt tiếp theo dùng YuNet 2023mar với confidence detector 0,5, OpenCV 4.14.0, cửa sổ trung vị 5 khung hình, khoảng cách tối đa 5 giây và ngưỡng giao trên hợp vùng mặt (Intersection over Union, IoU) 0,4. Confidence detector và ngưỡng PAD phục vụ hai quyết định khác nhau.
 
@@ -360,7 +356,7 @@ Phân tích đối chiếu quyết định trên từng video ở Bảng 8 cho t
 
 Hình 3 trình bày hàm mất mát huấn luyện và kiểm định của E0, E1. Trọng số E0 được chọn tại chu kỳ 5 theo BCE; trọng số E1 được chọn tại chu kỳ 25 theo hàm mất mát độ sâu. Do hai hàm mục tiêu có ý nghĩa toán học và thang đo khác nhau, độ lớn tuyệt đối của chúng không trực tiếp phản ánh thứ hạng hiệu năng phân loại. Mỗi mô hình được chọn tại giá trị mất mát kiểm định thấp nhất theo hàm mục tiêu tương ứng.
 
-E2 có BCE kiểm định thấp nhất là 0,031453 tại chu kỳ 1 trong tổng số 10 chu kỳ. Đối với E3 và E3b, trọng số được chọn tại chu kỳ toàn cục 10/16; E4 được chọn tại chu kỳ toàn cục 14/16. Các vị trí này được xác định theo quy tắc chọn trọng số trình bày ở Mục 2.14.
+E2 có BCE kiểm định thấp nhất là 0,031453 tại chu kỳ 1 trong tổng số 10 chu kỳ. Đối với E3 và E3b, trọng số được chọn tại chu kỳ toàn cục 10/16; E4 được chọn tại chu kỳ toàn cục 14/16. Các vị trí này được xác định theo quy tắc chọn trọng số trình bày ở Mục 2.13.
 
 ![Hình 4 Phân bố điểm số video và ngưỡng quyết định của E1 và E2](assets/e1-e2-score-histograms.png)
 
