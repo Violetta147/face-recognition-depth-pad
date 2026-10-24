@@ -8,13 +8,17 @@ CDCN có bộ phân loại học từ bản đồ độ sâu. Kế hoạch gồm
 
 Đọc [trạng thái và kết quả](docs/PROJECT_STATUS.md), sau đó đọc
 [bàn giao hiện hành](docs/handoffs/CURRENT.md). Bàn giao chỉ rõ phần còn thiếu
-của Lượt 7 và các bước làm Lượt 8. Không cần lịch sử chat hoặc prompt đặc biệt.
+của Lượt 7–8 và vị trí tài liệu mới. Không cần lịch sử chat hoặc prompt đặc biệt.
 Phiên Codex mới làm việc trong thư mục repository đã mở.
 
 Lượt 1–6 đã có kết quả. Lượt 7 đã có phân tích lỗi ba seed, 20 hình và log
 webcam thực đo. Lượt 7 còn thiếu cảnh ảnh in, kiểm quay lại đủ cửa sổ và
-hoàn thiện giải thích lỗi webcam. Word, paper và slide lịch sử mới đến
-Lượt 5; việc tích hợp kết quả mới và hoàn thiện báo cáo còn chưa thực hiện.
+hoàn thiện giải thích lỗi webcam. [Báo cáo và paper mới](reports/round8_documents_20261023/README.md)
+đã tích hợp kết quả đến Lượt 7: báo cáo 35 trang, phần chính 27 trang, đúng
+ba chương; paper tiếng Việt sáu trang theo bố cục tham chiếu IEEE conference.
+Các bản lịch sử giữ nguyên. Chưa làm webcam, slide hoặc train mới trong
+phiên tài liệu; chưa push, upload hoặc nộp bài. Phiên sau đọc bàn giao và
+tiếp tục theo nhiệm vụ người dùng giao.
 
 ## Thiết lập và dữ liệu
 
@@ -46,8 +50,9 @@ Webcam không thay cho đánh giá CASIA đã khóa.
 | `src/deepface_pad/`, `scripts/`, `tests/` | Mã thư viện, lệnh chạy và kiểm thử. |
 | `configs/`, `notebooks/` | Cấu hình và quy trình Colab; notebook Executed giữ đầu ra lịch sử. |
 | `reports/ROUND_6_*`, `reports/round7/` | Kết quả, hình và giới hạn của Lượt 6–7. |
-| `reports/bao_cao_cuoi_ky/` | Nguồn Markdown, Word, hình và bằng chứng báo cáo. |
-| `reports/paper_round5/`, `reports/slides_round5/` | Paper và slide lịch sử cần cập nhật ở Lượt 8. |
+| [reports/round8_documents_20261023/](reports/round8_documents_20261023/README.md) | Báo cáo/paper Word và Markdown mới, kiểm trang, provenance và nguồn số/hình. |
+| `reports/bao_cao_cuoi_ky/`, `reports/paper_round5/` | Báo cáo/paper lịch sử đến Lượt 5, được giữ nguyên. |
+| `reports/slides_round5/` | Slide lịch sử; slide Lượt 8 chưa thực hiện. |
 | `data/`, `evidence/`, các tệp được theo dõi trong `artifacts/` | Manifest, checkpoint, score, số đo và nguồn dựng hình. |
 
 Tài liệu có ngày hoặc số lượt ghi trạng thái tại thời điểm đó. Dùng

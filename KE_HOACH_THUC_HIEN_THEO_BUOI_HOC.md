@@ -6,7 +6,21 @@
 **Mục tiêu:** Mỗi lượt có tiến bộ nghiên cứu quan sát được và tích lũy trực tiếp cho báo cáo giữa kỳ hoặc paper  
 **Đặc tả nghiên cứu:** [DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md](DAC_TA_HE_THONG_NHAN_DIEN_KHUON_MAT_PAD_DEPTH_MAP.md)
 
-## Quyết định hiện hành ngày 16 tháng 10 năm 2026
+## Trạng thái hiện hành ngày 24 tháng 10 năm 2026
+
+Đã tạo mới [báo cáo và paper Lượt 8](reports/round8_documents_20261023/README.md)
+từ bằng chứng đến Lượt 7, giữ nguyên tài liệu lịch sử. Báo cáo tiếng Việt
+35 trang toàn bộ, phần chính kể cả kết luận 27/50 trang; ba chương 5/10/11
+trang so với giới hạn 15/25/20. Paper sáu trang tiếng Việt, không abstract
+tiếng Anh, dùng từ khóa chuyên ngành và bố cục tham chiếu IEEE conference;
+chưa chọn nơi nộp. Đã kiểm số liệu, provenance và bố cục.
+
+Phiên này chỉ làm tài liệu và bàn giao. Webcam còn thiếu, slide, luyện trình
+bày và train mới chưa thực hiện trong phiên này. Lượt 8 tổng thể chưa hoàn
+tất. Tiếp tục theo [bàn giao hiện hành](docs/handoffs/CURRENT.md) và nhiệm vụ
+người dùng giao; không tự chạy phần còn lại chỉ vì có trong kế hoạch.
+
+## Quyết định nghiên cứu ngày 16 tháng 10 năm 2026 (lịch sử)
 
 Tạm dừng điền báo cáo Word cuối kỳ để tiếp tục các thí nghiệm còn lại. Giữ
 CASIA-FASD, manifest, split và nhãn độ sâu đã dùng ở Official E1/E2; không đổi
@@ -620,7 +634,7 @@ Giải thích model tốt và kém ở đâu, sau đó đưa model tốt nhất 
 - [x] Demo tách khỏi số benchmark CASIA đã khóa.
 - [x] Có FPS/TTD thực đo; lượt thiếu window ghi thiếu, không ghi 0.
 - [x] Có video dự phòng cho năm lượt đo, giữ cả lượt lỗi.
-- [ ] Ghép addendum Results/Discussion đã có vào paper/Word lịch sử.
+- [x] Ghép addendum Results/Discussion vào báo cáo/paper mới ở `reports/round8_documents_20261023/`; giữ nguyên bản lịch sử.
 - [ ] Bổ sung print khi có mẫu giấy và kiểm quay lại đủ window; frontend/PAD còn lỗi.
 
 ---
@@ -659,13 +673,16 @@ Trình bày dự án như một nghiên cứu nhỏ: vấn đề, khoảng trố
 
 ### Tiêu chí đạt
 
-- [ ] Mọi con số truy ngược được về run ID.
-- [ ] Có bảng nội bộ và bảng paper comparison riêng.
-- [ ] Có mean và standard deviation khi đủ run.
-- [ ] Có cả failure case.
-- [ ] Không tuyên bố xử lý mask 3D hoặc mọi attack.
+Các mục đã đánh dấu dưới đây áp dụng cho hai tài liệu mới; slide và luyện
+trình bày chưa được xác nhận hoàn thành.
+
+- [x] Mọi con số truy ngược được về run ID.
+- [x] Có bảng nội bộ và bảng paper comparison riêng.
+- [x] Có mean và standard deviation khi đủ run.
+- [x] Có cả failure case.
+- [x] Không tuyên bố xử lý mask 3D hoặc mọi attack.
 - [ ] Cả hai thành viên đều trả lời được câu hỏi về data, model và metric.
-- [ ] Paper draft hoặc technical report hoàn chỉnh.
+- [x] Paper draft hoặc technical report hoàn chỉnh; có nguồn chỉnh sửa và kiểm bố cục trong gói mới.
 
 ---
 

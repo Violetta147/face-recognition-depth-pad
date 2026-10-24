@@ -1,8 +1,9 @@
 # Trạng thái DeepFace-PAD
 
-Cập nhật ngày 23/10/2026. Phạm vi hiện tại: hoàn tất kế hoạch 8 lượt trong
-KE_HOACH_THUC_HIEN_THEO_BUOI_HOC.md, mục 10 (Lượt 7) và mục 11 (Lượt 8).
-Không cần train thêm để tiếp tục các phần còn thiếu dưới đây.
+Cập nhật ngày 24/10/2026. Đã hoàn thành phần báo cáo và paper mới của Lượt 8
+từ bằng chứng đến Lượt 7. Phiên hiện tại chỉ cập nhật bàn giao; chưa làm
+webcam, slide hoặc train mới. Những phần còn lại của kế hoạch tám lượt dưới
+đây là trạng thái công việc, không phải quyền tự thực hiện trong phiên sau.
 
 ## 2. Thuật ngữ
 
@@ -69,8 +70,9 @@ Không thay E3 bằng E4 sau khi xem thứ hạng test. E1-Lite và các lượt
 không thuộc bảng kết quả chính.
 
 Nguồn số chính xác và run ID: `reports/ROUND_5_TEST_RESULTS_2026-10-16.json`.
-Bản Word báo cáo, paper và slide hiện tại trình bày đến Lượt 5. Các bản này
-chưa chứa kết quả mới của Lượt 6 và Lượt 7.
+Bản Word báo cáo, paper và slide lịch sử trình bày đến Lượt 5. Báo cáo/paper
+mới ở `reports/round8_documents_20261023/` đã tích hợp Lượt 6–7, xem mục 4.6.
+Slide mới chưa thực hiện.
 
 ### 4.2. Lượt 6: ba cặp E1/E3
 
@@ -149,13 +151,35 @@ Năm video/CSV đã được kiểm hash, số frame giải mã, median, state v
 Bản GitHub chứa log số. Video đi qua bộ giao nhận riêng. Nhãn cảnh do người
 chạy khai báo. Không tính ACER từ vài clip hoặc coi các frame là trial độc lập.
 
-## 5. Phần còn lại của kế hoạch 8 lượt
+### 4.6. Lượt 8: báo cáo và paper mới đã hoàn thành
+
+Gói hiện hành: [reports/round8_documents_20261023](../reports/round8_documents_20261023/README.md).
+Đã tạo mới hai Word và hai nguồn Markdown, giữ nguyên bản lịch sử. Báo cáo
+tiếng Việt đúng ba chương: tổng quan nghiên cứu và ưu/nhược, giải pháp,
+đánh giá. Kết quả render 35 trang toàn bộ; ba chương lần lượt 5/10/11 trang
+so với giới hạn 15/25/20. Phần chính kể cả kết luận là 27/50 trang.
+
+Paper sáu trang tiếng Việt, chỉ tóm tắt tiếng Việt, từ khóa chuyên ngành;
+cấu trúc bài nghiên cứu và bố cục tham chiếu IEEE conference A4 hai cột,
+10 pt. Chưa chọn nơi nộp, chưa tuyên bố dùng nguyên template chính thức.
+
+Đã ghép Results/Discussion/Limitations, tách seed 42 và ba seed mới, đối
+chiếu khác protocol, giữ seed 44 và lỗi webcam. Đã kiểm lại CSV sáu run
+(43.200 bản ghi frame; 2.160 dự đoán trên cùng 360 video), 3.600 timing và
+hash sáu hình; không chạy model mới. Seed 42 và webcam kế thừa kiểm toán cũ.
+Xem `SOURCES.md`, `SOURCE_RECHECK.json`, `VALIDATION.md`,
+`DOCUMENTS_QA.json` và provenance trong gói để biết phạm vi xác minh.
+
+Đã kiểm bố cục 41 trang của hai Word. Kiểm thử trước commit `ee3f270` đạt
+218 passed, 1 skipped, 34 subtests passed. Nguồn và gói tài liệu lưu ở hai
+commit local `4fdcb55`, `ee3f270`; chưa push, upload Drive hoặc nộp bài trong
+phiên tài liệu. Không coi hoàn thành tài liệu là hoàn thành toàn bộ Lượt 8.
+
+## 5. Phần còn lại của kế hoạch 8 lượt, chờ giao việc tiếp
 
 | Phần việc | Căn cứ kế hoạch | Kết quả cần có |
 | --- | --- | --- |
 | Hoàn tất demo PAD | Mục 10, Lượt 7 | Bổ sung print thật; kiểm quay lại đủ 5 frame; kiểm detector/crop và lỗi từ chối live; có video/log/FPS/TTD, báo đúng lỗi còn tồn tại. |
-| Hoàn thiện Results/Discussion | Mục 10, công việc A | Ghép kết quả Lượt 6 và addendum Lượt 7; giữ seed 44, failure case và giới hạn CPU/CUDA. |
-| Hoàn thiện Word/paper | Mục 11, Lượt 8 | Bản chứa kết quả đến Lượt 7, file chỉnh sửa được và render đã kiểm từng trang. |
 | Hoàn thiện slide và tập báo cáo | Mục 11, Lượt 8 | Bảng/hình có nguồn, script, Q&A, video dự phòng; cả hai hiểu dữ liệu/model/metric. |
 | Kiểm yêu cầu học phần và đóng góp | Mục 13, 14, 19 | Đúng định dạng, ghi đúng phần việc thực tế và trạng thái nộp. |
 | ArcFace, tùy chọn | Mục 10, chỉ nếu còn thời gian | Chỉ làm khi nhóm chọn; không phải điều kiện bắt buộc. |
