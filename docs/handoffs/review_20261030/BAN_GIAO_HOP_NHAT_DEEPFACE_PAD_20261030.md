@@ -7,6 +7,11 @@ Các minh chứng hiện có chưa tạo căn cứ để hủy toàn bộ kết 
 Kết luận này chỉ áp dụng cho phạm vi đã được kiểm tra.
 Các giới hạn về lựa chọn mô hình, dữ liệu và webcam vẫn cần được trình bày rõ.
 
+Kế hoạch xử lý theo mã EXP và kết quả đối chiếu mới nằm tại
+[kế hoạch so sánh công bằng](../../reviews/fair_comparison_20261030/KE_HOACH.md) và
+[kết quả nghiên cứu BCE–Focal](../../reviews/fair_comparison_20261030/KET_QUA.md).
+Phép thử mới và tiêu chí mới trong kế hoạch còn chờ người dùng quyết định.
+
 ## 1. Thuật ngữ
 
 
@@ -29,15 +34,31 @@ Các giới hạn về lựa chọn mô hình, dữ liệu và webcam vẫn cầ
 
 ## 2. Tổng quan các vấn đề kỹ thuật
 
+| Mã vấn đề | Nội dung cần xử lý | Điều đã biết và phần còn thiếu | Mã công việc |
+| --- | --- | --- | --- |
+| V01 | Chọn checkpoint rồi chọn cấu hình theo mục tiêu phù hợp | BCE ảnh hưởng hai bước nối tiếp. Chưa đo ảnh hưởng của quy tắc chọn khác. | EXP-00–04 |
+| V02 | Focal, alpha, gamma và trọng số loss | Alpha hiện tại không ưu tiên live; chưa chứng minh nó gây lỗi live hoặc đã tối ưu gamma. | EXP-00, EXP-01, EXP-05 |
+| V03 | Diễn giải đúng chuỗi huấn luyện và lựa chọn | Phải phân biệt cập nhật, lưu/nạp checkpoint, ngưỡng và cấu hình; Lượt 6 train lại theo seed. | EXP-01–04 |
+| V04 | Bốn người validation | Chưa có lý do được ghi nhận cho đúng bốn mã; chưa kiểm độ nhạy theo nhóm người. | EXP-02, EXP-05 |
+| V05 | Protocol và lịch sử xem test | Intra-dataset/intra-type và cách chia 16/4/30 là hai mô tả riêng; test đã xem không trở lại thành dữ liệu chưa từng được dùng. | EXP-02, EXP-08 |
+| V06 | APCER gộp, ACER và tỷ lệ lớp | BCE mẫu cho hai lớp trọng số 1:3; ACER cho hai tỷ lệ lỗi trọng số 1:1. Phạm vi ISO cần được giới hạn. | EXP-01, EXP-02, EXP-08 |
+| V07 | Phạm vi xác minh HR_1 | Đã kiểm 1.000 frame HR_1 trong manifest; chưa kiểm toàn bộ archive Kaggle. | EXP-02, EXP-08 |
+| V08 | Tác dụng head, lịch huấn luyện và seed | Chưa cô lập mọi yếu tố và chưa chứng minh cải thiện ổn định. | EXP-02, EXP-04–06 |
+| V09 | CPU và webcam | CPU chỉ minh họa; còn thiếu print, reset đủ cửa sổ và kiểm nguyên nhân lỗi live. | EXP-07, EXP-08 |
+
+### 2.1. Các chủ đề và nguồn đã đối chiếu
+
+Các mã AUD dưới đây chỉ nhóm nội dung kỹ thuật. Chúng không thay thế trạng thái V01–V09.
+
 | Mã kiểm toán | Vấn đề kỹ thuật | Trạng thái xác minh | Cơ chế xử lý trong hệ thống | Minh chứng mã nguồn và dữ liệu thực nghiệm |
 | :---: | :--- | :---: | :--- | :--- |
-| **AUD-01** | **Thư mục `HR_1` đặt nhầm trong `spoof/` trên bản phân phối Kaggle** | **Hợp lệ (Không lỗi nhãn)** | Hàm `parse_frame_path` cho phép ngoại lệ đường dẫn với mã `HR_1`. Hàm `build_manifest` gán nhãn trực tiếp từ từ điển `VIDEO_METADATA["HR_1"] = (1, "live", "high")`, không đọc nhãn theo tên thư mục. | `src/deepface_pad/casia_fasd.py` (dòng 14, 40–58, 110); `data/manifests/casia_fasd_debug.csv` (1.000 khung hình `HR_1` thuộc 50 video đều mang `label=1`). |
-| **AUD-02** | **Giao thức chia tập 16/4/30 so với bài báo gốc CASIA-FASD (20/30)** | **Hợp lệ (Có giới hạn cỡ mẫu Val)** | Dự án tách 4 đối tượng `{4, 9, 14, 19}` từ nhánh Train làm tập Validation để chọn checkpoint và ngưỡng quyết định. Nhánh Test giữ nguyên 100% 30 đối tượng gốc. Kịch bản thuộc loại **Intra-dataset, Intra-type**. | `src/deepface_pad/casia_fasd.py` (dòng 78, 87–108); `data/manifests/casia_fasd_debug.csv` (Train: 3.840, Val: 960, Test: 7.200 khung hình; tổng 12.000 khung hình). |
+| **AUD-01** | **Các frame `HR_1` dưới thư mục `spoof/` trong dữ liệu đã dùng** | **Nhãn manifest đã kiểm; phạm vi V07 còn giới hạn** | Hàm `parse_frame_path` cho phép ngoại lệ đường dẫn với mã `HR_1`. Hàm `build_manifest` gán nhãn trực tiếp từ từ điển `VIDEO_METADATA["HR_1"] = (1, "live", "high")`, không đọc nhãn theo tên thư mục. | `src/deepface_pad/casia_fasd.py` (dòng 14, 40–58, 110); `data/manifests/casia_fasd_debug.csv` (1.000 khung hình `HR_1` thuộc 50 video đều mang `label=1`). |
+| **AUD-02** | **Giao thức chia tập 16/4/30 so với bài báo gốc CASIA-FASD (20/30)** | **Đã kiểm cách chia; V04/V05 còn mở** | Dự án tách 4 đối tượng `{4, 9, 14, 19}` từ nhánh Train làm tập Validation. Nhánh Test giữ 30 đối tượng gốc. Kịch bản là **Intra-dataset, Intra-type**; chưa giải thích lý do chọn đúng bốn mã hoặc độ nhạy cách chia. | `src/deepface_pad/casia_fasd.py` (dòng 78, 87–108); `data/manifests/casia_fasd_debug.csv` (Train: 3.840, Val: 960, Test: 7.200 khung hình; tổng 12.000 khung hình). |
 | **AUD-03** | **Chuẩn hóa giả độ sâu, cách tính điểm suy luận** | **Đã xác minh** | Lớp `PadDataset` chuẩn hóa độ sâu về đoạn $[0, 1]$ qua phép chia cực đại. Mô hình E1 lấy trung bình bản đồ độ sâu; mô hình E2–E4 dùng xác suất $\sigma(\text{logit})$. | `src/deepface_pad/data.py` (dòng 120–125); `src/deepface_pad/train.py` (dòng 117); `src/deepface_pad/metrics.py` (dòng 36); `ANALYSIS_01_ROUNDS1_3_BASELINE_VA_PSEUDO_DEPTH_SUPERVISION.md` (dòng 63). |
 | **AUD-04** | **Khác biệt toán học giữa DepthNet (2018), FAS-TD (2019) và CDCN (2020)** | **Đã phân định rõ** | DepthNet dùng tích chập 2D chuẩn. FAS-TD thêm mô-đun truyền thông tin không-thời gian giữa các khung hình. CDCN thay tích chập chuẩn bằng tích chập sai phân tâm (CDC, $\theta=0.7$) trên từng khung hình độc lập. | `src/deepface_pad/models/` (`OfficialCDCN`, `OfficialCDCNWithDepthHead`); `src/deepface_pad/losses.py` (dòng 41–66, 88–98). |
-| **AUD-05** | **Hàm mất mát BCE vs Focal Loss và tiêu chí chọn checkpoint** | **Có giới hạn lựa chọn (Cần công khai)** | Giá trị Focal Loss luôn nhỏ hơn hoặc bằng BCE trên cùng dự đoán nên không thể so sánh trực tiếp. Tập Val (4 đối tượng) đạt bão hòa $\text{ACER}=0\%$, buộc hệ thống dùng `classification_bce` làm tiêu chí phụ, có thể bỏ qua checkpoint E4 tốt hơn theo tiêu chí khác. Cấu hình E4 đặt $\alpha_{\text{live}}=0.25$ làm giảm gradient của lớp thiểu số. | `src/deepface_pad/losses.py` (dòng 69–80); `src/deepface_pad/train.py` (dòng 97–110, 227–241); `configs/casia_e4_staged_focal.yaml`. |
+| **AUD-05** | **BCE, Focal và chuỗi chọn checkpoint/cấu hình** | **Đã kiểm quy tắc; chưa đo ảnh hưởng của tiêu chí khác** | Head/joint luôn chọn checkpoint bằng BCE frame validation. Sau đó chọn cấu hình bằng ACER → EER → AUC → BCE; ba chỉ số đầu hòa nên BCE quyết định. BCE là phép đo điểm xác suất hợp lệ nhưng chưa đủ để tuyên bố ưu thế PAD khi các chỉ số PAD hòa. Alpha live=0,25 không ưu tiên live; chưa chứng minh nguyên nhân lỗi. | `src/deepface_pad/losses.py` (dòng 69–80); `src/deepface_pad/train.py` (dòng 97–110, 227–241); `configs/casia_e4_staged_focal.yaml`. |
 | **AUD-06** | **Cơ chế "Step" trong mã huấn luyện và yếu tố gây nhiễu E1 – E3** | **Đã xác minh mã nguồn** | Hệ thống cập nhật trọng số theo từng batch (`optimizer.step()`), ghi log theo `epoch` và không lưu `global_step`. Lệnh `scheduler.step()` gọi theo epoch nên `step_size: 500` ở E1 không bao giờ kích hoạt trong 30 epochs. | `src/deepface_pad/train.py` (dòng 210–259); `configs/casia_e1_cdcn_official.yaml` (dòng 19, 24); `configs/casia_e3_joint_bce.yaml` (dòng 26–30). |
-| **AUD-07** | **Chỉ số APCER gộp, lặp lại đa hạt giống (Seeds 43–45) và sai số CPU vs CUDA** | **Đã xác minh số học** | Hàm `error_rates` tính APCER gộp trung bình trên 270 video giả mạo thay vì lấy kịch bản xấu nhất theo ISO/IEC 30107-3. Ba seed 43, 44, 45 kiểm chứng độ ổn định khởi tạo trên cùng 360 video Test. Suy luận CPU lệch tối đa $0.000684$ so với CUDA. | `src/deepface_pad/metrics.py` (dòng 46–58); `reports/ROUND_6_RESULTS_2026-10-22.md`; `docs/handoffs/CURRENT.md` (dòng 33–57). |
+| **AUD-07** | **Chỉ số APCER gộp, lặp lại đa hạt giống (Seeds 43–45) và sai số CPU vs CUDA** | **Đã xác minh số học** | Hàm `error_rates` tính APCER gộp trung bình trên 270 video giả mạo thay vì lấy kịch bản xấu nhất theo ISO/IEC 30107-3. Ba seed 43, 44, 45 đo biến thiên theo khởi tạo trên cùng 360 video Test; chưa chứng minh cải thiện ổn định. Suy luận CPU lệch tối đa $0.000684$ so với CUDA. | `src/deepface_pad/metrics.py` (dòng 46–58); `reports/ROUND_6_RESULTS_2026-10-22.md`; `docs/handoffs/CURRENT.md` (dòng 33–57). |
 | **AUD-08** | **Đường ống Webcam thời gian thực, Median Gate và lỗi từ chối người thật** | **Đã đo thực nghiệm** | Hệ thống dùng bộ phát hiện YuNet, cửa sổ trung vị 5 khung hình, khoảng chờ tối đa $5.0\text{ s}$ và $\text{IoU} \ge 0.4$. Webcam chặn đúng tấn công phát lại (`replay-02`) nhưng từ chối nhầm người thật (`live-03`) với nguyên nhân chưa được xác định đầy đủ. | `src/deepface_pad/webcam.py` (dòng 35–86); `reports/round7/WEBCAM_RESULTS.json`; `docs/handoffs/CURRENT.md` (dòng 60–89). |
 
 ---
@@ -45,11 +66,17 @@ Các giới hạn về lựa chọn mô hình, dữ liệu và webcam vẫn cầ
 
 ## 3. Các vấn đề cần giải quyết
 
+Các mục “Việc cần làm” là đề xuất xử lý, không phải phương án đã được người dùng duyệt.
+Sửa diễn giải không đồng nghĩa đã kiểm chứng ảnh hưởng bằng thực nghiệm.
+Theo dõi quyết định và kết quả theo mã EXP trong kế hoạch liên kết ở đầu tệp.
 
-### V01. Làm rõ tiêu chí chọn checkpoint cho E4
+### V01. Kiểm tra chuỗi chọn checkpoint và cấu hình BCE–Focal
 
-**Vấn đề:** Tiêu chí BCE có thể bỏ qua checkpoint tốt hơn theo mục tiêu khác.
-Thí nghiệm hiện tại chưa đánh giá việc chọn checkpoint E4 theo Focal trên validation.
+**Vấn đề:** Cần xác định tiêu chí phù hợp với mục tiêu PAD ở cả hai bước nối tiếp:
+chọn checkpoint đại diện từng cấu hình, rồi chọn cấu hình đi tiếp.
+BCE chung đo chất lượng điểm xác suất, nhưng BCE thấp hơn không chứng minh ACER tốt hơn.
+Chưa đủ bằng chứng gọi quy trình hiện tại là sai chỉ vì E4 học bằng Focal.
+Chưa kiểm ảnh hưởng của một quy tắc lựa chọn khác theo mục tiêu PAD.
 
 **Minh chứng:**
 
@@ -59,18 +86,26 @@ Thí nghiệm hiện tại chưa đánh giá việc chọn checkpoint E4 theo Fo
 - `val_loss` và `val_selection_loss` lưu hai đại lượng khác nhau.
 - Ở joint, `val_loss` gồm loss độ sâu và Focal.
 - Ở joint, `val_selection_loss` là BCE phân loại trên frame validation.
+- Chọn checkpoint bằng BCE diễn ra ngay cả khi chưa xét ACER.
+- Chọn giữa E3/E3b/E4 dùng ACER → EER → AUC → BCE trên validation.
+- Ba chỉ số PAD đầu hòa; BCE quyết định E3 đi tiếp theo quy tắc cũ.
+- E4 có BCE joint thấp nhất ở epoch 6; tổng objective thấp nhất ở epoch 3.
+- Tổng objective gồm depth + Focal, không phải Focal riêng hoặc ACER.
+- Chưa có score từng epoch để kết luận checkpoint epoch 3 tốt hơn về PAD.
 
 Nguồn: [cấu hình E4](../../../configs/casia_e4_staged_focal.yaml); [code huấn luyện và chọn checkpoint](../../../src/deepface_pad/train.py); [thiết kế Lượt 5](../../../reports/ROUND_5_CASIA_RUNBOOK.md).
 
-**Việc cần làm:**
+**Phương án đề xuất, chưa chốt:**
 
-1. Tách mục tiêu huấn luyện khỏi tiêu chí chọn checkpoint trong báo cáo.
-2. Ghi rõ việc chọn E4 theo BCE.
-3. Giới hạn kết luận về hiệu quả Focal theo thiết kế đã dùng.
-4. Nếu cần nghiên cứu thêm, xác định trước tiêu chí lựa chọn mới.
+1. Đọc kết quả EXP-00/01 để xác định điều dữ liệu hiện có trả lời được.
+2. Chọn trong EXP-02: chỉ hoàn tất kiểm toán hay làm phép thử có đối chứng.
+3. Nếu làm phép thử mới, chốt dữ liệu, ngân sách, tiêu chí checkpoint và cấu hình trước khi chạy.
+4. So BCE–Focal dưới cùng lịch bằng E3b–E4; kiểm cả ảnh hưởng head stage nếu đổi tiêu chí ở đó.
+5. Giữ các kết quả lịch sử; không chọn lại từ test rồi gọi là lựa chọn validation.
 
-**Điều kiện hoàn tất:** Báo cáo không khẳng định đã đánh giá toàn diện Focal.
-Một phép thử mới cần có kế hoạch riêng.
+**Điều kiện hoàn tất:** Có kết luận theo đúng phạm vi đã chọn.
+Nếu chỉ sửa báo cáo, câu hỏi thực nghiệm về ảnh hưởng checkpoint vẫn còn mở.
+Xem [EXP-00–04 và kết quả](../../reviews/fair_comparison_20261030/KET_QUA.md).
 
 ### V02. Sửa diễn giải về Focal, lớp thiểu số và thang đo loss
 
@@ -89,6 +124,9 @@ Giá trị Focal nhỏ hơn không chứng minh mô hình tốt hơn.
 - Điều kiện đó yêu cầu alpha trong [0, 1] và gamma không âm.
 - Quan hệ Focal không lớn hơn BCE không dùng để xếp hạng hai mô hình khác nhau.
 - Cùng `lambda_cls=1` chưa bảo đảm cùng đóng góp phân loại trong loss tổng.
+- Alpha/gamma là siêu tham số; p_t được tính từ dự đoán và nhãn, không phải siêu tham số.
+- Gamma=2 là cấu hình đã thử; chưa có khảo sát chứng minh tối ưu cho CASIA.
+- Alpha có thể ảnh hưởng lỗi live, nhưng chưa được xác định là nguyên nhân.
 
 Nguồn: [code các hàm mất mát](../../../src/deepface_pad/losses.py); [cấu hình E4](../../../configs/casia_e4_staged_focal.yaml); [manifest CASIA](../../../data/manifests/casia_fasd_debug.csv).
 Nguồn phương pháp: [Focal Loss gốc](https://arxiv.org/abs/1708.02002).
@@ -115,6 +153,11 @@ Thứ hạng trên test đã bị dùng nhầm như thứ hạng trên validatio
 | Chọn checkpoint joint | Chọn BCE frame validation thấp nhất. |
 | Chọn ngưỡng | Chọn ACER video validation thấp nhất. |
 | Chọn cấu hình | Xét lần lượt ACER, EER, AUC, rồi BCE trên validation. |
+
+Epoch sau tiếp tục từ trọng số hiện tại trong bộ nhớ; code không lưu file last.ckpt.
+Cuối stage mới nạp best của stage để chuyển tiếp.
+Hai bước chọn checkpoint và cấu hình thuộc cùng chuỗi lựa chọn.
+Lượt 6 huấn luyện lại E1/E3 ở seed 43/44/45, không dùng lại nguyên checkpoint seed 42.
 
 ACER, EER và BCE được ưu tiên theo giá trị thấp hơn.
 AUC được ưu tiên theo giá trị cao hơn.
@@ -319,7 +362,7 @@ Nếu chưa đo tiếp, báo cáo giữ trạng thái chưa hoàn tất.
 
 #### A. Hiện tượng trong dữ liệu nguồn
 1. Bộ dữ liệu gốc **CASIA-MFSD / CASIA-FASD** (Zhang et al., ICB 2012) gồm 50 đối tượng (20 đối tượng Train, 30 đối tượng Test). Mỗi đối tượng có 12 video `.avi` (3 video người thật và 9 video tấn công).
-2. Bản phân phối lại dưới dạng khung hình cắt sẵn trên Kaggle đặt các khung hình có mã `HR_1` vào thư mục `spoof/`.
+2. Trong 1.000 frame HR_1 thuộc manifest của bản Kaggle đã dùng, đường dẫn đều nằm dưới `spoof/`. Chưa kiểm toàn bộ archive ngoài phần lấy mẫu.
 3. Mẫu kiểm chứng cục bộ tại kho lưu trữ:
    * **Đường dẫn tệp mẫu:** [`s1vHR_1f69.png`](../../../artifacts/round7/figures-attempt03/inputs/test/spoof/s1vHR_1f69.png)
    * **Đường dẫn tương đối trong manifest:** `test/spoof/s1vHR_1f69.png`
@@ -331,7 +374,7 @@ Nếu chưa đo tiếp, báo cáo giữ trạng thái chưa hoàn tất.
    * `"2": (1, "live", "low")`
    * `"HR_1": (1, "live", "high")`
    * Các mã `"3"`, `"4"`, `"HR_2"` thuộc `warped_photo`; `"5"`, `"6"`, `"HR_3"` thuộc `cut_photo`; `"7"`, `"8"`, `"HR_4"` thuộc `video_replay`.
-   * Quy ước này khớp tuyệt đối với tài liệu gốc của CASIA-NLPR và thư viện chuẩn công nghiệp `bob.db.casia_fasd` của Viện Idiap.
+   * Ánh xạ HR_1 thành live chất lượng cao đã được đối chiếu với mã truy cập `bob.db.casia_fasd` của Viện Idiap; đây không phải xác minh toàn bộ archive Kaggle.
 2. Tại dòng 55–57 của [`casia_fasd.py`](../../../src/deepface_pad/casia_fasd.py#L55-L57), hàm `parse_frame_path` xử lý tường minh lỗi thư mục của Kaggle:
    ```python
    # The Kaggle copy places HR_1 (high-quality bona fide) under spoof.
@@ -367,7 +410,7 @@ Nếu chưa đo tiếp, báo cáo giữ trạng thái chưa hoàn tất.
 
 * **Phân loại bài toán:** Toàn bộ 3 phương thức tấn công (`warped_photo`, `cut_photo`, `video_replay`) và 3 cấp chất lượng camera (`low`, `normal`, `high`) đều xuất hiện cân bằng trong cả tập Train và tập Test. Do đó, giao thức thực nghiệm của đồ án thuộc nhóm **Đánh giá nội tập dữ liệu, cùng loại tấn công (Intra-dataset, Intra-type evaluation)**.
 * **Xử lý mất cân bằng lớp 1 Live : 3 Spoof:** Chỉ số đánh giá chính thức $\text{ACER} = \frac{\text{APCER} + \text{BPCER}}{2}$ lấy trung bình cộng trọng số $50:50$ giữa tỷ lệ lỗi trên lớp tấn công và tỷ lệ lỗi trên lớp người thật (`src/deepface_pad/metrics.py`, dòng 56–58), cho hai lớp đóng góp bằng nhau khi chấm điểm. Phép tính không cân bằng dữ liệu huấn luyện.
-* **Giới hạn của tập Validation 4 đối tượng:** Do tập Validation chỉ có 48 video (12 video live, 36 video spoof), các mô hình E0, E3, E3b và E4 đều đạt kết quả tuyệt đối trên tập Validation ($\text{ACER} = 0\%$, $\text{EER} = 0\%$, $\text{AUC} = 1.0$). Hiện tượng bão hòa này làm giảm khả năng phân tách hình học giữa các cấu hình khi chọn checkpoint.
+* **Giới hạn của tập Validation 4 đối tượng:** Do tập Validation chỉ có 48 video (12 video live, 36 video spoof), ba ứng viên E3, E3b và E4 đều đạt kết quả tuyệt đối trên tập Validation ($\text{ACER} = 0\%$, $\text{EER} = 0\%$, $\text{AUC} = 1.0$). Các chỉ số video này không phân định được ba cấu hình đã chọn. Checkpoint head/joint vẫn được chọn bằng BCE frame theo quy tắc riêng.
 
 ---
 
@@ -423,11 +466,16 @@ Vì $0 \le \alpha_t \le 1$, $0 \le p_t \le 1$ và $\gamma = 2.0 > 0$, nên hệ 
 3. Tại cùng xác suất dành cho nhãn đúng, hệ số alpha của live bằng một phần ba của attack. Điều này không bảo đảm gradient thực tế giữa hai lớp có tỷ lệ cố định. Alpha hiện tại không ưu tiên lớp live thiểu số.
 
 #### C. Giới hạn của tiêu chí chọn checkpoint `classification_bce`
-1. Tại hàm [`_selection_loss`](../../../src/deepface_pad/train.py#L97-L110), dự án sử dụng hàm `binary_cross_entropy_with_logits` trên tập Validation để chọn checkpoint tốt nhất cho cả E3, E3b và E4.
-2. Khi các mô hình cùng đạt $\text{ACER} = 0\%$ trên tập Validation, tiêu chí `classification_bce` đóng vai trò quyết định (tie-breaker):
-   * Mô hình học bằng BCE (E3) có xu hướng đẩy xác suất về sát $0$ hoặc $1$, đạt `val_selection_loss = 0.0109`.
-   * E4 có `val_selection_loss = 0.0874` cao hơn. Focal thay đổi trọng số theo độ khó của mẫu. Chỉ từ hai giá trị BCE chưa thể xác định nguyên nhân chênh lệch.
-3. Do đó, việc dùng BCE có thể bỏ qua checkpoint tốt hơn theo mục tiêu Focal hoặc một nhóm mẫu khó. Mức ảnh hưởng chưa được kiểm tra riêng. Tuy vậy, nhóm nghiên cứu giữ nguyên quy tắc đã khóa trước khi mở tập Test để đảm bảo tính trung thực học thuật, không quay lại chọn E4 theo kết quả Test.
+1. Tại hàm [`_selection_loss`](../../../src/deepface_pad/train.py#L97-L110), head/joint luôn dùng BCE frame validation để chọn checkpoint; không chờ ACER hòa mới dùng BCE.
+2. Sau khi có checkpoint joint đại diện từng cấu hình, hệ thống chọn ngưỡng và tính chỉ số video. Bước chọn giữa E3/E3b/E4 mới xét ACER → EER → AUC → BCE. Ba chỉ số đầu hòa nên BCE quyết định E3 theo quy tắc đã đăng ký.
+3. Hai bước thuộc cùng chuỗi lựa chọn. Đổi phép đo cuối không kiểm tra được checkpoint đã bị loại ở bước trước. Ở staged training, best head còn quyết định điểm khởi đầu joint.
+4. Có thể tính chung BCE cho mô hình học BCE và Focal để đo chất lượng điểm xác suất. Điều đó không chứng minh ưu thế PAD khi ACER/EER/AUC hòa, cũng không bảo đảm tiêu chí đã phù hợp mọi mục tiêu.
+5. Không có căn cứ khẳng định E4 tất nhiên có BCE validation tệ hơn. Tối ưu train không bảo đảm xếp hạng trên validation. Các tập cùng tỷ lệ lớp vẫn có thể khác người và độ khó.
+6. Alpha/gamma và lambda cần được xem xét. Với E4, BCE joint thấp nhất ở epoch 6, tổng depth + Focal thấp nhất ở epoch 3. Log không đủ để kết luận epoch 3 ít lỗi PAD hơn.
+7. Phương án đề xuất là lấy chỉ số PAD làm chính trong phép thử mới, báo hòa khi chỉ số đã chốt hòa, và giữ BCE/Brier làm thông tin bổ sung. Người dùng chưa chốt thay đổi; kết quả và ngưỡng lịch sử được giữ nguyên.
+
+Nguồn phương pháp và số liệu tính lại: [kết quả EXP-00/01](../../reviews/fair_comparison_20261030/KET_QUA.md).
+Nguồn học thuật bổ sung: [Loss Functions and Metrics in Deep Learning v3](https://arxiv.org/html/2307.02694v3), [nghiên cứu Focal và ước lượng xác suất](https://arxiv.org/html/2011.09172), [đánh giá NLL của mô hình Focal và CE](https://torrvision.com/focal_calibration/).
 
 ---
 
@@ -450,7 +498,7 @@ Vì $0 \le \alpha_t \le 1$, $0 \le p_t \le 1$ và $\gamma = 2.0 > 0$, nên hệ 
 #### B. Yếu tố gây nhiễu (Confounding Factors) khi so sánh E1 và E3
 Khi đối sánh E1 và E3, sự thay đổi không chỉ nằm ở kiến trúc đầu ra mà bao gồm 3 yếu tố đi kèm:
 1. **Kiến trúc:** E1 dùng phép lấy trung bình không tham số (`Mean Depth`); E3 gắn thêm nhánh `DepthHead` ($1.265$ tham số).
-2. **Ngân sách huấn luyện (Training Budget):** E1 huấn luyện 30 epochs từ đầu; E3 nạp trọng số tốt nhất của E1 và huấn luyện thêm 16 epochs ở chế độ `joint` (tổng cộng 46 epochs).
+2. **Ngân sách huấn luyện (Training Budget):** E1 huấn luyện 30 epochs từ đầu; E3 nạp trọng số tốt nhất của E1 và huấn luyện thêm 16 epochs ở chế độ `joint`. Chi phí hai run gồm 30 + 16 epoch; không có nghĩa quỹ đạo E3 nối từ trọng số cuối epoch 30 của E1.
 3. **Hệ số suy giảm trọng số (`weight_decay`):** E1 dùng `weight_decay = 0.00005` (`5e-5`), trong khi E3 dùng `weight_decay = 0.0001` (`1e-4`).
 
 > Phép so sánh E1–E3 phản ánh tác động tổng hợp của nhánh phân loại và quá trình tinh chỉnh bổ sung.
@@ -460,8 +508,7 @@ Khi đối sánh E1 và E3, sự thay đổi không chỉ nằm ở kiến trúc
 ### 4.6. Đo Lường ISO/IEC 30107-3, Lặp Lại Đa Hạt Giống và Sai Số CPU vs CUDA (AUD-07)
 
 #### A. Sự khác biệt giữa Pooled APCER và Worst-Case APCER theo ISO/IEC 30107-3
-1. **Theo tiêu chuẩn ISO/IEC 30107-3 nguyên bản:** Chỉ số $\text{APCER}$ của hệ thống phải được xác định bởi phương thức tấn công có tỷ lệ lọt lưới cao nhất (Worst-case Presentation Attack Instrument - PAI):
-   $$\text{APCER}_{\text{ISO}} = \max_{c \in \{\text{warped}, \text{cut}, \text{replay}\}} \text{APCER}_c$$
+1. **Phạm vi đối chiếu:** Nhiều protocol PAD báo APCER theo nhóm công cụ tấn công rồi tổng hợp trường hợp xấu nhất. Có thể tính bổ sung $\max_c \text{APCER}_c$ trên ba nhóm warped/cut/replay của dự án, nhưng không tự gọi đó là APCER theo đầy đủ ISO. Ba nhãn attack_type này chưa được chứng minh tương đương cách định nghĩa PAI species của một đánh giá theo chuẩn. Công thức ACER riêng lẻ không xác nhận tuân thủ toàn bộ tiêu chuẩn.
 2. **Trong mã nguồn [`metrics.py`](../../../src/deepface_pad/metrics.py#L56-L58):** Hàm `error_rates` tính $\text{APCER}$ gộp (Pooled APCER) bằng trung bình cộng trên toàn bộ 270 video tấn công. Để đảm bảo tính chặt chẽ, Lượt 7 đã trích xuất bảng phân rã lỗi theo từng nhóm tấn công và chất lượng camera tại `reports/round7/analysis/`.
 
 #### B. Kết quả tái lập đa hạt giống (Seeds 43, 44, 45 - Lượt 6)
@@ -558,6 +605,8 @@ E4 được huấn luyện bằng Focal nhưng chọn checkpoint theo BCE valida
 Ba ứng viên có ACER và EER validation bằng 0, với AUC bằng 1.
 BCE được dùng để phân định sau các chỉ số này.
 Kết quả lựa chọn là E3.
+Chọn checkpoint và chọn cấu hình là hai bước nối tiếp của cùng quy trình.
+BCE là phép đo điểm xác suất, chưa chứng minh ưu thế PAD khi các chỉ số PAD hòa.
 E4 có ACER test thấp hơn E3 ở seed 42.
 Quan sát đó không thay đổi lựa chọn đã xác lập từ validation.
 Thí nghiệm chưa xác định checkpoint E4 tối ưu theo Focal.
