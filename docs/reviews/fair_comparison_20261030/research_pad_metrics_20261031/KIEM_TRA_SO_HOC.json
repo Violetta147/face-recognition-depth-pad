@@ -1,0 +1,448 @@
+{
+  "scope": "Independent arithmetic recomputation at frozen thresholds, no training/inference/threshold reselection",
+  "models": {
+    "E0": {
+      "threshold": 0.9900876432657242,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 10,
+      "apcer": 0.0,
+      "bpcer": 0.1111111111111111,
+      "acer": 0.05555555555555555,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "63fd5c301114ced79b9b08f68287b110a13cd23d8ce5d7018560b627f96fd790",
+        "test_scores.csv": "41612ea1f8996d7d0182321aec3a4ab937f6a350d028bddfe8b922278bfd734e",
+        "threshold.json": "446012e4662dcfb1272a81f42de2d7feda582ccae92123d80f5f872707b2f7cf"
+      }
+    },
+    "E1": {
+      "threshold": 0.1916038803756237,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 5,
+      "apcer": 0.0,
+      "bpcer": 0.05555555555555555,
+      "acer": 0.027777777777777776,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "f5f0f9c8fbb29290fc3f4ea65e96c93f7e1748c62c720086b120b15fb7371615",
+        "test_scores.csv": "48df61d9a1d1249c7ef8b25e0853f75c56f8d0d99af5f8da92ac77abe5198368",
+        "threshold.json": "3b7d640081f53f5f6ae5ff38dfbabb3bca0f1bbb98891a41f353a9122de2e34b"
+      }
+    },
+    "E2": {
+      "threshold": 0.4117791514843702,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 5,
+      "apcer": 0.0,
+      "bpcer": 0.05555555555555555,
+      "acer": 0.027777777777777776,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "ad458840c7c21a65d7a8698e0b7b375c14baaab746b0010e513f37b200bcd09f",
+        "test_scores.csv": "cc04c03dcc6b577bce548a98b6d93730ab5af63b30b4c6f9c6380adca761c0ba",
+        "threshold.json": "5cf33d07f116e6bf1a907112e2d844d5d669a7299b71cb9f21bce862e60c19dd"
+      }
+    },
+    "E3": {
+      "threshold": 0.8496189594268799,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 9,
+      "apcer": 0.0,
+      "bpcer": 0.1,
+      "acer": 0.05,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "44479b9813a235dec93c0ee2577b36ae41bf45b7e87569a8c020a026b39e1a01",
+        "test_scores.csv": "d831b363125a22fe9641f0b5b4dd3e45b751eaa574b2b791c7c329b79c8eedfa",
+        "threshold.json": "91e43ecd2b764f3223f76ae6f780eadd477bca814a3db1fea0698123eb5c6277"
+      }
+    },
+    "E3b": {
+      "threshold": 0.7518128156661987,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 9,
+      "apcer": 0.0,
+      "bpcer": 0.1,
+      "acer": 0.05,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "e0840675981d21fa830908119178df3277a9eced0df127b7660437a7bf182647",
+        "test_scores.csv": "f9816a029fe3cbdeeef1beb34e9dcf911b34b50f0d15648fd8d3939fc07301d2",
+        "threshold.json": "a1f455e4370e30315276d88d582783b494e9955e0545ed35b523b5337d217dcc"
+      }
+    },
+    "E4": {
+      "threshold": 0.418625445663929,
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "false_accepts": 0,
+      "false_rejects": 8,
+      "apcer": 0.0,
+      "bpcer": 0.08888888888888889,
+      "acer": 0.044444444444444446,
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      },
+      "matches_project_code_and_saved_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "d7d6bea07192b9f5701ed6f3680b7f5a496fed3a4bb5a403b27ec5304b7f4fcb",
+        "test_scores.csv": "bb16ff2f745ef1bfcd3b7e503e496c50f7fc7355c1c62fd05e7df0894fd3b6f8",
+        "threshold.json": "612a88ec9d8d076a1cdfadca434d1dd78dcec373624903769ce239ef0f2f4f8e"
+      }
+    }
+  },
+  "edge_cases": {
+    "exact_threshold_ties": {
+      "labels": [
+        0,
+        1
+      ],
+      "scores": [
+        0.5,
+        0.5
+      ],
+      "threshold": 0.5,
+      "rates": [
+        1.0,
+        0.0,
+        0.5
+      ],
+      "expected": [
+        1,
+        0,
+        0.5
+      ]
+    },
+    "nan_threshold": {
+      "rates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "problem": "nonfinite threshold not rejected; both comparisons false yields spurious zero error; NOT observed in frozen runs"
+    },
+    "nonbinary_float_labels": {
+      "input_labels": [
+        0.2,
+        1.8
+      ],
+      "rates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "problem": "labels cast to int before validation; invalid raw labels accepted; NOT observed in frozen runs"
+    }
+  },
+  "round6": {
+    "E1_43": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed43_20261022T014520Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.265095642209053,
+      "false_accepts": 0,
+      "false_rejects": 12,
+      "apcer": 0.0,
+      "bpcer": 0.13333333333333333,
+      "acer": 0.06666666666666667,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "35f7760163c31809fbc7a49a3c288d6ad132cd0653d67077c54e65f825c651ad",
+        "test_scores.csv": "7fb54ca16f4520dfcd1c6edecbefb5f9ca874e45ba756745da5e912f2a2becb7",
+        "threshold.json": "bfde3df5f6569f415c3a227c97a6151f9848ff707bd716a5bdf878741e1411a4"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      }
+    },
+    "E3_43": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed43_20261022T020926Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.3983212910592556,
+      "false_accepts": 0,
+      "false_rejects": 6,
+      "apcer": 0.0,
+      "bpcer": 0.06666666666666667,
+      "acer": 0.03333333333333333,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "3e9be482379b6376742fe088d0d4f5aa6a2cd8c65bdaaf1919cb9153a87ecb3a",
+        "test_scores.csv": "7c640d1096ad35dc2b55fa3120a64b8ca863f0d8c89c5fb8e977c7b027fe6320",
+        "threshold.json": "b2471bd5c980219eba1c5ec30e16b900a0a5ad6d84cd41b69c22456da26627d3"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      }
+    },
+    "E1_44": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed44_20261022T023108Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.1520372174680233,
+      "false_accepts": 1,
+      "false_rejects": 4,
+      "apcer": 0.003703703703703704,
+      "bpcer": 0.044444444444444446,
+      "acer": 0.024074074074074074,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "c34236ce55481db7a447e6cda04c2a891052c1e258a6c38625604a42482f13ad",
+        "test_scores.csv": "eae49c03206b960c26338a0e298e72b262b00c68c1833d704ed7525bbb1f281c",
+        "threshold.json": "dcbe3454fac76dfc3195e063b4a014f9df428c8a1c1e29045717f3f6c37ff4c2"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 1
+        }
+      }
+    },
+    "E3_44": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed44_20261022T025516Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.4321130795404315,
+      "false_accepts": 0,
+      "false_rejects": 8,
+      "apcer": 0.0,
+      "bpcer": 0.08888888888888889,
+      "acer": 0.044444444444444446,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "472eaa7122ac2e69a14a90cb05519b278af595ca83ac620800970183cd61f428",
+        "test_scores.csv": "6326e553107db8791d35ae9bc0dd29784b170258c58e79abd4ac98b38c4db100",
+        "threshold.json": "0d404145fcaf9c60d14e453745724218066cffa9183cbad2db6a4cc44024d5c0"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      }
+    },
+    "E1_45": {
+      "run_id": "ROUND6_CASIA_E1_CDCN_OFFICIAL_seed45_20261022T031641Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.23987324237823487,
+      "false_accepts": 0,
+      "false_rejects": 7,
+      "apcer": 0.0,
+      "bpcer": 0.07777777777777778,
+      "acer": 0.03888888888888889,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "4401d0d320c5dd5e6b163e07342d4a09a956e412133fa5b2c4ba82725f69b3e7",
+        "test_scores.csv": "928a8e1ca39c723f2d9509f8fed0f160871cd82b2b01757941ed80f1a9978211",
+        "threshold.json": "633ce2fd12b0319d667da5f16c25487e1ad94ac1371d69a0b3aae36c0e91d425"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      }
+    },
+    "E3_45": {
+      "run_id": "ROUND6_CASIA_E3_CDCN_OFFICIAL_JOINT_BCE_seed45_20261022T034049Z",
+      "n_frames": 7200,
+      "n_videos": 360,
+      "n_attack": 270,
+      "n_live": 90,
+      "threshold": 0.38984894957393407,
+      "false_accepts": 0,
+      "false_rejects": 6,
+      "apcer": 0.0,
+      "bpcer": 0.06666666666666667,
+      "acer": 0.03333333333333333,
+      "matches_code_and_report": true,
+      "source_hashes": {
+        "test_frame_scores.csv": "1c8fab51653b8d82ca5f141fb2740ee4ebc77b63a64dd1ddc41fb3522b1e4cc3",
+        "test_scores.csv": "4f5af90c886dd52fc5fc14b63230c5a546c8e54ab70a0685218f10ad2c88c4f2",
+        "threshold.json": "72fa89323fd51e120f2522224093e0ef6daebc0dd00ae41cd4f0ed99ffccc73c"
+      },
+      "attack_groups": {
+        "warped_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "cut_photo": {
+          "n": 90,
+          "false_accepts": 0
+        },
+        "video_replay": {
+          "n": 90,
+          "false_accepts": 0
+        }
+      }
+    }
+  },
+  "checked_totals": {
+    "runs": 12,
+    "frame_records": 86400,
+    "video_records": 4320,
+    "unique_test_videos": 360,
+    "source_file_hashes": 36,
+    "note": "Repeated evaluations of the same videos; not 4320 independent test videos"
+  }
+}

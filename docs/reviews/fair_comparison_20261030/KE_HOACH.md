@@ -1,228 +1,228 @@
-# Kế hoạch kiểm tra và so sánh công bằng BCE–Focal
+# Kế hoạch giải quyết V01–V09 trên CASIA-FASD
 
-Ngày lập: 30/10/2026.
+Ngày lập: 30/10/2026. Phạm vi cập nhật: 31/10/2026.
 
-Mục tiêu: xác định tiêu chí phù hợp cho bài toán phân biệt thật/giả; kiểm tra ảnh hưởng của loss, cách chọn checkpoint và tập validation. Hoàn tất phần cần thiết trước khi tiếp tục học Lượt 5–7 và làm phần còn lại của Lượt 7–8.
+## 1. Mục tiêu và phạm vi đã xác định
 
-Mỗi mã EXP là một đơn vị công việc. Không phải mã nào cũng là một lần huấn luyện. Trạng thái “hoàn tất phân tích” không có nghĩa đã hoàn tất thí nghiệm mới.
+Hoàn tất kiểm tra phương pháp và các vấn đề V01–V09 trước khi chốt báo cáo và tiếp tục phần còn lại Lượt 7–8. Ưu tiên khả năng phân biệt bona fide/attack; báo riêng attack lọt qua và live bị từ chối.
 
-Kết quả hiện có: [KET_QUA.md](KET_QUA.md). Số liệu tính lại: [MINH_CHUNG_VALIDATION.json](MINH_CHUNG_VALIDATION.json). Danh sách vấn đề gốc: [bàn giao V01–V09](../../handoffs/review_20261030/BAN_GIAO_HOP_NHAT_DEEPFACE_PAD_20261030.md).
+Theo yêu cầu mới nhất, **không kiểm kê, chuẩn bị hoặc thí nghiệm OULU-NPU lúc này**. Không mở OCIM, thêm dataset hoặc nghiên cứu cross-type trong kế hoạch này. Các thuật ngữ benchmark chỉ được đối chiếu để mô tả đúng phạm vi CASIA hiện tại.
 
-Phạm vi cập nhật ngày 31/10/2026: ưu tiên hiệu năng phân biệt bona fide/attack, công bố riêng hai chiều lỗi. E0/E1 và kết quả lịch sử được giữ làm mốc đã khóa. Cách đặt trọng số ưu tiên chống lọt attack so với từ chối live chưa được chốt. Các nhánh Lượt 5.x/6.x ở mục 5.5 là đề xuất để người dùng lựa chọn, chưa là đăng ký chạy.
+Giữ nguyên E0/E1, kết quả và bản khóa Lượt 1–7. E2 là đối chiếu lịch sử. Nhánh mới dùng output riêng. Giữ nguyên checkpoint E1 làm initializer không có nghĩa khóa bản sao backbone khi huấn luyện E3/E4.
 
-## 1. Thứ tự thực hiện
+Đây là kế hoạch đã được điều chỉnh theo phạm vi người dùng yêu cầu. Nó chưa là đăng ký thông số full run. Agent được tiếp tục kiểm tra nguồn và chuẩn bị thiết kế; không ghi thí nghiệm chưa chạy là hoàn tất.
 
-| Mã | Công việc | Vấn đề liên quan | Trạng thái | Có huấn luyện mới? |
-| --- | --- | --- | --- | --- |
-| EXP-00 | Đối chiếu tài liệu về loss và thước đo đánh giá | V01, V02, V03 | Đã có kết quả, xem KET_QUA | Không |
-| EXP-01 | Kiểm tra pipeline và tính lại validation từ CSV đã lưu | V01, V02, V03, V06 | Đã có kết quả; chưa kiểm được checkpoint bị ghi đè | Không |
-| EXP-02 | Chốt câu hỏi, dữ liệu và quy tắc so sánh bổ sung | V01–V08 | Đã soạn phương án; chờ người dùng chọn phạm vi | Không |
-| EXP-03 | Chuẩn bị code, notebook và chạy thử nhỏ theo phương án đã chọn | V01, V02, V03, V08 | Chưa thực hiện | Chỉ chạy thử nhỏ sau EXP-02 |
-| EXP-04 | So sánh có đối chứng E3b–E4 theo protocol mới | V01, V02, V03, V08 | Chưa thực hiện; phụ thuộc EXP-02 | Có |
-| EXP-05 | Kiểm tra độ nhạy alpha, gamma hoặc nhóm người validation | V02, V04 | Chưa thực hiện; chỉ chạy phần đã chọn | Có |
-| EXP-06 | Đánh giá lặp lại theo seed nếu cần kết luận cấu hình mới | V08 | Chưa thực hiện; không tự mở rộng Lượt 6 cũ | Có |
-| EXP-07 | Đối chiếu minh họa CPU và hoàn tất tình huống webcam | V09 | Chưa đo mới; thực hiện sau khi giải quyết lựa chọn mô hình | Không huấn luyện benchmark |
-| EXP-08 | Đồng bộ báo cáo, kết luận và tiếp tục học Lượt 5–7 | V01–V09 | Chưa hoàn tất; chờ các bước áp dụng | Không |
+Theo dõi kết quả tại [KET_QUA.md](KET_QUA.md), số liệu đã tính lại tại [MINH_CHUNG_VALIDATION.json](MINH_CHUNG_VALIDATION.json) và [MINH_CHUNG_NGUONG_20261031.json](MINH_CHUNG_NGUONG_20261031.json). Vấn đề gốc: [bàn giao V01–V09](../../handoffs/review_20261030/BAN_GIAO_HOP_NHAT_DEEPFACE_PAD_20261030.md).
 
-Luồng chính: EXP-00 → EXP-01 → EXP-02. Sau đó thực hiện những mã người dùng chọn. EXP-05 và EXP-06 không tự động trở thành công việc bắt buộc. Mọi mã không áp dụng phải ghi rõ lý do, không ghi “đã giải quyết bằng thực nghiệm”.
+Nghiên cứu NIST/PAD và kiểm tra chỉ số được lưu riêng tại [nghiên cứu tài liệu](research_pad_metrics_20261031/NGHIEN_CUU_NIST_PAD.md) và [kiểm tra code/CSV](research_pad_metrics_20261031/KIEM_TRA_CODE_VA_CSV.md). Hai báo cáo phân biệt lỗi số học, lỗi kiểm tra đầu vào và khác biệt protocol.
 
-## 2. Những nguyên tắc cần chốt
+## 2. Hướng nghiên cứu được đề xuất
 
-1. Phân biệt mục tiêu dự đoán điểm xác suất với mục tiêu giảm lỗi PAD ở cấp video.
-2. Chọn checkpoint và chọn cấu hình là hai bước nối tiếp của cùng quy trình lựa chọn. Kiểm tra cả hai.
-3. Lượt 6 cũ huấn luyện lại theo seed. Nó không dùng lại nguyên checkpoint E3 seed 42.
-4. Giữ nguyên kết quả Lượt 1–7, manifest, ngưỡng và các bản khóa lịch sử. Kết quả mới dùng mã và thư mục mới.
-5. Không sử dụng test CASIA đã xem để chọn alpha, gamma, epoch, metric hoặc cấu hình mới. Bất kỳ đánh giá lại nào trên test đó phải được công bố là phân tích bổ sung sau khi đã biết kết quả.
-6. Dữ liệu chia theo người. Các frame cùng video không được chia sang những tập khác nhau. Các fold theo người phải giữ toàn bộ video của một người cùng nhóm.
-7. Cùng tiêu chí chưa đủ chứng minh công bằng. Cần cùng đầu vào, ngân sách đã xác định, seed ghép cặp, cơ hội điều chỉnh và cách báo cáo.
+1. Kiểm tra lại chuỗi lựa chọn và lỗi từ score đã lưu, đặc biệt là sự khác nhau giữa khả năng xếp hạng và ngưỡng vận hành.
+2. Làm rõ tỷ lệ 1:3 ở ba nơi: huấn luyện, lựa chọn checkpoint và chấm điểm. Không đổi cả ba cùng lúc.
+3. Dùng một tiêu chí PAD chính cho phép thử có đối chứng. AUC/EER và BCE là thông tin hỗ trợ hoặc quy tắc phân định được khóa trước, không mở mỗi metric thành một cuộc thi riêng.
+4. Chỉ kiểm tra thêm loss/trọng số lớp sau khi đã tách ảnh hưởng tiêu chí và ngưỡng.
+5. Chỉ mở nhiều seed sau khi thiết kế nhỏ chạy đúng và ngân sách đã rõ.
+6. Chốt mô hình/giới hạn để hoàn tất CPU, webcam và tài liệu.
 
-## 3. EXP-00 — Đối chiếu phương pháp
+**Đề xuất chính:** tiếp tục đánh giá đồng thời hai loại lỗi bằng ACER, kèm APCER/BPCER và số lỗi thực. Chưa chuyển sang tối ưu chỉ chống lọt attack. APCER=0 trên mẫu test cũ không bảo đảm rủi ro thực bằng 0; nhiều lỗi live cũng chưa chứng minh đổi ưu tiên an ninh sẽ giúp ích.
 
-**Câu hỏi:** Có được huấn luyện bằng Focal và đánh giá bằng BCE khi so với mô hình BCE không?
+## 3. Tiến trình theo mã EXP
 
-**Đầu vào:** Bài 2307.02694v3 do người dùng cung cấp; bài Focal gốc; nghiên cứu về ước lượng xác suất và hiệu chỉnh độ tin cậy; tài liệu đánh giá mô hình.
-
-**Thao tác:** Phân biệt đánh giá xác suất với đánh giá quyết định. Ghi điều kiện áp dụng và giới hạn của từng nguồn. Không suy từ một bài tổng quan ra kết luận thiết kế cụ thể đã công bằng.
-
-**Kết quả:** Có thể dùng chung BCE/log loss để đánh giá xác suất đầu ra. Điều đó không chứng minh cấu hình có BCE thấp nhất có ACER tốt nhất. Việc dùng BCE làm tiêu chí quyết định cho PAD cần được giải trình theo mục tiêu. Không có căn cứ kết luận mọi phép so đó đều sai, hoặc E4 chắc chắn thua.
-
-**Điều kiện chuyển bước:** Người đọc phân biệt được “phép đo hợp lệ” và “phép đo đủ phù hợp để chọn mô hình cho mục tiêu đang xét”. Nguồn và diễn giải nằm trong KET_QUA.
-
-## 4. EXP-01 — Kiểm tra dữ liệu và chuỗi lựa chọn đã có
-
-**Câu hỏi:** BCE tác động ở đâu? Chênh lệch quan sát được có chỉ do tỷ lệ lớp không?
-
-**Đầu vào:** CSV validation của ba checkpoint đã chọn; train_log.csv; metrics.json; comparison_freeze.json; manifest; train.py và round6.py.
-
-**Thao tác đã làm:**
-
-1. Đọc cơ chế cập nhật, lưu và nạp checkpoint.
-2. Đếm lớp theo train/validation/test từ manifest.
-3. Tính BCE riêng live/attack, BCE trung bình hai lớp, Brier và cùng một công thức Focal cho cả ba ứng viên.
-4. Phân biệt BCE frame với các chỉ số video.
-5. Kiểm tra epoch có BCE thấp nhất và epoch có tổng objective thấp nhất trong joint.
-6. Liệt kê tên checkpoint ở cấp gốc của đúng ba thư mục run gốc trên G:. Không mở trọng số hoặc quét toàn bộ Drive.
-
-**Kết quả:** Xem KET_QUA mục 4–6. E4 chọn joint epoch 6 theo BCE; tổng objective thấp nhất ở joint epoch 3. Chưa có dự đoán từng epoch để so ACER giữa hai thời điểm. Checkpoint cấp gốc chỉ có best theo stage và best.ckpt; chưa tìm thấy bản lưu từng epoch trong phạm vi đã liệt kê.
-
-**Giới hạn:** Tính lại cùng Focal trên ba checkpoint đã chọn bằng BCE không kiểm tra được checkpoint E4 đã bị bỏ qua. Đây là phân tích mô tả, không phải lựa chọn lại cấu hình.
-
-**Điều kiện chuyển bước:** Người dùng xem kết quả hiện có trước khi quyết định có cần huấn luyện bổ sung.
-
-## 5. EXP-02 — Chốt protocol và phạm vi xử lý
-
-**Trạng thái:** Đề xuất dưới đây chưa được người dùng chọn. Không thay đổi training hay lựa chọn lịch sử chỉ từ việc có kế hoạch này.
-
-### 5.1. Hai phạm vi để người dùng chọn
-
-| Lựa chọn | Thực hiện | Trả lời được | Giới hạn |
+| Mã | Công việc | Vấn đề | Trạng thái |
 | --- | --- | --- | --- |
-| 1. Hoàn tất kiểm toán trên dữ liệu đã có | EXP-00, EXP-01; sửa diễn giải và làm các phần EXP-08 tương ứng | Quy trình cũ hoạt động ra sao; dữ liệu hiện có cho phép kết luận gì | Không trả lời được việc chọn checkpoint khác có cải thiện E4 không |
-| 2. Thêm phép thử có đối chứng | Chốt protocol, làm EXP-03 và EXP-04; chỉ mở EXP-05/06 khi đã quyết định | Kiểm tra ảnh hưởng của tiêu chí chọn và loss trong thiết kế mới | Cần GPU; kết quả CASIA test cũ không trở lại thành bằng chứng độc lập chưa từng được xem |
+| EXP-00 | Chốt ý nghĩa loss, metric, protocol và phạm vi kết luận | V01–V06 | Có kết quả nghiên cứu; cần học cùng người dùng |
+| EXP-01 | Phân tích score cũ: threshold, lỗi, nhóm người/chất lượng và trọng số lớp | V01–V03, V06, V08 | Có số liệu validation; mới bổ sung kiểm tra ngưỡng; các phân tích chi tiết còn chờ |
+| EXP-02 | Đăng ký thiết kế, chốt nguồn dữ liệu và cách chọn trước full run | V01–V08 | Kế hoạch cụ thể bên dưới; chưa khóa thông số thực thi |
+| EXP-03 | Code/notebook/test và chạy thử nhỏ | V01–V03, V08 | Chưa thực hiện |
+| EXP-04 | Nhánh 5.1 và 5.2 kiểm tra tiêu chí checkpoint và độ nhạy ngưỡng | V01, V03, V08 | Chưa train mới |
+| EXP-05 | Nhánh 5.3 kiểm tra ảnh hưởng trọng số lớp nếu còn cần | V02, V04, V06 | Chưa thực hiện; giới hạn số yếu tố thay đổi |
+| EXP-06 | Nhánh 6.x lặp lại thiết kế đã chọn theo seed | V08 | Chưa thực hiện |
+| EXP-07 | CPU và webcam | V09 | Giữ giới hạn đã biết; chưa đo mới |
+| EXP-08 | Đóng từng V, đồng bộ báo cáo/paper và học tiếp | V01–V09 | Chưa hoàn tất |
 
-**Đề xuất chuyên môn:** Chọn phạm vi 2 nếu cần giải quyết bằng thực nghiệm câu hỏi checkpoint. Phạm vi 1 đủ cho một báo cáo trung thực về thiết kế cũ, nhưng chưa đủ để kết luận ảnh hưởng của cách chọn đã được giải quyết.
+Thứ tự: EXP-00 → EXP-01 → EXP-02 → EXP-03 → EXP-04. EXP-05 chỉ chạy nếu câu hỏi trọng số lớp còn cần kiểm tra. EXP-06 chạy theo phạm vi được chốt sau khi có chi phí thử nhỏ; không chọn nhánh dựa vào test. Sau đó EXP-07/08. Không cần làm mọi tổ hợp để được ghi hoàn tất; phần không chạy phải giữ giới hạn tương ứng.
 
-### 5.2. Mục tiêu đánh giá đề xuất
+## 4. EXP-00 — Hiểu đúng điều đang đánh giá
 
-- Mục tiêu chính: giảm lỗi PAD ở cấp video. Công bố APCER, BPCER và ACER; kèm EER/AUC và số lỗi thực.
-- BCE/log loss, BCE trung bình hai lớp và Brier: chỉ số bổ sung về điểm dự đoán. Không dùng chúng để tuyên bố hơn về ACER khi ACER đang hòa.
-- Khi các chỉ số PAD đã chốt hòa nhau: báo hòa. Nếu cần chọn một cấu hình để triển khai, dùng quy tắc vận hành định trước, chẳng hạn chi phí hoặc cấu hình mốc; không diễn giải thành mô hình đó chính xác hơn.
-- Nếu mục tiêu thay thành dự đoán xác suất, việc chọn bằng BCE có thể phù hợp. Khi đó phải chốt trọng số lớp, đơn vị frame/video và dữ liệu hiệu chỉnh xác suất trước.
+**Kết quả cần nắm:**
 
-### 5.3. Phương án dữ liệu phải được quyết định trước khi viết notebook full run
+- BCE/Focal là objective dùng trên train; có thể tính một công thức chung để đánh giá điểm của các mô hình khác loss. BCE thấp hơn không tự động có ACER hoặc calibration tốt hơn.
+- Chọn checkpoint, chọn ngưỡng và chọn cấu hình là các bước liên quan, nhưng thay đổi một bước chưa giải quyết ảnh hưởng các bước khác.
+- AUC đo xếp hạng qua các ngưỡng; nó không chọn một threshold tối ưu để vận hành.
+- Ngưỡng lịch sử tối ưu ACER video validation theo implementation đã khóa. Đây không phải bảo đảm tối ưu test hoặc tối ưu an ninh.
+- Tên intra/cross-dataset và intra/cross-type mô tả hai trục khác nhau. OCIM là tập benchmark và thiết kế leave-one-dataset-out trong các công trình cụ thể, không đồng nghĩa bốn ô phân loại trên và không phải yêu cầu mọi đồ án phải thực hiện.
+- NIST IR là báo cáo kỹ thuật; không mặc định dataset/protocol nghiên cứu được NIST chứng nhận chỉ vì dùng APCER/BPCER. Tiêu chuẩn, báo cáo đánh giá và protocol của tác giả dataset phải được dẫn riêng.
 
-**Phương án nhỏ:** Giữ 16/4/30 để so sánh bổ sung trực tiếp với lịch sử. Kết quả chỉ là thí nghiệm phát triển với bốn người validation cố định. Không tuyên bố đã giải quyết độ nhạy cách chọn người.
+**Người dùng:** giải thích lại ngắn gọn sự khác nhau giữa tốt về score, tốt về xếp hạng và ít lỗi tại một threshold. Không cần học toàn bộ paper trước khi chuyển bước.
 
-**Phương án mạnh hơn, chưa tương thích với ràng buộc giữ nguyên E1:** Dùng các fold theo người trong 20 người train gốc sẽ cần initializer không học người của fold validation. E1 hiện có đã học 16 người train; không được nạp nó rồi đổi một trong 16 người đó sang validation và coi là không trùng người trong toàn pipeline. Vì người dùng muốn giữ E0/E1 làm mốc đã khóa, không triển khai phương án 5 fold này trong phạm vi hiện tại. Nếu mở lại câu hỏi dữ liệu sau này, phải quyết định riêng việc huấn luyện initializer theo fold hoặc nguồn đánh giá mới. Việc giữ nguyên E1 không buộc phải đóng băng bản sao backbone khi huấn luyện các nhánh E3/E4 mới.
+## 5. EXP-01 — Chẩn đoán bằng dữ liệu đã có
 
-Chi phí phương án mạnh hơn chưa được đo. Không ước tính giờ GPU như một cam kết trước EXP-03.
+Không train hoặc inference toàn tập. Không chọn lại mô hình/ngưỡng lịch sử trên test.
 
-### 5.4. Nội dung phải khóa trước full run
+### EXP-01a. Chuỗi lựa chọn và threshold
 
-1. Danh sách ứng viên: tối thiểu E3b–E4 để so BCE–Focal dưới cùng lịch. E3 là nhánh kiểm tra lịch riêng nếu người dùng muốn bao gồm.
-2. Manifest, nhóm người, initializer hợp lệ và hash nguồn.
-3. Seed, lịch depth/head/joint, batch size, optimizer, weight decay, số bước cập nhật và số epoch.
-4. Alpha, gamma, lambda_cls và ngân sách tìm siêu tham số bằng nhau giữa các họ cấu hình. Nếu giữ alpha/gamma cũ, gọi đúng là cấu hình cố định chưa tối ưu.
-5. Tiêu chí chọn checkpoint, cách chọn ngưỡng, xử lý hòa và đơn vị tổng hợp.
-6. Phân biệt hai phép hỏi: so loss dưới cùng tiêu chí chọn; và kiểm tra độ nhạy tiêu chí trên cùng quỹ đạo huấn luyện.
-7. Dữ liệu nào dùng chọn; dữ liệu nào chỉ đánh giá; điều kiện dừng và nội dung được phép xem.
-8. Nơi lưu mỗi epoch, dung lượng và đầu ra tối thiểu. Không ghi đè file lịch sử.
+Nguồn: [train.py](../../../src/deepface_pad/train.py), [metrics.py](../../../src/deepface_pad/metrics.py), [runbook Lượt 5](../../../reports/ROUND_5_CASIA_RUNBOOK.md), [kết quả validation](../../../reports/ROUND_5_FULL_VALIDATION_2026-10-16.md).
 
-**Điều kiện chuyển EXP-03:** Có lựa chọn của người dùng và một bản đăng ký thiết kế cụ thể. Các đề xuất ở mục này chưa thay thế bản đăng ký đó.
+Đã xác minh: head/joint chọn checkpoint bằng BCE frame; cuối stage nạp best. Epoch sau chạy từ trọng số hiện tại trong bộ nhớ, không nạp file last.ckpt. Sau joint, chọn threshold theo thứ tự (ACER, |APCER-BPCER|, threshold) nhỏ nhất trên tập candidate. Các candidate là các score phân biệt và hai điểm ngoài biên.
 
-### 5.5. Nhánh Lượt 5.x và Lượt 6.x — đề xuất ngày 31/10/2026
+Cả E3/E3b/E4 đều có khoảng threshold cho 0 lỗi validation: (max score attack, min score live]. Threshold đã chọn bằng min score live. Điều này do candidate và quy tắc xử lý hòa, không do AUC. Chưa chứng minh nguyên nhân lỗi test.
 
-Mã EXP mô tả công việc; mã 5.x/6.x mô tả biến thể thực nghiệm. Một EXP có thể phục vụ nhiều biến thể. Không đồng nhất thêm một metric báo cáo với thêm một nhánh lựa chọn.
+**Phần cần làm tiếp:** vẽ phân bố score và đường APCER/BPCER theo threshold; đánh dấu threshold đã khóa và khoảng tối ưu validation. Phân tích độ nhạy trước hết trên validation. Nếu minh họa test đã xem, ghi mô tả hậu kiểm, không dùng để chọn threshold mới hoặc báo tối thiểu test như kết quả vận hành.
 
-| Nhánh | Quy tắc chính dự kiến | Câu hỏi | Trạng thái |
+### EXP-01b. Đếm lỗi và đối chiếu nhóm
+
+Nguồn: [kết quả test Lượt 5](../../../reports/ROUND_5_TEST_RESULTS_2026-10-16.md) và các CSV đã lưu. Tại ngưỡng đã khóa: E1/E2 từ chối 5/90 live, E3/E3b 9/90, E4 8/90; APCER=0 trên 270 attack cho các mô hình này. Giữ nguyên bảng.
+
+Đối chiếu lỗi theo người, chất lượng, loại tấn công; tách lỗi frontend webcam với lỗi phân loại. Xem AUC, EER và lỗi tại ngưỡng cùng nhau. Ví dụ E4 có AUC cao hơn E1 nhưng ACER ở threshold validation cao hơn; không suy rằng threshold là nguyên nhân duy nhất.
+
+### EXP-01c. Phân tích 1:3 trước khi train
+
+- Xác minh tỷ lệ theo video, frame và người; train/validation/test đều live:attack=1:3.
+- BCE mẫu hiện tại = 0,25 × BCE live + 0,75 × BCE attack; ACER cho APCER/BPCER trọng số 1:1.
+- Báo BCE riêng từng lớp, macro BCE, số lỗi và các chỉ số đã có. Không cần lấy bớt video attack để tính ACER.
+- Alpha live=0,25/attack=0,75 không ưu tiên live thiểu số. Không suy trực tiếp tỷ lệ gradient hoặc nguyên nhân lỗi test từ alpha.
+- So sánh dữ liệu theo nhóm người/chất lượng; cùng tỷ lệ lớp không chứng minh cùng độ khó.
+
+**Đầu ra:** bảng/biểu đồ chẩn đoán mới trong output EXP-01; kết luận được và chưa được ghi trong KET_QUA. Mẫu độc lập chính là người/video, không coi 20 frame/video là 20 lần đánh giá độc lập. Nếu ước lượng bất định bằng lấy mẫu lại, lấy theo người và giữ mọi video cùng người; bốn người validation vẫn giới hạn độ chính xác.
+
+### EXP-01d. Kiểm tra độc lập APCER/BPCER/ACER — phải xong trước nhánh mới
+
+1. Đối chiếu NIST IR 8491 và nguồn PAD: định nghĩa hai lỗi, mẫu số, chiều score, ranh giới bằng threshold, nhóm tấn công và trường hợp không trả quyết định.
+2. Tính lại từ số đếm confusion tại threshold đã khóa; đối chiếu CSV, JSON và báo cáo. Kiểm đơn vị tỷ lệ 0–1 so với phần trăm, số video và phép mean frame → video; không trộn mẫu số attack/live.
+3. Kiểm pooled APCER so với phân rã theo attack_type. Không tự gọi attack_type của CASIA là đầy đủ PAI species hoặc gọi max ba nhóm là tuân thủ toàn bộ ISO.
+4. Kiểm đủ dự đoán trên manifest và ghi rõ cách xử lý nonresponse. Không đem trường hợp no_face webcam gộp vào benchmark như thể có score hợp lệ.
+5. Kiểm đầu vào không hợp lệ: threshold NaN/Inf, nhãn không nhị phân trước ép kiểu, score không hữu hạn, thiếu một lớp, shape và trường hợp score bằng threshold.
+6. Ghi trạng thái riêng: đúng số học trên dữ liệu đã dùng; không khớp protocol tham chiếu; có lỗi phòng vệ đầu vào; hoặc chưa đủ bằng chứng.
+
+Phát hiện lỗi phòng vệ không tự động làm sai mọi kết quả cũ. Nếu phát hiện sai số học thật ở dữ liệu đã báo, giữ bản cũ và xuất bản đính chính có nguồn; không sửa âm thầm file khóa.
+
+## 6. EXP-02 — Khóa thiết kế và đóng các vấn đề dữ liệu
+
+### 6.1. Phần giữ nguyên
+
+CASIA 16/4/30 người, manifest, target depth, tiền xử lý và 20 frame/video. E0/E1, threshold và kết quả lịch sử không bị ghi đè. Không đổi bốn người validation chỉ để tìm kết quả đẹp hơn. Không dùng E1 đã học một người làm initializer rồi chuyển người đó sang validation.
+
+Không bổ sung dataset lúc này. Kết quả mới trên test CASIA đã xem là phân tích bổ sung sau quan sát; không tuyên bố đã có phép xác nhận trên test chưa từng được dùng. Bổ sung protocol chuẩn không tự phục hồi tính độc lập của test cũ.
+
+### 6.2. Bản đăng ký phải có trước EXP-03/full run
+
+1. Câu hỏi chính: ảnh hưởng tiêu chí checkpoint, ảnh hưởng threshold hay ảnh hưởng trọng số lớp.
+2. Candidate: E3b–E4 là cặp chính cùng lịch; E3 chỉ thêm nếu cần phân tích lịch. Không tự mở E2 mới.
+3. Config/commit/hash, seed, initializer, lịch epoch, số bước cập nhật, optimizer, LR, weight decay, batch và augmentation.
+4. Objective và alpha/gamma/lambda; mỗi phép thử chỉ thay yếu tố đã nêu.
+5. Tiêu chí chọn ở từng stage, threshold và xử lý hòa. Không chỉ ghi tiêu chí joint rồi bỏ ngỏ head stage.
+6. Các nhánh sẽ báo cáo; dữ liệu dùng chọn; số lần xem kết quả; đơn vị phân tích; cách xử lý lỗi/thiếu đầu ra.
+7. Quy tắc chọn ứng viên sang nhiều seed dựa trên nguồn lựa chọn đã định trước; không chọn từ test. Nếu các chỉ số chính hòa, báo hòa và giữ đại diện theo quy tắc đã chốt, không gọi là chính xác hơn.
+8. Lưu checkpoint và score validation mỗi epoch; lưu riêng thành phần depth và classification; đo ngân sách sau thử nhỏ.
+
+### 6.3. Xử lý V04, V05, V06, V07 ngay trong thiết kế
+
+| Vấn đề | Cách giải quyết trong phạm vi hiện tại | Giới hạn còn lại |
+| --- | --- | --- |
+| V04: người 4/9/14/19 | Ghi đúng lựa chọn cố định; không có chứng cứ cho lý do đại diện/ngẫu nhiên | Không tuyên bố đã kiểm độ nhạy theo cách chia khác |
+| V05: protocol/test | Ghi intra-dataset, intra-type, chia 16/4/30; công bố lịch sử xem test | Không gọi kết quả bổ sung là xác nhận độc lập |
+| V06: APCER gộp/1:3 | Công bố mẫu số, pooled APCER và BPCER; thêm phân rã loại tấn công khi phù hợp | Không tự gọi ba attack_type là đầy đủ PAI species theo chuẩn |
+| V07: HR_1 | Giữ nhãn theo video; giới hạn tuyên bố ở 1.000 frame/50 video đã dùng | Không khẳng định toàn bộ archive Kaggle đã kiểm |
+
+## 7. EXP-03 — Chuẩn bị notebook và chạy thử nhỏ
+
+1. Tạo mã/output mới; không ghi đè runs/artifacts cũ.
+2. Bổ sung logging từng thành phần loss, checkpoint và score validation theo epoch.
+3. Tính threshold và metric video nhất quán; thực hiện đúng xử lý hòa đã đăng ký.
+4. Test chọn checkpoint, tổng hợp frame/video, chiều live=1, thao tác stage, không trùng người/video và lưu đủ đầu ra.
+5. Chạy thử nhỏ; đo thời gian/dung lượng và trình ngân sách trước full run.
+
+Trước khi chạy nhánh mới, sửa và test các lỗi kiểm tra đầu vào được xác nhận trong EXP-01d. Giữ nguyên định nghĩa hợp lệ, threshold và số liệu lịch sử; nếu thay đổi protocol tổng hợp, dùng phiên bản evaluator/nhãn chỉ số mới. Lần rà soát kế hoạch này chưa sửa code evaluator.
+
+Nếu cần người dùng chạy Colab: agent chuẩn bị notebook cụ thể, rồi hướng dẫn theo từng cell: mở → chọn GPU → mount Drive → kiểm nguồn/hash → chạy thử → xem log → chạy full khi thiết kế và ngân sách đã chốt. Hiện chưa có notebook mới để chạy.
+
+## 8. EXP-04 — Các nhánh Lượt 5 về tiêu chí và threshold
+
+Các nhánh dưới đây thay thế danh sách đề xuất 5.x trước đó chưa được thực hiện. Không biến mỗi metric thành một nhánh bắt buộc.
+
+| Nhánh | Thay đổi chính | Giữ nguyên | Kết luận có thể kiểm tra |
 | --- | --- | --- | --- |
-| 5.0 | Quy tắc lịch sử: chọn checkpoint head/joint bằng BCE; chọn cấu hình theo ACER → EER → AUC → BCE | Mốc đối chiếu đã có | Giữ nguyên |
-| 5.1 | Chọn checkpoint theo ACER video validation thấp nhất; EER thấp hơn, AUC cao hơn; nếu hòa hoàn toàn giữ epoch sớm nhất | Chọn theo lỗi PAD có làm thay đổi checkpoint/cấu hình không? | Đề xuất |
-| 5.2 | Chọn checkpoint theo AUC video validation cao nhất; EER thấp hơn, ACER thấp hơn; hòa hoàn toàn giữ epoch sớm nhất | Ưu tiên khả năng xếp hạng qua các ngưỡng có khác nhánh 5.1 không? | Đề xuất |
-| 5.3 | Giảm BPCER với điều kiện APCER không vượt mức đã chốt trên validation | Ưu tiên chống lọt attack trong khi kiểm soát từ chối live | Đề xuất; chưa có mức APCER được chọn |
-| D1 | Đối chiếu checkpoint có tổng depth + classification objective thấp nhất trong từng nhánh | Giải thích vì sao E4 có cực tiểu tổng objective khác cực tiểu BCE | Phân tích phụ; không dùng raw objective khác công thức để xếp hạng cấu hình |
-| 6.1 | Lặp lại quy tắc của 5.1 theo các seed đã chốt | Kết quả của 5.1 có lặp lại khi đổi seed không? | Chưa chạy |
-| 6.2 | Lặp lại quy tắc của 5.2 theo cùng seed | Kết quả của 5.2 có lặp lại khi đổi seed không? | Chưa chạy |
-| 6.3 | Lặp lại quy tắc của 5.3 nếu chọn nhánh này | Tính biến thiên của điểm vận hành ưu tiên chống lọt attack | Chưa chạy |
+| 5.0 | Không đổi: BCE chọn head/joint; threshold ACER theo code cũ | Kết quả lịch sử | Mốc đã có |
+| 5.1 | Chọn checkpoint head/joint theo chỉ số PAD video: ACER thấp → EER thấp → AUC cao; hòa hoàn toàn giữ epoch sớm nhất | Objective, lịch và đầu vào của từng candidate; depth stage theo depth objective; threshold theo code cũ | Ảnh hưởng của chính sách chọn checkpoint toàn chuỗi head/joint |
+| 5.2 | Phân tích quy tắc đặt threshold trong khoảng ACER validation tối ưu | Checkpoint đã chọn của 5.0/5.1; không cập nhật trọng số | Độ nhạy quyết định đối với các threshold cùng tối ưu trên validation |
+| D1 | Đối chiếu checkpoint có tổng objective thấp nhất trong từng run | Không so raw tổng loss khác công thức giữa BCE và Focal | Giải thích cực tiểu depth + Focal khác cực tiểu BCE |
 
-Các thứ tự phân định ở bảng là phương án cần duyệt. Ngưỡng của 5.1/5.2 được chọn trên validation theo quy tắc ACER đã định trước. Nhánh 5.3 có cách chọn ngưỡng riêng theo ràng buộc APCER; phải chốt thêm xử lý hòa, không chọn mức ràng buộc sau khi thấy kết quả. Báo cấu hình hòa nếu chỉ số PAD hòa; quy tắc epoch sớm nhất chỉ chọn đại diện trong một run, không chứng minh chính xác hơn.
+**5.1:** Đây là can thiệp vào chính sách lựa chọn cả head/joint, không phải ablation chỉ đổi joint. Nếu head checkpoint khác, cần run joint riêng. Với E3 không có head stage riêng, chỉ joint. Tất cả vẫn chạy đủ lịch epoch đã khóa, không thêm early stopping. Thực hiện cặp E3b/E4 trước; thêm E3 cần được đăng ký rõ.
 
-**Phạm vi so sánh:** E3b–E4 là cặp chính vì cùng lịch; E3 có thể thêm để kiểm tra lịch. E2 giữ như đối chiếu lịch sử nếu không có quyết định khác. Không thay đổi E0/E1.
+Để so quy tắc cũ và mới trên dữ liệu lưu đủ, có thể cần chạy lại nhánh BCE chọn checkpoint theo thiết kế cũ vào output mới; không khẳng định tái lập chính xác run cũ bằng seed đơn lẻ. E1 không train lại. Không thể chấm epoch bị ghi đè chỉ từ train_log.csv.
 
-**Điều cần quyết định về head stage:** Các nhánh trên mới mô tả lựa chọn joint cuối. Nếu vẫn dùng best head theo BCE, kết luận chỉ là ảnh hưởng tiêu chí joint khi giữ nguyên cách chọn head. Nếu muốn loại BCE khỏi lựa chọn head, một lựa chọn khác là chuyển tiếp từ epoch head cuối theo lịch cố định cho cả E3b/E4. Đó là một thay đổi thiết kế riêng, cần chạy và ghi nhãn riêng; không sửa sau khi xem kết quả.
+**5.2:** Trước hết làm độ nhạy mô tả bằng dữ liệu đã lưu. Quy tắc thay threshold dùng cho nhánh mới phải khóa trước: đề xuất trung điểm một khoảng hữu hạn có ACER validation tối thiểu; nếu nhiều khoảng, chọn khoảng rộng nhất rồi khoảng có biên trái nhỏ nhất; nếu không có khoảng hữu hạn phù hợp thì dùng quy tắc lịch sử. Cần mô tả endpoint và test trước áp dụng. Đây là kiểm tra quy ước threshold, không phải benchmark được NIST chứng nhận hoặc phương pháp đã chứng minh tốt hơn. Không chọn vị trí trong khoảng dựa trên số live test được sửa.
 
-**Tiết kiệm số run:** Khi dữ liệu, train objective, head initializer và toàn bộ quỹ đạo joint giống nhau, 5.1/5.2/5.3 có thể chọn từ cùng bộ checkpoint và score từng epoch. Không cần train lại chỉ vì đổi criterion hậu kiểm. Nếu criterion làm đổi head checkpoint nạp sang joint hoặc thay cách dừng huấn luyện, các quỹ đạo khác nhau và cần run riêng. Áp dụng cùng nguyên tắc cho 6.x.
+**D1:** E4 cũ có tổng depth + Focal thấp nhất joint epoch 3, BCE thấp nhất epoch 6. Tìm checkpoint/score đúng epoch trước; nếu thiếu, ghi không phục hồi được và kiểm tra trên run mới. Epoch 3 mới không phải epoch 3 cũ. Lưu riêng loss thành phần để biết yếu tố nào làm tổng loss giảm.
 
-**Giới hạn cỡ mẫu:** Validation có 36 attack và 12 live. Một lỗi làm APCER đổi khoảng 2,78 điểm phần trăm, BPCER khoảng 8,33 điểm phần trăm. Không dùng 0 lỗi quan sát để bảo đảm APCER thực dưới 1% hoặc bằng 0. Nhánh 5.3 có thể hòa với 5.1/5.2; không buộc dữ liệu nhỏ phải phân định được.
+**AUC/EER:** tiếp tục báo cáo và dùng trong quy tắc đã khóa; không mở nhánh chỉ ưu tiên AUC ngay lúc này vì chưa giải quyết trực tiếp câu hỏi threshold và validation đang hòa.
 
-**D1 và epoch 3 của E4 cũ:** Trước hết tìm bản lưu checkpoint/score đúng epoch nếu có. Log chỉ cho biết cực tiểu tổng loss, không dựng lại trọng số. Nếu không có, chạy một thí nghiệm mới lưu mỗi epoch rồi so các checkpoint được quy tắc chọn. Không gọi epoch 3 của run mới là phục hồi epoch 3 cũ, không dùng tổng objective có Focal để thắng trực tiếp tổng objective có BCE.
+**Ưu tiên an ninh:** chưa mở nhánh ràng buộc APCER thành nhiệm vụ chính. Nếu sau EXP-01/04 người dùng có yêu cầu vận hành cụ thể, đăng ký riêng mức APCER và tối thiểu hóa BPCER dưới ràng buộc đó trên validation. Không tối ưu APCER đơn lẻ, không suy 0 lỗi = rủi ro thực bằng 0.
 
-**Đánh giá nhánh:** Khóa trước tiêu chí và số nhánh. Không dùng test CASIA cũ để chọn nhánh thắng rồi gọi là xác nhận độc lập. Nếu tất cả dùng cùng validation để chọn checkpoint/ngưỡng/cấu hình, chỉ số trên validation là số phục vụ lựa chọn; khả năng khái quát hóa cần phần đánh giá không dùng cho các quyết định đó. Mọi đánh giá lại test cũ phải công khai lịch sử quan sát.
+## 9. EXP-05 — Nhánh 5.3 về mất cân bằng lớp
 
-Nguồn phương pháp: [NIST IR 8491 về APCER/BPCER](https://doi.org/10.6028/NIST.IR.8491), [scikit-learn về ngưỡng quyết định](https://scikit-learn.org/stable/modules/classification_threshold.html). Điểm score/nhãn của dự án luôn theo live=1, score cao nghiêng live; không đổi theo quy ước ví dụ bên ngoài.
+Chỉ bắt đầu sau phân tích 1:3 của EXP-01 và khi đã khóa một chính sách checkpoint/threshold. Đó là vị trí phù hợp để thay trọng số huấn luyện, tránh trộn hiệu ứng với metric.
 
-## 6. EXP-03 — Chuẩn bị code và notebook chạy thử nhỏ
+**Phép thử nhỏ đề xuất:** giữ lịch E3b, dùng BCE không trọng số làm đối chứng và thêm BCE với trọng số hai lớp chuẩn hóa có cùng tổng trọng số kỳ vọng trên train. Với live:attack=1:3, một lựa chọn là w_live=2 và w_attack=2/3; trung bình trọng số train bằng 1, mỗi lớp đóng góp tổng trọng số bằng nhau. Đây là thiết kế đối chứng về trọng số, chưa bảo đảm cùng gradient hoặc tối ưu.
 
-**Chỉ bắt đầu sau EXP-02.**
+Nếu triển khai tương đương bằng pos_weight=3, cần chuẩn hóa scale phù hợp; dùng trực tiếp pos_weight=3 không bảo đảm cùng quy mô classification objective với đối chứng và có thể đổi tương quan với depth loss. Ghi công thức và test trước khi chạy.
 
-1. Tạo cấu hình và output mới theo mã EXP.
-2. Thêm cách tính chỉ số validation video ở từng epoch; giữ nguyên pipeline lịch sử.
-3. Lưu trọng số mỗi epoch hoặc đủ bản lưu để so các tiêu chí đã chốt. Lưu validation scores theo epoch, loss thành phần, config và hash.
-4. Trong head stage, ghi rõ checkpoint nào được nạp sang joint. Nếu muốn kiểm tra cả ảnh hưởng của tiêu chí ở head stage, cần nhánh huấn luyện riêng; chỉ chọn lại joint cuối không giải quyết được ảnh hưởng này.
-5. Viết test cho việc chọn checkpoint, xử lý hòa, tổng hợp video, chống trùng người/video và lưu đủ đầu ra.
-6. Chạy thử trên dữ liệu nhỏ, không dùng test để sửa lựa chọn.
-7. Đo thời gian và dung lượng để lập ngân sách cho EXP-04.
+Không đồng thời đổi sampler, gamma, alpha và lambda. Chưa mở grid gamma hay bộ lấy mẫu cân bằng. Nếu chọn khảo sát Focal alpha thay vì weighted BCE, lập phép thử riêng và xử lý scale; giữ gamma cố định. Gamma=0 với alpha không đồng đều không phải BCE thuần.
 
-**Nếu cần người dùng chạy Colab:** Agent chuẩn bị notebook cụ thể trước. Sau đó hướng dẫn từng bước: mở đúng notebook → chọn GPU → mount Drive → kiểm đầu vào/hash → chạy cell thử nhỏ → gửi log thử nhỏ → mới chạy full. Không yêu cầu người dùng tự đoán cell cần chạy. Hiện chưa có notebook mới để chạy.
+**Đầu ra:** per-class loss, lỗi tại threshold đã định trước, score và chi phí; kết quả không cải thiện vẫn phải giữ. Không chọn cấu hình từ test; không đưa mọi phương án vào 6.x chỉ vì có số đo.
 
-**Điều kiện chuyển bước:** Test đạt; log, trọng số và score từng epoch đủ; người dùng đã biết ngân sách full run.
+## 10. EXP-06 — Các nhánh Lượt 6.x
 
-## 7. EXP-04 — So sánh có đối chứng và ảnh hưởng của tiêu chí chọn
+- 6.0: sáu run E1/E3 seed 43/44/45 lịch sử, giữ nguyên.
+- 6.1: lặp lại chính sách checkpoint của 5.1 trên seed đã chốt.
+- 6.2: độ nhạy threshold 5.2 trên checkpoint/score của cùng run 6.0/6.1 khi tương thích; đổi threshold đơn thuần không cần train mới.
+- 6.3: chỉ lặp lại nhánh trọng số 5.3 nếu câu hỏi này được chọn cho giai đoạn nhiều seed.
 
-**Giả thuyết cần kiểm tra:** Cách chọn bằng BCE và cách chọn theo mục tiêu PAD có thể lấy các checkpoint khác nhau. Mức ảnh hưởng tới lỗi trên dữ liệu không tham gia lựa chọn cần được đo.
+Dùng E1 cùng seed đã khóa sau kiểm hash/protocol; không tự train lại E1. Nếu thiếu initializer hợp lệ cho seed mới, dừng ở quyết định phạm vi, không thay ngẫu nhiên initializer.
 
-**Đối chứng chính:** E3b BCE và E4 Focal, cùng lịch và điều kiện đã khóa. Không quy chênh lệch E3–E4 hoàn toàn cho loss vì lịch khác nhau.
+So sánh ghép cặp trên cùng video; báo từng seed, mean/SD và số lỗi thực. Không coi các lần chấm cùng 360 video là những test độc lập. Kết quả CASIA bổ sung vẫn giới hạn bởi test đã xem và cỡ mẫu. Không tăng seed liên tục đến khi có kết quả đẹp.
 
-**Thao tác:**
+## 11. EXP-07 — CPU, webcam và V09
 
-1. Huấn luyện theo thiết kế EXP-02, lưu đầu ra mỗi epoch.
-2. Trên cùng quỹ đạo joint, áp dụng các quy tắc chọn đã đăng ký. Không lựa chọn quy tắc sau khi thấy kết quả đánh giá.
-3. So sánh checkpoint theo lỗi PAD, chỉ số điểm, nhóm lớp và loại tấn công.
-4. Ghi trường hợp hòa; không tự thêm một metric mới để buộc có người thắng.
-5. Đánh giá trên phần dữ liệu dành cho đánh giá theo thiết kế. Nếu xem lại test CASIA cũ, gắn nhãn phân tích bổ sung sau quan sát test, không gọi là xác nhận độc lập.
+1. Giữ hình CPU là minh họa khi chưa đạt dung sai CUDA. Không đổi tolerance để ghi đạt.
+2. Đối chiếu score/log/crop hiện có; tách mất detection, reset cửa sổ và lỗi PAD. Alpha của E4 không giải thích trực tiếp webcam E3.
+3. Chốt model/threshold/frontend trước đo mới. Không sửa threshold benchmark để demo nhận live.
+4. Khi có người vận hành và ảnh giấy, hướng dẫn một cảnh print theo [WEBCAM_GUIDE](../../../reports/round7/WEBCAM_GUIDE.md), output mới.
+5. Hướng dẫn reset: đủ 5/5 → rời đến 0/5 → quay lại đủ 5/5 và có quyết định.
+6. Lưu video riêng, frames.csv, summary.json; báo FPS vòng, frame PAD/s và TTD hoặc lý do thiếu.
 
-**Kết quả phải lưu:** Epoch được chọn theo từng quy tắc; score frame/video; ngưỡng và nguồn chọn; số lỗi live/attack; chỉ số từng nhóm; chi phí; tất cả kết quả bất lợi.
+Không tự bật camera. Chưa chứng minh nguyên nhân thì giữ là giả thuyết. V09 có thể đóng bằng mô tả giới hạn nếu không đo thêm, nhưng không ghi các cảnh thiếu là đã đạt.
 
-**Điều kiện hoàn tất:** Có bảng ảnh hưởng của cả loss và tiêu chí. Nếu không thấy khác biệt, ghi không thấy khác biệt trong thiết kế này. Nếu thiếu checkpoint/dữ liệu, ghi chưa trả lời được.
+## 12. EXP-08 — Đóng V01–V09 và đồng bộ tài liệu
 
-## 8. EXP-05 — Kiểm tra alpha, gamma hoặc cách chia người
+| Vấn đề | Bằng chứng để ghi trạng thái kết thúc |
+| --- | --- |
+| V01 | Có kết quả ảnh hưởng checkpoint hoặc ghi rõ chưa kiểm; không chỉ sửa văn bản rồi nói đã giải quyết thực nghiệm |
+| V02 | Công thức/alpha/gamma/scale được mô tả đúng; kết luận chỉ cho cấu hình đã thử |
+| V03 | Người đọc phân biệt train → checkpoint → threshold → cấu hình → test; Lượt 6 train theo seed |
+| V04 | Nêu rõ mã người cố định và lý do chưa tìm thấy; không bịa đại diện/ngẫu nhiên |
+| V05 | Ghi protocol và lịch sử xem test riêng; không đồng nhất CASIA hiện tại với OCIM hay protocol gốc đầy đủ |
+| V06 | Có mẫu số, pooled APCER, BPCER và cách tính ACER; tách đánh giá với trọng số training |
+| V07 | Phạm vi HR_1 khớp dữ liệu đã kiểm; không cần kiểm archive mới để đóng giới hạn phát biểu |
+| V08 | Giữ seed bất lợi, khác biệt budget/weight decay; không quy nhân quả riêng head hoặc loss khi có yếu tố khác |
+| V09 | Có bằng chứng cảnh đã đo hoặc ghi rõ thiếu; CPU không được gọi tái lập chính xác CUDA |
 
-**Chỉ thực hiện sau khi người dùng chọn câu hỏi còn cần kiểm tra.**
+Đồng bộ nguồn báo cáo và paper sau khi chốt kết luận; giữ sửa đổi có sẵn của người dùng. Nếu dựng Word mới, làm builder/render/test và kiểm bố cục vào output mới. Không tự đánh dấu luyện trình bày/nộp bài hoàn tất.
 
-- Alpha: kiểm tra giả thuyết tăng trọng số live có làm thay đổi BPCER không. Giữ gamma và các yếu tố khác cố định. Không mặc định alpha=0,75 tối ưu chỉ vì cân bằng tổng trọng số theo tỷ lệ lớp.
-- Gamma: khảo sát hữu hạn các giá trị đã chốt, ví dụ 0, 1, 2. Gamma=0 với alpha không đồng đều là BCE có trọng số lớp, không phải BCE không trọng số. Muốn đối chứng BCE thuần cần ghi đúng alpha và hệ số scale.
-- Lambda_cls: cùng lambda không có nghĩa cùng đóng góp loss hoặc gradient. Nếu điều chỉnh, dành ngân sách tương đương và không trộn kết quả đó với phép thử chỉ đổi gamma.
-- Cách chia người: dùng fold theo người với initializer không học người của fold validation. Không đổi đúng bốn người vì tìm được kết quả đẹp hơn.
+Học song song từng EXP: giải thích một câu hỏi → xem đúng bằng chứng → người dùng diễn giải lại → thực hiện phần đã chốt → cập nhật kết quả. Sau phần phương pháp, tiếp tục Lượt 5–7 rồi việc còn lại Lượt 7–8.
 
-**Đầu ra:** Bảng độ nhạy theo thiết kế định trước. Không chọn phương án dựa trên test cũ.
+## 13. Cách lưu kết quả và các điểm cần chốt
 
-## 9. EXP-06 — Lặp lại theo seed
+KET_QUA ghi theo mã EXP: câu hỏi, config/commit/hash, việc thực sự đã làm, bảng kết quả có mẫu số, kết luận và giới hạn, bước tiếp theo. Output thô ở thư mục riêng gắn mã nhánh; kết quả Markdown dẫn tới đó. Không chép nhật ký hội thoại vào Git hoặc báo cáo.
 
-Nếu cấu hình mới cần được đem so với E1, đăng ký một batch mới cho ứng viên. Giữ E1 lịch sử đã khóa; với seed 43/44/45 có thể dùng đúng checkpoint E1 và kết quả E1 cùng seed đã có, sau khi kiểm hash và tính tương thích protocol. Không tự huấn luyện lại E1. Nếu cần seed hoặc dữ liệu mà không có E1 tương ứng hợp lệ, quyết định phạm vi riêng trước khi chạy. Không dùng chỉ seed thuận lợi và không gộp các lần chấm trên cùng video thành các test độc lập.
+Trước full run cần chốt: candidate và số seed sau đo chi phí; tiêu chí/threshold chính xác; quy tắc chọn ứng viên khi hòa; nhánh trọng số có cần chạy hay giữ giới hạn. Không yêu cầu quyết định tất cả ngay trước khi người dùng hiểu EXP-01.
 
-Kết quả Lượt 6 cũ được giữ như bằng chứng của E3 theo quy tắc cũ. Thay đổi cách chọn cấu hình không tự động cập nhật sáu run lịch sử. Nếu muốn kết luận riêng tác dụng head, phải kiểm soát ngân sách/weight decay hoặc công bố giới hạn.
+## 14. Nguồn phương pháp
 
-**Đầu ra:** Kết quả từng seed, trung bình, độ lệch chuẩn, chênh lệch ghép cặp và chi phí. Số seed chưa được chốt.
+- [Focal Loss gốc](https://arxiv.org/html/1708.02002).
+- [Loss Functions and Metrics in Deep Learning](https://arxiv.org/html/2307.02694v3).
+- [NIST IR 8491 về đánh giá PAD](https://doi.org/10.6028/NIST.IR.8491): phân biệt APCER/BPCER; không là bằng chứng CASIA của nhóm được chứng nhận.
+- [scikit-learn về ngưỡng quyết định](https://scikit-learn.org/stable/modules/classification_threshold.html).
 
-## 10. EXP-07 — CPU và webcam
-
-1. Giữ hình CPU là minh họa nếu chưa đạt đối chiếu CUDA. Không đổi tolerance để ghi đạt.
-2. Dùng log/crop/detection đã có để phân biệt lỗi tìm mặt và lỗi PAD. Alpha là giả thuyết có thể ảnh hưởng, chưa phải nguyên nhân đã chứng minh của lỗi live.
-3. Chốt mô hình và cấu hình frontend trước đo mới. Không chỉnh ngưỡng benchmark theo cảnh webcam cho tới khi nhận live.
-4. Khi người dùng có ảnh giấy, hướng dẫn một cảnh print riêng theo [WEBCAM_GUIDE](../../../reports/round7/WEBCAM_GUIDE.md).
-5. Hướng dẫn cảnh reset: đợi đủ 5/5 → rời khung đến 0/5 → quay lại và đợi đủ 5/5.
-6. Mỗi cảnh lưu video riêng, frames.csv và summary.json. Ghi FPS vòng, frame PAD/s và TTD hoặc lý do thiếu.
-
-**Điều kiện hoàn tất:** Có bằng chứng mỗi cảnh; giữ lỗi nếu còn lỗi. Chưa tự bật camera hoặc chạy đo trong đợt lập kế hoạch này.
-
-## 11. EXP-08 — Kết thúc xử lý và trở lại học/báo cáo
-
-1. Đối chiếu V01–V09 với kết quả và đánh dấu từng vấn đề: đã sửa diễn giải; đã kiểm thực nghiệm; hoặc còn giới hạn.
-2. Đồng bộ nguồn báo cáo và paper sau khi chốt kết luận. Giữ sửa đổi đang có của người dùng, không dựng đè Word lịch sử.
-3. Nếu dựng tài liệu mới, thực hiện builder/render/kiểm nội dung/kiểm bố cục/test theo quy trình repository và tạo output mới.
-4. Học tiếp Lượt 5: loss → cập nhật → checkpoint → ngưỡng → cấu hình → test. Sau đó học Lượt 6: seed và giới hạn; Lượt 7: phân tích lỗi và webcam.
-5. Chỉ tiếp tục phần còn lại Lượt 7–8 khi đã xác định mô hình dùng và giới hạn cần trình bày. Không đánh dấu phần luyện báo cáo hoặc nộp bài hoàn tất từ việc có tài liệu.
-
-## 12. Mẫu ghi kết quả cho mỗi mã
-
-Khi có kết quả mới, bổ sung vào KET_QUA với mã EXP tương ứng:
-
-- Câu hỏi và giả thuyết đã khóa.
-- Lựa chọn của người dùng; ngày chốt; config/commit/hash.
-- Thao tác thực tế và phần chưa chạy.
-- Bảng kết quả, mẫu số, đơn vị frame/video/người và nguồn.
-- Đối chiếu với điều kiện hoàn tất.
-- Kết luận được phép đưa ra và giới hạn.
-- Bước tiếp theo; hỗ trợ người dùng cần làm.
-
-Không ghi nhật ký trao đổi hoặc quy ước văn phong vào báo cáo kết quả.
+Không mở rộng nguồn dữ liệu ngoài phạm vi V01–V09 trong phiên này.

@@ -1,0 +1,36 @@
+{
+  "scope": "Historical validation threshold audit only; no alternative threshold selected; no test labels used in this calculation",
+  "threshold_rule": "minimum (ACER, abs(APCER-BPCER), threshold) among unique score candidates plus two outer points",
+  "models": {
+    "E3": {
+      "max_attack_score": 0.04201461469056085,
+      "min_live_score": 0.8496189594268799,
+      "historical_threshold": 0.8496189594268799,
+      "zero_validation_error_interval": "(max_attack_score, min_live_score]",
+      "selected_equals_min_live": true,
+      "n_attack": 36,
+      "n_live": 12,
+      "val_scores_sha256": "9babb9c118607a9a720f83e26f6ab6f796520b21714ed6ee43bc7af0fcd848c5"
+    },
+    "E3b": {
+      "max_attack_score": 0.05285476290155202,
+      "min_live_score": 0.7518128156661987,
+      "historical_threshold": 0.7518128156661987,
+      "zero_validation_error_interval": "(max_attack_score, min_live_score]",
+      "selected_equals_min_live": true,
+      "n_attack": 36,
+      "n_live": 12,
+      "val_scores_sha256": "2c7fd73d87311cb045856196bc84ac6ab0510e6e7aed8a9c09f956df255ac559"
+    },
+    "E4": {
+      "max_attack_score": 0.0941372400149703,
+      "min_live_score": 0.418625445663929,
+      "historical_threshold": 0.418625445663929,
+      "zero_validation_error_interval": "(max_attack_score, min_live_score]",
+      "selected_equals_min_live": true,
+      "n_attack": 36,
+      "n_live": 12,
+      "val_scores_sha256": "669be4e88b563640fcf37f964d03cebb88c3fc264ccf6030b3d24ba3f79d868a"
+    }
+  }
+}

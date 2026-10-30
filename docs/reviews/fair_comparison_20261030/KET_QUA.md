@@ -209,9 +209,42 @@ Thứ tự đề xuất: đọc EXP-00/01 → quyết định EXP-02 → triển
 - Mục tiêu được làm rõ: ưu tiên khả năng phân biệt bona fide/attack; đo cả attack bị cho qua và người thật bị từ chối. Chưa chốt mức ưu tiên định lượng giữa hai lỗi.
 - E0/E1 và kết quả lịch sử là mốc đã khóa. Các nhánh mới không ghi đè chúng. Backbone bản sao từ E1 trong E3/E4 vẫn có thể được huấn luyện theo thiết kế.
 - Báo cáo cuối kỳ và paper phải thống nhất sự thật phương pháp, số liệu và phạm vi kết luận. Chưa dựng lại hai tài liệu.
-- Kế hoạch đã thêm đề xuất 5.1 theo ACER, 5.2 theo AUC, 5.3 theo ràng buộc APCER; 6.x kiểm tra theo seed với cùng quy tắc tương ứng. Chưa nhánh nào được đăng ký chạy.
+- Kế hoạch hiện ưu tiên V01–V09: 5.1 kiểm chính sách checkpoint PAD, 5.2 kiểm độ nhạy threshold, 5.3 chỉ kiểm trọng số lớp nếu cần; 6.x lặp lại chính sách tương ứng. AUC và ngưỡng ưu tiên an ninh không mở thành nhánh bắt buộc. Chưa nhánh nào được đăng ký chạy.
 - BCE, CE hai lớp và Bernoulli NLL có thể tương đương về giá trị khi cùng dự đoán, nhãn cứng, trọng số và phép tổng hợp. Không tạo ba nhánh chỉ bằng đổi tên các đại lượng tương đương này. API NLLLoss yêu cầu log-probabilities; không thay trực tiếp BCEWithLogitsLoss bằng NLLLoss trên cùng tensor mà không xử lý đầu vào đúng.
 - Calibration là câu hỏi riêng với lỗi PAD. Không bổ sung bước hiệu chỉnh xác suất chỉ vì muốn giảm lỗi phân loại; nếu thực hiện phải có thiết kế và dữ liệu phù hợp.
 - Ràng buộc giữ E1 làm mốc khiến phương án đổi các người E1 đã học sang fold validation không hợp lệ cho kết luận không trùng người của toàn pipeline. Kế hoạch đã loại phương án đó khỏi phạm vi hiện tại.
 
 Đây là cập nhật thiết kế và phạm vi, không phải kết quả huấn luyện. Cần người dùng chọn nhánh, xử lý head stage và quy tắc dữ liệu trước EXP-03.
+
+
+## 11. Ngưỡng hiện tại và phạm vi V01–V09, ngày 31/10/2026
+
+Người dùng yêu cầu tập trung V01–V09; không xem xét OULU-NPU lúc này. Kế hoạch không kiểm kê hoặc bổ sung dataset. Dữ liệu CASIA và E0/E1 lịch sử được giữ nguyên.
+
+Code chọn threshold tối thiểu hóa ACER video validation, sau đó |APCER-BPCER|, sau đó threshold trong tập candidate. AUC không chọn ngưỡng. Đã kiểm trực tiếp từ val_scores.csv:
+
+| Mô hình | Score attack cao nhất | Score live thấp nhất | Threshold lịch sử |
+| --- | ---: | ---: | ---: |
+| E3 | 0,04201461 | 0,84961896 | 0,84961896 |
+| E3b | 0,05285476 | 0,75181282 | 0,75181282 |
+| E4 | 0,09413724 | 0,41862545 | 0,41862545 |
+
+Với quyết định live khi score >= threshold, mọi threshold thuộc (max attack, min live] đều cho 0 lỗi validation. Code chọn min live trong ba trường hợp trên do tập candidate và quy tắc hòa. Chưa chứng minh quy ước này sai hoặc là nguyên nhân duy nhất của lỗi test; nó cho thấy tốt nhất trên validation chưa xác định một threshold duy nhất trong không gian liên tục.
+
+Minh chứng: [MINH_CHUNG_NGUONG_20261031.json](MINH_CHUNG_NGUONG_20261031.json). Không chọn threshold thay thế hoặc sửa điểm test trong lần tính này.
+
+Phân tích 1:3 được đặt ở EXP-01 trước training: kiểm phân bố và đóng góp từng lớp. Thay trọng số huấn luyện chỉ ở EXP-05 sau khi khóa tiêu chí/threshold. Kế hoạch không đổi đồng thời sampler, alpha, gamma và lambda rồi quy kết hiệu quả cho riêng mất cân bằng lớp.
+
+## 12. Nghiên cứu NIST và kiểm tra số học chỉ số
+
+Nguồn độc lập và phân tích code/CSV được lưu trong thư mục riêng:
+
+- [NGHIEN_CUU_NIST_PAD.md](research_pad_metrics_20261031/NGHIEN_CUU_NIST_PAD.md): định nghĩa, score, ngưỡng, PAI species, nonresponse và giới hạn phát biểu tuân thủ chuẩn.
+- [KIEM_TRA_CODE_VA_CSV.md](research_pad_metrics_20261031/KIEM_TRA_CODE_VA_CSV.md): phương pháp kiểm, bảng 12 run và hai lỗi kiểm tra đầu vào.
+- [KIEM_TRA_SO_HOC.json](research_pad_metrics_20261031/KIEM_TRA_SO_HOC.json): số đếm và hash tệp nguồn.
+
+Kết quả: số học APCER/BPCER/ACER của 12 run đã kiểm khớp code và báo cáo trong 10^-12. Đã đối chiếu 86.400 bản ghi frame/4.320 bản ghi video trên cùng 360 video test. Không chạy inference hoặc chọn ngưỡng trên test. E1 seed 44 có một attack lọt qua; không suy APCER=0 ở seed 42 thành mọi seed đều bằng 0.
+
+Hai lỗi phòng vệ được tái hiện: threshold NaN chưa bị chặn; nhãn phân số có thể bị ép int rồi được chấp nhận. Threshold của 12 run đều hữu hạn, nhãn đúng 0/1 theo manifest; chưa thấy hai lỗi này làm sai bảng lịch sử. EXP-03 phải sửa/test trước nhánh mới. Code chưa được sửa trong đợt rà soát này.
+
+Ba test hiện có của metrics đạt (3 passed), nhưng chưa bao phủ hai lỗi phòng vệ. Đánh giá mới cần test bổ sung. Code hiện gộp attack và không có trạng thái nonresponse, nên không tự coi là tương đương đầy đủ protocol NIST/ISO.
