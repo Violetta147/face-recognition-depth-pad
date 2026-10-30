@@ -8,6 +8,8 @@ Mỗi mã EXP là một đơn vị công việc. Không phải mã nào cũng l�
 
 Kết quả hiện có: [KET_QUA.md](KET_QUA.md). Số liệu tính lại: [MINH_CHUNG_VALIDATION.json](MINH_CHUNG_VALIDATION.json). Danh sách vấn đề gốc: [bàn giao V01–V09](../../handoffs/review_20261030/BAN_GIAO_HOP_NHAT_DEEPFACE_PAD_20261030.md).
 
+Phạm vi cập nhật ngày 31/10/2026: ưu tiên hiệu năng phân biệt bona fide/attack, công bố riêng hai chiều lỗi. E0/E1 và kết quả lịch sử được giữ làm mốc đã khóa. Cách đặt trọng số ưu tiên chống lọt attack so với từ chối live chưa được chốt. Các nhánh Lượt 5.x/6.x ở mục 5.5 là đề xuất để người dùng lựa chọn, chưa là đăng ký chạy.
+
 ## 1. Thứ tự thực hiện
 
 | Mã | Công việc | Vấn đề liên quan | Trạng thái | Có huấn luyện mới? |
@@ -91,7 +93,7 @@ Luồng chính: EXP-00 → EXP-01 → EXP-02. Sau đó thực hiện những mã
 
 **Phương án nhỏ:** Giữ 16/4/30 để so sánh bổ sung trực tiếp với lịch sử. Kết quả chỉ là thí nghiệm phát triển với bốn người validation cố định. Không tuyên bố đã giải quyết độ nhạy cách chọn người.
 
-**Phương án mạnh hơn:** Dùng các fold theo người trong 20 người train gốc; chỉ fit từng fold bằng người thuộc phần train của fold. Có thể dùng 5 fold, mỗi fold giữ 4 người. Nếu dùng các fold này để chọn siêu tham số, không gọi chính các điểm đó là ước lượng độc lập không thiên lệch; cần vòng ngoài tách biệt hoặc dữ liệu đánh giá mới cho kết luận xác nhận. Lưu danh sách người và quy tắc phân nhóm trước khi chạy. Không dùng checkpoint E1 cũ đã học các người hiện nằm trong fold validation làm initializer.
+**Phương án mạnh hơn, chưa tương thích với ràng buộc giữ nguyên E1:** Dùng các fold theo người trong 20 người train gốc sẽ cần initializer không học người của fold validation. E1 hiện có đã học 16 người train; không được nạp nó rồi đổi một trong 16 người đó sang validation và coi là không trùng người trong toàn pipeline. Vì người dùng muốn giữ E0/E1 làm mốc đã khóa, không triển khai phương án 5 fold này trong phạm vi hiện tại. Nếu mở lại câu hỏi dữ liệu sau này, phải quyết định riêng việc huấn luyện initializer theo fold hoặc nguồn đánh giá mới. Việc giữ nguyên E1 không buộc phải đóng băng bản sao backbone khi huấn luyện các nhánh E3/E4 mới.
 
 Chi phí phương án mạnh hơn chưa được đo. Không ước tính giờ GPU như một cam kết trước EXP-03.
 
@@ -107,6 +109,37 @@ Chi phí phương án mạnh hơn chưa được đo. Không ước tính giờ 
 8. Nơi lưu mỗi epoch, dung lượng và đầu ra tối thiểu. Không ghi đè file lịch sử.
 
 **Điều kiện chuyển EXP-03:** Có lựa chọn của người dùng và một bản đăng ký thiết kế cụ thể. Các đề xuất ở mục này chưa thay thế bản đăng ký đó.
+
+### 5.5. Nhánh Lượt 5.x và Lượt 6.x — đề xuất ngày 31/10/2026
+
+Mã EXP mô tả công việc; mã 5.x/6.x mô tả biến thể thực nghiệm. Một EXP có thể phục vụ nhiều biến thể. Không đồng nhất thêm một metric báo cáo với thêm một nhánh lựa chọn.
+
+| Nhánh | Quy tắc chính dự kiến | Câu hỏi | Trạng thái |
+| --- | --- | --- | --- |
+| 5.0 | Quy tắc lịch sử: chọn checkpoint head/joint bằng BCE; chọn cấu hình theo ACER → EER → AUC → BCE | Mốc đối chiếu đã có | Giữ nguyên |
+| 5.1 | Chọn checkpoint theo ACER video validation thấp nhất; EER thấp hơn, AUC cao hơn; nếu hòa hoàn toàn giữ epoch sớm nhất | Chọn theo lỗi PAD có làm thay đổi checkpoint/cấu hình không? | Đề xuất |
+| 5.2 | Chọn checkpoint theo AUC video validation cao nhất; EER thấp hơn, ACER thấp hơn; hòa hoàn toàn giữ epoch sớm nhất | Ưu tiên khả năng xếp hạng qua các ngưỡng có khác nhánh 5.1 không? | Đề xuất |
+| 5.3 | Giảm BPCER với điều kiện APCER không vượt mức đã chốt trên validation | Ưu tiên chống lọt attack trong khi kiểm soát từ chối live | Đề xuất; chưa có mức APCER được chọn |
+| D1 | Đối chiếu checkpoint có tổng depth + classification objective thấp nhất trong từng nhánh | Giải thích vì sao E4 có cực tiểu tổng objective khác cực tiểu BCE | Phân tích phụ; không dùng raw objective khác công thức để xếp hạng cấu hình |
+| 6.1 | Lặp lại quy tắc của 5.1 theo các seed đã chốt | Kết quả của 5.1 có lặp lại khi đổi seed không? | Chưa chạy |
+| 6.2 | Lặp lại quy tắc của 5.2 theo cùng seed | Kết quả của 5.2 có lặp lại khi đổi seed không? | Chưa chạy |
+| 6.3 | Lặp lại quy tắc của 5.3 nếu chọn nhánh này | Tính biến thiên của điểm vận hành ưu tiên chống lọt attack | Chưa chạy |
+
+Các thứ tự phân định ở bảng là phương án cần duyệt. Ngưỡng của 5.1/5.2 được chọn trên validation theo quy tắc ACER đã định trước. Nhánh 5.3 có cách chọn ngưỡng riêng theo ràng buộc APCER; phải chốt thêm xử lý hòa, không chọn mức ràng buộc sau khi thấy kết quả. Báo cấu hình hòa nếu chỉ số PAD hòa; quy tắc epoch sớm nhất chỉ chọn đại diện trong một run, không chứng minh chính xác hơn.
+
+**Phạm vi so sánh:** E3b–E4 là cặp chính vì cùng lịch; E3 có thể thêm để kiểm tra lịch. E2 giữ như đối chiếu lịch sử nếu không có quyết định khác. Không thay đổi E0/E1.
+
+**Điều cần quyết định về head stage:** Các nhánh trên mới mô tả lựa chọn joint cuối. Nếu vẫn dùng best head theo BCE, kết luận chỉ là ảnh hưởng tiêu chí joint khi giữ nguyên cách chọn head. Nếu muốn loại BCE khỏi lựa chọn head, một lựa chọn khác là chuyển tiếp từ epoch head cuối theo lịch cố định cho cả E3b/E4. Đó là một thay đổi thiết kế riêng, cần chạy và ghi nhãn riêng; không sửa sau khi xem kết quả.
+
+**Tiết kiệm số run:** Khi dữ liệu, train objective, head initializer và toàn bộ quỹ đạo joint giống nhau, 5.1/5.2/5.3 có thể chọn từ cùng bộ checkpoint và score từng epoch. Không cần train lại chỉ vì đổi criterion hậu kiểm. Nếu criterion làm đổi head checkpoint nạp sang joint hoặc thay cách dừng huấn luyện, các quỹ đạo khác nhau và cần run riêng. Áp dụng cùng nguyên tắc cho 6.x.
+
+**Giới hạn cỡ mẫu:** Validation có 36 attack và 12 live. Một lỗi làm APCER đổi khoảng 2,78 điểm phần trăm, BPCER khoảng 8,33 điểm phần trăm. Không dùng 0 lỗi quan sát để bảo đảm APCER thực dưới 1% hoặc bằng 0. Nhánh 5.3 có thể hòa với 5.1/5.2; không buộc dữ liệu nhỏ phải phân định được.
+
+**D1 và epoch 3 của E4 cũ:** Trước hết tìm bản lưu checkpoint/score đúng epoch nếu có. Log chỉ cho biết cực tiểu tổng loss, không dựng lại trọng số. Nếu không có, chạy một thí nghiệm mới lưu mỗi epoch rồi so các checkpoint được quy tắc chọn. Không gọi epoch 3 của run mới là phục hồi epoch 3 cũ, không dùng tổng objective có Focal để thắng trực tiếp tổng objective có BCE.
+
+**Đánh giá nhánh:** Khóa trước tiêu chí và số nhánh. Không dùng test CASIA cũ để chọn nhánh thắng rồi gọi là xác nhận độc lập. Nếu tất cả dùng cùng validation để chọn checkpoint/ngưỡng/cấu hình, chỉ số trên validation là số phục vụ lựa chọn; khả năng khái quát hóa cần phần đánh giá không dùng cho các quyết định đó. Mọi đánh giá lại test cũ phải công khai lịch sử quan sát.
+
+Nguồn phương pháp: [NIST IR 8491 về APCER/BPCER](https://doi.org/10.6028/NIST.IR.8491), [scikit-learn về ngưỡng quyết định](https://scikit-learn.org/stable/modules/classification_threshold.html). Điểm score/nhãn của dự án luôn theo live=1, score cao nghiêng live; không đổi theo quy ước ví dụ bên ngoài.
 
 ## 6. EXP-03 — Chuẩn bị code và notebook chạy thử nhỏ
 
@@ -155,7 +188,7 @@ Chi phí phương án mạnh hơn chưa được đo. Không ước tính giờ 
 
 ## 9. EXP-06 — Lặp lại theo seed
 
-Nếu cấu hình mới cần được đem so với E1, đăng ký một batch mới. Mỗi seed huấn luyện E1 và ứng viên tương ứng theo cùng protocol đã chốt; so sánh ghép cặp. Không dùng chỉ seed thuận lợi và không gộp các lần chấm trên cùng video thành các test độc lập.
+Nếu cấu hình mới cần được đem so với E1, đăng ký một batch mới cho ứng viên. Giữ E1 lịch sử đã khóa; với seed 43/44/45 có thể dùng đúng checkpoint E1 và kết quả E1 cùng seed đã có, sau khi kiểm hash và tính tương thích protocol. Không tự huấn luyện lại E1. Nếu cần seed hoặc dữ liệu mà không có E1 tương ứng hợp lệ, quyết định phạm vi riêng trước khi chạy. Không dùng chỉ seed thuận lợi và không gộp các lần chấm trên cùng video thành các test độc lập.
 
 Kết quả Lượt 6 cũ được giữ như bằng chứng của E3 theo quy tắc cũ. Thay đổi cách chọn cấu hình không tự động cập nhật sáu run lịch sử. Nếu muốn kết luận riêng tác dụng head, phải kiểm soát ngân sách/weight decay hoặc công bố giới hạn.
 

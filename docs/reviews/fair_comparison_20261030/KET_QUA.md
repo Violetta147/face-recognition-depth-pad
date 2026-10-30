@@ -203,3 +203,15 @@ Thứ tự đề xuất: đọc EXP-00/01 → quyết định EXP-02 → triển
 Đầu ra MINH_CHUNG_VALIDATION.json ghi công thức, số lượng và SHA-256 của các CSV/JSON nguồn. Số BCE tính lại từ CSV có sai khác nhỏ với BCE từ logits trong log do độ chính xác và cách tính số; không ghi đè giá trị đã khóa.
 
 Đã kiểm: giữ đủ 43 đích tham chiếu cũ; 73 lượt liên kết cục bộ trong ba Markdown hợp lệ; 12 hash nguồn khớp; 144 phép gộp video từ 20 frame khớp; phân bố lớp, BCE theo lớp và các cực tiểu epoch khớp. ACER=0 và AUC=1 được đối chiếu lại từ score video đã lưu. Không dùng kiểm tra tài liệu để tuyên bố huấn luyện hoặc thí nghiệm mới đã đạt.
+
+## 10. Phạm vi và nhánh đề xuất ngày 31/10/2026
+
+- Mục tiêu được làm rõ: ưu tiên khả năng phân biệt bona fide/attack; đo cả attack bị cho qua và người thật bị từ chối. Chưa chốt mức ưu tiên định lượng giữa hai lỗi.
+- E0/E1 và kết quả lịch sử là mốc đã khóa. Các nhánh mới không ghi đè chúng. Backbone bản sao từ E1 trong E3/E4 vẫn có thể được huấn luyện theo thiết kế.
+- Báo cáo cuối kỳ và paper phải thống nhất sự thật phương pháp, số liệu và phạm vi kết luận. Chưa dựng lại hai tài liệu.
+- Kế hoạch đã thêm đề xuất 5.1 theo ACER, 5.2 theo AUC, 5.3 theo ràng buộc APCER; 6.x kiểm tra theo seed với cùng quy tắc tương ứng. Chưa nhánh nào được đăng ký chạy.
+- BCE, CE hai lớp và Bernoulli NLL có thể tương đương về giá trị khi cùng dự đoán, nhãn cứng, trọng số và phép tổng hợp. Không tạo ba nhánh chỉ bằng đổi tên các đại lượng tương đương này. API NLLLoss yêu cầu log-probabilities; không thay trực tiếp BCEWithLogitsLoss bằng NLLLoss trên cùng tensor mà không xử lý đầu vào đúng.
+- Calibration là câu hỏi riêng với lỗi PAD. Không bổ sung bước hiệu chỉnh xác suất chỉ vì muốn giảm lỗi phân loại; nếu thực hiện phải có thiết kế và dữ liệu phù hợp.
+- Ràng buộc giữ E1 làm mốc khiến phương án đổi các người E1 đã học sang fold validation không hợp lệ cho kết luận không trùng người của toàn pipeline. Kế hoạch đã loại phương án đó khỏi phạm vi hiện tại.
+
+Đây là cập nhật thiết kế và phạm vi, không phải kết quả huấn luyện. Cần người dùng chọn nhánh, xử lý head stage và quy tắc dữ liệu trước EXP-03.
