@@ -22,6 +22,18 @@ Hồ sơ này ghi các điểm đã chốt và phương án cần chọn trướ
 
 ## Lựa chọn E3 và phép so sánh BCE với Focal
 
+Xem [ghi chú riêng về E3 và Focal](CHON_E3_VA_FOCAL.md). Báo cáo cuối giữ câu hỏi, yếu tố được thay đổi, tiêu chí chính, kết quả và giới hạn cần để đọc đúng kết luận. Chi tiết thiết kế đối chứng, cấu hình, log và lần chạy nằm trong hồ sơ thí nghiệm. Sau khi đọc xong PDF, đồng bộ những chỉnh sửa đã chốt.
+
+### Hướng xử lý khác biệt E1 và E3
+
+Chuẩn bị phép thử ngang số bước cập nhật từ cùng checkpoint E1 theo phương án 2 ở trên. Khóa weight decay của cả hai nhánh ở 10⁻⁴ như giai đoạn E3 lịch sử, giữ cùng Adam, LR, batch và dữ liệu. Thử một seed trên Colab trước, lưu đủ checkpoint và score theo epoch. Tách phép so sánh mục tiêu học (cùng tính điểm bằng trung bình) khỏi phép so sánh cách tính điểm (cùng checkpoint joint). Chỉ mở phép thử đổi riêng weight decay nếu cần đo độ nhạy của hệ số. Đây là thiết kế cần chuẩn bị, chưa có kết quả.
+
+### Ghi chú khi sửa mục 1.5.3
+
+UCDCN là tiền lệ gần vì vừa dự đoán độ sâu vừa dùng bộ phân loại cho quyết định thật/giả. Giải thích hợp nhất đặc trưng là kết hợp thông tin từ nhiều tầng để hỗ trợ dự đoán bản đồ. Nêu đánh đổi về độ phức tạp và cách tác giả rút gọn mạng. Chi tiết ngưỡng giữa các bảng và so sánh GPU chuyển sang hồ sơ đối chiếu nếu cần. Mục này cần kết nối với câu hỏi của Deep-PAD về cách tính điểm trên CDCN. [Bài báo UCDCN](https://link.springer.com/article/10.1007/s40747-024-01397-0).
+
+### Quy trình lựa chọn E3 trong Lượt 5
+
 | Bước | Quy tắc lịch sử | Ý nghĩa |
 | --- | --- | --- |
 | Huấn luyện | E3/E3b dùng BCE cho phân loại, E4 dùng Focal. Cả ba có giai đoạn joint, lịch trước joint khác giữa E3 và E3b/E4 | Xác định cách cập nhật trọng số |
