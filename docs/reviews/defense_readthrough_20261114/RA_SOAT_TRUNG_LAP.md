@@ -1,0 +1,17 @@
+# Rà soát trùng lặp và nhất quán trước khi sửa báo cáo
+
+Một phiên Antigravity Swarm trong project DeepFace-PAD đã nhận đủ bốn báo cáo từ `scope`, `science`, `delivery` và `verifier`. Cả bốn dùng Gemini 3.8 Flash Low. Các phát hiện dưới đây đã được đối chiếu với nguồn và các đoạn liên quan trong PDF 42 trang. Hồ sơ này dùng để đồng bộ sau khi đọc xong PDF.
+
+| Ưu tiên | Phát hiện | Xử lý đề xuất |
+| --- | --- | --- |
+| <strong style="background-color:#FDE7E7;color:#941C30;padding:1px 4px;border-radius:3px;">Lệch phạm vi</strong> | PDF trang 1 vẫn gọi đề tài là hệ thống nhận diện thời gian thực. Trang 7, 32 và 41 coi nhận diện danh tính là phần chưa tích hợp. Q&A câu 8 cũng có cách nói này. | Dùng tên Face PAD và giữ một đoạn bối cảnh xác thực khuôn mặt. Bỏ câu coi nhận diện danh tính là chức năng còn thiếu. Giữ bằng chứng webcam như giới hạn của nguyên mẫu PAD. |
+| Làm rõ khi trình bày | Ghi chú slide 5 và Q&A câu 3 nêu khác số epoch và weight decay nhưng chưa nói E3 tinh chỉnh từ checkpoint tốt nhất của E1 cùng seed. Mục 2.15 của báo cáo đã nói rõ nguồn khởi tạo. | Sửa câu nói và Q&A, dùng tên mô tả kèm mã. Trong báo cáo, trình bày quan hệ E1→E3 một lần ở phương pháp rồi kết luận ở phần kết quả. |
+| Giảm lặp giữa hai ghi chú | [Quyết định](QUYET_DINH.md) đã dẫn [ghi chú Focal](CHON_E3_VA_FOCAL.md) nhưng vẫn giữ bảng bốn bước và đoạn giải thích dài. Hai đoạn trong Quyết định cũng lặp thiết kế đối chứng E1–E3. | Sau khi chốt, để Quyết định giữ trạng thái, lựa chọn và liên kết. Đưa quy tắc chọn checkpoint/ngưỡng và ma trận thí nghiệm vào hồ sơ kỹ thuật. |
+| Giảm lặp trong báo cáo | Tóm tắt và kết luận lặp bảng ACER, số liệu qua seed và chi phí A100. Mục UCDCN trong Chương 1 đi vào threshold và GPU, trong khi Chương 3 đã có phần đối chiếu giao thức. | Tóm tắt mở bằng câu hỏi và kết quả chính. Chương 3 giữ số đầy đủ. Mục UCDCN giải thích phương pháp, ưu nhược điểm và lý do liên quan đến câu hỏi Deep-PAD. |
+| Câu chữ | “Giao thức phát triển” còn ở nhiều trang. Ghi chú “Article in Press có DOI” nằm trong thân Chương 1. CDCN có mã nguồn mở được đặt vào phần ưu điểm phương pháp. | Dùng “quy trình đánh giá do nhóm thiết lập trên CASIA-FASD” khi giới thiệu lần đầu. Để thông tin phiên bản ở tài liệu tham khảo. Chuyển lý do chọn CDCN vào phần chọn đối chứng. |
+
+**Hai nhận xét của Swarm cần thu hẹp.** Các đoạn về E3 tại §3.2 báo cáo và phần phương pháp paper đã nói ba cấu hình hòa ACER/EER/AUC rồi phân định bằng BCE. Q&A cũng đã tách BCE dùng chọn checkpoint khỏi BCE dùng phân định cấu hình. Có thể nêu hệ quả của lựa chọn này trong thảo luận, giữ nguyên mô tả lịch sử. Câu ở đầu paper phân biệt PAD với nhận diện có thể giữ như định nghĩa bối cảnh. Câu ở phần giới hạn coi nhận diện là chức năng chưa tích hợp mới cần bỏ.
+
+**Vị trí kiểm chứng.** [Bìa](../../../reports/round8_documents_20261023/BAO_CAO.md#L5) · [UCDCN](../../../reports/round8_documents_20261023/BAO_CAO.md#L104) · [Phương pháp Lượt 6](../../../reports/round8_documents_20261023/BAO_CAO.md#L271) · [Lựa chọn E3 trong paper](../../../reports/round8_documents_20261023/PAPER.md#L78) · [Q&A](../../../reports/defense_20261115/QA_BAO_VE.md#L6) · [Nguồn slide](../../../reports/defense_20261115/build_defense_slides.mjs#L91).
+
+Phép thử ngang số bước và weight decay vẫn ở trạng thái chuẩn bị. Bản báo cáo chính chỉ cần nêu giới hạn của so sánh hiện có và câu hỏi mà phép thử sau sẽ xử lý. Số liệu nhắc ngắn trong slide, câu hỏi bảo vệ và bảng giải trình phục vụ các cách đọc độc lập.
