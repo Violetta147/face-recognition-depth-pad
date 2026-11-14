@@ -10,6 +10,10 @@ import pandas as pd
 from sklearn.metrics import roc_curve
 
 
+class NonFiniteDevThreshold(ValueError):
+    """The public ROC rule picked a non-finite threshold."""
+
+
 def load_scores(path):
     frame = pd.read_csv(path)
     if (frame.video_id.isna().any() or frame.video_id.duplicated().any()
@@ -23,7 +27,7 @@ def score(dev, test):
     fpr, tpr, thresholds = roc_curve(dev.label, dev.score, pos_label=1)
     threshold = float(thresholds[np.argmin(np.abs(tpr + fpr - 1.0))])
     if not np.isfinite(threshold):
-        raise ValueError("Dev did not yield a finite threshold")
+        raise NonFiniteDevThreshold("Dev did not yield a finite threshold")
 
     def rates(frame):
         # The public evaluator uses strict >, even though sklearn's ROC uses >=.

@@ -106,3 +106,43 @@ cùng JSON và log. SHA-256 của ZIP là
 Script này mới kiểm tiền xử lý. Mốc ACER 1,0% chỉ đánh giá được sau khi
 train CDCN, chọn checkpoint và ngưỡng trên Dev rồi chấm Test theo quy
 trình đã nêu.
+
+## Lượt chạy thử Train/Dev
+
+Mở [notebook CDCN Train/Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Train_Pilot.ipynb)
+trên Colab, chọn GPU A100 và chạy bốn cell. Bộ 48 khung từ sáu video
+OULU gốc đã sẵn trên Drive trong
+`MyDrive/face-pad/cdcn-prnet-train-pilot-p1/prepared-cache/c375c1dfc4bce1acc988`.
+Cell 3 kiểm phiên bản mã tiền xử lý, SHA-256 của protocol, cỡ và hash
+64 KiB đầu của hai TAR, rồi kiểm SHA-256 toàn ZIP trước khi giải nén.
+Nếu cấu hình thay đổi, cell dựng lại các khung và lưu snapshot mới.
+Cell 4 ghi checkpoint, `dev_scores.csv`, `pilot_result.json` và log
+dưới `MyDrive/face-pad/cdcn-prnet-train-pilot-p1`.
+
+CDCN θ=0,7 chạy FP32, ba epoch với batch 3, từ khởi tạo mới. Mỗi epoch
+lấy ngẫu nhiên một trong tám khung đã lưu của mỗi video Train.
+Ảnh được crop ngẫu nhiên ở các scale 1,2–1,4 và biến đổi màu, xóa
+vùng ảnh, lật và cutout. Biến đổi màu dùng NumPy trong lượt pilot.
+Video thật dùng depth chuẩn hóa về [0,1], video giả dùng target bằng 0.
+Loss gồm depth MSE và contrast MSE. Dev chạy cả tám khung mỗi video. Với
+mỗi khung, tổng depth dự đoán được chia cho tổng map PRNet đã crop và
+lưu JPEG, rồi lấy trung bình các tỷ số theo video. Chỉ số dùng APCER
+gộp và quy tắc lấy ngưỡng ROC của mã công khai khi có ngưỡng hữu hạn.
+[Loader Train](https://github.com/ZitongYu/CDCN/blob/fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b/CVPR2020_paper_codes/Load_OULUNPU_train.py) ·
+[Script huấn luyện và chấm của tác giả](https://github.com/ZitongYu/CDCN/blob/fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b/CVPR2020_paper_codes/train_CDCN.py).
+
+Batch, số epoch và số video trên dành cho kiểm tra pipeline. Dev pilot
+có một video thật và hai video giả. Khi chuyển sang lượt đầy đủ, cần
+chuẩn bị tập khung Train lớn hơn để loader có thể lấy mẫu theo video,
+đo thông lượng với batch thực tế, chốt tiêu chí chọn checkpoint trên
+Dev đầy đủ rồi mới dùng Test để đối chiếu Bảng 4.
+
+Lượt Windows CPU đã hoàn thành ba lần cập nhật, lưu và đọc lại
+checkpoint, rồi chấm đủ 24 khung Dev. Train mất 87 giây, chấm Dev mất
+55 giây. Tổng hai thành phần loss đi từ 0,2396 đến 0,1691. Điểm video
+thật đứng cao nhất và trùng ngưỡng ROC. Quy tắc `score > threshold`
+của tác giả loại video đó, cho APCER gộp 0%, BPCER 100% và ACER 50%
+trên ba video. Checkpoint, điểm và log lưu trong
+`MyDrive/face-pad/cdcn-prnet-train-pilot-p1/windows-cpu-pilot`.
+Nhánh khôi phục của cell 3 đã chạy với bản sao ZIP Drive trên Windows.
+Thời gian và VRAM của lượt A100 chờ log Colab.

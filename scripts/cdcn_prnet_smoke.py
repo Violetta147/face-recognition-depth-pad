@@ -38,6 +38,8 @@ SMOKE_PACKAGES = (
     "scipy==1.17.1",
     "opencv-python-headless==4.11.0.86",
 )
+SMOKE_SLOTS = (0, 3, 7)
+PILOT_SLOTS = tuple(range(8))
 
 
 def sha(path):
@@ -129,7 +131,7 @@ def select_videos(protocol, split, wide_sample=False):
     return videos
 
 
-def emit_video(path, access, split, output, models):
+def emit_video(path, access, split, output, models, slots=SMOKE_SLOTS):
     cap = cv2.VideoCapture(str(path))
     try:
         count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -137,7 +139,7 @@ def emit_video(path, access, split, output, models):
             raise ValueError(f"cannot determine frame count: {path.name}")
         rows, used = [], set()
         # Match the public Dev loader's nominal stride. Frame IDs are one-based.
-        for slot in (0, 3, 7):
+        for slot in slots:
             nominal = 1 + slot * (count // 10)
             for frame_id in range(nominal, min(nominal + 50, count + 1)):
                 if frame_id in used:
@@ -170,7 +172,7 @@ def emit_video(path, access, split, output, models):
                 map_path.write_bytes(encoded_map.tobytes())
                 scene_path.with_suffix(".dat").write_text("\n".join(map(str, box)) + "\n")
                 used.add(frame_id)
-                rows.append({"video_id": path.stem, "split": split, "access": access,
+                rows.append({"video_id": path.stem, "split": split, "access": access, "slot": slot,
                              "frame_id": frame_id, "nominal": nominal,
                              "prnet_sum_32": int(map32.sum()), "train_target_zero": access != 1})
                 break
@@ -184,6 +186,7 @@ def main():
     parser.add_argument("--data", type=Path)
     parser.add_argument("--image", type=Path)
     parser.add_argument("--wide-sample", action="store_true", help="also sample phone 4, session 2")
+    parser.add_argument("--training-pilot", action="store_true", help="prepare eight frames per video")
     parser.add_argument("--prnet", type=Path, required=True)
     parser.add_argument("--renderer", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -213,13 +216,14 @@ def main():
         print("PRNET_IMAGE_PASS", box, int(depth.max()), int(np.count_nonzero(depth)), flush=True)
         return
     rows, failures = [], []
+    slots = PILOT_SLOTS if args.training_pilot else SMOKE_SLOTS
     started = time.monotonic()
     for split in ("Train", "Dev"):
         videos = select_videos(args.data / "Protocols.tar", split, args.wide_sample)
         archive_path = args.data / f"{split}_files.tar"
         print(f"{split}: look for AVI members in {archive_path.name}", flush=True)
-        with Progress(f"{split} TAR and depth"), tarfile.open(archive_path, "r:") as archive, \
-                tempfile.TemporaryDirectory() as temp:
+        with Progress(f"{split} TAR and depth", len(videos), "videos") as progress, \
+                tarfile.open(archive_path, "r:") as archive, tempfile.TemporaryDirectory() as temp:
             remaining = set(videos)
             for member in archive:
                 name = PurePosixPath(member.name)
@@ -228,15 +232,16 @@ def main():
                 local = Path(temp) / name.name
                 with archive.extractfile(member) as source, local.open("wb") as dest:
                     shutil.copyfileobj(source, dest, 4 * 1024 * 1024)
-                observations = emit_video(local, videos[name.stem], split, args.output, models)
+                observations = emit_video(local, videos[name.stem], split, args.output, models, slots)
                 rows.extend(observations)
                 with (args.output / "frames.jsonl").open("a", encoding="utf-8") as journal:
                     for observation in observations:
                         journal.write(json.dumps(observation) + "\n")
-                if len(observations) != 3:
+                if len(observations) != len(slots):
                     failures.append({"video_id": name.stem, "frames": len(observations)})
                 local.unlink()
                 remaining.remove(name.stem)
+                progress.update(len(videos) - len(remaining))
                 print(f"{split}: {len(videos) - len(remaining)}/{len(videos)} videos | {time.monotonic()-started:.1f}s", flush=True)
                 if not remaining:
                     break
@@ -244,7 +249,7 @@ def main():
     packages = [spec.split("==")[0] for spec in SMOKE_PACKAGES]
     report = {"frames": rows, "failures": failures, "source": versions, "weight_sha256": WEIGHT_SHA,
               "weight_index_sha256": INDEX_SHA, "protocol_sha256": sha(args.data / "Protocols.tar"),
-              "wide_sample": args.wide_sample,
+              "wide_sample": args.wide_sample, "slots": list(slots),
               "packages": {name: importlib.metadata.version(name) for name in packages},
               "seconds": time.monotonic() - started}
     (args.output / "smoke_summary.json").write_text(json.dumps(report, indent=2))
