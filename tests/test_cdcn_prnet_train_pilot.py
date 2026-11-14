@@ -20,6 +20,7 @@ NOTEBOOK = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Train_Pilot.ipynb"
 sys.path.insert(0, str(ROOT / "scripts"))
 try:
     import cdcn_prnet_train_pilot as pilot
+    import cdcn_prnet_batch_probe as batch_probe
 finally:
     sys.path.pop(0)
 
@@ -79,7 +80,7 @@ def test_notebook_compiles_and_bundles_pilot_code():
     bundle_cell = ast.parse("".join(content["cells"][2]["source"]))
     bundle = base64.b64decode(ast.literal_eval(bundle_cell.body[1].value))
     with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:gz") as archive:
-        for name in ("scripts/cdcn_prnet_smoke.py", "scripts/cdcn_prnet_train_pilot.py",
+        for name in ("scripts/cdcn_prnet_smoke.py", "scripts/cdcn_prnet_train_pilot.py", "scripts/cdcn_prnet_batch_probe.py",
                      "scripts/audit_cdc_n_p1_scores.py", "src/deepface_pad/models/cdcn_official.py"):
             assert archive.extractfile(name).read() == (ROOT / name).read_bytes()
 
@@ -111,3 +112,35 @@ def test_notebook_restores_snapshot_without_preprocessing(tmp_path):
     exec("".join(cell["source"]), state)
     assert len(pilot.load_videos(state["assets"])["Dev"]) == 3
     assert (run / "preparation.json").read_bytes() == (source / "smoke_summary.json").read_bytes()
+
+
+def test_batch_probe_measures_training_updates_and_retains_partial_results(tmp_path, monkeypatch):
+    class TinyDepthModel(torch.nn.Module):
+        def __init__(self, theta):
+            super().__init__()
+            assert theta == 0.7
+            self.conv = torch.nn.Conv2d(3, 1, 1)
+
+        def forward(self, image):
+            return {"depth": self.conv(image)}
+
+    make_assets(tmp_path)
+    images, targets = batch_probe.prepare_pool(tmp_path, 43)
+    assert images.shape == (24, 3, 256, 256)
+    assert targets.flatten(1).any(dim=1).sum() == 8
+    monkeypatch.setattr(batch_probe, "OfficialCDCN", TinyDepthModel)
+    monkeypatch.setattr(batch_probe, "prepare_pool", lambda *args: (images[:, :, :32, :32], targets))
+    original = batch_probe.measure_batch
+
+    def measure(pool, batch, *args):
+        if batch == 4:
+            raise torch.cuda.OutOfMemoryError("fixture")
+        return original(pool, batch, *args)
+
+    monkeypatch.setattr(batch_probe, "measure_batch", measure)
+    out = tmp_path / "probe.json"
+    batch_probe.probe(tmp_path, out, [2, 4, 5], 1, 2, 43, torch.device("cpu"))
+    report = json.loads(out.read_text())
+    assert [row["status"] for row in report["batches"]] == ["ok", "out_of_memory", "ok"]
+    assert report["batches"][0]["frames_per_second"] > 0
+    assert len(report["batches"][0]["update_seconds"]) == 2

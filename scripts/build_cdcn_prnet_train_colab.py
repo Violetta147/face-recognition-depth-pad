@@ -15,7 +15,10 @@ Cell 3 khôi phục ZIP tiền xử lý trên Drive nếu dấu vân tay cấu h
 Nếu cần dựng từ đầu, cell đó đọc các video được chọn trong TAR và ghi
 snapshot lên Drive. Cell 4 lưu checkpoint, điểm video, chỉ số Dev và thời
 gian. Chỉ số của 3 video Dev dùng để kiểm tra pipeline. Mốc của paper dùng
-toàn bộ Protocol 1 và chấm trên Test."""),
+toàn bộ Protocol 1 và chấm trên Test.
+
+Nếu đã có kết quả pilot, chạy cell 1–3 rồi chuyển thẳng đến cell 5 để đo
+batch trên A100 bằng các khung Train đã có."""),
     ("code", PREP_CELLS[1][1].replace("cdcn-prnet-smoke", "cdcn-prnet-train-pilot") + """
 import torch
 if not torch.cuda.is_available():
@@ -92,6 +95,13 @@ run("train-and-dev", sys.executable, "-u", WORK / "scripts/cdcn_prnet_train_pilo
     "--seed", SEED, "--device", "cuda")
 print((result / "pilot_result.json").read_text())
 print("RUN_DIR", result)"""),
+    ("code", """#@title 5. Đo batch 8, 16, 32 và 56 trên A100
+PROBE_BATCHES = (8, 16, 32, 56)
+report = RUN / f"batch-probe-{time.time_ns()}.json"
+run("batch-probe", sys.executable, "-u", WORK / "scripts/cdcn_prnet_batch_probe.py",
+    "--assets", assets, "--output", report, "--warmup", 2, "--steps", 6,
+    "--batches", *PROBE_BATCHES)
+print(report.read_text())"""),
 ]
 
 
@@ -114,6 +124,7 @@ if __name__ == "__main__":
         ["__init__", "losses", "progress", "models/__init__", "models/cdcn_official",
          "models/cdcn_depth_head", "models/depth_head", "models/mobilenet_baseline"],
         {f"scripts/{name}.py": ROOT / f"scripts/{name}.py"
-         for name in ("cdcn_prnet_smoke", "cdcn_prnet_train_pilot", "audit_cdc_n_p1_scores")},
+         for name in ("cdcn_prnet_smoke", "cdcn_prnet_train_pilot",
+                      "cdcn_prnet_batch_probe", "audit_cdc_n_p1_scores")},
         gpu=True,
     )

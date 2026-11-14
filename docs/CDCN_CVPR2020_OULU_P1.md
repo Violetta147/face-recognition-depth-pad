@@ -110,7 +110,7 @@ trình đã nêu.
 ## Lượt chạy thử Train/Dev
 
 Mở [notebook CDCN Train/Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Train_Pilot.ipynb)
-trên Colab, chọn GPU A100 và chạy bốn cell. Bộ 48 khung từ sáu video
+trên Colab, chọn GPU A100 và chạy cell 1–4 để chạy pilot. Bộ 48 khung từ sáu video
 OULU gốc đã sẵn trên Drive trong
 `MyDrive/face-pad/cdcn-prnet-train-pilot-p1/prepared-cache/c375c1dfc4bce1acc988`.
 Cell 3 kiểm phiên bản mã tiền xử lý, SHA-256 của protocol, cỡ và hash
@@ -145,4 +145,21 @@ của tác giả loại video đó, cho APCER gộp 0%, BPCER 100% và ACER 50%
 trên ba video. Checkpoint, điểm và log lưu trong
 `MyDrive/face-pad/cdcn-prnet-train-pilot-p1/windows-cpu-pilot`.
 Nhánh khôi phục của cell 3 đã chạy với bản sao ZIP Drive trên Windows.
-Thời gian và VRAM của lượt A100 chờ log Colab.
+
+Lượt Colab A100 80 GB đã khôi phục ZIP trong 1 giây, train ba epoch
+trong 4,00 giây và chấm Dev trong 0,56 giây. Hai epoch sau khởi động
+mất khoảng 0,10 giây mỗi epoch, với một lượt cập nhật mỗi epoch.
+Batch 3 dùng đỉnh cấp phát 1,23 GiB. Điểm của video thật cũng trùng
+ngưỡng ROC, cho APCER gộp 0%, BPCER 100% và ACER 50% trên ba video.
+Đã kiểm SHA-256 checkpoint và đọc CSV của lượt
+`cdcn-prnet-train-pilot-p1/1794675910919099959/train-1794675926103304940`.
+
+Để đo GPU trước lượt lớn hơn, mở notebook mới và chạy cell 1–3 rồi
+cell 5. Cell 5 thử batch 8, 16, 32 và 56, mỗi batch có hai lượt làm nóng
+và sáu lượt đo. Phép đo lặp 24 khung Train có thật đã nạp để chạy
+forward, backward và Adam. Thời gian giải mã và augmentation được đo
+riêng. Kết quả lưu từng batch vào `batch-probe-*.json`, kể cả khi GPU
+hết bộ nhớ. Batch 56 là mốc tổng trong paper. Khi dùng một A100, phép
+đo này cho biết chi phí của batch 56 trên máy hiện tại. Thời gian một
+epoch đầy đủ vẫn cần đo với loader và tập dữ liệu đầy đủ. Dùng Test sau
+khi chọn checkpoint và khóa ngưỡng trên Dev.
