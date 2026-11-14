@@ -19,6 +19,17 @@ from cdcn_prnet_smoke import (
 from deepface_pad.progress import Progress
 
 SUBJECT_COUNTS = {"Train": 8, "Dev": 6}
+FULL_COUNTS = {"Train": 1200, "Dev": 900}
+FULL_TRAIN_SLOTS = tuple(range(24))
+
+
+def full_membership(protocol):
+    from deepface_pad.oulu_npu import protocol_videos
+
+    return {
+        split: {video.id: video.access for video in protocol_videos(protocol, 1, None, name)}
+        for split, name in (("Train", "train"), ("Dev", "val"))
+    }
 
 
 def select_group(protocol, split):
@@ -47,9 +58,9 @@ def frame_assets(split, video, frame_id):
             f"{split}/maps/{video}/{name}_depth1D.jpg")
 
 
-def video_assets(rows, split, video, access):
-    if (len(rows) != len(PILOT_SLOTS) or [row["slot"] for row in rows] != list(PILOT_SLOTS)
-            or len({row["frame_id"] for row in rows}) != len(PILOT_SLOTS)
+def video_assets(rows, split, video, access, slots=PILOT_SLOTS):
+    if (len(rows) != len(slots) or [row["slot"] for row in rows] != list(slots)
+            or len({row["frame_id"] for row in rows}) != len(slots)
             or any(row["split"] != split or row["video_id"] != video or row["access"] != access
                    or row["frame_id"] < 1 or row["prnet_sum_32"] <= 0
                    or row["train_target_zero"] != (access != 1) for row in rows)):
@@ -57,8 +68,8 @@ def video_assets(rows, split, video, access):
     return [name for row in rows for name in frame_assets(split, video, row["frame_id"])]
 
 
-def publish_video(cache_path, root, split, video, access, rows):
-    names = video_assets(rows, split, video, access)
+def publish_video(cache_path, root, split, video, access, rows, slots=PILOT_SLOTS):
+    names = video_assets(rows, split, video, access, slots)
     partial = cache_path.with_name(f"{cache_path.stem}-{uuid4().hex}.part")
     try:
         with tempfile.TemporaryDirectory() as directory:
@@ -83,10 +94,10 @@ def publish_video(cache_path, root, split, video, access, rows):
         partial.unlink(missing_ok=True)
 
 
-def restore_video(cache_path, root, split, video, access):
+def restore_video(cache_path, root, split, video, access, slots=PILOT_SLOTS):
     with zipfile.ZipFile(cache_path) as archive:
         rows = json.loads(archive.read("frames.json"))
-        names = video_assets(rows, split, video, access)
+        names = video_assets(rows, split, video, access, slots)
         if sorted(archive.namelist()) != sorted(["frames.json", *names]):
             raise ValueError(f"Unexpected entries in {cache_path}")
         for name in names:
@@ -96,11 +107,17 @@ def restore_video(cache_path, root, split, video, access):
     return rows
 
 
-def prepare(data, cache, output, prnet, renderer, baseline=None):
+def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
+            dev_cache=None, splits=("Train", "Dev"), stage_dir=None, restore_only=False):
     protocol = data / "Protocols.tar"
     protocol_digest = sha(protocol)
-    selected = {split: select_group(protocol, split) for split in SUBJECT_COUNTS}
-    output.mkdir(parents=True, exist_ok=False)
+    selected = full_membership(protocol) if full else {split: select_group(protocol, split) for split in SUBJECT_COUNTS}
+    if len(set(splits)) != len(splits) or (full and baseline is not None):
+        raise ValueError("Choose unique splits and use --dev-cache to seed full preparation")
+    output.mkdir(parents=True, exist_ok=full)
+    manifest_path = output / "smoke_summary.json"
+    if full:
+        manifest_path.unlink(missing_ok=True)
     baseline_rows = {}
     if baseline:
         manifest = json.loads((baseline / "smoke_summary.json").read_text(encoding="utf-8"))
@@ -113,7 +130,10 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
 
     models = None
     rows, failures = [], []
-    for split, videos in selected.items():
+    for split in splits:
+        videos = selected[split]
+        spread_train = full and split == "Train"
+        slots = FULL_TRAIN_SLOTS if spread_train else PILOT_SLOTS
         split_cache = cache / split
         split_cache.mkdir(parents=True, exist_ok=True)
         waiting = {}
@@ -124,7 +144,12 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
                 if not target.exists() and previous:
                     publish_video(target, baseline, split, video, access, previous)
                 try:
-                    restored = restore_video(target, output, split, video, access) if target.exists() else None
+                    restored = restore_video(target, output, split, video, access, slots) if target.exists() else None
+                    if restored is None and split == "Dev" and dev_cache is not None:
+                        source = dev_cache / f"{video}.zip"
+                        if source.is_file():
+                            restored = restore_video(source, output, split, video, access, slots)
+                            publish_video(target, output, split, video, access, restored, slots)
                 except (zipfile.BadZipFile, KeyError, UnicodeError, ValueError) as exc:
                     print(f"Rebuild invalid cache {target.name}: {exc}", flush=True)
                     restored = None
@@ -134,6 +159,10 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
                     rows.extend(restored)
                 progress.update(done)
         if not waiting:
+            continue
+        if restore_only:
+            failures.extend({"split": split, "video": video, "error": "missing or invalid cache"}
+                            for video in waiting)
             continue
         if models is None:
             with Progress("Load MTCNN and PRNet"):
@@ -146,8 +175,13 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
                     raise ValueError("Unexpected PRNet checkpoint")
                 models = load_models(prnet, renderer)
         count = len(waiting)
+        archive_path = data / f"{split}_files.tar"
+        if stage_dir is not None:
+            from deepface_pad.colab_cache import copy_progress
+
+            archive_path = copy_progress(archive_path, stage_dir / archive_path.name, f"Stage {archive_path.name}")
         with Progress(f"{split} prepare missing videos", count, "videos") as progress, \
-                tarfile.open(data / f"{split}_files.tar", "r:") as archive, tempfile.TemporaryDirectory() as tmp:
+                tarfile.open(archive_path, "r:") as archive, tempfile.TemporaryDirectory() as tmp:
             for member in archive:
                 name = PurePosixPath(member.name)
                 if not member.isfile() or name.suffix.lower() != ".avi" or name.stem not in waiting:
@@ -157,14 +191,14 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
                     shutil.copyfileobj(source, target, 4 * 1024 * 1024)
                 access = waiting[name.stem]
                 try:
-                    observations = emit_video(local, access, split, output, models, PILOT_SLOTS)
-                    video_assets(observations, split, name.stem, access)
+                    observations = emit_video(local, access, split, output, models, slots, spread_train=spread_train)
+                    video_assets(observations, split, name.stem, access, slots)
                 except ValueError as exc:
                     failure = {"split": split, "video": name.stem, "error": str(exc)}
                     failures.append(failure)
                     print(json.dumps(failure), flush=True)
                 else:
-                    publish_video(split_cache / f"{name.stem}.zip", output, split, name.stem, access, observations)
+                    publish_video(split_cache / f"{name.stem}.zip", output, split, name.stem, access, observations, slots)
                     rows.extend(observations)
                 local.unlink()
                 waiting.pop(name.stem)
@@ -172,11 +206,15 @@ def prepare(data, cache, output, prnet, renderer, baseline=None):
                 if not waiting:
                     break
         failures.extend({"split": split, "video": video, "error": "missing AVI"} for video in sorted(waiting))
-    manifest = {"profile": "expanded", "slots": list(PILOT_SLOTS), "failures": failures,
+    manifest = {"profile": "full" if full else "expanded", "slots": list(PILOT_SLOTS), "failures": failures,
                 "protocol_sha256": protocol_digest, "source": {"prnet": PRNET_COMMIT, "renderer": DEPTH_COMMIT},
                 "weight_sha256": WEIGHT_SHA, "weight_index_sha256": INDEX_SHA,
                 "frames": sorted(rows, key=lambda row: (row["split"], row["video_id"], row["slot"]))}
-    (output / "smoke_summary.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    if full:
+        manifest["train_slots"] = list(FULL_TRAIN_SLOTS)
+    temporary_manifest = manifest_path.with_suffix(".json.part")
+    temporary_manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    temporary_manifest.replace(manifest_path)
     if failures:
         raise ValueError(f"Preparation incomplete for {len(failures)} videos. See {output / 'smoke_summary.json'}")
     print("CDCN_EXPANDED_DATA_READY", len(rows), "frames", flush=True)
@@ -187,4 +225,9 @@ if __name__ == "__main__":
     for name in ("data", "cache", "output", "prnet", "renderer"):
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--baseline", type=Path)
+    parser.add_argument("--full", action="store_true")
+    parser.add_argument("--dev-cache", type=Path)
+    parser.add_argument("--stage-dir", type=Path)
+    parser.add_argument("--restore-only", action="store_true")
+    parser.add_argument("--splits", nargs="+", choices=("Train", "Dev"), default=("Train", "Dev"))
     prepare(**vars(parser.parse_args()))

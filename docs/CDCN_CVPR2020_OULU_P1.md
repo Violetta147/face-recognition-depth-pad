@@ -228,3 +228,28 @@ với dải khung Train đủ rộng để lấy mẫu ngẫu nhiên qua nhiều
 trên Train/Dev đầy đủ ở batch 56 để đo thời gian thực tế và kiểm tra
 checkpoint trước khi quyết định thời lượng huấn luyện dài. Khóa ngưỡng
 trên Dev và chỉ chấm Test sau khi cấu hình đã chốt.
+
+## Train/Dev đầy đủ, đo ba epoch
+
+[Notebook Protocol 1 Train/Dev đầy đủ](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Full_Train_Dev.ipynb)
+dùng danh sách chính thức gồm 1.200 video Train và 900 video Dev. Cell 3
+lấy 24 khung rải suốt mỗi video Train và giữ tám vị trí Dev như lượt
+pilot. Trong mỗi epoch, loader lấy ngẫu nhiên một trong 24 khung đã lưu
+của mỗi video Train. Pool 24 khung là lựa chọn tiết kiệm chi phí khi
+dựng lại dữ liệu từ AVI. Paper dùng dữ liệu tiền xử lý của tác giả CDCN.
+
+Chạy cell 1–3 trên CPU. Khi có đủ dung lượng, cell 3 chép TAR cần đọc
+sang đĩa cục bộ. ZIP của mỗi video được lưu lên Drive ngay sau khi
+xử lý xong, nên chạy lại được khi runtime ngắt. Cấu hình cùng nguồn
+có thể dùng lại 30 ZIP Dev của pilot. Train được dựng với 24 khung.
+`SPLITS` cho phép chuẩn bị từng split. Chạy cả hai split trước khi
+train. Nếu cache đã đủ số tệp nhưng có ZIP thiếu hoặc hỏng, đặt
+`REPAIR_CACHE=True` ở cell 3 để dựng lại phần lỗi.
+
+Khi cell 3 báo đủ 36.000 khung, chuyển sang A100 80 GB và chạy cell
+1–4. Cell 3 đọc lại ZIP trên Drive. Cell 4 train từ đầu 3 epoch với
+batch 56, 4 luồng đọc ảnh, Adam và lịch giảm LR đã nêu, sau đó chấm đủ
+900 video Dev. File `pilot_result.json` có thời gian đọc và augmentation
+mỗi epoch, thời gian train, thời gian Dev, đỉnh GPU và hash
+checkpoint. Lượt ba epoch dùng để đo hệ thống. Cần log đó để lập lịch
+huấn luyện dài và chọn checkpoint theo Dev trước khi chấm Test.

@@ -82,6 +82,10 @@ def test_emit_attack_retries_empty_depth_and_keeps_nonzero_eval_map(tmp_path, mo
         assert cv2.imread(str(image)).shape[:2] == loaded.shape
         assert cv2.resize(loaded[roi], (32, 32)).sum() == row["prnet_sum_32"] > 0
     assert len(list(tmp_path.rglob("*.jpg"))) == 6
+    train = smoke.emit_video(video, 4, "Train", tmp_path, (), tuple(range(24)), spread_train=True)
+    assert len(train) == 24
+    assert len({row["frame_id"] for row in train}) == 24
+    assert train[-1]["nominal"] == 39
 
 
 def test_colab_bundles_current_sources_and_compiles():

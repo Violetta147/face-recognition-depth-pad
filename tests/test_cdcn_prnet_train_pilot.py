@@ -189,3 +189,71 @@ def test_expanded_selection_and_video_cache(tmp_path, monkeypatch):
     for cell in json.loads(notebook.read_text(encoding="utf-8"))["cells"]:
         if cell["cell_type"] == "code":
             compile("".join(cell["source"]), notebook.name, "exec")
+
+
+def test_full_membership_requires_official_ids_and_split_frame_counts(tmp_path):
+    from deepface_pad.oulu_npu import expected_ids
+
+    protocol = tmp_path / "Protocols.tar"
+    rows = []
+    with tarfile.open(protocol, "w") as archive:
+        for split, alias, slots in (("Train", "train", expanded.FULL_TRAIN_SLOTS), ("Dev", "val", range(8))):
+            entries = []
+            for phone, session, subject, access in sorted(expected_ids(1, None, alias)):
+                video = f"{phone}_{session}_{subject:02}_{access}"
+                entries.append(f"{1 if access == 1 else -1},{video}")
+                rows.extend({"split": split, "video_id": video, "access": access, "slot": slot,
+                             "frame_id": slot + 1, "train_target_zero": access != 1} for slot in slots)
+            data = "\n".join(entries).encode()
+            entry = tarfile.TarInfo(f"Protocols/Protocol_1/{split}.txt")
+            entry.size = len(data)
+            archive.addfile(entry, io.BytesIO(data))
+    path = tmp_path / "smoke_summary.json"
+    manifest = {"profile": "full", "failures": [], "slots": list(range(8)),
+                "train_slots": list(expanded.FULL_TRAIN_SLOTS), "protocol_sha256": pilot.sha(protocol),
+                "frames": rows}
+    path.write_text(json.dumps(manifest))
+    splits = pilot.load_videos(tmp_path, "full", protocol)
+    assert {split: len(videos) for split, videos in splits.items()} == expanded.FULL_COUNTS
+    assert len(rows) == 36000
+    for row in rows[:24]:
+        row["video_id"] = "7_1_01_1"
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="IDs differ"):
+        pilot.load_videos(tmp_path, "full", protocol)
+
+
+def test_full_notebook_compiles_with_cpu_prepare_and_batch_56():
+    notebook = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Full_Train_Dev.ipynb"
+    cells = json.loads(notebook.read_text(encoding="utf-8"))["cells"]
+    for cell in cells[1:]:
+        compile("".join(cell["source"]), notebook.name, "exec")
+    assert "BATCH = 56" in "".join(cells[4]["source"])
+    assert '"--restore-only"' in "".join(cells[3]["source"])
+    assert '"--device", "cuda"' in "".join(cells[4]["source"])
+
+
+def test_threaded_train_epoch_keeps_short_final_batch(tmp_path, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from torch.nn import functional as F
+
+    class Model(torch.nn.Conv2d):
+        def forward(self, image):
+            return {"depth": super().forward(image)}
+
+    def sample(root, rows, rng):
+        return torch.ones(3, 4, 4), torch.full((1, 4, 4), float(rows[0]))
+
+    monkeypatch.setattr(pilot, "sample_training_frame", sample)
+    model = Model(3, 1, 1)
+    optimizer = torch.optim.Adam(model.parameters())
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=500)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        history = pilot.train_epochs(
+            model, F.mse_loss, optimizer, scheduler, ["a", "b", "c"],
+            {"a": [0], "b": [1], "c": [0]}, tmp_path, torch.device("cpu"),
+            1, 2, np.random.default_rng(43), pool, 2,
+        )
+    assert history[0]["updates"] == 2
+    assert all(int(state["step"]) == 2 for state in optimizer.state.values())
+    assert 0 < history[0]["load_seconds"] <= history[0]["seconds"]

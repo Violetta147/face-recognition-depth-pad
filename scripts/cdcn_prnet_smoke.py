@@ -6,6 +6,7 @@ import csv
 import hashlib
 import importlib
 import importlib.metadata
+from itertools import chain
 import json
 import math
 import os
@@ -131,19 +132,30 @@ def select_videos(protocol, split, wide_sample=False):
     return videos
 
 
-def emit_video(path, access, split, output, models, slots=SMOKE_SLOTS):
+def emit_video(path, access, split, output, models, slots=SMOKE_SLOTS, *, spread_train=False):
     cap = cv2.VideoCapture(str(path))
     try:
         count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        if count < 10:
+        if count < (len(slots) if spread_train else 10):
             raise ValueError(f"cannot determine frame count: {path.name}")
         rows, used = [], set()
-        # Match the public Dev loader's nominal stride. Frame IDs are one-based.
+        # Dev keeps the public loader's stride. Train can sample across the whole AVI.
         for slot in slots:
-            nominal = 1 + slot * (count // 10)
-            for frame_id in range(nominal, min(nominal + 50, count + 1)):
+            nominal = 1 + slot * count // len(slots) if spread_train else 1 + slot * (count // 10)
+            stop = min(nominal + 50, count + 1)
+            if spread_train:
+                stop = 1 + (slot + 1) * count // len(slots)
+                candidates = chain(range(nominal, stop), range(stop, min(stop + 50, count + 1)),
+                                   range(nominal - 1, max(0, nominal - 51), -1))
+            else:
+                candidates = range(nominal, stop)
+            tried = set()
+            for frame_id in candidates:
                 if frame_id in used:
                     continue
+                if frame_id in tried:
+                    continue
+                tried.add(frame_id)
                 cap.set(cv2.CAP_PROP_POS_FRAMES, frame_id - 1)
                 ok, frame = cap.read()
                 if not ok or abs(cap.get(cv2.CAP_PROP_POS_FRAMES) - frame_id) >= 0.5:
