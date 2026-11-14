@@ -187,9 +187,12 @@ sang GPU và chạy lại cell 1–4 để dùng cache. Tập lấy 40 video Tra
 có đủ năm loại video từ điện thoại 1, phiên 1. Mỗi video dùng tám
 khung, tổng 560 khung. Cell 3 dùng lại 48 khung có sẵn khi khớp cấu hình,
 lưu từng video hoàn tất lên `expanded-cache` và báo số video đã xử
-lý, thời gian, ETA khi có thể. Nếu một video thiếu khung, cell tiếp
+lý, thời gian, ETA khi có thể. ZIP từng video được tạo và kiểm CRC trên
+ổ cục bộ trước khi chép lên Drive. Nếu một video thiếu khung, cell tiếp
 tục lưu các video xử lý được rồi ghi tên video lỗi trong
 `preparation.json` để kiểm tra và chạy tiếp.
+Sáu video pilot, tổng 48 khung, đã được nhập và đọc kiểm tra trong
+`expanded-cache/eb835e43f34a17c44a74`.
 
 Cell 4 train 10 epoch FP32 với batch 32, mỗi epoch đọc một khung mỗi
 video và cập nhật hai lần. Checkpoint cuối, điểm video, chỉ số và thời

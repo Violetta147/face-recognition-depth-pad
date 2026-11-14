@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+import time
 from uuid import uuid4
 import zipfile
 
@@ -60,13 +61,23 @@ def publish_video(cache_path, root, split, video, access, rows):
     names = video_assets(rows, split, video, access)
     partial = cache_path.with_name(f"{cache_path.stem}-{uuid4().hex}.part")
     try:
-        with zipfile.ZipFile(partial, "x") as archive:
-            archive.writestr("frames.json", json.dumps(rows))
-            for name in names:
-                archive.write(root / name, name)
-        with zipfile.ZipFile(partial) as archive:
-            if archive.testzip() is not None:
-                raise OSError(f"Failed to verify {partial}")
+        with tempfile.TemporaryDirectory() as directory:
+            local = Path(directory) / "video.zip"
+            with zipfile.ZipFile(local, "x") as archive:
+                archive.writestr("frames.json", json.dumps(rows))
+                for name in names:
+                    archive.write(root / name, name)
+            with zipfile.ZipFile(local) as archive:
+                if archive.testzip() is not None:
+                    raise OSError(f"Failed to verify {local}")
+            shutil.copyfile(local, partial)
+            expected_bytes = local.stat().st_size
+            # A mounted Drive can briefly report a stale size after the writer closes.
+            deadline = time.monotonic() + 5
+            while partial.stat().st_size != expected_bytes:
+                if time.monotonic() >= deadline:
+                    raise OSError(f"Incomplete cache transfer: {partial}")
+                time.sleep(0.25)
         partial.replace(cache_path)
     finally:
         partial.unlink(missing_ok=True)

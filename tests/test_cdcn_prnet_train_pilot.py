@@ -147,7 +147,7 @@ def test_batch_probe_measures_training_updates_and_retains_partial_results(tmp_p
     assert len(report["batches"][0]["update_seconds"]) == 2
 
 
-def test_expanded_selection_and_video_cache(tmp_path):
+def test_expanded_selection_and_video_cache(tmp_path, monkeypatch):
     protocol = tmp_path / "Protocols.tar"
     with tarfile.open(protocol, "w") as archive:
         for split, subjects in (("Train", range(1, 10)), ("Dev", range(21, 28))):
@@ -165,7 +165,20 @@ def test_expanded_selection_and_video_cache(tmp_path):
     make_assets(source)
     rows = pilot.load_videos(source)["Dev"]["1_1_21_4"]
     cache = tmp_path / "video.zip"
+    original_stat = Path.stat
+    stale_reads = []
+
+    def stale_size(path, *args, **kwargs):
+        result = original_stat(path, *args, **kwargs)
+        if path.suffix == ".part" and not stale_reads:
+            from types import SimpleNamespace
+            stale_reads.append(path)
+            return SimpleNamespace(st_size=0)
+        return result
+
+    monkeypatch.setattr(Path, "stat", stale_size)
     expanded.publish_video(cache, source, "Dev", "1_1_21_4", 4, rows)
+    assert len(stale_reads) == 1
     restored = tmp_path / "restored"
     assert expanded.restore_video(cache, restored, "Dev", "1_1_21_4", 4) == rows
     np.testing.assert_array_equal(pilot.load_frame(source, rows[0], 1.3)[1],
