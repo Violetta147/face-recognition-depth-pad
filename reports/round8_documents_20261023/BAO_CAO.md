@@ -103,9 +103,9 @@ Hạn chế nằm ở chất lượng nhãn hình học và khả năng chuyển
 
 ### 1.5.3 Hợp nhất đặc trưng và bộ phân loại độ sâu trong UCDCN
 
-UCDCN [3] kết hợp phép CDC với cấu trúc lồng UNet++ để hợp nhất thông tin ngữ nghĩa ở nhiều mức. Công trình còn khảo sát nhánh phân loại ở đầu ra và rút gọn mạng thành biến thể L2. Ưu điểm là cải thiện khả năng khai thác cấu trúc không gian và khảo sát chi phí triển khai cùng hiệu năng. Sự tồn tại của nhánh phân loại độ sâu trong UCDCN xác lập tiền lệ cho hướng nghiên cứu; đóng góp của đề tài hiện tại là kiểm tra thực nghiệm các cấu hình trên cùng CDCN, không phải phát minh ý tưởng nhánh phân loại.
+UCDCN [3] kết hợp tích chập sai phân trung tâm với cấu trúc lồng UNet++. Mạng kết hợp đặc trưng từ nhiều tầng để dự đoán bản đồ độ sâu, rồi đưa bản đồ này vào bộ phân loại thật/giả. Ưu điểm của cách làm này là mạng dự đoán độ sâu có thể tận dụng thông tin ở nhiều mức, còn bộ phân loại có thể học cách sử dụng các vùng khác nhau trên bản đồ.
 
-Đổi lại, cấu trúc lồng, cách hợp nhất và chiến lược huấn luyện của UCDCN tạo thành một thiết kế khác E3. Kết quả ACER 0,9% của L2 trên OULU-NPU P1/P2 không cô lập tác dụng của nhánh phân loại khi gắn vào CDCN của nhóm. Quy tắc ngưỡng 0,5 được nêu cho thí nghiệm bộ phân loại tại Bảng 7 của UCDCN; nguồn đã đọc chưa xác định cùng quy tắc đó cho Bảng 5. Tốc độ công bố trên RTX 3090 cũng khác phép đo A100 của đề tài. Vì vậy, UCDCN phù hợp làm công trình gần về phương pháp hơn là một đối chứng số liệu trực tiếp.
+Cấu trúc lồng làm mạng phức tạp hơn, nên tác giả khảo sát biến thể L2 bằng cách bỏ bớt các tầng hợp nhất. Bộ phân loại vẫn phụ thuộc vào chất lượng bản đồ độ sâu dự đoán, và tác giả lưu ý khả năng tổng quát hóa với kiểu tấn công chưa gặp còn hạn chế. UCDCN là tiền lệ cho việc dùng bộ phân loại trên bản đồ độ sâu. Từ đó, Deep-PAD khảo sát câu hỏi hẹp hơn trên CDCN: khi giữ nguyên mạng dự đoán độ sâu, dùng bộ phân loại thay cho phép lấy trung bình bản đồ có giảm lỗi hay không?
 
 ### 1.5.4 Công cụ sinh nhãn và hàm mất mát
 
