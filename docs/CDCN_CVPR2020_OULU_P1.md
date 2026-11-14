@@ -165,20 +165,23 @@ khi chọn checkpoint và khóa ngưỡng trên Dev.
 
 ## Lượt Train/Dev mở rộng
 
-Đã kiểm file `batch-probe-1794676322097175841.json` trên Drive.
-Cấu hình đo là A100-SXM4-40GB, FP32, cuDNN cho phép TF32.
+Đã kiểm hai file benchmark trên Drive. Lượt 40 GB ghi vào thư mục
+`1794676312092424696`, lượt 80 GB vào thư mục `1794678456348141079`.
+Cả hai dùng cùng manifest 24 khung Train, seed, số bước đo, phiên bản
+PyTorch và OpenCV, FP32 và cuDNN cho phép TF32.
 
-| Batch | Khung/giây | GPU cấp phát đỉnh (GiB) | Bộ nhớ allocator giữ đỉnh (GiB) |
-| --- | ---: | ---: | ---: |
-| 8 | 92,62 | 3,21 | 5,13 |
-| 16 | 96,10 | 6,37 | 10,19 |
-| 32 | 99,98 | 12,72 | 20,32 |
-| 56 | 97,67 | 22,23 | 35,50 |
+| Batch | A100 40 GB (khung/giây) | A100 80 GB (khung/giây) | GPU cấp phát đỉnh (GiB) | Bộ nhớ PyTorch giữ đỉnh (GiB) |
+| --- | ---: | ---: | ---: | ---: |
+| 8 | 92,62 | 101,09 | 3,21 | 5,13 |
+| 16 | 96,10 | 104,99 | 6,37 | 10,19 |
+| 32 | 99,98 | 109,49 | 12,72 | 20,32 |
+| 56 | 97,67 | 106,80 | 22,23 | 35,50 |
 
-Batch 32 được dùng cho lượt mở rộng vì có thông lượng cao nhất trong
-phép đo và dư bộ nhớ trên cả bản A100 40 GB. Batch 56 giữ vai trò mốc
-paper. Khoảng 12 giây/epoch tính từ 1.200 video và 100 khung/giây chỉ
-là ước lượng phần cập nhật mô hình với dữ liệu đã nạp.
+Batch 32 đạt thông lượng cao nhất trong bốn batch đã đo trên cả hai
+GPU. Lượt 80 GB nhanh hơn 9,5% ở batch 32 trong phép đo này. Giữ batch
+32 cho lượt mở rộng và batch 56 làm mốc cấu hình paper. Thời gian
+đo trên các khung đã nạp chưa tính phần đọc ảnh cho từng epoch hay
+chấm Dev.
 
 Mở [notebook mở rộng](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Expanded.ipynb)
 và chạy cell 1–4 trên A100. Có thể chạy cell 1–3 trên CPU rồi chuyển
