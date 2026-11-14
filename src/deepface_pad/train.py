@@ -184,9 +184,14 @@ def run(config_path: str | Path) -> Path:
         raise ValueError(f"unknown precision: {precision}")
     if precision == "bf16" and (device.type != "cuda" or not torch.cuda.is_bf16_supported()):
         raise ValueError("bf16 training requires a CUDA GPU with bfloat16 support")
+    # A matched pair must share the sample order and augmentation worker seeds
+    # even when the model constructors consume different amounts of randomness.
+    loader_seed = training.get("loader_seed")
+    train_generator = None if loader_seed is None else torch.Generator().manual_seed(loader_seed)
     loaders = {
         split: DataLoader(ds, batch_size=batch_size, shuffle=split == "train", num_workers=workers,
-                          pin_memory=fast_io, persistent_workers=fast_io and workers > 0)
+                          pin_memory=fast_io, persistent_workers=fast_io and workers > 0,
+                          generator=train_generator if split == "train" else None)
         for split, ds in datasets.items()
     }
     if oulu:

@@ -40,6 +40,55 @@ ngưỡng lấy gần EER trên Dev. Khi thấy `E1_DEV_READY`, gửi đường 
 run và `metrics.json`; kiểm `e1_dev_lock.json` trước khi dùng checkpoint
 cho đối chứng. Notebook này chỉ sử dụng Train/Dev.
 
+**E1 đã hoàn tất.** A100 40 GB, batch 16, 5 epoch × 600 bước, tổng
+465 giây cho phiên Train/Dev. Epoch 5 đạt ACER Dev 2,92%, BPCER 5/180,
+APCER in 9/360 và phát lại 11/360. Ngưỡng Dev 0,10381030. Đã đối chiếu
+SHA-256 của tám file trong `e1_dev_lock.json` trên Drive.
+
+**Tiếp theo dùng [notebook E1–E3](../notebooks/Face_PAD_OULU_NPU_E1_E3_Pair.ipynb).**
+Hai nhánh đều nạp trọng số E1 epoch 5 và khởi tạo Adam mới. Mỗi nhánh
+thêm 3.000 bước với batch 16, BF16, LR 0,0001, weight decay 0,00005, cùng
+seed cho loader và tiêu chí ACER video trên Dev. E3 thêm đầu phân loại
+với BCE hệ số 1. Kết quả đo tác động phối hợp của đầu phân loại và mục
+tiêu BCE, còn E2 là đối chứng riêng cho tác dụng đọc điểm.
+Khi thấy `PAIR_DEV_READY`, gửi JSON Dev và đường dẫn lock. Khi đổi runtime
+có thể điền `RESUME_PAIR` để bỏ qua nhánh đã hoàn tất; nhánh dở chạy lại
+từ checkpoint chung. So Test dùng bước đánh giá riêng sau khi khóa cặp.
+
+**Cặp seed 43 đã khóa Dev.** E1 tiếp tục chọn epoch 2, ACER 1,25%.
+E3 chọn epoch 4, ACER 1,11%. Mỗi nhánh từ chối nhầm 2/180 video thật.
+E1 cho lọt 3 video in và 5 video phát lại. E3 cho lọt 4 video ở mỗi nhóm.
+Hai nhánh cùng cho lọt 8/720 video tấn công. Chênh ACER đến từ tỷ lệ
+lỗi của nhóm tấn công cao nhất giảm ở E3.
+
+Dán [cell chấm Test](../scripts/oulu_pair_test_colab_cell.py) vào cuối
+notebook E1–E3 đang mở, sau dòng `PAIR_DEV_READY`. Nếu đã đổi runtime,
+chạy lại phần thiết lập cell 1–2 trước để nạp mã và đường dẫn.
+Cell dùng ZIP Test RGB đã lưu, kiểm hash của khóa và các tệp run,
+rồi chấm 600 video bằng ngưỡng Dev của từng checkpoint. Kết quả ghi
+vào `locked-test` bên dưới thư mục cặp. Test Protocol 1 đã được quan sát
+ở lượt MobileNet, nên ghi kết quả này như so sánh phát triển trên một seed.
+
+**Test của cặp seed 43 đã hoàn tất.** Hai run chấm cùng 600 video,
+dùng ngưỡng Dev đã khóa. Đã đối chiếu JSON, khóa và điểm theo video trên
+Drive tại `cdcn-pair-p1/seed43-1794667766717400448/locked-test`.
+
+| Chỉ số Test | E1 tiếp tục | E3 joint BCE |
+| --- | ---: | ---: |
+| ACER | 13,33% | 7,08% |
+| BPCER | 24,17% (29/120) | 10,83% (13/120) |
+| APCER in | 2,50% (6/240) | 2,08% (5/240) |
+| APCER phát lại | 1,67% (4/240) | 3,33% (8/240) |
+| APCER chung (nhóm cao nhất) | 2,50% | 3,33% |
+| AUC | 0,9651 | 0,9852 |
+| EER | 10,00% | 6,67% |
+
+Ở seed 43, E3 nhận đúng thêm 16 video thật từng bị E1 từ chối.
+E3 cũng chặn thêm 4 video tấn công từng lọt qua và để lọt 7 video
+tấn công từng bị E1 chặn. ACER giảm 6,25 điểm phần trăm trong khi
+APCER chung tăng 0,83 điểm phần trăm. Lượt tiếp theo ưu tiên lặp đối
+chứng với seed 44/45, mỗi seed dùng checkpoint E1 khởi tạo của chính nó.
+
 ## Mốc kết quả đã khóa
 
 | Hạng mục | Giá trị |
