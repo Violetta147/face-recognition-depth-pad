@@ -11,6 +11,17 @@
 
 Chọn E3 để chạy nhiều seed có căn cứ theo quy tắc lịch sử. Muốn đánh giá Focal có giúp giảm lỗi PAD hay không, cặp phù hợp là **E3b–E4**, hai cấu hình dùng cùng lịch huấn luyện theo giai đoạn. Trên E4, epoch 3 của joint có tổng loss validation thấp nhất, còn epoch 6 có BCE validation thấp nhất. Chênh lệch đó cho thấy hai tiêu chí chọn thời điểm khác nhau. Muốn biết tác động đến PAD cần điểm video hoặc checkpoint của các epoch liên quan. [Hồ sơ kiểm toán BCE–Focal](../fair_comparison_20261030/KET_QUA.md) · [Validation Lượt 5](../../../reports/ROUND_5_FULL_VALIDATION_2026-10-16.md).
 
+**Số đo thực tế của E4 trên validation (log giai đoạn joint).**
+
+| Epoch | Tổng loss độ sâu + Focal | BCE |
+| --- | ---: | ---: |
+| 3 | 0,0223781547 | 0,0881865043 |
+| 6 | 0,0225270261 | 0,0873854375 |
+
+ACER video của E4 ở epoch 3 chưa xác minh được. Phép so E3b–E4 **đã chạy** ở seed 42 theo quy tắc chọn checkpoint cũ. Trên test, E3b từ chối nhầm 9/90 video người thật, E4 từ chối nhầm 8/90, cả hai có 0/270 video tấn công lọt qua. ACER lần lượt là 5,0000% và 4,4444%. Phép thử mở là ảnh hưởng của việc đổi tiêu chí giữ checkpoint, không phải thực hiện lại câu hỏi E3b–E4 như thể chưa có kết quả. [Test Lượt 5](../../../reports/ROUND_5_TEST_RESULTS_2026-10-16.md).
+
+**Quy tắc đề xuất cho lần kế tiếp.** Chấm chính bằng ACER cấp video trên validation và báo APCER/BPCER kèm số video lỗi. EER, AUC hoặc đường DET bổ sung góc nhìn theo ngưỡng. Nếu các ứng viên hòa theo tiêu chí chính, báo hòa. Nếu chỉ đủ tài nguyên chạy một ứng viên tiếp, chốt trước cách chọn đại diện và ghi lý do đó trong hồ sơ thí nghiệm. NIST IR 8491 chấm điểm và sai số của thuật toán được nộp, không quy định tiêu chí chọn checkpoint huấn luyện. CASIA-FASD gốc có split 20/30 và bảy kịch bản báo EER/DET. Nhóm tách thêm bốn người để chọn mô hình và ngưỡng, nên gọi đúng đây là quy trình nội bộ 16/4/30. [NIST IR 8491](https://doi.org/10.6028/NIST.IR.8491) · [CASIA-FASD gốc, §4.1](https://nlpr.ia.ac.cn/2012papers/gjhy/gh69.pdf) · [Kiểm toán chỉ số của nhóm](../fair_comparison_20261030/research_pad_metrics_20261031/KIEM_TRA_CODE_VA_CSV.md).
+
 ## Việc tiếp theo
 
 1. Các thư mục run đã kiểm chỉ có checkpoint tốt nhất theo stage. Kiểm tra bản lưu khác nếu có. Nếu vẫn thiếu checkpoint hoặc điểm validation theo epoch, chuẩn bị cặp chạy Colab cùng một seed và lưu đủ hai loại đầu ra. Thay lựa chọn cuối head có thể đổi điểm khởi tạo joint, nên nhánh đó phải huấn luyện joint từ checkpoint mới.
