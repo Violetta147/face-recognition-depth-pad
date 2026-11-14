@@ -2,6 +2,14 @@
 
 Cập nhật ngày 14/11/2026. **Điểm bắt đầu khi quay lại: khôi phục cache RGB Train/Dev và chạy thử tạo pseudo-depth trên một nhóm nhỏ.** Kế hoạch này ghi các bước dự kiến. Lượt thực nghiệm đã hoàn tất hiện là MobileNetV3-Small trên Protocol 1, seed 43.
 
+**Notebook cho bước 1–2**: [Face_PAD_OULU_NPU_Depth_Smoke.ipynb](../notebooks/Face_PAD_OULU_NPU_Depth_Smoke.ipynb). Chọn CPU và chạy cell 1–4, rồi xem RGB và map ở cell 5. Notebook chỉ đọc 16 ảnh mỗi split trực tiếp từ ZIP đã khóa. Mỗi split lấy 12 ảnh thật từ sáu camera × hai phiên và bốn ảnh tấn công, mỗi thiết bị tạo mẫu một ảnh. Bước lấy mẫu đã kiểm bằng ZIP thật. Việc dựng map bằng 3DDFA V2 vẫn cần chạy trên Colab.
+
+Cell 4 cần in `DEPTH_SMOKE_PASS` với 24 map thật và 8 map zero trước khi
+ước lượng lượt đầy đủ. Gửi `smoke_summary.json` trong
+`MyDrive/face-pad/oulu-fast-p1/depth-smoke/p1-32-v1` và nhận xét ảnh ở cell 5.
+Nếu có lỗi, gửi traceback và `failures.csv` nếu file đã được tạo. Notebook
+cố định commit 3DDFA V2 đã dùng ở CASIA và dùng ONNX trên CPU.
+
 ## Mốc kết quả đã khóa
 
 | Hạng mục | Giá trị |

@@ -45,10 +45,10 @@ CELLS = [
 ]
 
 
-def build():
+def build_notebook(cells, filename, sources, extra_files=None, gpu=False):
     buffer = io.BytesIO()
-    files = {f"src/deepface_pad/{name}.py": ROOT / f"src/deepface_pad/{name}.py" for name in SOURCES}
-    files["yunet.onnx"] = ROOT / "artifacts/round7/detector/face_detection_yunet_2023mar.onnx"
+    files = {f"src/deepface_pad/{name}.py": ROOT / f"src/deepface_pad/{name}.py" for name in sources}
+    files.update(extra_files or {})
     with tarfile.open(fileobj=buffer, mode="w") as archive:
         for name, path in files.items():
             data = path.read_bytes()
@@ -57,7 +57,7 @@ def build():
             archive.addfile(info, io.BytesIO(data))
     bundle = gzip.compress(buffer.getvalue(), mtime=0)
     code = []
-    for index, (kind, source) in enumerate(CELLS):
+    for index, (kind, source) in enumerate(cells):
         cell = {"cell_type": kind, "id": f"oulu-{index:02d}", "metadata": {}}
         if kind == "code":
             cell.update(execution_count=None, outputs=[])
@@ -69,10 +69,17 @@ def build():
         cell["source"] = source.splitlines(keepends=True)
         code.append(cell)
     result = {"cells": code, "metadata": {"kernelspec": {"display_name": "Python 3",
-              "language": "python", "name": "python3"}, "colab": {"provenance": []},
-              "accelerator": "GPU"}, "nbformat": 4, "nbformat_minor": 5}
-    path = ROOT / "notebooks/Face_PAD_OULU_NPU_A100.ipynb"
+              "language": "python", "name": "python3"}, "colab": {"provenance": []}},
+              "nbformat": 4, "nbformat_minor": 5}
+    if gpu:
+        result["metadata"]["accelerator"] = "GPU"
+    path = ROOT / "notebooks" / filename
     path.write_text(json.dumps(result, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+
+def build():
+    detector = ROOT / "artifacts/round7/detector/face_detection_yunet_2023mar.onnx"
+    build_notebook(CELLS, "Face_PAD_OULU_NPU_A100.ipynb", SOURCES, {"yunet.onnx": detector}, gpu=True)
 
 
 if __name__ == "__main__":
