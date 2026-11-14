@@ -10,6 +10,21 @@ Cell 4 cần in `DEPTH_SMOKE_PASS` với 24 map thật và 8 map zero trước k
 Nếu có lỗi, gửi traceback và `failures.csv` nếu file đã được tạo. Notebook
 cố định commit 3DDFA V2 đã dùng ở CASIA và dùng ONNX trên CPU.
 
+**Smoke đã đạt trên Colab CPU** với 24/24 map thật, 8/8 target zero và
+0 lỗi. Hai map thật trong ảnh xem trước hiện rõ cấu trúc mặt, còn hai
+mẫu print có target zero theo thiết kế. Worker mất 14,0 giây, gồm cả
+xuất ONNX. Log dựng 24 map báo khoảng 1 giây, chưa đủ để dự đoán chính
+xác runtime đầy đủ vì ledger lớn hơn và có thời gian lưu snapshot.
+
+**Tiếp theo chạy bước 3** bằng [notebook Depth Full](../notebooks/Face_PAD_OULU_NPU_Depth_Full.ipynb).
+Chọn CPU. Ưu tiên phiên smoke còn mở để giữ nguyên ba tài sản ONNX đã xuất.
+Notebook kiểm đúng hash RGB và tài sản 3DDFA V2, lưu bản ONNX đã xác minh
+lên Drive, rồi ghi snapshot mỗi 500 map thật. Thư mục đầu ra là
+`MyDrive/face-pad/oulu-fast-p1/depth-full/p1-v1`. Lượt đầy đủ đạt khi cell
+5 in `DEPTH_FULL_PASS` với 16.800 target, gồm 3.360 thật và 13.440 tấn
+công. Nếu thất bại, giữ `depth-progress.zip`, xem `failures.csv` và
+log worker để xử lý các ID lỗi trước khi train E1.
+
 ## Mốc kết quả đã khóa
 
 | Hạng mục | Giá trị |
