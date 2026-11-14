@@ -14,16 +14,19 @@ import torch
 from torch.nn import functional as F
 
 from audit_cdc_n_p1_scores import NonFiniteDevThreshold, score
+from cdcn_prnet_expanded import SUBJECT_COUNTS
 from cdcn_prnet_smoke import PILOT_SLOTS, crop_bounds, sha
 from deepface_pad.losses import OfficialContrastiveDepthLoss
 from deepface_pad.models.cdcn_official import OfficialCDCN, OFFICIAL_CDCN_PROVENANCE
 from deepface_pad.progress import Progress
 
 
-def load_videos(root):
+def load_videos(root, profile="pilot"):
     manifest = json.loads((root / "smoke_summary.json").read_text(encoding="utf-8"))
     if manifest["failures"] or manifest.get("slots") != list(PILOT_SLOTS):
         raise ValueError("Use a complete eight-frame training pilot snapshot")
+    if manifest.get("profile", "pilot") != profile:
+        raise ValueError(f"Expected {profile} assets")
     splits = {"Train": defaultdict(list), "Dev": defaultdict(list)}
     for row in manifest["frames"]:
         video = row["video_id"]
@@ -36,8 +39,9 @@ def load_videos(root):
 
     subjects = {}
     for split, videos in splits.items():
-        expected = 6 if manifest["wide_sample"] else 3
-        if len(videos) != expected or {rows[0]["access"] for rows in videos.values()} != {1, 2, 4}:
+        expected = SUBJECT_COUNTS[split] * 5 if profile == "expanded" else (6 if manifest["wide_sample"] else 3)
+        accesses = {1, 2, 3, 4, 5} if profile == "expanded" else {1, 2, 4}
+        if len(videos) != expected or {rows[0]["access"] for rows in videos.values()} != accesses:
             raise ValueError(f"Incomplete {split} pilot membership")
         subjects[split] = {int(video.split("_")[2]) for video in videos}
         for video, rows in videos.items():
@@ -122,12 +126,12 @@ def score_dev(model, root, videos, batch, device):
     return pd.DataFrame(scores)
 
 
-def train(root, out, device, epochs, batch, seed):
+def train(root, out, device, epochs, batch, seed, profile="pilot"):
     if epochs < 1 or batch < 1:
         raise ValueError("epochs and batch must be positive")
     cv2.setNumThreads(1)
     with Progress("Verify pilot manifest and Dev assets"):
-        splits = load_videos(root)
+        splits = load_videos(root, profile)
         for videos in splits.values():
             for rows in videos.values():
                 for row in rows:
@@ -190,7 +194,7 @@ def train(root, out, device, epochs, batch, seed):
             metrics = {"status": "non_finite_threshold"}
         else:
             metrics = evaluated["dev"] | {"threshold_from_dev": evaluated["threshold_from_dev"]}
-    result = {"mode": "pilot", "seed": seed, "batch": batch, "device": str(device),
+    result = {"mode": profile, "seed": seed, "batch": batch, "device": str(device),
               "gpu": torch.cuda.get_device_name(device) if gpu else None, "torch": torch.__version__,
               "opencv": cv2.__version__, "architecture_source_commit": OFFICIAL_CDCN_PROVENANCE["git_commit"],
               "train_videos": len(train_videos), "dev_videos": len(dev), "dev_frames_per_video": len(PILOT_SLOTS),
@@ -209,7 +213,8 @@ if __name__ == "__main__":
     parser.add_argument("--batch", type=int, default=3)
     parser.add_argument("--seed", type=int, default=43)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
+    parser.add_argument("--profile", choices=("pilot", "expanded"), default="pilot")
     args = parser.parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         parser.error("Select a Colab GPU runtime or pass --device cpu")
-    train(args.assets, args.output, torch.device(args.device), args.epochs, args.batch, args.seed)
+    train(args.assets, args.output, torch.device(args.device), args.epochs, args.batch, args.seed, args.profile)

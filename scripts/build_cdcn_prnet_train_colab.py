@@ -125,6 +125,6 @@ if __name__ == "__main__":
          "models/cdcn_depth_head", "models/depth_head", "models/mobilenet_baseline"],
         {f"scripts/{name}.py": ROOT / f"scripts/{name}.py"
          for name in ("cdcn_prnet_smoke", "cdcn_prnet_train_pilot",
-                      "cdcn_prnet_batch_probe", "audit_cdc_n_p1_scores")},
+                      "cdcn_prnet_batch_probe", "cdcn_prnet_expanded", "audit_cdc_n_p1_scores")},
         gpu=True,
     )

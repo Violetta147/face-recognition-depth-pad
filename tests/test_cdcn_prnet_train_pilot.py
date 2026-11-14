@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 try:
     import cdcn_prnet_train_pilot as pilot
     import cdcn_prnet_batch_probe as batch_probe
+    import cdcn_prnet_expanded as expanded
 finally:
     sys.path.pop(0)
 
@@ -144,3 +145,34 @@ def test_batch_probe_measures_training_updates_and_retains_partial_results(tmp_p
     assert [row["status"] for row in report["batches"]] == ["ok", "out_of_memory", "ok"]
     assert report["batches"][0]["frames_per_second"] > 0
     assert len(report["batches"][0]["update_seconds"]) == 2
+
+
+def test_expanded_selection_and_video_cache(tmp_path):
+    protocol = tmp_path / "Protocols.tar"
+    with tarfile.open(protocol, "w") as archive:
+        for split, subjects in (("Train", range(1, 10)), ("Dev", range(21, 28))):
+            data = "\n".join(f"{1 if access == 1 else -1},1_1_{subject:02}_{access}"
+                             for subject in subjects for access in range(1, 6)).encode()
+            entry = tarfile.TarInfo(f"Protocols/Protocol_1/{split}.txt")
+            entry.size = len(data)
+            archive.addfile(entry, io.BytesIO(data))
+    train = expanded.select_group(protocol, "Train")
+    dev = expanded.select_group(protocol, "Dev")
+    assert len(train) == 40 and len(dev) == 30
+    assert "1_1_08_5" in train and "1_1_09_1" not in train
+    assert "1_1_26_5" in dev and "1_1_27_1" not in dev
+    source = tmp_path / "source"
+    make_assets(source)
+    rows = pilot.load_videos(source)["Dev"]["1_1_21_4"]
+    cache = tmp_path / "video.zip"
+    expanded.publish_video(cache, source, "Dev", "1_1_21_4", 4, rows)
+    restored = tmp_path / "restored"
+    assert expanded.restore_video(cache, restored, "Dev", "1_1_21_4", 4) == rows
+    np.testing.assert_array_equal(pilot.load_frame(source, rows[0], 1.3)[1],
+                                  pilot.load_frame(restored, rows[0], 1.3)[1])
+    with pytest.raises(ValueError, match="incomplete"):
+        expanded.publish_video(tmp_path / "incomplete.zip", source, "Dev", "1_1_21_4", 4, rows[:-1])
+    notebook = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Expanded.ipynb"
+    for cell in json.loads(notebook.read_text(encoding="utf-8"))["cells"]:
+        if cell["cell_type"] == "code":
+            compile("".join(cell["source"]), notebook.name, "exec")

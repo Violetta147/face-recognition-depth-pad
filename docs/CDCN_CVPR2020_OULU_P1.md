@@ -154,8 +154,7 @@ ngưỡng ROC, cho APCER gộp 0%, BPCER 100% và ACER 50% trên ba video.
 Đã kiểm SHA-256 checkpoint và đọc CSV của lượt
 `cdcn-prnet-train-pilot-p1/1794675910919099959/train-1794675926103304940`.
 
-Để đo GPU trước lượt lớn hơn, mở notebook mới và chạy cell 1–3 rồi
-cell 5. Cell 5 thử batch 8, 16, 32 và 56, mỗi batch có hai lượt làm nóng
+Cell 5 của notebook pilot thử batch 8, 16, 32 và 56, mỗi batch có hai lượt làm nóng
 và sáu lượt đo. Phép đo lặp 24 khung Train có thật đã nạp để chạy
 forward, backward và Adam. Thời gian giải mã và augmentation được đo
 riêng. Kết quả lưu từng batch vào `batch-probe-*.json`, kể cả khi GPU
@@ -163,3 +162,36 @@ hết bộ nhớ. Batch 56 là mốc tổng trong paper. Khi dùng một A100, p
 đo này cho biết chi phí của batch 56 trên máy hiện tại. Thời gian một
 epoch đầy đủ vẫn cần đo với loader và tập dữ liệu đầy đủ. Dùng Test sau
 khi chọn checkpoint và khóa ngưỡng trên Dev.
+
+## Lượt Train/Dev mở rộng
+
+Đã kiểm file `batch-probe-1794676322097175841.json` trên Drive.
+Cấu hình đo là A100-SXM4-40GB, FP32, cuDNN cho phép TF32.
+
+| Batch | Khung/giây | GPU cấp phát đỉnh (GiB) | Bộ nhớ allocator giữ đỉnh (GiB) |
+| --- | ---: | ---: | ---: |
+| 8 | 92,62 | 3,21 | 5,13 |
+| 16 | 96,10 | 6,37 | 10,19 |
+| 32 | 99,98 | 12,72 | 20,32 |
+| 56 | 97,67 | 22,23 | 35,50 |
+
+Batch 32 được dùng cho lượt mở rộng vì có thông lượng cao nhất trong
+phép đo và dư bộ nhớ trên cả bản A100 40 GB. Batch 56 giữ vai trò mốc
+paper. Khoảng 12 giây/epoch tính từ 1.200 video và 100 khung/giây chỉ
+là ước lượng phần cập nhật mô hình với dữ liệu đã nạp.
+
+Mở [notebook mở rộng](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Expanded.ipynb)
+và chạy cell 1–4 trên A100. Có thể chạy cell 1–3 trên CPU rồi chuyển
+sang GPU và chạy lại cell 1–4 để dùng cache. Tập lấy 40 video Train từ
+8 người và 30 video Dev từ 6 người, tách người giữa hai tập. Mỗi người
+có đủ năm loại video từ điện thoại 1, phiên 1. Mỗi video dùng tám
+khung, tổng 560 khung. Cell 3 dùng lại 48 khung có sẵn khi khớp cấu hình,
+lưu từng video hoàn tất lên `expanded-cache` và báo số video đã xử
+lý, thời gian, ETA khi có thể. Nếu một video thiếu khung, cell tiếp
+tục lưu các video xử lý được rồi ghi tên video lỗi trong
+`preparation.json` để kiểm tra và chạy tiếp.
+
+Cell 4 train 10 epoch FP32 với batch 32, mỗi epoch đọc một khung mỗi
+video và cập nhật hai lần. Checkpoint cuối, điểm video, chỉ số và thời
+gian Dev được ghi trong `expanded-runs` trên Drive. Mẫu này dùng để đo
+luồng đọc, huấn luyện và chấm trước khi lên đủ Protocol 1.
