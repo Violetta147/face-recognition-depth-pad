@@ -230,7 +230,7 @@ E2 không thay đổi bất kỳ quyết định nào so với E1 ở seed 42, n
 
 E1/E3 khác ngân sách huấn luyện và weight decay nên chưa cô lập tác dụng head. Đối chứng loss và chiến lược E3/E3b/E4 mới có seed 42, còn thống kê ba seed chỉ thuộc cặp E1/E3. Validation có bốn người và 48 video, test development đã được quan sát nhiều vòng. Khóa ngưỡng trên validation không loại bỏ ảnh hưởng của quá trình phát triển đã biết test. Nghiên cứu chưa có tập xác nhận mới, đánh giá cross-dataset của các cấu hình nhóm hoặc thử mask 3D.
 
-Pseudo-depth có sai số ước lượng; zero map attack là mục tiêu học, không phải độ sâu vật lý. Các case chọn có chủ đích và hình CPU chưa khớp CUDA theo tolerance ban đầu. Webcam dùng CPU, trung vị năm frame và ít cảnh khai báo, khác benchmark dùng trung bình 20 frame; detector bỏ lỡ mặt và các cửa sổ live đều bị từ chối. Print và chu trình quay lại đủ cửa sổ chưa hoàn tất. Nhận diện danh tính chưa được tích hợp. Bằng chứng hiện có chưa xác nhận hiệu quả bảo mật hoặc tốc độ thời gian thực của toàn hệ thống.
+Pseudo-depth có sai số ước lượng; zero map attack là mục tiêu học, không phải độ sâu vật lý. Các case chọn có chủ đích và hình CPU chưa khớp CUDA theo tolerance ban đầu. Webcam dùng CPU, trung vị năm frame và ít cảnh khai báo, khác benchmark dùng trung bình 20 frame; detector bỏ lỡ mặt và các cửa sổ live đều bị từ chối. Print và chu trình quay lại đủ cửa sổ chưa hoàn tất. Các lượt thử này chưa xác nhận nguyên mẫu PAD xử lý thời gian thực đáng tin cậy trên cấu hình CPU đã đo.
 
 ## 7 Kết luận
 

@@ -4,6 +4,8 @@ Cập nhật: 24/10/2026. Làm việc tại thư mục gốc của repository đ
 Không cần bản sao bàn giao, lịch sử chat hoặc prompt đặc biệt. Chỉ đọc nguồn
 cần cho tác vụ. Bàn giao ghi trạng thái công việc, không cấp quyền mới.
 
+**Phạm vi cập nhật 14/11/2026.** Dự án nghiên cứu Face PAD. Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](../reviews/defense_readthrough_20261114/QUYET_DINH.md).
+
 ## 1. Bắt đầu phiên
 
 1. Đọc `AGENTS.md`. Kiểm `git status`, nhánh và commit.
@@ -99,7 +101,7 @@ Khi cần người vận hành: hướng dẫn từng cảnh, xác nhận cảnh
 khi chạy. Cửa sổ READY chờ Space. Mỗi lượt dùng output mới. Nếu thay frontend,
 chốt config trước lượt đo và ghi thay đổi; không đổi threshold benchmark để
 demo nhận live. Người dùng có webcam laptop và điện thoại, chưa có giấy in.
-ArcFace chưa làm và là tùy chọn. Không bắt buộc mở nghiên cứu hoặc train mới
+Không bắt buộc mở nghiên cứu hoặc train mới
 để sửa demo. Sai khác CPU/CUDA có thể giữ là giới hạn chưa giải quyết.
 
 ## 5. Lượt 8: báo cáo và paper đã hoàn thành

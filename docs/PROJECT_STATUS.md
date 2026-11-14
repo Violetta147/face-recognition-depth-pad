@@ -5,6 +5,10 @@ từ bằng chứng đến Lượt 7. Phiên hiện tại chỉ cập nhật bà
 webcam, slide hoặc train mới. Những phần còn lại của kế hoạch tám lượt dưới
 đây là trạng thái công việc, không phải quyền tự thực hiện trong phiên sau.
 
+## 1. Phạm vi dự án
+
+Từ 14/11/2026, DeepFace-PAD nghiên cứu phát hiện tấn công trình diện khuôn mặt (Face PAD). Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](reviews/defense_readthrough_20261114/QUYET_DINH.md).
+
 ## 2. Thuật ngữ
 
 | Thuật ngữ | Nghĩa dùng trong dự án |
@@ -182,7 +186,6 @@ phiên tài liệu. Không coi hoàn thành tài liệu là hoàn thành toàn b
 | Hoàn tất demo PAD | Mục 10, Lượt 7 | Bổ sung print thật; kiểm quay lại đủ 5 frame; kiểm detector/crop và lỗi từ chối live; có video/log/FPS/TTD, báo đúng lỗi còn tồn tại. |
 | Hoàn thiện slide và tập báo cáo | Mục 11, Lượt 8 | Bảng/hình có nguồn, script, Q&A, video dự phòng; cả hai hiểu dữ liệu/model/metric. |
 | Kiểm yêu cầu học phần và đóng góp | Mục 13, 14, 19 | Đúng định dạng, ghi đúng phần việc thực tế và trạng thái nộp. |
-| ArcFace, tùy chọn | Mục 10, chỉ nếu còn thời gian | Chỉ làm khi nhóm chọn; không phải điều kiện bắt buộc. |
 
 Kiểm detector/crop và giải thích lỗi live phục vụ demo hiện có. Không bắt buộc
 mở nghiên cứu domain, thu tập calibration, đổi threshold benchmark hoặc train

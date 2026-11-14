@@ -1,6 +1,6 @@
-# Đặc tả nghiên cứu tinh gọn về nhận diện khuôn mặt có chống giả mạo bằng bản đồ độ sâu
+# Đặc tả nghiên cứu chống giả mạo khuôn mặt bằng bản đồ độ sâu
 
-**Tên tiếng Anh:** A Lean Experimental Study of Real Time Face Recognition with Depth Supervised Presentation Attack Detection  
+**Tên tiếng Anh:** An Experimental Study of Depth Supervised Face Presentation Attack Detection\
 **Loại đề tài:** Đồ án nghiên cứu môn Computer Vision  
 **Quy mô nhóm:** 2 thành viên  
 **Định hướng:** Tái lập, cải tiến nhỏ, thí nghiệm, đánh giá và chuẩn bị bản thảo paper  
@@ -19,7 +19,7 @@ bên dưới không thay thế trạng thái và bằng chứng hiện hành nà
 
 ## 1. Quyết định phạm vi
 
-Đây là một **lean research project**, không phải dự án xây sản phẩm nhận diện khuôn mặt hoàn chỉnh.
+DeepFace-PAD nghiên cứu phát hiện tấn công trình diện khuôn mặt (Face PAD). Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng.
 
 Trọng tâm nghiên cứu là **Presentation Attack Detection bằng depth supervision trên ảnh RGB**. Nhóm sẽ:
 
@@ -29,9 +29,9 @@ Trọng tâm nghiên cứu là **Presentation Attack Detection bằng depth supe
 4. Thực hiện ablation để biết thành phần nào tạo ra thay đổi.
 5. Đánh giá bằng protocol và metric tương tự các bài báo.
 6. Đặt kết quả cạnh các công trình gần nhất với điều kiện so sánh được giải thích rõ.
-7. Ghép mô hình tốt nhất với ArcFace và webcam để tạo demo cuối.
+7. Thử nguyên mẫu Face PAD trên webcam và ghi lại quyết định, tốc độ xử lý và các trường hợp lỗi.
 
-Phần face recognition chỉ chứng minh PAD có thể bảo vệ một pipeline nhận diện. Nhóm không nghiên cứu detector mới, không huấn luyện ArcFace từ đầu, không xây web app, không triển khai cloud và không tối ưu cho doanh nghiệp.
+Nguyên mẫu dùng bộ phát hiện khuôn mặt có sẵn để cắt vùng ảnh đầu vào cho PAD.
 
 ### Kết quả cuối mong muốn
 
@@ -113,7 +113,7 @@ Nhóm không tuyên bố một phương pháp hoàn toàn mới trước khi là
 3. **Ablation:** tách ảnh hưởng của classification head, loại loss và staged training.
 4. **Evaluation:** so sánh độ chính xác, cân bằng hai loại lỗi và chi phí tính toán.
 5. **Reproducibility:** công bố config, split, seed, raw score và script tính metric trong phạm vi giấy phép dữ liệu.
-6. **Integration demo:** dùng mô hình tốt nhất chặn ảnh in hoặc replay trước khi ArcFace công bố danh tính.
+6. **Thử webcam:** ghi nhận hành vi của mô hình PAD trước người thật, ảnh in và video phát lại.
 
 ### Tên tạm của phương pháp
 
@@ -148,7 +148,7 @@ Chỉ bắt đầu viết claim mạnh khi có đủ:
 
 ### 5.2 Không làm trong phạm vi chính
 
-- Huấn luyện face detector hoặc ArcFace.
+- Huấn luyện bộ phát hiện khuôn mặt mới.
 - Nhiều dataset bắt buộc.
 - Mobile app, web app, database server, API hoặc cloud.
 - Multi-face tracking phức tạp.
@@ -470,29 +470,28 @@ Mọi ô kết quả từ paper phải được chép từ đúng bảng và ki�
 
 ---
 
-## 11. Nhận diện khuôn mặt và demo cuối
+## 11. Nguyên mẫu Face PAD trên webcam
 
 ### 11.1 Vai trò
 
-Recognition là lớp minh họa. Chỉ triển khai sau khi E1 và ít nhất một cấu hình M1 chạy được.
+Nguyên mẫu minh họa quyết định PAD trên webcam. Kết quả giúp nhận diện giới hạn của bộ phát hiện mặt, mô hình PAD và cách tổng hợp điểm theo thời gian.
 
 ### 11.2 Pipeline tối giản
 
 ```mermaid
 flowchart LR
-    A[Webcam] --> B[SCRFD hoặc RetinaFace]
+    A[Webcam] --> B[Phát hiện khuôn mặt]
     B --> C[Face crop]
     C --> D[PAD model tốt nhất]
-    D --> E{Video score}
-    E -->|Spoof| F[Hiển thị SPOOF]
-    E -->|Live| G[ArcFace]
-    G --> H[Cosine match]
-    H --> I[Known hoặc Unknown]
+    D --> E{Đủ cửa sổ điểm?}
+    E -->|Chưa đủ| J[Đang thu thập]
+    E -->|Đủ| K{Trung vị điểm đạt ngưỡng?}
+    K -->|Không| F[Hiển thị ATTACK]
+    K -->|Có| G[Hiển thị LIVE]
 ```
 
 ### 11.3 Giới hạn triển khai
 
-- Gallery 2 đến 5 người.
 - Một mặt trong frame.
 - Score smoothing bằng median window đơn giản.
 - UI OpenCV.
@@ -670,7 +669,7 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 - [ ] Có params, latency và FPS.
 - [ ] Có ablation và error analysis.
 - [ ] Có bảng paper comparison ghi rõ mức tương thích.
-- [ ] Demo ArcFace chỉ chạy sau PAD.
+- [ ] Nguyên mẫu webcam hiển thị quyết định PAD khi đủ dữ liệu.
 - [ ] Có paper draft hoặc báo cáo theo cấu trúc paper.
 - [ ] Không có claim vượt quá dữ liệu.
 
@@ -687,7 +686,7 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 | Focal Loss không giúp | Giữ như negative ablation |
 | Depth head không giúp | Phân tích score overlap và depth quality; không thêm model tùy tiện |
 | Demo webcam khác domain | Trình bày như demo định tính, không gộp với benchmark |
-| Trễ lịch | Bỏ E0 hoặc demo recognition trước; không bỏ E1, M1, metric và ablation |
+| Trễ lịch | Hoãn E0 hoặc phần cải tiến demo webcam trước; không bỏ E1, M1, metric và ablation |
 
 ### Thứ tự giữ lại khi phải cắt giảm
 
@@ -698,8 +697,7 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 5. Nhiều seed.
 6. Paper comparison.
 7. Webcam PAD demo.
-8. ArcFace integration.
-9. Cross-dataset và ONNX.
+8. Cross-dataset và ONNX.
 
 ---
 
@@ -712,8 +710,7 @@ Nếu không có improvement ổn định, nhóm vẫn viết báo cáo nghiên 
 5. Yu, Z. và cộng sự. **Dual-Cross Central Difference Network for Face Anti-Spoofing**, IJCAI 2021. <https://www.ijcai.org/proceedings/2021/177>
 6. Yu, Z. và cộng sự. **Deep Learning for Face Anti-Spoofing A Survey**, IEEE TPAMI. <https://github.com/ZitongYu/DeepFAS>
 7. Guo, J. và cộng sự. **3DDFA V2**, ECCV 2020. <https://github.com/cleardusk/3DDFA_V2>
-8. Deng, J. và cộng sự. **ArcFace**, CVPR 2019. <https://openaccess.thecvf.com/content_CVPR_2019/html/Deng_ArcFace_Additive_Angular_Margin_Loss_for_Deep_Face_Recognition_CVPR_2019_paper.html>
-9. ISO IEC 30107-3:2023. **Biometric Presentation Attack Detection Testing and Reporting**. <https://www.iso.org/standard/79520.html>
+8. ISO IEC 30107-3:2023. **Biometric Presentation Attack Detection Testing and Reporting**. <https://www.iso.org/standard/79520.html>
 
 ---
 

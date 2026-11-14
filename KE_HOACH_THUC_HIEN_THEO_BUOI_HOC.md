@@ -1,6 +1,6 @@
 # Kế hoạch nghiên cứu và báo cáo luân phiên cho nhóm hai người
 
-**Đề tài:** Real Time Face Recognition with Depth Supervised Presentation Attack Detection  
+**Đề tài:** DeepFace-PAD — phát hiện tấn công trình diện khuôn mặt bằng giám sát độ sâu\
 **Quy mô:** 2 thành viên  
 **Số lượt chuẩn:** 8 lượt báo cáo  
 **Mục tiêu:** Mỗi lượt có tiến bộ nghiên cứu quan sát được và tích lũy trực tiếp cho báo cáo giữa kỳ hoặc paper  
@@ -87,7 +87,6 @@ Thứ tự ưu tiên của nhóm:
 5. So sánh với paper.
 6. Error analysis.
 7. Webcam demo.
-8. ArcFace integration.
 
 Không làm web app, mobile app hoặc giao diện cầu kỳ trước khi hoàn thành mục 1 đến 6.
 
@@ -611,7 +610,6 @@ Giải thích model tốt và kém ở đâu, sau đó đưa model tốt nhất 
 - Tích hợp face detector và model tốt nhất vào webcam.
 - Thêm median score window.
 - Đo FPS và time to decision.
-- Nếu còn thời gian, ghép ArcFace pretrained.
 
 ### Demo
 
@@ -619,7 +617,6 @@ Giải thích model tốt và kém ở đâu, sau đó đưa model tốt nhất 
 2. Print attack.
 3. Replay attack.
 4. Một failure case nếu có thể tái hiện.
-5. ArcFace chỉ công bố identity khi PAD live, nếu phần này đã hoàn tất.
 
 ### Câu hỏi học thuật phải trả lời
 
@@ -809,7 +806,7 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 | Hết lượt 1 chưa chốt dataset | Chuyển sang phương án thay thế |
 | Hết lượt 2 chưa có metric đúng | Dừng model mới, sửa evaluator |
 | Hết lượt 3 chưa có CDCN score | Giảm dữ liệu debug, hoàn thành E1 trước |
-| Hết lượt 4 chưa có E2 | Bỏ UI và recognition, tập trung depth head |
+| Hết lượt 4 chưa có E2 | Hoãn cải tiến giao diện, tập trung bộ phân loại độ sâu |
 | Hết lượt 5 chưa có ablation | Không thêm augmentation hoặc model mới |
 | Hết lượt 6 chưa có nhiều seed | Dừng mọi phần mở rộng |
 | Hết lượt 7 chưa có paper table | Chia một người viết, một người khóa artifact |
@@ -818,9 +815,8 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 
 1. Cross-dataset.
 2. ONNX.
-3. ArcFace demo.
-4. MobileNetV3 E0 nếu CDCN đã tái lập tốt.
-5. Focal Loss nếu không còn thời gian tách biến.
+3. MobileNetV3 E0 nếu CDCN đã tái lập tốt.
+4. Focal Loss nếu không còn thời gian tách biến.
 
 ### Những thứ không được cắt
 
@@ -848,7 +844,7 @@ Phân biệt yêu cầu bắt buộc với gợi ý mở rộng. Gợi ý mở r
 - [x] Có params/latency E1/E2 sơ bộ; Lượt 6 bổ sung đo lặp có kiểm soát E1/E3/E4 trên A100.
 - [x] Có error analysis official E1 theo attack type, quality và failure video.
 - [x] Có bảng đối chiếu CDCN, UCDCN, CASO-PAD và kết quả nhóm, phân biệt protocol không so trực tiếp.
-- [ ] Có demo PAD; ArcFace là phần cộng thêm.
+- [ ] Có nguyên mẫu webcam minh họa quyết định PAD.
 - [ ] Có technical report hoặc paper draft.
 - [ ] Claim cuối không vượt quá protocol và attack đã thử.
 

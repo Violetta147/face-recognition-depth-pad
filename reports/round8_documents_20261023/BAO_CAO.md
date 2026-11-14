@@ -2,7 +2,7 @@
 
 Học phần THỊ GIÁC MÁY TÍNH
 
-## Hệ thống nhận diện khuôn mặt thời gian thực tích hợp chống giả mạo dựa trên bản đồ độ sâu
+## Đánh giá nhánh phân loại trên bản đồ độ sâu của CDCN cho bài toán chống giả mạo khuôn mặt
 
 Trường Đại học Bách khoa, Đại học Đà Nẵng
 
@@ -54,9 +54,9 @@ Từ khóa: Face anti-spoofing; Presentation attack detection; Central differenc
 
 ## 1.1 Bối cảnh và bài toán chống giả mạo
 
-Một hệ thống xác thực sinh trắc học khuôn mặt hoàn chỉnh cần giải quyết đồng thời hai bài toán cốt lõi: xác định xem đối tượng xuất hiện trước camera là người thật (live/bona fide) hay không, và nếu là người thật thì danh tính của người đó là ai. Bài toán phát hiện tấn công trình diện (PAD) giải quyết câu hỏi thứ nhất, trong khi bài toán nhận diện khuôn mặt (Face Recognition) giải quyết câu hỏi thứ hai. Trong thực tế, một bức ảnh in trên giấy hoặc một đoạn video phát lại trên màn hình vẫn mang đầy đủ các đặc trưng hình thái của đúng chủ thể hợp lệ nhưng bản chất lại là một hành vi giả mạo. Do đó, kết quả nhận diện đúng danh tính không đồng nghĩa với việc mẫu thu nhận được là người thật.
+Trong xác thực sinh trắc học khuôn mặt, ảnh in hoặc video phát lại có thể mang hình ảnh của người dùng hợp lệ. Phát hiện tấn công trình diện (Presentation Attack Detection, PAD) giúp phân biệt một lần trình diện thật trước camera với các kiểu tấn công như vậy.
 
-Trọng tâm thực nghiệm của báo cáo này tập trung giải quyết bài toán PAD từ ảnh màu RGB (gồm ba kênh màu Đỏ, Lục và Lam). Mô hình nhận đầu vào là từng khung hình để dự đoán điểm số người thật (liveness score), sau đó tổng hợp điểm số trung bình trên toàn video để đưa ra quyết định phân loại cuối cùng. Trong khuôn khổ hiện tại, nhóm tập trung xây dựng và đánh giá chuyên sâu mô-đun chống giả mạo dựa trên bản đồ độ sâu; nhánh nhận diện danh tính chưa được tích hợp. Các lượt webcam thăm dò đã có được sử dụng để đánh giá giới hạn của nguyên mẫu PAD, chưa xác nhận khả năng xử lý thời gian thực đáng tin cậy.
+Nghiên cứu đánh giá Face PAD từ ảnh màu RGB. Mô hình nhận đầu vào là từng khung hình để dự đoán điểm số người thật (liveness score), sau đó lấy trung bình điểm của 20 khung hình được lấy mẫu để phân loại video. Các lượt webcam thăm dò đã có được sử dụng để đánh giá giới hạn của nguyên mẫu PAD, chưa xác nhận khả năng xử lý thời gian thực đáng tin cậy.
 
 ## 1.2 Động cơ sử dụng bản đồ độ sâu
 
@@ -521,7 +521,7 @@ Về dữ liệu, validation chỉ có bốn chủ thể, 48 video; tập test d
 
 Về biểu diễn và số học, pseudo-depth không phải độ sâu đo thật; gán zero map cho attack là quy ước học. Hình CPU chưa khớp score CUDA theo tolerance ban đầu. Các trường hợp minh họa được chọn có chủ đích nên không đại diện cho phân bố lỗi toàn tập. Nhãn quality không định lượng blur hoặc ánh sáng, vì thế chưa thể dùng để xác lập cơ chế gây lỗi.
 
-Về triển khai, phép đo A100 tách khỏi frontend và chỉ ở một phiên, float32, batch 1. Webcam là nguyên mẫu trên CPU với ít cảnh do người vận hành khai báo; detector còn bỏ lỡ mặt, mọi cửa sổ live đủ dữ liệu đều bị từ chối. Cảnh print và chu trình quay lại đủ cửa sổ chưa hoàn tất. Nhận diện danh tính chưa được tích hợp, nên phạm vi tên đề tài rộng hơn phần chức năng đã được thực nghiệm xác nhận.
+Về triển khai, phép đo A100 tách khỏi frontend và chỉ ở một phiên, float32, batch 1. Webcam là nguyên mẫu trên CPU với ít cảnh do người vận hành khai báo; detector còn bỏ lỡ mặt, mọi cửa sổ live đủ dữ liệu đều bị từ chối. Cảnh print và chu trình quay lại đủ cửa sổ chưa hoàn tất. Các lượt thử này chưa xác nhận nguyên mẫu PAD xử lý thời gian thực đáng tin cậy trên cấu hình CPU đã đo.
 
 
 # Kết luận và hướng phát triển
