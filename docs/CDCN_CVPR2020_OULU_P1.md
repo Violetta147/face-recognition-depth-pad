@@ -64,5 +64,45 @@ crop, cách tính điểm khung hoặc lịch huấn luyện. Có thể kiểm l
    ngưỡng từ Dev trước khi chấm Test. Báo APCER/BPCER/ACER của evaluator
    công khai và đếm video lỗi. So với dòng CDCN 1,0% trong Bảng 4.
 
-Ở thời điểm này đã đối chiếu nguồn và chạy lại bước tính chỉ số. Chưa
-chạy training hoặc chấm điểm khung theo pipeline CDCN gốc.
+## Chạy thử tiền xử lý MTCNN và PRNet
+
+Mở [notebook Colab](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Smoke.ipynb),
+chọn runtime CPU rồi chạy bốn cell theo thứ tự. Cell đầu mặc định đọc bộ
+OULU-NPU trong `MyDrive/face-pad/datasets/OULU-NPU`. Lượt mặc định lấy
+ba video mỗi tập Train và Dev của Protocol 1 từ điện thoại 1, phiên 1.
+Mỗi tập lấy một video thật, một ảnh in và một video phát lại. Mỗi video
+lấy ba vị trí trong tám vị trí theo bước lấy mẫu Dev của loader công khai.
+`WIDE_SAMPLE=True` thêm ba video mỗi tập từ điện thoại 4, phiên 2.
+Đọc trực tiếp TAR trên Drive có thể lâu khi video nằm sâu trong archive.
+
+Notebook lưu log, `smoke_summary.json`, mã nguồn đi kèm và ZIP chứa ảnh
+scene, hộp mặt `.dat` và depth JPEG vào thư mục riêng dưới
+`MyDrive/face-pad/cdcn-prnet-smoke-p1`. Log báo mỗi video hoàn tất và
+nhắc định kỳ khi đọc TAR hoặc dựng depth. Mã CLI giữ từng khung hoàn tất
+trong `frames.jsonl` để kiểm tra nếu lượt chạy bị ngắt.
+
+Đây là cấu hình tiền xử lý dựng từ nguồn công khai. MTCNN lấy hộp mặt
+lớn nhất. PRNet dùng checkpoint của tác giả PRNet. Hàm dựng depth dùng
+mã từ công trình liên quan của Wang và cộng sự với tùy chọn lọc trung vị.
+Mẫu giữ map PRNet có giá trị dương cho cả video thật và video giả vì
+loader Dev dùng tổng map khi tính điểm khung. Target train bằng 0 cho
+video giả được ghi trong manifest. Điểm khác biệt cần xác minh là cách
+chọn bbox, thiết lập lọc và phân bố giá trị map trong chính bộ dữ liệu
+tiền xử lý của CDCN. [PRNet](https://github.com/yfeng95/PRNet) ·
+[Mã dựng depth](https://github.com/clks-wzz/PRNet-Depth-Generation) ·
+[Loader Dev của CDCN](https://github.com/ZitongYu/CDCN/blob/fd8370e8f32bdd090a3552f5a1fe4c301fa99f2b/CVPR2020_paper_codes/Load_OULUNPU_valtest.py).
+
+Ảnh mẫu công khai của PRNet đã cho bbox hợp lệ và map có 47.136 pixel
+khác 0, giá trị lớn nhất 254. Lượt CPU trên Windows ngày 14/11/2026 đã
+xử lý đủ 18 khung từ sáu video OULU gốc, 9 khung mỗi tập Train và Dev.
+Đọc lại JPEG và bbox của cả 18 khung cho thấy map 32 × 32 có tổng từ
+95.545 đến 123.007. Một khung cần tính lại tổng vì làm tròn tọa độ crop
+lệch một pixel. Mã hiện dùng đúng thứ tự phép tính của loader công khai.
+ZIP đã đọc kiểm tra và lưu ở
+`MyDrive/face-pad/cdcn-prnet-smoke-p1/windows-20261114-p1/oulu-18-frame-smoke.zip`
+cùng JSON và log. SHA-256 của ZIP là
+`d59685c21cb1624b4a002b10bb741c33513a7c4e0eeb9bff6e2e3ec6787e3074`.
+
+Script này mới kiểm tiền xử lý. Mốc ACER 1,0% chỉ đánh giá được sau khi
+train CDCN, chọn checkpoint và ngưỡng trên Dev rồi chấm Test theo quy
+trình đã nêu.
