@@ -4,6 +4,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+try:
+    from colab_progress_source import progress_source
+except ModuleNotFoundError:
+    from scripts.colab_progress_source import progress_source
+
 CPU_TESTS = ["tests/test_cost.py", "tests/test_cost_notebook.py", "tests/test_official_depth_head.py"]
 
 
@@ -27,11 +32,13 @@ drive.mount("/content/drive")
 import hashlib, importlib, json, os, shutil, subprocess, sys, zipfile
 from pathlib import Path
 DRIVE_ROOT = Path("/content/drive/MyDrive/face-pad")
+''' + progress_source() + '''
 REPO_ROOT = Path("/content/round6-cost-source/DeepFace-PAD")
 archive = Path("/content/DeepFace-PAD-Round6-cost-source.zip")
 drive_archive = DRIVE_ROOT / "handoffs/round6-cost-20261022" / archive.name
 if not archive.exists() and drive_archive.is_file():
-    shutil.copy2(drive_archive, archive)
+    with Progress("Copy benchmark source ZIP"):
+        shutil.copy2(drive_archive, archive)
 if not archive.exists():
     print("Upload DeepFace-PAD-Round6-cost-source.zip được giao cùng notebook này.")
     files.upload()
@@ -44,20 +51,21 @@ with zipfile.ZipFile(archive) as z:
         for entry in z.infolist():
             assert (parent / entry.filename).resolve().is_relative_to(parent)
             assert (entry.external_attr >> 16) & 0o170000 != 0o120000
-        z.extractall(parent)
+        with Progress("Extract benchmark source"):
+            z.extractall(parent)
 lock = json.loads((REPO_ROOT / "SOURCE_LOCK.json").read_text())
 assert all(hashlib.sha256((REPO_ROOT / p).read_bytes()).hexdigest()==h for p,h in lock["files"].items())
 SOURCE_COMMIT = (REPO_ROOT / "SOURCE_COMMIT.txt").read_text().strip()
 assert SOURCE_COMMIT == lock["commit"] and len(SOURCE_COMMIT)==40
-subprocess.run([sys.executable,"-m","pip","install","-q","-e",".[dev]"],cwd=REPO_ROOT,check=True)
+notebook_run([sys.executable,"-m","pip","install","-q","-e",".[dev]"],cwd=REPO_ROOT)
 os.chdir(REPO_ROOT)
 sys.path.insert(0,str(REPO_ROOT / "src"))
 importlib.invalidate_caches()
 print("Cost source:", SOURCE_COMMIT)
 '''),cell("code",'''#@title 0.2 Tests CPU và GPU thực tế
 CPU_TESTS = '''+repr(CPU_TESTS)+'''
-subprocess.run([sys.executable,"-m","pytest","-q",*CPU_TESTS],cwd=REPO_ROOT,
-    env=dict(os.environ,CUDA_VISIBLE_DEVICES="",OMP_NUM_THREADS="2",MKL_NUM_THREADS="2"),check=True)
+notebook_run([sys.executable,"-m","pytest","-q",*CPU_TESTS],cwd=REPO_ROOT,
+    env=dict(os.environ,CUDA_VISIBLE_DEVICES="",OMP_NUM_THREADS="2",MKL_NUM_THREADS="2"))
 import torch
 assert torch.cuda.is_available() and "A100" in torch.cuda.get_device_name(0), "Chọn A100 GPU rồi chạy lại setup"
 print("GPU:",torch.cuda.get_device_name(0),"torch:",torch.__version__,"CUDA:",torch.version.cuda)
@@ -67,7 +75,8 @@ from IPython.display import display
 from deepface_pad.cost import prepare, run_cost
 BLOCK_ID = "a100-01"
 OUTPUT_DIR = DRIVE_ROOT / "reports" / f"round6-cost-{SOURCE_COMMIT[:12]}" / BLOCK_ID
-registration, cpu_models, cpu_inputs = prepare(REPO_ROOT, DRIVE_ROOT, OUTPUT_DIR)
+with Progress("Verify cost benchmark inputs"):
+    registration, cpu_models, cpu_inputs = prepare(REPO_ROOT, DRIVE_ROOT, OUTPUT_DIR)
 display(pd.DataFrame([{"model":key,"seed":value["seed"],"params":value["params"],
     "state_bytes":value["state_bytes_including_buffers"],"checkpoint_bytes":value["checkpoint_file_bytes"]}
     for key,value in registration["models"].items()]))
@@ -80,7 +89,8 @@ del cpu_models, cpu_inputs
 print("DỪNG: gửi output này cho Codex; chưa mở cổng đo. Giữ nguyên BLOCK_ID.")
 '''),cell("code",'''#@title 2.1 Cổng đo forward — chỉ mở sau khi preflight đã được kiểm
 RUN_BENCHMARK = False
-results = run_cost(REPO_ROOT, DRIVE_ROOT, OUTPUT_DIR, allow_benchmark=RUN_BENCHMARK)
+with Progress("Measure model cost"):
+    results = run_cost(REPO_ROOT, DRIVE_ROOT, OUTPUT_DIR, allow_benchmark=RUN_BENCHMARK)
 rows=[]
 for key, stats in results["summary"]["pooled"].items():
     rows.append({"model":key,"params":results["models"][key]["params"],

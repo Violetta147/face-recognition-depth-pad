@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 from pathlib import Path
+from colab_progress_source import progress_source
 
 
 def markdown(source: str) -> dict:
@@ -61,15 +62,16 @@ E1_RUN = RUNS_DIR / "CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z"
 for directory in (RUNS_DIR, REPORTS_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-def run(command, cwd=None):
-    subprocess.run([str(item) for item in command], cwd=str(cwd) if cwd else None, check=True)
+''' + progress_source() + '''
+run = notebook_run
 '''), code('''#@title 0.2 Nạp source đã commit từ ZIP và chạy tests
 archive = Path("/content/DeepFace-PAD-Round4-source.zip")
 if not archive.is_file():
     print("Upload DeepFace-PAD-Round4-source.zip vừa được cung cấp cùng notebook.")
     uploaded = files.upload()
     assert archive.is_file(), "Thiếu đúng file DeepFace-PAD-Round4-source.zip"
-shutil.unpack_archive(str(archive), "/content/round4-source")
+with Progress("Extract Round 4 source"):
+    shutil.unpack_archive(str(archive), "/content/round4-source")
 assert (REPO_ROOT / "src/deepface_pad/models/cdcn_depth_head.py").is_file()
 run([sys.executable, "-m", "pip", "install", "-q", "-e", ".[dev]"], cwd=REPO_ROOT)
 sys.path.insert(0, str(REPO_ROOT / "src"))

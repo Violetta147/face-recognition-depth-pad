@@ -7,6 +7,7 @@ import random
 import shutil
 import sys
 import time
+from contextlib import nullcontext
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -27,6 +28,8 @@ from .models import (
     OfficialCDCNWithDepthHead,
 )
 from .preflight import inspect_training_inputs
+from .oulu_metrics import attach_attack_types, oulu_metrics
+from .progress import Progress
 
 
 def seed_everything(seed: int) -> None:
@@ -112,10 +115,12 @@ def _selection_loss(metric: str, output: dict[str, torch.Tensor],
 @torch.no_grad()
 def score_loader(model: nn.Module, loader: DataLoader, device: torch.device) -> pd.DataFrame:
     model.eval(); rows = []
-    for batch in loader:
-        output = model(batch["image"].to(device))
-        score = torch.sigmoid(output["logit"]) if "logit" in output else output["score"]
-        rows.extend({"sample_id": s, "video_id": v, "label": int(y), "score": float(z)} for s, v, y, z in zip(batch["sample_id"], batch["video_id"], batch["label"], score.cpu()))
+    with Progress("Score frames", len(loader), "batches") as progress:
+        for number, batch in enumerate(loader, 1):
+            output = model(batch["image"].to(device))
+            score = torch.sigmoid(output["logit"]) if "logit" in output else output["score"]
+            rows.extend({"sample_id": s, "video_id": v, "label": int(y), "score": float(z)} for s, v, y, z in zip(batch["sample_id"], batch["video_id"], batch["label"], score.cpu()))
+            progress.update(number)
     return pd.DataFrame(rows)
 
 
@@ -135,7 +140,8 @@ def run(config_path: str | Path) -> Path:
             raise ValueError("Round 6 configuration differs from registration or is already frozen")
         round6_binding = {"registration_sha256": manifest_checksum(batch.registration_path),
                           "environment": environment()}
-    require_depth, depth_snapshot = inspect_training_inputs(config)
+    with Progress("Check training inputs"):
+        require_depth, depth_snapshot = inspect_training_inputs(config)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     run_id = f'{config["experiment_id"]}_seed{config["seed"]}_{datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")}'
     run_dir = Path(config.get("runs_dir", "runs")) / run_id; run_dir.mkdir(parents=True)
@@ -168,8 +174,32 @@ def run(config_path: str | Path) -> Path:
         )
         for split in ("train", "val")
     }
-    loaders = {split: DataLoader(ds, batch_size=config["training"].get("batch_size", 16), shuffle=split == "train", num_workers=config["training"].get("workers", 0)) for split, ds in datasets.items()}
-    model = build_model(config).to(device); history = []
+    training = config["training"]
+    oulu = config["evaluation"].get("protocol") == "oulu_npu"
+    workers = training.get("workers", 0)
+    batch_size = training.get("batch_size", 16)
+    fast_io = oulu and device.type == "cuda"
+    precision = training.get("precision", "fp32")
+    if precision not in {"fp32", "bf16"}:
+        raise ValueError(f"unknown precision: {precision}")
+    if precision == "bf16" and (device.type != "cuda" or not torch.cuda.is_bf16_supported()):
+        raise ValueError("bf16 training requires a CUDA GPU with bfloat16 support")
+    loaders = {
+        split: DataLoader(ds, batch_size=batch_size, shuffle=split == "train", num_workers=workers,
+                          pin_memory=fast_io, persistent_workers=fast_io and workers > 0)
+        for split, ds in datasets.items()
+    }
+    if oulu:
+        (run_dir / "runtime.json").write_text(json.dumps({
+            "gpu": torch.cuda.get_device_name() if device.type == "cuda" else None,
+            "gpu_memory_bytes": torch.cuda.get_device_properties(0).total_memory if fast_io else None,
+            "cuda": torch.version.cuda, "precision": precision,
+            "steps_per_epoch": len(loaders["train"]), "training_frames": len(datasets["train"]),
+            "validation_frames": len(datasets["val"]),
+        }, indent=2), encoding="utf-8")
+    with Progress("Load model and initial weights"):
+        model = build_model(config).to(device)
+    history = []
     stages = config["training"].get("stages")
     if stages is None:
         stages = [{"name": "joint", "epochs": config["training"]["epochs"], "lr": config["training"]["lr"]}]
@@ -187,8 +217,10 @@ def run(config_path: str | Path) -> Path:
     elif any(stage["name"] == "head" for stage in stages):
         raise ValueError("head-only training requires training.init_checkpoint from E1")
     selection_metric = config["training"].get("selection_metric", "val_loss")
-    if selection_metric not in {"val_loss", "classification_bce"}:
+    if selection_metric not in {"val_loss", "classification_bce", "oulu_video_acer"}:
         raise ValueError(f"unknown checkpoint selection metric: {selection_metric}")
+    if selection_metric == "oulu_video_acer" and not oulu:
+        raise ValueError("OULU video ACER selection requires evaluation.protocol=oulu_npu")
     selections = []
     for stage_index, stage in enumerate(stages, 1):
         # The objectives of depth, head and joint stages are different. Reset
@@ -215,27 +247,57 @@ def run(config_path: str | Path) -> Path:
             )
         for epoch in range(stage["epochs"]):
             epoch_started = time.perf_counter()
+            if fast_io:
+                torch.cuda.reset_peak_memory_stats()
             model.train(); losses = []
-            for batch in loaders["train"]:
-                optimizer.zero_grad(); output = model(batch["image"].to(device)); loss = _loss(config, output, batch, stage["name"]); loss.backward(); optimizer.step(); losses.append(loss.item())
-            model.eval(); val_losses = []; selection_losses = []
-            with torch.no_grad():
-                for batch in loaders["val"]:
-                    output = model(batch["image"].to(device))
+            if oulu and stage["name"] == "head":
+                model.backbone.eval()
+            label = f"{stage['name']} epoch {epoch + 1}/{stage['epochs']}"
+            with Progress(f"{label} train", len(loaders["train"]), "batches") as progress:
+                for number, batch in enumerate(loaders["train"], 1):
+                    optimizer.zero_grad()
+                    with torch.autocast("cuda", dtype=torch.bfloat16) if precision == "bf16" else nullcontext():
+                        output = model(batch["image"].to(device, non_blocking=fast_io))
+                    loss = _loss(config, {key: value.float() for key, value in output.items()}, batch, stage["name"])
+                    loss.backward()
+                    optimizer.step()
+                    losses.append(loss.detach())
+                    progress.update(number)
+            training_seconds = time.perf_counter() - epoch_started
+            model.eval(); val_losses = []; selection_losses = []; video_rows = []
+            use_acer = selection_metric == "oulu_video_acer" and (stage["name"] != "depth" or not hasattr(model, "head"))
+            with torch.no_grad(), Progress(f"{label} dev", len(loaders["val"]), "batches") as progress:
+                for number, batch in enumerate(loaders["val"], 1):
+                    output = model(batch["image"].to(device, non_blocking=fast_io))
                     objective = _loss(config, output, batch, stage["name"])
                     val_losses.append(objective.item())
+                    progress.update(number)
+                    if use_acer:
+                        scores = torch.sigmoid(output["logit"]) if "logit" in output else output["score"]
+                        video_rows.extend(zip(batch["video_id"], batch["label"].tolist(), scores.cpu().tolist()))
+                        continue
                     selection_losses.append(_selection_loss(
-                        selection_metric, output, batch, stage["name"], objective).item())
+                        "val_loss" if selection_metric == "oulu_video_acer" else selection_metric,
+                        output, batch, stage["name"], objective).item())
+            criterion = selection_metric if use_acer or stage["name"] != "depth" else "val_loss"
+            if use_acer:
+                val_frames = pd.DataFrame(video_rows, columns=["video_id", "label", "score"])
+                val_videos = aggregate_video_scores(val_frames, config["evaluation"].get("aggregation", "mean"))
+                selection_losses = [oulu_metrics(attach_attack_types(val_videos, datasets["val"].rows))["acer"]]
             row = {"stage": stage["name"], "epoch": epoch + 1,
-                   "train_loss": float(np.mean(losses)), "val_loss": float(np.mean(val_losses)),
+                   "train_loss": float(torch.stack(losses).double().mean().item()), "val_loss": float(np.mean(val_losses)),
                    "val_selection_loss": float(np.mean(selection_losses))}; history.append(row)
+            if oulu:
+                row.update(optimizer_steps=len(loaders["train"]), epoch_seconds=time.perf_counter() - epoch_started,
+                           train_seconds=training_seconds,
+                           peak_gpu_allocated_bytes=torch.cuda.max_memory_allocated() if fast_io else 0)
             if not np.isfinite([row["train_loss"], row["val_loss"], row["val_selection_loss"]]).all():
                 raise ValueError(f"non-finite loss in {stage['name']} epoch {epoch + 1}")
             if row["val_selection_loss"] < best:
                 best = row["val_selection_loss"]
                 torch.save({"model": model.state_dict(), "config": config,
                             "val_loss": row["val_loss"], "selection_value": best,
-                            "selection_metric": "val_loss" if stage["name"] == "depth" else selection_metric,
+                            "selection_metric": criterion,
                             "stage": stage["name"],
                             "stage_index": stage_index, "epoch": epoch + 1,
                             "global_epoch": len(history)}, stage_checkpoint)
@@ -273,7 +335,10 @@ def run(config_path: str | Path) -> Path:
     checkpoint = torch.load(run_dir / "best.ckpt", map_location=device, weights_only=False); model.load_state_dict(checkpoint["model"])
     frame_scores = score_loader(model, loaders["val"], device); frame_scores.to_csv(run_dir / "val_frame_scores.csv", index=False)
     video_scores = aggregate_video_scores(frame_scores, config["evaluation"].get("aggregation", "mean")); video_scores.to_csv(run_dir / "val_scores.csv", index=False)
-    metrics = evaluate_scores(video_scores.label.to_numpy(), video_scores.score.to_numpy()); payload = metrics.to_dict()
-    (run_dir / "threshold.json").write_text(json.dumps({"threshold": metrics.threshold, "source": "validation"}, indent=2), encoding="utf-8")
+    if oulu:
+        payload = oulu_metrics(attach_attack_types(video_scores, datasets["val"].rows))
+    else:
+        payload = evaluate_scores(video_scores.label.to_numpy(), video_scores.score.to_numpy()).to_dict()
+    (run_dir / "threshold.json").write_text(json.dumps({"threshold": payload["threshold"], "source": "validation"}, indent=2), encoding="utf-8")
     (run_dir / "metrics.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return run_dir

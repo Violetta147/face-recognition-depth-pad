@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from build_round4_colab import code, markdown
+from colab_progress_source import progress_source
 
 
 def build(root: Path) -> dict:
@@ -39,18 +40,20 @@ DEPTH_BACKUP = DRIVE_ROOT / "depth-checkpoints/casia-fasd"
 MANIFEST = REPO_ROOT / "data/manifests/casia_fasd_debug.csv"
 DEPTH_MANIFEST = REPO_ROOT / "data/manifests/casia_fasd_debug_with_depth.csv"
 E1_RUN = RUNS_DIR / "CASIA_E1_CDCN_OFFICIAL_seed42_20260921T114029Z"
-def run(command, cwd=None):
-    subprocess.run([str(item) for item in command], cwd=str(cwd) if cwd else None, check=True)
+''' + progress_source() + '''
+run = notebook_run
 '''), code('''#@title 0.2 Nạp source ZIP đã commit
 archive = Path("/content/DeepFace-PAD-Round5-source.zip")
 drive_archive = DRIVE_ROOT / "handoffs/round5-20261016/DeepFace-PAD-Round5-source.zip"
 if not archive.is_file() and drive_archive.is_file():
-    shutil.copy2(drive_archive, archive)
+    with Progress("Copy Round 5 source ZIP"):
+        shutil.copy2(drive_archive, archive)
 if not archive.is_file():
     print("Upload DeepFace-PAD-Round5-source.zip được cung cấp cùng notebook.")
     files.upload()
 assert archive.is_file(), "Thiếu đúng source ZIP; dừng và gửi thông báo này"
-shutil.unpack_archive(str(archive), "/content/round5-source")
+with Progress("Extract Round 5 source"):
+    shutil.unpack_archive(str(archive), "/content/round5-source")
 SOURCE_COMMIT = (REPO_ROOT / "SOURCE_COMMIT.txt").read_text().strip()
 assert len(SOURCE_COMMIT) == 40
 run([sys.executable, "-m", "pip", "install", "-q", "-e", ".[dev]"], cwd=REPO_ROOT)
@@ -68,11 +71,13 @@ if not looks_like_casia(DATA_ROOT):
     dataset_zip = DRIVE_ROOT / "casia-fasd.zip"
     assert dataset_zip.is_file(), "Thiếu face-pad/casia-fasd.zip; dừng, không tải dataset khác"
     DATA_ROOT.parent.mkdir(parents=True, exist_ok=True)
-    shutil.unpack_archive(str(dataset_zip), str(DATA_ROOT.parent))
+    with Progress("Extract CASIA RGB"):
+        shutil.unpack_archive(str(dataset_zip), str(DATA_ROOT.parent))
     if not looks_like_casia(DATA_ROOT):
         roots = [p.parent for p in DATA_ROOT.parent.rglob("train") if looks_like_casia(p.parent)]
         assert len(roots) == 1, f"Không xác định duy nhất CASIA root: {roots}"
-        shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
+        with Progress("Stage CASIA RGB"):
+            shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
 assert looks_like_casia(DATA_ROOT)
 print("Dataset:", DATA_ROOT)
 '''), code(restore["1.2"]), code('''#@title 1.3 Khôi phục cache đã kiểm toán, không chạy 3DDFA
@@ -81,13 +86,15 @@ cache_tar = DRIVE_ROOT / "depth-checkpoints/casia-fasd-depth-checkpoint.tar"
 assert cache_tar.is_file(), "Thiếu TAR cache đã kiểm toán; dừng để kiểm tra"
 assert manifest_checksum(cache_tar) == "26cfa7f26d61e3a71372404008f5dc9dd696af931172850986a8642e440b3d80"
 local_tar = Path("/content/casia-fasd-depth-checkpoint.tar")
-shutil.copy2(cache_tar, local_tar)
+with Progress("Copy CASIA depth TAR"):
+    shutil.copy2(cache_tar, local_tar)
 with tarfile.open(local_tar) as archive:
     for member in archive.getmembers():
         destination = (DATA_ROOT / member.name).resolve()
         assert destination.is_relative_to(DATA_ROOT.resolve())
         assert member.isfile() or member.isdir(), "Cache có entry không phải file/directory"
-    archive.extractall(DATA_ROOT, filter="data")
+    with Progress("Extract CASIA depth"):
+        archive.extractall(DATA_ROOT, filter="data")
 # Tái tạo attack zero targets và ledger; live maps hợp lệ được tái sử dụng.
 run([sys.executable, "scripts/generate_depth.py", MANIFEST,
      "--data-root", DATA_ROOT, "--output-root", DEPTH_ROOT], cwd=REPO_ROOT)

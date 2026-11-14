@@ -4,6 +4,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+try:
+    from colab_progress_source import progress_source
+except ModuleNotFoundError:
+    from scripts.colab_progress_source import progress_source
+
 CPU_TESTS = ["test_round6.py", "test_round6_notebook.py", "test_preflight.py",
              "test_training_stages.py", "test_official_depth_head.py", "test_metrics.py",
              "test_manifest.py", "test_depth_jobs.py", "test_depth_qa.py"]
@@ -37,8 +42,9 @@ MANIFEST = REPO_ROOT / "data/manifests/casia_fasd_debug.csv"
 DEPTH_MANIFEST = REPO_ROOT / "data/manifests/casia_fasd_debug_with_depth.csv"
 DEPTH_ROOT = DATA_ROOT / "depth"
 DEPTH_LEDGER = DEPTH_ROOT / "depth_status.csv"
+''' + progress_source() + '''
 def run(command, cwd=REPO_ROOT, env=None):
-    subprocess.run([str(x) for x in command], cwd=cwd, env=env, check=True)
+    notebook_run(command, cwd=cwd, env=env)
 def checksum(path):
     h = hashlib.sha256()
     with Path(path).open("rb") as stream:
@@ -57,13 +63,15 @@ def safe_zip(path, target):
 archive = Path("/content/DeepFace-PAD-Round6-source.zip")
 drive_archive = DRIVE_ROOT / "handoffs/round6-20261022/DeepFace-PAD-Round6-source.zip"
 if not archive.is_file() and drive_archive.is_file():
-    shutil.copy2(drive_archive, archive)
+    with Progress("Copy Round 6 source ZIP"):
+        shutil.copy2(drive_archive, archive)
 if not archive.is_file():
     print("Upload DeepFace-PAD-Round6-source.zip được giao cùng notebook.")
     files.upload()
 assert archive.is_file(), "Thiếu source ZIP Lượt 6"
 if not REPO_ROOT.exists():
-    safe_zip(archive, REPO_ROOT.parent)
+    with Progress("Extract Round 6 source"):
+        safe_zip(archive, REPO_ROOT.parent)
 else:
     with zipfile.ZipFile(archive) as source_zip:
         assert source_zip.read("DeepFace-PAD/SOURCE_LOCK.json") == (REPO_ROOT / "SOURCE_LOCK.json").read_bytes(), "Source cũ khác ZIP; dừng kiểm tra"
@@ -97,11 +105,13 @@ if not looks_like_casia(DATA_ROOT):
     dataset_zip = DRIVE_ROOT / "casia-fasd.zip"
     assert dataset_zip.is_file(), "Thiếu face-pad/casia-fasd.zip; dừng, không tải bộ dữ liệu khác"
     DATA_ROOT.parent.mkdir(parents=True, exist_ok=True)
-    safe_zip(dataset_zip, DATA_ROOT.parent)
+    with Progress("Extract CASIA RGB"):
+        safe_zip(dataset_zip, DATA_ROOT.parent)
     if not looks_like_casia(DATA_ROOT):
         roots = [p.parent for p in DATA_ROOT.parent.rglob("train") if looks_like_casia(p.parent)]
         assert len(roots) == 1, f"CASIA root không duy nhất: {roots}"
-        shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
+        with Progress("Stage CASIA RGB"):
+            shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
 assert looks_like_casia(DATA_ROOT)
 print("Dataset:", DATA_ROOT)
 '''), cell("code", '''#@title 1.2 Manifest cùng split và sampling đã khóa
@@ -116,7 +126,8 @@ assert cache_tar.is_file(), "Thiếu TAR cache đã kiểm toán; dừng"
 assert checksum(cache_tar) == "26cfa7f26d61e3a71372404008f5dc9dd696af931172850986a8642e440b3d80"
 local_tar = Path("/content/casia-fasd-depth-checkpoint.tar")
 if not local_tar.exists():
-    shutil.copy2(cache_tar, local_tar)
+    with Progress("Copy CASIA depth TAR"):
+        shutil.copy2(cache_tar, local_tar)
 assert checksum(local_tar) == checksum(cache_tar)
 with tarfile.open(local_tar) as archive:
     for member in archive.getmembers():
@@ -144,7 +155,8 @@ run([sys.executable, "scripts/materialize_depth_manifest.py", MANIFEST,
      "--ledger", DEPTH_LEDGER, "--data-root", DATA_ROOT, "--output", DEPTH_MANIFEST])
 assert checksum(DEPTH_MANIFEST) == EXPECTED_DEPTH
 '''), cell("code", '''#@title 1.4 PREFLIGHT: đăng ký sáu config/source/data/environment — DỪNG
-registration = batch.register(DATA_ROOT, RUNS_DIR)
+with Progress("Register and verify training inputs"):
+    registration = batch.register(DATA_ROOT, RUNS_DIR)
 identity = registration["environment"]
 display(pd.DataFrame([{"key":key, "seed":cfg["seed"], "model":cfg["model"]["name"],
                       "initializer":cfg.get("round6_initializer", "random, đúng seed")}
@@ -163,14 +175,16 @@ Sau mỗi cặp, kiểm output và thời gian còn lại trước seed tiếp t
     for seed in (43, 44, 45):
         cells.append(cell("code", f'''#@title 2.{seed-42} Cặp seed {seed} — cổng mặc định đóng
 RUN_SEED{seed} = False
-pair{seed} = batch.train_pair({seed}, allow_train=RUN_SEED{seed})
+with Progress("Train or verify E1/E3 pair, seed {seed}", interval=60):
+    pair{seed} = batch.train_pair({seed}, allow_train=RUN_SEED{seed})
 for key, folder in pair{seed}.items():
     print(key, folder)
     display(pd.read_csv(folder / "train_log.csv"))
 print("DỪNG: gửi run ID/log/initializer, kiểm thời gian trước cặp tiếp theo.")
 '''))
     cells.extend([cell("code", '''#@title 3.1 Freeze validation đủ sáu run, chưa mở test
-freeze = batch.freeze()
+with Progress("Verify and freeze checkpoints"):
+    freeze = batch.freeze()
 rows = []
 for key, record in freeze["runs"].items():
     folder = Path(record["run"])
@@ -186,7 +200,8 @@ display(validation.style.format(formats).set_caption("Validation — video; APCE
 print("DỪNG: gửi bảng validation và freeze:", batch.freeze_path)
 '''), cell("code", '''#@title 4.1 Test phát triển — chỉ sau khi kiểm freeze cả sáu run
 OPEN_TEST = False
-test = batch.test(allow_test=OPEN_TEST)
+with Progress("Score locked CASIA test", interval=60):
+    test = batch.test(allow_test=OPEN_TEST)
 test.to_csv(OUTPUT_DIR / "development-test.csv", index=False)
 summary, paired = summarize(test)
 summary.to_csv(OUTPUT_DIR / "summary-mean-sample-sd.csv")

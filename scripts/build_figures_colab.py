@@ -1,6 +1,7 @@
 """Build the clean, run-all notebook for frozen-result figure export."""
 import json
 from pathlib import Path
+from colab_progress_source import progress_source
 
 
 def markdown(text):
@@ -31,6 +32,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 import json, os, shutil, subprocess, sys
 DRIVE_ROOT = Path("/content/drive/MyDrive/face-pad")
+''' + progress_source() + '''
 REPO_ROOT = Path("/content/figures-source/DeepFace-PAD")
 HANDOFF = DRIVE_ROOT / "handoffs/figures-e0-e4-20261016"
 MANIFEST = DRIVE_ROOT / "reports/casia_fasd_debug_with_depth.csv"
@@ -41,14 +43,16 @@ assert MANIFEST.is_file() and FREEZE.is_file(), "Thiếu manifest/freeze; gửi 
 '''),code('''#@title 0.2 Nạp source mới dành cho xuất hình
 archive = Path("/content/DeepFace-PAD-Figures-source.zip")
 if not archive.is_file() and (HANDOFF / archive.name).is_file():
-    shutil.copy2(HANDOFF / archive.name, archive)
+    with Progress("Copy figures source ZIP"):
+        shutil.copy2(HANDOFF / archive.name, archive)
 if not archive.is_file():
     print("Upload DeepFace-PAD-Figures-source.zip được cung cấp cùng notebook.")
     files.upload()
 assert archive.is_file(), "Thiếu source ZIP xuất hình"
-shutil.unpack_archive(str(archive), "/content/figures-source")
+with Progress("Extract figures source"):
+    shutil.unpack_archive(str(archive), "/content/figures-source")
 assert (REPO_ROOT / "scripts/export_report_figures.py").is_file()
-subprocess.run([sys.executable,"-m","pip","install","-q","-e",".[dev]"],cwd=REPO_ROOT,check=True)
+notebook_run([sys.executable,"-m","pip","install","-q","-e",".[dev]"],cwd=REPO_ROOT)
 FIGURE_SOURCE_COMMIT = (REPO_ROOT / "SOURCE_COMMIT.txt").read_text().strip()
 print("Figure source commit:",FIGURE_SOURCE_COMMIT)
 print("Checkpoint experiment source: 525c80889106c06525f5b758e8725c8ac9cee856")
@@ -77,12 +81,7 @@ environment = os.environ.copy()
 environment["PYTHONPATH"] = str(REPO_ROOT / "src") + os.pathsep + environment.get("PYTHONPATH","")
 environment["OMP_NUM_THREADS"] = "1"
 environment["MKL_NUM_THREADS"] = "1"
-process = subprocess.Popen(command,cwd=REPO_ROOT,env=environment,stdout=subprocess.PIPE,
-                           stderr=subprocess.STDOUT,text=True,bufsize=1)
-for line in process.stdout:
-    print(line,end="",flush=True)
-return_code = process.wait()
-assert return_code == 0, "Xuất hình chưa hoàn tất; gửi nguyên output lỗi, không bỏ qua assert"
+notebook_run(command,cwd=REPO_ROOT,env=environment)
 manifest = json.loads((OUTPUT_DIR / "figure_manifest.json").read_text())
 assert manifest["phase"] == "all" and len(manifest["figures"]) == 31
 print("FIGURES_COMPLETE:",len(manifest["figures"]),"hình")
@@ -100,7 +99,8 @@ for name in names:
         display(preview)
 print("Preview chỉ thu nhỏ trong notebook; PNG/PDF/SVG gốc giữ nguyên chất lượng.")
 '''),code('''#@title 2.2 Đóng gói và tải tất cả hình
-archive_path = Path(shutil.make_archive(str(OUTPUT_DIR),"zip",root_dir=OUTPUT_DIR))
+with Progress("Package figures"):
+    archive_path = Path(shutil.make_archive(str(OUTPUT_DIR),"zip",root_dir=OUTPUT_DIR))
 print("THƯ MỤC HÌNH:",OUTPUT_DIR)
 print("ZIP:",archive_path)
 print("Mở INDEX.html sau khi giải nén để xem toàn bộ hình và caption.")

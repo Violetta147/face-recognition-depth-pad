@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from colab_progress_source import progress_source
 
 
 def markdown(text: str) -> dict:
@@ -63,10 +64,8 @@ DEPTH_QA = REPORTS_DIR / "casia-depth-qa-official-e1.json"
 for directory in (RUNS_DIR, REPORTS_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-def run(command, cwd=None):
-    command = [str(item) for item in command]
-    print("$", " ".join(command))
-    subprocess.run(command, cwd=str(cwd) if cwd else None, check=True)
+''' + progress_source() + '''
+run = notebook_run
 
 def latest_complete(pattern, required=("best.ckpt", "metrics.json")):
     candidates = [p for p in RUNS_DIR.glob(pattern) if all((p / f).is_file() for f in required)]
@@ -139,20 +138,24 @@ if not looks_like_casia(DATA_ROOT):
     dataset_zip = DRIVE_ROOT / "casia-fasd.zip"
     DATA_ROOT.parent.mkdir(parents=True, exist_ok=True)
     if looks_like_casia(drive_dataset):
-        shutil.copytree(drive_dataset, DATA_ROOT, dirs_exist_ok=True)
+        with Progress("Stage CASIA RGB"):
+            shutil.copytree(drive_dataset, DATA_ROOT, dirs_exist_ok=True)
     elif dataset_zip.is_file():
-        shutil.unpack_archive(str(dataset_zip), str(DATA_ROOT.parent))
+        with Progress("Extract CASIA RGB"):
+            shutil.unpack_archive(str(dataset_zip), str(DATA_ROOT.parent))
         discovered = find_casia_root(DATA_ROOT.parent)
         assert discovered is not None, "Không tìm thấy CASIA root sau khi giải nén"
         if discovered.resolve() != DATA_ROOT.resolve():
-            shutil.copytree(discovered, DATA_ROOT, dirs_exist_ok=True)
+            with Progress("Stage CASIA RGB"):
+                shutil.copytree(discovered, DATA_ROOT, dirs_exist_ok=True)
     else:
         run([sys.executable, "-m", "pip", "install", "-q", "kagglehub"])
         import kagglehub
         downloaded = Path(kagglehub.dataset_download("immada/casia-fasd"))
         roots = [p.parent for p in downloaded.rglob("train") if looks_like_casia(p.parent)]
         assert roots, "Không tìm thấy CASIA root trong Kaggle download"
-        shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
+        with Progress("Stage CASIA RGB"):
+            shutil.copytree(roots[0], DATA_ROOT, dirs_exist_ok=True)
 
 assert looks_like_casia(DATA_ROOT), f"CASIA chưa đúng cấu trúc: {DATA_ROOT}"
 print("Dataset:", DATA_ROOT)

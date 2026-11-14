@@ -10,6 +10,7 @@ from PIL import Image
 
 from .data import manifest_checksum
 from .depth_qa import _load_depth
+from .progress import Progress
 
 
 LEDGER_COLUMNS = [
@@ -311,48 +312,49 @@ def process_pending_depth_jobs(
 
     attempted = succeeded = failed = 0
     failures: list[dict[str, str]] = []
-    rows = pending.to_dict("records")
-    for row in rows:
-        if limit is not None and attempted >= limit:
-            break
-        sample_id = str(row["sample_id"])
-        if str(ledger.at[sample_id, "status"]) != "pending_3ddfa":
-            continue
-        attempted += 1
-        destination = Path(str(row["output_path"]))
-        try:
-            depth = _normalise_bona_fide_depth(reconstruct(Path(str(row["image_path"]))), output_size)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            temporary = destination.with_suffix(destination.suffix + ".tmp")
-            with temporary.open("wb") as handle:
-                np.save(handle, depth.astype(np.float32, copy=False))
-            temporary.replace(destination)
-            valid, error = _valid_depth(destination, require_nonzero=True, zero_tolerance=1e-6)
-            if not valid:
-                raise ValueError(error)
-            ledger.at[sample_id, "status"] = "complete_bona_fide"
-            ledger.at[sample_id, "last_error"] = ""
-            succeeded += 1
-        except Exception as exc:
-            message = f"{type(exc).__name__}: {exc}"
-            ledger.at[sample_id, "status"] = "failed_bona_fide"
-            ledger.at[sample_id, "last_error"] = message
-            failures.append({"sample_id": sample_id, "error": message})
-            failed += 1
+    rows = [row for row in pending.to_dict("records")
+            if str(ledger.at[str(row["sample_id"]), "status"]) == "pending_3ddfa"]
+    if limit is not None:
+        rows = rows[:max(0, limit)]
+    with Progress("3DDFA reconstruct and persist", len(rows), "maps") as progress:
+        for row in rows:
+            sample_id = str(row["sample_id"])
+            attempted += 1
+            destination = Path(str(row["output_path"]))
+            try:
+                depth = _normalise_bona_fide_depth(reconstruct(Path(str(row["image_path"]))), output_size)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                temporary = destination.with_suffix(destination.suffix + ".tmp")
+                with temporary.open("wb") as handle:
+                    np.save(handle, depth.astype(np.float32, copy=False))
+                temporary.replace(destination)
+                valid, error = _valid_depth(destination, require_nonzero=True, zero_tolerance=1e-6)
+                if not valid:
+                    raise ValueError(error)
+                ledger.at[sample_id, "status"] = "complete_bona_fide"
+                ledger.at[sample_id, "last_error"] = ""
+                succeeded += 1
+            except Exception as exc:
+                message = f"{type(exc).__name__}: {exc}"
+                ledger.at[sample_id, "status"] = "failed_bona_fide"
+                ledger.at[sample_id, "last_error"] = message
+                failures.append({"sample_id": sample_id, "error": message})
+                failed += 1
 
-        ledger_frame = ledger.reset_index(drop=True)[LEDGER_COLUMNS]
-        remaining = pending[
-            pending["sample_id"].map(
-                lambda value: str(ledger.at[str(value), "status"]) == "pending_3ddfa"
-            )
-        ]
-        _write_csv_atomic(ledger_frame, ledger_path)
-        _write_csv_atomic(remaining, pending_path)
-        if failure_report is not None:
-            current_failures = ledger_frame.loc[
-                ledger_frame["status"] == "failed_bona_fide", ["sample_id", "last_error"]
-            ].rename(columns={"last_error": "error"})
-            _write_csv_atomic(current_failures, Path(failure_report))
+            ledger_frame = ledger.reset_index(drop=True)[LEDGER_COLUMNS]
+            remaining = pending[
+                pending["sample_id"].map(
+                    lambda value: str(ledger.at[str(value), "status"]) == "pending_3ddfa"
+                )
+            ]
+            _write_csv_atomic(ledger_frame, ledger_path)
+            _write_csv_atomic(remaining, pending_path)
+            if failure_report is not None:
+                current_failures = ledger_frame.loc[
+                    ledger_frame["status"] == "failed_bona_fide", ["sample_id", "last_error"]
+                ].rename(columns={"last_error": "error"})
+                _write_csv_atomic(current_failures, Path(failure_report))
+            progress.update(attempted)
 
     return {
         "attempted": attempted,
