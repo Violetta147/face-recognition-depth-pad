@@ -201,3 +201,30 @@ Cell 4 train 10 epoch FP32 với batch 32, mỗi epoch đọc một khung mỗi
 video và cập nhật hai lần. Checkpoint cuối, điểm video, chỉ số và thời
 gian Dev được ghi trong `expanded-runs` trên Drive. Mẫu này dùng để đo
 luồng đọc, huấn luyện và chấm trước khi lên đủ Protocol 1.
+
+Lượt `expanded-runs/1794680667780116476` đã hoàn thành trên A100
+80 GB, batch 32 và seed 43. Manifest xác nhận 40 video Train, 30 video
+Dev, tám khung mỗi video, 560 khung và không có lỗi chuẩn bị. Dev có
+tám khung dùng vị trí dự phòng. Hai tập tương ứng tám và sáu người,
+tách theo danh sách chính thức. SHA-256 của checkpoint và manifest
+khớp với `pilot_result.json`.
+
+- Tiền xử lý chạy CPU, dùng lại sáu video và dựng thêm 64 video.
+  Train mất 531 giây cho 37 video mới, Dev mất 474 giây cho 27 video mới.
+  Tiến trình chuẩn bị mất tổng 1.034 giây.
+- Train mất 14,83 giây cho 10 epoch, tổng cộng 20 lượt cập nhật.
+  Trung vị epoch 2–10 là 1,05 giây. Chấm Dev mất 4,16 giây.
+  Đỉnh bộ nhớ GPU cấp phát khi train là 12,72 GiB.
+- Tính lại từ `dev_scores.csv` cho APCER gộp 20,83% (5/24 video giả
+  lọt), BPCER 33,33% (2/6 video thật bị từ chối), ACER gộp 27,08% và
+  AUC 0,8125. Kết quả chỉ đại diện cho mẫu Dev gồm một điện thoại,
+  một phiên và checkpoint ở epoch 10.
+
+Với 1.200 video Train và 900 video Dev, tốc độ CPU đo được trong lượt
+này tương ứng khoảng 9 giờ chuẩn bị ở cùng mật độ tám khung mỗi video,
+nếu giữ cách làm tuần tự và dùng lại 70 video. Lượt tái lập cần đo lại
+với dải khung Train đủ rộng để lấy mẫu ngẫu nhiên qua nhiều epoch.
+Ưu tiên chuẩn bị và lưu cache theo từng video trên CPU. Chạy vài epoch
+trên Train/Dev đầy đủ ở batch 56 để đo thời gian thực tế và kiểm tra
+checkpoint trước khi quyết định thời lượng huấn luyện dài. Khóa ngưỡng
+trên Dev và chỉ chấm Test sau khi cấu hình đã chốt.
