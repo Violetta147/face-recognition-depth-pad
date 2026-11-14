@@ -1,5 +1,10 @@
 # Kế hoạch thực nghiệm DeepFace-PAD trên OULU-NPU
 
+**Ưu tiên hiện tại: tái lập CDCN CVPR 2020 trên Protocol 1.** Mốc của
+CDCN là ACER 1,0% ở Bảng 4. Trước khi lặp cặp E1–E3, đọc
+[đối chiếu paper và mã CDCN công khai](CDCN_CVPR2020_OULU_P1.md) để xác
+minh bộ asset tiền xử lý, checkpoint và cấu hình cần cho lượt tái lập.
+
 Cập nhật ngày 14/11/2026. **Điểm bắt đầu khi quay lại: khôi phục cache RGB Train/Dev và chạy thử tạo pseudo-depth trên một nhóm nhỏ.** Kế hoạch này ghi các bước dự kiến. Lượt thực nghiệm đã hoàn tất hiện là MobileNetV3-Small trên Protocol 1, seed 43.
 
 **Notebook cho bước 1–2**: [Face_PAD_OULU_NPU_Depth_Smoke.ipynb](../notebooks/Face_PAD_OULU_NPU_Depth_Smoke.ipynb). Chọn CPU và chạy cell 1–4, rồi xem RGB và map ở cell 5. Notebook chỉ đọc 16 ảnh mỗi split trực tiếp từ ZIP đã khóa. Mỗi split lấy 12 ảnh thật từ sáu camera × hai phiên và bốn ảnh tấn công, mỗi thiết bị tạo mẫu một ảnh. Bước lấy mẫu đã kiểm bằng ZIP thật. Việc dựng map bằng 3DDFA V2 vẫn cần chạy trên Colab.
