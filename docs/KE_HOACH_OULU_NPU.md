@@ -25,6 +25,21 @@ lên Drive, rồi ghi snapshot mỗi 500 map thật. Thư mục đầu ra là
 công. Nếu thất bại, giữ `depth-progress.zip`, xem `failures.csv` và
 log worker để xử lý các ID lỗi trước khi train E1.
 
+**Depth Full đã đạt trên Colab CPU.** Đã đối chiếu `depth_summary.json`
+trên Drive: đủ 16.800 target (3.360 thật, 13.440 zero), audit hợp lệ.
+Log ghi 879 giây cho bước dựng và lưu snapshot từng nhóm, chưa gồm
+khôi phục RGB và kiểm cuối. ZIP chốt `depth-final.zip` có SHA-256
+`fda2b58e871258906ce7c006e00880fb7d22dcf80aa80480c1992f8724ebc935`.
+
+**Tiếp theo chạy E1** bằng [notebook E1 CDCN](../notebooks/Face_PAD_OULU_NPU_E1_CDCN.ipynb)
+trên Colab A100. Chạy cell 1–3 để kiểm dữ liệu và chọn batch 8 hoặc 16
+theo tốc độ đo được. Cell 4 chạy seed 43, BF16, ảnh 256 × 256, Adam
+(LR 0,0001, weight decay 0,00005) trong 5 epoch. Đây là mốc khởi tạo
+OULU cho đối chứng E1–E3. Mỗi epoch chọn theo ACER video trên Dev;
+ngưỡng lấy gần EER trên Dev. Khi thấy `E1_DEV_READY`, gửi đường dẫn
+run và `metrics.json`; kiểm `e1_dev_lock.json` trước khi dùng checkpoint
+cho đối chứng. Notebook này chỉ sử dụng Train/Dev.
+
 ## Mốc kết quả đã khóa
 
 | Hạng mục | Giá trị |
