@@ -4,11 +4,14 @@ import assert from "node:assert/strict";
 import { pathToFileURL } from "node:url";
 
 // Run from the repository root with the Codex bundled Node runtime.
-// Builds the HTML review and PNG previews for content approval.
+// Builds the HTML review by default. Pass an approved .pptx destination as
+// the only argument to export the native PowerPoint instead.
 const runtime = path.join(process.env.USERPROFILE, ".cache/codex-runtimes/codex-primary-runtime/dependencies");
-const { Presentation } = await import(pathToFileURL(path.join(runtime,
+const { Presentation, PresentationFile } = await import(pathToFileURL(path.join(runtime,
   "node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs")));
-const output = path.resolve("outputs/defense_20261115/Duyệt slide DUT v3");
+const output = path.resolve("outputs/defense_20261115/Duyệt slide DUT v4");
+const approvedPptx = process.argv[2];
+if (approvedPptx) assert.ok(approvedPptx.toLowerCase().endsWith(".pptx"), "Chỉ định đường dẫn .pptx");
 const assets = "reports/slides_round5/assets";
 const W = 1280, H = 720, LEFT = 69, WIDTH = 1142;
 const blue = "#0C5284", ink = "#173349", soft = "#3F5667", yellow = "#FFE300";
@@ -128,7 +131,6 @@ const paper = "Paper_DG56.pdf trong hồ sơ Nhóm 01, Bảng kết quả CASIA-
 const firstReview = "Phiếu DG56 ngày 19/10/2026, trang 3: https://drive.google.com/file/d/1uQSb2sLuqopMp-Wgm4LKdq2HXc6NYdaV/view";
 const secondReview = "Phiếu DG56 ngày 29/10/2026, trang 2: https://drive.google.com/file/d/1VDUiIyHXlhVXFrEa9pO4hiSfHQvF2nbz/view";
 const review = firstReview + "\n" + secondReview;
-const boot = "PHAN_TICH_DIEM_DA_KHOA.md và KHOANG_BOOTSTRAP.json.";
 const oulu = "Hồ sơ Nhóm 01, Source Code/Kết quả/OULU và pair_dev_lock.json.";
 const prnet = "CDCN_CVPR2020_OULU_P1.md và Source Code/Kết quả/PRNet Dev pilot.";
 
@@ -228,23 +230,7 @@ box(s, "Tăng lỗi", 1013, 416, 170, 38, 18, caution, true);
 foot(s, "Chênh lệch trung bình ± độ lệch chuẩn là −0,62 ± 2,69 điểm phần trăm.", 459);
 highlight(s, "Huấn luyện đồng thời với BCE giảm lỗi ở hai lượt và tăng lỗi ở lượt còn lại.", 533, caution);
 
-s = newSlide("Giải trình DG56 về ngưỡng và đối chứng", review + "\n" + boot);
-table(s, [["Góp ý", "Nhóm đã kiểm", "Còn mở"],
-  ["Ngưỡng và sai số", "Một video thật làm tỷ lệ từ chối nhầm ở tập validation đổi 8,33 điểm %.", "Kiểm định chéo 5 phần, chia theo người"],
-  ["Khoảng bất định", "Lấy mẫu lại theo người 20.000 lần.", "Lặp lịch ba giai đoạn với BCE và Focal"],
-  ["Nhánh phân loại", "Hai cách tính điểm xếp ngược thứ tự ở 863 trong 64.620 cặp video.", "Thử kết hợp điểm và so sánh với cùng số lượt cập nhật"]],
-  [241, 527, 374], 146, 83, 23);
-highlight(s, "CDCN lấy trung bình độ sâu có ACER 2,78%. Khoảng bootstrap 95% là 0,56–5,00%.", 530);
-const reviewSource = box(s, "Nguồn: Phiếu DG56 ngày 19/10, trang 3 và phiếu ngày 29/10, trang 2.",
-  LEFT, 588, WIDTH - 100, 28, 17, soft);
-reviewSource.text.get("Phiếu DG56 ngày 19/10").link = {
-  uri: "https://drive.google.com/file/d/1uQSb2sLuqopMp-Wgm4LKdq2HXc6NYdaV/view", isExternal: true
-};
-reviewSource.text.get("phiếu ngày 29/10").link = {
-  uri: "https://drive.google.com/file/d/1VDUiIyHXlhVXFrEa9pO4hiSfHQvF2nbz/view", isExternal: true
-};
-
-s = newSlide("Giải trình DG56 về dữ liệu đánh giá", secondReview + "\n" + oulu);
+s = newSlide("Giải trình DG56 về dữ liệu đánh giá", review + "\n" + oulu);
 box(s, "Tiêu chí 1 · Tính mới và hàm lượng khoa học", LEFT, 119, WIDTH, 34, 24, blue, true);
 marker(s, 86, 226, 775);
 const novelty = box(s, [
@@ -271,9 +257,12 @@ const dataset = box(s, [
   "nên ngưỡng bị lượng tử hóa; không có tập ngoài miền.”",
 ].join("\n"), 89, 389, 1117, 60, 21);
 emphasize(dataset, ["CASIA-FASD nhỏ và cũ", "không có tập ngoài miền"]);
-const citation = box(s, "Phiếu nhận xét DG56 ngày 29/10/2026, trang 2, tiêu chí 1–3", LEFT, 470, WIDTH, 32, 18, soft);
+const citation = box(s, "Phiếu nhận xét DG56 ngày 29/10/2026, trang 2, tiêu chí 1–3 · Phiếu nhận xét ngày 19/10/2026", LEFT, 470, WIDTH, 32, 18, soft);
 citation.text.get("Phiếu nhận xét DG56 ngày 29/10/2026").link = {
   uri: "https://drive.google.com/file/d/1VDUiIyHXlhVXFrEa9pO4hiSfHQvF2nbz/view", isExternal: true
+};
+citation.text.get("Phiếu nhận xét ngày 19/10/2026").link = {
+  uri: "https://drive.google.com/file/d/1uQSb2sLuqopMp-Wgm4LKdq2HXc6NYdaV/view", isExternal: true
 };
 highlight(s, "Nhóm đã bổ sung OULU-NPU Protocol 1. Đánh giá chéo tập vẫn còn mở.", 535);
 
@@ -308,6 +297,12 @@ s = newSlide("Trao đổi", "Hồ sơ Nhóm 01 Deep-PAD.", "closing");
 box(s, "Cảm ơn thầy và các bạn", 95, 234, 805, 98, 57, "#FFFFFF", true);
 box(s, "Nhóm 01 Deep-PAD", 98, 363, 680, 53, 33, yellow, true);
 
+if (approvedPptx) {
+  const destination = path.resolve(approvedPptx);
+  await fs.mkdir(path.dirname(destination), { recursive: true });
+  await (await PresentationFile.exportPptx(deck)).save(destination);
+  console.log(`Exported ${deck.slides.items.length} slides to ${destination}`);
+} else {
 await fs.mkdir(output, { recursive: true });
 await fs.mkdir(path.join(output, "ảnh"), { recursive: true });
 for (const [i, slide] of deck.slides.items.entries()) {
@@ -358,3 +353,4 @@ prev.onclick=()=>show(index-1);next.onclick=()=>show(index+1);jump.onchange=()=>
 window.addEventListener('keydown',e=>{if(e.target===jump)return;if(e.key==='ArrowLeft')show(index-1);if(e.key==='ArrowRight')show(index+1)});show(0);
 </script></html>`, "utf8");
 console.log(`Rendered ${records.length} DUT review slides in ${output}`);
+}
