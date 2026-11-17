@@ -87,6 +87,24 @@ crop hợp lệ.
 Mốc kiểm thử là số video/khung, độ phủ crop, log thời gian/VRAM, checkpoint
 và bộ chỉ số Test. Test thật và tốc độ A100 cần được xác nhận trên Colab.
 
+## Tiếp tục chuẩn bị CDCN với PRNet
+
+Dùng [notebook Train/Dev đầy đủ](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Full_Train_Dev.ipynb).
+Nếu ổ Drive gắn vào Colab báo `Errno 107`, đặt `REMOUNT_DRIVE = True` ở
+cell 1 rồi chạy lại cell 1–3. Nếu runtime vẫn báo lỗi khi mount lại, kết nối
+runtime CPU mới và chạy cell 1–3. Giữ thư mục `full-cache` trên Drive.
+
+Cell 3 in `FULL_CACHE` và `CACHE_ZIPS` trước khi cài môi trường PRNet.
+Các số này đếm tệp. Notebook kiểm nội dung và tính toàn vẹn của từng ZIP
+khi khôi phục. Nếu Train đã có 1.200 ZIP, có thể đặt
+`SPLITS = ("Dev",)` để tiếp tục riêng Dev. Trước khi train, khôi phục cả
+hai tập trên runtime A100 và kiểm cell 3 báo đủ 36.000 khung.
+
+Mỗi tiến trình con ghi log vào `/content/cdcn-prnet-full/logs/<run>`
+rồi chép một lần lên Drive sau khi kết thúc. Nếu Drive mất kết nối,
+tải log cục bộ về trước khi xóa runtime. Các ZIP hoàn tất vẫn được tìm
+trong cùng khóa cache khi chạy lại với cùng dữ liệu và bộ tiền xử lý.
+
 ## Các nghiên cứu tiếp theo
 
 - E1 dự đoán bản đồ giả độ sâu từ 3DDFA V2 cho mặt thật. E2 thêm đầu

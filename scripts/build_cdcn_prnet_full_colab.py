@@ -5,19 +5,48 @@ from build_cdcn_prnet_train_colab import include_setup
 from build_oulu_colab import ROOT, build_notebook
 
 
+MOUNT = (EXPANDED[1][1].replace("cdcn-prnet-expanded", "cdcn-prnet-full")
+         .replace("expanded-runs", "full-runs")
+         .replace('drive.mount("/content/drive")',
+                  'REMOUNT_DRIVE = False  # đổi thành True nếu mount vừa báo Errno 107\n'
+                  'drive.mount("/content/drive", force_remount=REMOUNT_DRIVE)'))
+
+LOAD_CODE = EXPANDED[2][1].split("\ndef run(label, *args):", 1)[0] + """
+
+# Ghi tiến trình lên ổ runtime. Chỉ chép log lên Drive sau khi lệnh kết thúc.
+LOCAL_LOGS = WORK / "logs" / RUN.name
+
+def run(label, *args):
+    log = LOCAL_LOGS / f"{label}-{time.time_ns()}.log"
+    try:
+        run_logged(args, label=label, log=log,
+                   env={**os.environ, "PYTHONPATH": str(WORK / "src"), "TF_ENABLE_ONEDNN_OPTS": "0"})
+    finally:
+        if log.is_file():
+            try:
+                shutil.copyfile(log, RUN / log.name)
+            except OSError as exc:
+                print(f"Chưa chép được log lên Drive: {exc} | Log cục bộ: {log}", flush=True)
+"""
+
 CELLS = [
     ("markdown", """# CDCN trên OULU-NPU · Train/Dev đầy đủ của Protocol 1
 Chạy **cell 1–3 trên CPU** để chuẩn bị 1.200 video Train và 900 video Dev.
 Train lấy 24 khung rải đều qua mỗi video, Dev giữ 8 khung. Cell 3 lưu
 từng video đã hoàn tất lên Drive và có thể chạy lại sau khi đổi runtime.
 
+Nếu Drive báo **Errno 107**, đặt `REMOUNT_DRIVE = True` ở cell 1 rồi chạy
+lại cell 1–3. Cell 3 in `CACHE_ZIPS` trước khi chuẩn bị. Nếu đã đủ ZIP
+Train, có thể đặt `SPLITS = ("Dev",)` để chuẩn bị riêng Dev. Log gốc nằm
+trong `/content/cdcn-prnet-full/logs` cho đến khi runtime bị xóa.
+
 Sau khi cell 3 báo đủ 36.000 khung, chuyển sang **A100 80 GB** và chạy
-lại **cell 1–4**. Cell 3 khôi phục dữ liệu đã chuẩn bị. Cell 4 chạy 3 epoch
+lại **cell 1–4** với cả hai tập trong `SPLITS`. Cell 4 chạy 3 epoch
 từ đầu với batch 56 rồi chấm toàn bộ Dev, để đo thời gian trước khi chốt
 lượt huấn luyện dài. Kết quả lưu trên Drive."""),
-    ("code", EXPANDED[1][1].replace("cdcn-prnet-expanded", "cdcn-prnet-full").replace("expanded-runs", "full-runs")),
-    EXPANDED[2],
-    ("code", "#@title 3. Khôi phục hoặc chuẩn bị Train/Dev đầy đủ\n" + include_setup() + """
+    ("code", MOUNT),
+    ("code", LOAD_CODE),
+    ("code", "#@title 3. Khôi phục hoặc chuẩn bị Train/Dev đầy đủ\nPREPARED_SPLITS = ()\n" + include_setup() + """
 
 import json
 import statistics
@@ -43,6 +72,17 @@ cache = BASE / "full-cache" / key
 cache.mkdir(parents=True, exist_ok=True)
 (RUN / "cache-config.json").write_text(json.dumps(config, indent=2))
 
+def count_zips(directory):
+    try:
+        return sum(path.name.endswith(".zip") for path in directory.iterdir())
+    except FileNotFoundError:
+        return 0
+
+expected_counts = {"Train": 1200, "Dev": 900}
+cache_counts = {split: count_zips(cache / split) for split in expected_counts}
+print("FULL_CACHE", cache, flush=True)
+print("CACHE_ZIPS", cache_counts, "| số tệp trước khi kiểm nội dung ZIP", flush=True)
+
 # Reuse Dev ZIPs from the verified 70-video run with the same source archives.
 reference = BASE / "expanded-runs/1794680667780116476/cache-config.json"
 old = json.loads(reference.read_text()) if reference.is_file() else {}
@@ -55,10 +95,7 @@ if (old.get("protocol") == protocol and old.get("archives") == archives
     old_key = hashlib.sha256(json.dumps(old, sort_keys=True).encode()).hexdigest()[:20]
     seed = ["--dev-cache", BASE / "expanded-cache" / old_key / "Dev"]
 
-complete = not REPAIR_CACHE and all(
-    len(list((cache / split).glob("*.zip"))) == (1200 if split == "Train" else 900)
-    for split in SPLITS
-)
+complete = not REPAIR_CACHE and all(cache_counts[split] == expected_counts[split] for split in SPLITS)
 if complete:
     python = sys.executable
     mode = ["--restore-only"]
@@ -71,8 +108,7 @@ stage = []
 if STAGE_TARS and not complete:
     needed = 0
     for split in SPLITS:
-        expected = 1200 if split == "Train" else 900
-        if not REPAIR_CACHE and len(list((cache / split).glob("*.zip"))) == expected:
+        if not REPAIR_CACHE and cache_counts[split] == expected_counts[split]:
             continue
         name = f"{split}_files.tar"
         local = WORK / "archives" / name
@@ -86,19 +122,24 @@ if STAGE_TARS and not complete:
 assets = WORK / f"assets-{key}"
 summary_copy = RUN / "preparation.json"
 summary_copy.unlink(missing_ok=True)
+manifest = assets / "smoke_summary.json"
 try:
     run("prepare-full", python, "-u", package / "cdcn_prnet_expanded.py",
         "--data", DATA, "--cache", cache, "--output", assets, "--prnet", WORK / "PRNet",
         "--renderer", WORK / "PRNet-Depth-Generation", "--full", "--splits", *SPLITS, *seed, *stage, *mode)
-finally:
-    manifest = assets / "smoke_summary.json"
+except (RuntimeError, OSError):
     if manifest.is_file():
-        shutil.copyfile(manifest, summary_copy)
-print("FULL_CACHE", cache)"""),
+        try:
+            shutil.copyfile(manifest, RUN / "preparation-incomplete.json")
+        except OSError as exc:
+            print(f"Chưa lưu được manifest lỗi: {exc} | Manifest cục bộ: {manifest}", flush=True)
+    raise
+shutil.copyfile(manifest, summary_copy)
+PREPARED_SPLITS = tuple(SPLITS)"""),
     ("code", """#@title 4. Đo train batch 56 và chấm Dev đầy đủ
 if not torch.cuda.is_available():
     raise RuntimeError("Chọn runtime A100 rồi chạy lại cell 1–4.")
-if set(SPLITS) != {"Train", "Dev"} or not summary_copy.is_file():
+if set(globals().get("PREPARED_SPLITS", ())) != {"Train", "Dev"}:
     raise ValueError("Chuẩn bị đủ Train và Dev ở cell 3 trước khi train.")
 EPOCHS = 3
 BATCH = 56
