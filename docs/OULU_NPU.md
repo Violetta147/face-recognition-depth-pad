@@ -100,7 +100,7 @@ rồi mới mở và kiểm nội dung. Thư mục tạm của mỗi ZIP đượ
 Nếu bản sao thất bại do mất kết nối, log ghi đường dẫn ZIP đang chép.
 Đường dẫn cache cũ được giữ với đúng cặp mã băm bộ tiền xử lý tương thích.
 Nếu Train đã có 1.200 ZIP, có thể đặt
-`SPLITS = ("Dev",)` để tiếp tục riêng Dev. Trước khi train, khôi phục cả
+`SPLITS = ["Dev"]` để tiếp tục riêng Dev. Trước khi train, khôi phục cả
 hai tập trên runtime A100 và kiểm cell 3 báo đủ 36.000 khung.
 
 Mỗi tiến trình con ghi log vào `/content/cdcn-prnet-full/logs/<run>`

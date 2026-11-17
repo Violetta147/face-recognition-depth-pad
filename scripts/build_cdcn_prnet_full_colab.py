@@ -37,7 +37,7 @@ từng video đã hoàn tất lên Drive và có thể chạy lại sau khi đ�
 
 Nếu Drive báo **Errno 107**, đặt `REMOUNT_DRIVE = True` ở cell 1 rồi chạy
 lại cell 1–3. Cell 3 in `CACHE_ZIPS` trước khi chuẩn bị. Nếu đã đủ ZIP
-Train, có thể đặt `SPLITS = ("Dev",)` để chuẩn bị riêng Dev. Log gốc nằm
+Train, có thể đặt `SPLITS = ["Dev"]` để chuẩn bị riêng Dev. Log gốc nằm
 trong `/content/cdcn-prnet-full/logs` cho đến khi runtime bị xóa.
 
 Sau khi cell 3 báo đủ 36.000 khung, chuyển sang **A100 80 GB** và chạy
@@ -53,9 +53,20 @@ import statistics
 from deepface_pad.colab_cache import SPLIT_ARCHIVES, file_hash
 
 # Có thể chạy một split trước rồi chạy lại cả hai. Cache theo video nằm trên Drive.
-SPLITS = ("Train", "Dev")
+SPLITS = ["Train", "Dev"]
 STAGE_TARS = True  # chép TAR thiếu vào ổ cục bộ để đọc nhanh hơn
 REPAIR_CACHE = False  # đặt True nếu log báo ZIP thiếu hoặc hỏng dù đã đủ số tệp
+
+def normalize_splits(splits):
+    if isinstance(splits, str):
+        splits = (splits,)
+    if (not isinstance(splits, (list, tuple)) or not splits
+            or any(split not in ("Train", "Dev") for split in splits)
+            or len(set(splits)) != len(splits)):
+        raise ValueError('Đặt SPLITS = ["Train"], ["Dev"] hoặc ["Train", "Dev"].')
+    return tuple(splits)
+
+SPLITS = normalize_splits(SPLITS)
 
 def cache_worker_hashes(scripts):
     # This exact worker revision only changes where ZIPs are opened.
@@ -148,7 +159,7 @@ except (RuntimeError, OSError):
             print(f"Chưa lưu được manifest lỗi: {exc} | Manifest cục bộ: {manifest}", flush=True)
     raise
 shutil.copyfile(manifest, summary_copy)
-PREPARED_SPLITS = tuple(SPLITS)"""),
+PREPARED_SPLITS = SPLITS"""),
     ("code", """#@title 4. Đo train batch 56 và chấm Dev đầy đủ
 if not torch.cuda.is_available():
     raise RuntimeError("Chọn runtime A100 rồi chạy lại cell 1–4.")

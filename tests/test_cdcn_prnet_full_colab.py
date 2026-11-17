@@ -70,6 +70,21 @@ def test_full_notebook_zip_count_distinguishes_missing_and_disconnected(tmp_path
         count(SimpleNamespace(iterdir=disconnected))
 
 
+@pytest.mark.parametrize(("value", "expected"), [
+    ("Dev", ("Dev",)),
+    (["Dev"], ("Dev",)),
+    (("Train", "Dev"), ("Train", "Dev")),
+])
+def test_full_notebook_accepts_single_split_and_split_sequences(value, expected):
+    assert notebook_function(3, "normalize_splits")(value) == expected
+
+
+@pytest.mark.parametrize("value", ["D", [], ["Dev", "Dev"], None])
+def test_full_notebook_reports_invalid_split_configuration(value):
+    with pytest.raises(ValueError, match="SPLITS"):
+        notebook_function(3, "normalize_splits")(value)
+
+
 def test_full_notebook_preserves_the_cache_identity_for_known_zip_transport_change():
     scripts_dir = NOTEBOOK.parents[1] / "scripts"
     current = {name: hashlib.sha256((scripts_dir / name).read_text(encoding="utf-8").encode()).hexdigest()
