@@ -191,6 +191,44 @@ def test_expanded_selection_and_video_cache(tmp_path, monkeypatch):
             compile("".join(cell["source"]), notebook.name, "exec")
 
 
+@pytest.mark.parametrize("drive_connected", [True, False])
+def test_full_restore_opens_local_zip_and_preserves_copy_error(tmp_path, monkeypatch, drive_connected):
+    import errno
+
+    source = tmp_path / "source"
+    make_assets(source)
+    video = "1_1_21_4"
+    rows = pilot.load_videos(source)["Dev"][video]
+    cache = tmp_path / "drive.zip"
+    expanded.publish_video(cache, source, "Dev", video, 4, rows)
+    restored = tmp_path / "restored"
+    zip_class = expanded.zipfile.ZipFile
+    opened = []
+
+    def open_local(filename, *args, **kwargs):
+        assert filename != cache
+        opened.append(filename)
+        return zip_class(filename, *args, **kwargs)
+
+    def disconnected(source, destination):
+        destination.write_bytes(b"partial")
+        raise ConnectionAbortedError(errno.ECONNABORTED, "Drive disconnected")
+
+    monkeypatch.setattr(expanded.zipfile, "ZipFile", open_local)
+    if drive_connected:
+        assert expanded.restore_video(cache, restored, "Dev", video, 4, stage_zip=True) == rows
+        assert len(opened) == 1 and not opened[0].exists()
+        np.testing.assert_array_equal(pilot.load_frame(source, rows[0], 1.3)[1],
+                                      pilot.load_frame(restored, rows[0], 1.3)[1])
+    else:
+        monkeypatch.setattr(expanded.shutil, "copyfile", disconnected)
+        with pytest.raises(OSError, match="Could not stage cache ZIP") as error:
+            expanded.restore_video(cache, restored, "Dev", video, 4, stage_zip=True)
+        assert error.value.errno == errno.ECONNABORTED and error.value.filename == cache
+        assert not opened
+    assert cache.is_file() and not list(tmp_path.glob("restore-zip-*"))
+
+
 def test_full_membership_requires_official_ids_and_split_frame_counts(tmp_path):
     from deepface_pad.oulu_npu import expected_ids
 

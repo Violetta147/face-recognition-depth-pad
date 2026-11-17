@@ -1,5 +1,6 @@
 import ast
 import errno
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -67,3 +68,15 @@ def test_full_notebook_zip_count_distinguishes_missing_and_disconnected(tmp_path
 
     with pytest.raises(OSError, match="Drive disconnected"):
         count(SimpleNamespace(iterdir=disconnected))
+
+
+def test_full_notebook_preserves_the_cache_identity_for_known_zip_transport_change():
+    scripts_dir = NOTEBOOK.parents[1] / "scripts"
+    current = {name: hashlib.sha256((scripts_dir / name).read_text(encoding="utf-8").encode()).hexdigest()
+               for name in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}
+    resolve_cache_hashes = notebook_function(3, "cache_worker_hashes")
+    assert resolve_cache_hashes(current) == current | {
+        "cdcn_prnet_expanded.py": "9611f0b3464a441ea1582eca0ceca61741f2d644fa1230cb892592ca0751652a",
+    }
+    changed_smoke = current | {"cdcn_prnet_smoke.py": "0" * 64}
+    assert resolve_cache_hashes(changed_smoke) == changed_smoke

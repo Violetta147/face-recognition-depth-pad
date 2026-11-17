@@ -56,6 +56,18 @@ from deepface_pad.colab_cache import SPLIT_ARCHIVES, file_hash
 SPLITS = ("Train", "Dev")
 STAGE_TARS = True  # chép TAR thiếu vào ổ cục bộ để đọc nhanh hơn
 REPAIR_CACHE = False  # đặt True nếu log báo ZIP thiếu hoặc hỏng dù đã đủ số tệp
+
+def cache_worker_hashes(scripts):
+    # This exact worker revision only changes where ZIPs are opened.
+    if scripts == {
+        "cdcn_prnet_smoke.py": "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8",
+        "cdcn_prnet_expanded.py": "f0794f5537278642aa3c5c795c42f0321b1feeec6295af151aa06db13b6f8134",
+    }:
+        return scripts | {
+            "cdcn_prnet_expanded.py": "9611f0b3464a441ea1582eca0ceca61741f2d644fa1230cb892592ca0751652a",
+        }
+    return scripts
+
 package = WORK / "scripts"
 archives = {}
 for key in ("train", "val"):
@@ -64,9 +76,10 @@ for key in ("train", "val"):
     with path.open("rb") as stream:
         archives[name] = {"bytes": size, "prefix_sha256": hashlib.sha256(stream.read(65536)).hexdigest()}
 protocol = file_hash(DATA / "Protocols.tar")
+scripts = {name: hashlib.sha256((package / name).read_text(encoding="utf-8").encode()).hexdigest()
+           for name in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}
 config = {"profile": "p1-full-train24-dev8", "protocol": protocol, "archives": archives,
-          "scripts": {name: hashlib.sha256((package / name).read_text(encoding="utf-8").encode()).hexdigest()
-                      for name in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}}
+          "scripts": cache_worker_hashes(scripts)}
 key = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:20]
 cache = BASE / "full-cache" / key
 cache.mkdir(parents=True, exist_ok=True)

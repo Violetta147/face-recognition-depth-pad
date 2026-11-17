@@ -95,8 +95,11 @@ cell 1 rồi chạy lại cell 1–3. Nếu runtime vẫn báo lỗi khi mount l
 runtime CPU mới và chạy cell 1–3. Giữ thư mục `full-cache` trên Drive.
 
 Cell 3 in `FULL_CACHE` và `CACHE_ZIPS` trước khi cài môi trường PRNet.
-Các số này đếm tệp. Notebook kiểm nội dung và tính toàn vẹn của từng ZIP
-khi khôi phục. Nếu Train đã có 1.200 ZIP, có thể đặt
+Các số này đếm tệp. Khi khôi phục, notebook chép từng ZIP về đĩa runtime
+rồi mới mở và kiểm nội dung. Thư mục tạm của mỗi ZIP được dọn sau lần đọc.
+Nếu bản sao thất bại do mất kết nối, log ghi đường dẫn ZIP đang chép.
+Đường dẫn cache cũ được giữ với đúng cặp mã băm bộ tiền xử lý tương thích.
+Nếu Train đã có 1.200 ZIP, có thể đặt
 `SPLITS = ("Dev",)` để tiếp tục riêng Dev. Trước khi train, khôi phục cả
 hai tập trên runtime A100 và kiểm cell 3 báo đủ 36.000 khung.
 

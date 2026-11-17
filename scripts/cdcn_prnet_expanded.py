@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 import csv
 import json
 from pathlib import Path, PurePosixPath
@@ -94,8 +95,17 @@ def publish_video(cache_path, root, split, video, access, rows, slots=PILOT_SLOT
         partial.unlink(missing_ok=True)
 
 
-def restore_video(cache_path, root, split, video, access, slots=PILOT_SLOTS):
-    with zipfile.ZipFile(cache_path) as archive:
+def restore_video(cache_path, root, split, video, access, slots=PILOT_SLOTS, *, stage_zip=False):
+    with ExitStack() as stack:
+        source = cache_path
+        if stage_zip:
+            directory = stack.enter_context(tempfile.TemporaryDirectory(prefix="restore-zip-", dir=root.parent))
+            source = Path(directory) / cache_path.name
+            try:
+                shutil.copyfile(cache_path, source)
+            except OSError as exc:
+                raise OSError(exc.errno, "Could not stage cache ZIP to the runtime disk", cache_path) from exc
+        archive = stack.enter_context(zipfile.ZipFile(source))
         rows = json.loads(archive.read("frames.json"))
         names = video_assets(rows, split, video, access, slots)
         if sorted(archive.namelist()) != sorted(["frames.json", *names]):
@@ -144,11 +154,12 @@ def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
                 if not target.exists() and previous:
                     publish_video(target, baseline, split, video, access, previous)
                 try:
-                    restored = restore_video(target, output, split, video, access, slots) if target.exists() else None
+                    restored = (restore_video(target, output, split, video, access, slots, stage_zip=full)
+                                if target.exists() else None)
                     if restored is None and split == "Dev" and dev_cache is not None:
                         source = dev_cache / f"{video}.zip"
                         if source.is_file():
-                            restored = restore_video(source, output, split, video, access, slots)
+                            restored = restore_video(source, output, split, video, access, slots, stage_zip=full)
                             publish_video(target, output, split, video, access, restored, slots)
                 except (zipfile.BadZipFile, KeyError, UnicodeError, ValueError) as exc:
                     print(f"Rebuild invalid cache {target.name}: {exc}", flush=True)
