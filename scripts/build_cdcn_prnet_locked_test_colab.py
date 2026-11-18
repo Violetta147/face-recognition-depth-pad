@@ -8,10 +8,12 @@ from cdcn_prnet_locked_test import RUN_NAME
 CELLS = [
     ("markdown", """# CDCN và PRNet · Chấm Test OULU-NPU Protocol 1
 
-1. Mở notebook trên Colab và chạy cell 1–3 trên **CPU**. Cell 3 xác minh
+1. Mở notebook trên Colab và chạy cell 1–3 trên **CPU**, ưu tiên RAM cao
+   nếu Colab cấp được. Cell 3 xác minh
    checkpoint 100 epoch và ngưỡng Dev, rồi chuẩn bị 600 video Test với
-   MTCNN và PRNet, 8 khung mỗi video. Mặc định dùng hai tiến trình CPU.
-   Cell này khôi phục các ZIP cũ rồi lưu từng video mới lên Drive.
+   MTCNN và PRNet, 8 khung mỗi video. Nó tự chọn tối đa bốn tiến trình
+   theo vCPU và RAM thực tế. Nó khôi phục các ZIP cũ rồi lưu từng video
+   mới lên Drive. Dừng cell 3 của notebook cũ trước khi chạy bản này.
 2. Khi thấy `TEST_DATA_READY`, chuyển sang GPU rồi chạy lại cell 1–3 để
    khôi phục cache trong runtime mới. Cell 4 đọc checkpoint đã khóa và
    chấm Test. Notebook in đường dẫn kết quả sau `CDCN_LOCKED_TEST_READY`.
@@ -78,25 +80,49 @@ with source.open("rb") as stream:
     prefix_hash = hashlib.sha256(stream.read(65536)).hexdigest()
 
 def test_cache_worker_hashes(workers):
-    if workers == {
-        "cdcn_prnet_smoke.py": "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8",
-        "cdcn_prnet_expanded.py": "655fcf8ff5679dd0947cb6249ac4e9c8160dd7980fce758628c45a4a018c78c4",
-    }:
+    if (workers["cdcn_prnet_smoke.py"] == "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8"
+            and workers["cdcn_prnet_expanded.py"] in {
+                "655fcf8ff5679dd0947cb6249ac4e9c8160dd7980fce758628c45a4a018c78c4",
+                "3e9c63b08c0e0ca52908f0ac1b8b785e566494f0503df1386cf0e57d7aa635a2",
+            }):
         return workers | {
             "cdcn_prnet_expanded.py": "6eb2a41eb6aa5b8cbc35b94677b8c940a27f56acea6ffd7a3db2a910a5fa4562",
         }
     return workers
 
+def automatic_workers(cpus, memory_bytes):
+    return min(4, max(1, cpus // 2), max(1, memory_bytes // (6 * 2**30)))
+
+PREP_WORKERS = 0  # 0 tự chọn, 1 tuần tự, hoặc chọn cụ thể 2–4
+START_FRESH = False  # True dùng cache riêng để dựng lại Test, giữ nguyên cache cũ
+cpus = len(os.sched_getaffinity(0))
+quota_path = Path("/sys/fs/cgroup/cpu.max")
+if quota_path.is_file():
+    quota, period = quota_path.read_text().split()
+    if quota != "max":
+        cpus = min(cpus, max(1, int(quota) // int(period)))
+memory = next(int(line.split()[1]) * 1024 for line in Path("/proc/meminfo").read_text().splitlines()
+              if line.startswith("MemAvailable:"))
+memory_limit = Path("/sys/fs/cgroup/memory.max")
+if memory_limit.is_file():
+    limit = memory_limit.read_text().strip()
+    if limit != "max":
+        used = int(memory_limit.with_name("memory.current").read_text())
+        memory = min(memory, max(0, int(limit) - used))
+workers = min(PREP_WORKERS, cpus) if PREP_WORKERS else automatic_workers(cpus, memory)
+print(f"CPU {cpus} vCPU | RAM còn {memory / 2**30:.1f} GiB | chọn {workers} tiến trình", flush=True)
+
 worker_hashes = {script: hashlib.sha256((package / script).read_text(encoding="utf-8").encode()).hexdigest()
                  for script in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}
-config = {"protocol": locked["protocol_sha256"], "profile": "p1-test8-mtcnn-prnet",
+profile = "p1-test8-mtcnn-prnet-fresh-v1" if START_FRESH else "p1-test8-mtcnn-prnet"
+config = {"protocol": locked["protocol_sha256"], "profile": profile,
           "archive": {"name": name, "bytes": expected_bytes, "prefix_sha256": prefix_hash},
           "workers": test_cache_worker_hashes(worker_hashes)}
 key = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:20]
 cache = BASE / "test-cache" / key
 assets = WORK / f"assets-{key}"
-PREP_WORKERS = 2  # 1 chạy tuần tự, 2 chạy song song hai video nếu CPU đủ lõi
-run_config = config | {"requested_prep_workers": PREP_WORKERS, "source_worker_hashes": worker_hashes}
+run_config = config | {"requested_prep_workers": workers, "available_vcpus": cpus,
+                       "available_memory_bytes": memory, "source_worker_hashes": worker_hashes}
 (RUN / "cache-config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
 
 REPAIR_CACHE = False  # đặt True nếu đủ 600 ZIP nhưng worker báo cache hỏng
@@ -108,10 +134,7 @@ if complete:
     python = sys.executable
 else:
     prepare_prnet_environment()
-    io_packages = ["pandas==2.2.3"]
-    if PREP_WORKERS > 1:
-        io_packages.append("threadpoolctl==3.6.0")
-    run("install-prep-io", sys.executable, "-m", "uv", "pip", "install", "--python", PY, *io_packages)
+    run("install-prep-io", sys.executable, "-m", "uv", "pip", "install", "--python", PY, "pandas==2.2.3")
     python = PY
     if shutil.disk_usage(WORK).free > expected_bytes + 12 * 2**30:
         stage = ["--stage-dir", WORK / "archives"]
@@ -120,7 +143,7 @@ else:
 
 run("prepare-locked-test", python, "-u", package / "cdcn_prnet_expanded.py",
     "--data", DATA, "--output", assets, "--cache", cache, "--prnet", WORK / "PRNet",
-    "--renderer", WORK / "PRNet-Depth-Generation", "--full", "--splits", "Test", "--workers", PREP_WORKERS,
+    "--renderer", WORK / "PRNet-Depth-Generation", "--full", "--splits", "Test", "--workers", workers,
     *stage, *(["--restore-only"] if complete else []))
 manifest = assets / "smoke_summary.json"
 copy_progress(manifest, RUN / "preparation.json", "Save Test preparation manifest")

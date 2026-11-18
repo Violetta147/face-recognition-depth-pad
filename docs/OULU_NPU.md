@@ -143,14 +143,22 @@ Dev `0.0007160214008763433` trước khi chuẩn bị Test.
 
 Kết quả Test của cấu hình này đang chờ lượt chấm trên Colab.
 
-Cell 3 mặc định đặt `PREP_WORKERS = 2`. Mỗi tiến trình CPU có một bộ
-MTCNN và PRNet cùng giới hạn luồng theo số lõi khả dụng. Khi có ZIP cũ,
-cell dựng lại tám khung của một video để đối chiếu frame ID, JPEG scene,
-bbox và tổng map PRNet dùng để tính điểm. Nếu có sai khác, cell chuyển
-sang xử lý tuần tự. Dòng `PREP_WORKERS` báo số tiến trình thực tế.
-Tiến trình chính ghi từng ZIP hoàn tất và in số video cùng ETA. Khi
-đổi notebook, dừng cell 3 cũ trước rồi mở bản mới trong cùng runtime nếu
-có thể để dùng lại TAR trên ổ cục bộ và các ZIP trên Drive.
+Cell 3 mặc định đặt `PREP_WORKERS = 0` để chọn tối đa bốn tiến trình
+theo vCPU và RAM còn trống. Mỗi tiến trình dùng cấu hình MTCNN và PRNet
+của lượt tuần tự. Trước khi chạy song song, cell dựng cùng hai video
+bằng hai cách trên cùng runtime. Cell so frame ID, bbox, pixel RGB đã
+crop và map độ sâu 32 × 32 cùng tổng map. Nếu có ZIP cũ, cell so thêm
+với dữ liệu đã lưu. Dòng `PARALLEL_NUMERIC_MATCH` xác nhận hai video
+kiểm tra trùng nhau. Khi có sai khác, cell báo rõ trường bị lệch và
+dừng trước khi ghi video mới. Hai video kiểm tra giúp phát hiện sai
+khác sớm. Muốn chứng minh trùng từng khung cho cả tập cần đối chiếu cả tập.
+
+Dòng `PREP_WORKERS` báo số tiến trình thực tế. Tiến trình chính ghi từng
+ZIP hoàn tất và in số video cùng ETA. Khi đổi notebook, dừng cell 3 cũ
+trước rồi mở bản mới trong cùng runtime nếu có thể để dùng lại TAR và
+các ZIP. Đặt `START_FRESH = True` khi chủ động dựng lại toàn bộ Test
+trong cache riêng. Checkpoint và ngưỡng Dev tiếp tục dùng bản đã khóa.
+
 
 ## Các nghiên cứu tiếp theo
 

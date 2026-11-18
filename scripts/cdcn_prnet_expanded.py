@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import defaultdict
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from contextlib import ExitStack
 import csv
@@ -18,8 +19,10 @@ import time
 from uuid import uuid4
 import zipfile
 
+import cv2
+
 from cdcn_prnet_smoke import (
-    DEPTH_COMMIT, INDEX_SHA, PILOT_SLOTS, PRNET_COMMIT, WEIGHT_SHA, emit_video, load_models, sha,
+    DEPTH_COMMIT, INDEX_SHA, PILOT_SLOTS, PRNET_COMMIT, WEIGHT_SHA, crop_bounds, emit_video, load_models, sha,
 )
 from deepface_pad.progress import Progress
 
@@ -141,17 +144,8 @@ def prepare_video(local, access, split, output, models, slots, *, spread_train=F
 _PROCESS_MODELS = None
 
 
-def init_process(prnet, renderer, threads):
+def init_process(prnet, renderer):
     global _PROCESS_MODELS
-    for key in ("TF_NUM_INTRAOP_THREADS", "OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-        os.environ[key] = str(threads)
-    os.environ["TF_NUM_INTEROP_THREADS"] = "1"
-    import cv2
-    from threadpoolctl import threadpool_limits
-
-    # NumPy/SciPy may have loaded before the spawned process runs the initializer.
-    threadpool_limits(limits=threads)
-    cv2.setNumThreads(threads)
     _PROCESS_MODELS = load_models(prnet, renderer)
 
 
@@ -159,24 +153,76 @@ def prepare_test_video(local, access, output):
     return prepare_video(local, access, "Test", output, _PROCESS_MODELS, PILOT_SLOTS)
 
 
-def check_parallel_reference(pool, archive, scratch, output, rows):
-    video, access = rows[0]["video_id"], rows[0]["access"]
-    probe_output = scratch / "probe"
+def test_frame_values(root, row):
+    video, frame = row["video_id"], row["frame_id"]
+    scene, box, depth = (root / name for name in frame_assets("Test", video, frame))
+    coordinates = tuple(map(float, box.read_text().splitlines()))
+    image = cv2.imread(str(scene))
+    depth_map = cv2.imread(str(depth), cv2.IMREAD_GRAYSCALE)
+    if image is None or depth_map is None or image.shape[:2] != depth_map.shape:
+        raise ValueError(f"PRNet comparison cannot read matching assets for {video} frame {frame}")
+    roi = crop_bounds(coordinates, image.shape)
+    rgb = cv2.resize(image[roi], (256, 256))
+    map32 = cv2.resize(depth_map[roi], (32, 32))
+    total = int(map32.sum())
+    if total != row["prnet_sum_32"]:
+        raise ValueError(f"PRNet sum differs from manifest for {video} frame {frame}: {total} != {row['prnet_sum_32']}")
+    return {"frame_id": frame, "bbox": coordinates, "depth_sum": total,
+            "rgb_crop": rgb.tobytes(), "depth32": map32.tobytes()}
+
+
+def compare_test_video(video, reference_root, reference, candidate_root, candidate, *, label):
+    for expected, actual in zip(reference, candidate, strict=True):
+        if expected["frame_id"] != actual["frame_id"]:
+            raise ValueError(f"{label}: {video} slot {expected['slot']} differs in frame_id")
+        before = test_frame_values(reference_root, expected)
+        after = test_frame_values(candidate_root, actual)
+        for field, value in before.items():
+            if value != after[field]:
+                raise ValueError(f"{label}: {video} frame {expected['frame_id']} differs in {field}")
+
+
+def check_parallel_reference(pool, archive, scratch, output, videos, rows, prnet, renderer):
+    cached = defaultdict(list)
+    for row in rows:
+        cached[row["video_id"]].append(row)
+    sample, cached_count = {}, 0
+    quota = min(2, len(cached))
     for member in archive:
         name = PurePosixPath(member.name)
-        if member.isfile() and name.suffix.lower() == ".avi" and name.stem == video:
-            local = staged_video(archive, member, scratch)
-            result, failure = pool.submit(prepare_test_video, local, access, probe_output).result()
-            local.unlink()
-            # The scorer consumes the scene and bbox, and the sum of the cropped PRNet map.
-            names = video_assets(rows, "Test", video, access)
-            inputs = [name for name in names if name.endswith(("_scene.jpg", "_scene.dat"))]
-            if failure or result != rows or any(sha(probe_output / name) != sha(output / name) for name in inputs):
-                print(f"PARALLEL_REFERENCE_DIFFERS {video} | Switching to serial preparation", flush=True)
-                return False
-            print(f"PARALLEL_REFERENCE_MATCH {video} | 8 frames", flush=True)
-            return True
-    raise ValueError(f"Cached Test video {video} is missing from {archive.name}")
+        video = name.stem
+        if not member.isfile() or name.suffix.lower() != ".avi" or video not in videos or video in sample:
+            continue
+        in_cache = video in cached
+        if (in_cache and cached_count == quota) or (not in_cache and len(sample) - cached_count == 2 - quota):
+            continue
+        sample[video] = (staged_video(archive, member, scratch), videos[video])
+        cached_count += in_cache
+        if len(sample) == 2:
+            break
+    if len(sample) != 2:
+        raise ValueError(f"Could not find two probe AVIs in {archive.name}")
+
+    serial_root, parallel_root = scratch / "probe-serial", scratch / "probe-parallel"
+    with ProcessPoolExecutor(max_workers=1, mp_context=multiprocessing.get_context("spawn"),
+                             initializer=init_process, initargs=(prnet, renderer)) as serial:
+        refs = {video: serial.submit(prepare_test_video, path, access, serial_root).result()
+                for video, (path, access) in sample.items()}
+    for video, (expected, failure) in refs.items():
+        if failure:
+            raise ValueError(f"Serial numeric check failed: {failure}")
+        if video in cached:
+            compare_test_video(video, output, cached[video], serial_root, expected, label="CACHED_TEST_DIFFERS")
+    jobs = {video: pool.submit(prepare_test_video, path, access, parallel_root)
+            for video, (path, access) in sample.items()}
+    for video, job in jobs.items():
+        actual, failure = job.result()
+        if failure:
+            raise ValueError(f"Parallel numeric check failed: {failure}")
+        compare_test_video(video, serial_root, refs[video][0], parallel_root, actual, label="PARALLEL_TEST_DIFFERS")
+    for local, _ in sample.values():
+        local.unlink()
+    print(f"PARALLEL_NUMERIC_MATCH {len(sample)} videos | {cached_count} compared with cache", flush=True)
 
 
 def parallel_jobs(pool, archive, scratch, output, waiting, workers):
@@ -291,10 +337,6 @@ def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
                     raise ValueError("Unexpected PRNet checkpoint")
         count = len(waiting)
         archive_path = data / f"{split}_files.tar"
-        if stage_dir is not None:
-            from deepface_pad.colab_cache import copy_progress
-
-            archive_path = copy_progress(archive_path, stage_dir / archive_path.name, f"Stage {archive_path.name}")
         with ExitStack() as resources:
             scratch = Path(resources.enter_context(tempfile.TemporaryDirectory(prefix="prepare-", dir=output)))
             rendered = scratch / "rendered" if workers > 1 else output
@@ -303,19 +345,21 @@ def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
                 cpus = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
                 workers = min(workers, cpus, count)
             if workers > 1:
-                threads = max(1, cpus // workers)
                 pool = resources.enter_context(ProcessPoolExecutor(
                     max_workers=workers, mp_context=multiprocessing.get_context("spawn"),
-                    initializer=init_process, initargs=(prnet, renderer, threads),
+                    initializer=init_process, initargs=(prnet, renderer),
                 ))
-                if rows:
-                    ref = [row for row in rows if row["video_id"] == rows[0]["video_id"]]
-                    with Progress("Compare parallel preprocessing with cached Test frames"), \
-                            tarfile.open(archive_path, "r:") as reference_archive:
-                        if check_parallel_reference(pool, reference_archive, scratch, output, ref):
-                            job = partial(parallel_jobs, pool, workers=workers)
-                else:
-                    job = partial(parallel_jobs, pool, workers=workers)
+                probe_archive = archive_path
+                if stage_dir is not None:
+                    local = stage_dir / archive_path.name
+                    if local.is_file():
+                        staged, source = local.stat(), archive_path.stat()
+                        if (staged.st_size, staged.st_mtime_ns) == (source.st_size, source.st_mtime_ns):
+                            probe_archive = local
+                with Progress("Check same-runtime serial and parallel on two videos"), \
+                        tarfile.open(probe_archive, "r:") as reference_archive:
+                    check_parallel_reference(pool, reference_archive, scratch, output, videos, rows, prnet, renderer)
+                job = partial(parallel_jobs, pool, workers=workers)
             if job is None:
                 workers, rendered = 1, output
                 if models is None:
@@ -323,6 +367,10 @@ def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
                         models = load_models(prnet, renderer)
                 job = partial(serial_jobs, split=split, models=models, slots=slots, spread_train=spread_train)
 
+            if stage_dir is not None:
+                from deepface_pad.colab_cache import copy_progress
+
+                archive_path = copy_progress(archive_path, stage_dir / archive_path.name, f"Stage {archive_path.name}")
             print(f"PREP_WORKERS {workers} | {count} {split} videos remaining", flush=True)
             archive = resources.enter_context(tarfile.open(archive_path, "r:"))
             progress = resources.enter_context(Progress(f"{split} prepare missing videos", count, "videos"))

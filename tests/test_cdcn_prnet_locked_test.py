@@ -12,6 +12,8 @@ import tarfile
 from threading import Barrier
 from types import SimpleNamespace
 
+import cv2
+import numpy as np
 import pandas as pd
 import pytest
 import torch
@@ -152,8 +154,8 @@ def test_parallel_revision_uses_existing_test_cache():
     assert normalize(changed) == changed
 
 
-@pytest.mark.parametrize("reference_matches", [True, False])
-def test_prepare_resumes_cache_and_only_parallelizes_remaining_videos(tmp_path, monkeypatch, capsys, reference_matches):
+@pytest.mark.parametrize("mismatch", [None, "cache", "parallel"])
+def test_prepare_checks_same_runtime_and_cache_before_parallel_publishing(tmp_path, monkeypatch, capsys, mismatch):
     (tmp_path / "Protocols.tar").write_bytes(b"fixture")
     members = {f"1_3_36_{access}": access for access in (1, 2, 3)}
     with tarfile.open(tmp_path / "Test_files.tar", "w") as archive:
@@ -186,18 +188,22 @@ def test_prepare_resumes_cache_and_only_parallelizes_remaining_videos(tmp_path, 
 
     def emit(path, access, split, root, models, slots, *, spread_train):
         assert not spread_train
-        if root.name == "rendered":
-            assert reference_matches
+        if root.name in ("probe-parallel", "rendered"):
             barrier.wait()
-        prnet_sum = 5 if root.name == "probe" and not reference_matches else 10
+        unequal = (mismatch == "cache" and root.name == "baseline"
+                   or mismatch == "parallel" and root.name == "probe-parallel")
+        depth_value = 101 if unequal else 100
         result = []
         for slot in slots:
-            for name in expanded.frame_assets(split, path.stem, slot + 1):
-                target = root / name
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_bytes(b"assets")
+            scene, box, depth = (root / name for name in expanded.frame_assets(split, path.stem, slot + 1))
+            scene.parent.mkdir(parents=True, exist_ok=True)
+            depth.parent.mkdir(parents=True, exist_ok=True)
+            assert cv2.imwrite(str(scene), np.full((32, 32, 3), 60, dtype=np.uint8))
+            assert cv2.imwrite(str(depth), np.full((32, 32), depth_value, dtype=np.uint8))
+            box.write_text("0\n0\n32\n32\n")
             result.append({"video_id": path.stem, "split": split, "access": access, "slot": slot,
-                           "frame_id": slot + 1, "prnet_sum_32": prnet_sum, "train_target_zero": access != 1})
+                           "frame_id": slot + 1, "prnet_sum_32": depth_value * 32 * 32,
+                           "train_target_zero": access != 1})
         return result
 
     monkeypatch.setattr(expanded, "emit_video", emit)
@@ -205,18 +211,35 @@ def test_prepare_resumes_cache_and_only_parallelizes_remaining_videos(tmp_path, 
     first_zip = cache / "Test" / f"{first}.zip"
     expanded.publish_video(first_zip, baseline, "Test", first, 1, rows)
     old_hash, old_mtime = expanded.sha(first_zip), first_zip.stat().st_mtime_ns
-    expanded.prepare(tmp_path, cache, output, prnet, renderer, full=True, splits=["Test"], workers=2)
-
-    log = capsys.readouterr().out
-    if reference_matches:
-        assert "PARALLEL_REFERENCE_MATCH" in log and "PREP_WORKERS 2" in log
+    if mismatch:
+        label = "CACHED_TEST_DIFFERS" if mismatch == "cache" else "PARALLEL_TEST_DIFFERS"
+        with pytest.raises(ValueError, match=f"{label}.*depth_sum"):
+            expanded.prepare(tmp_path, cache, output, prnet, renderer, full=True, splits=["Test"], workers=2)
+        assert len(list((cache / "Test").glob("*.zip"))) == 1
+        assert not (output / "smoke_summary.json").exists()
     else:
-        assert "PARALLEL_REFERENCE_DIFFERS" in log and "PREP_WORKERS 1" in log
+        expanded.prepare(tmp_path, cache, output, prnet, renderer, full=True, splits=["Test"], workers=2)
+        log = capsys.readouterr().out
+        assert "PARALLEL_NUMERIC_MATCH 2 videos | 1 compared with cache" in log and "PREP_WORKERS 2" in log
+        assert len(list((cache / "Test").glob("*.zip"))) == 3
+        manifest = json.loads((output / "smoke_summary.json").read_text(encoding="utf-8"))
+        assert not manifest["failures"] and len(manifest["frames"]) == 24
     assert old_hash == expanded.sha(first_zip) and old_mtime == first_zip.stat().st_mtime_ns
-    assert len(list((cache / "Test").glob("*.zip"))) == 3
     assert not list(output.glob("prepare-*"))
-    manifest = json.loads((output / "smoke_summary.json").read_text(encoding="utf-8"))
-    assert not manifest["failures"] and len(manifest["frames"]) == 24
+
+
+def test_automatic_workers_respects_cpu_and_available_ram():
+    notebook = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Locked_Test.ipynb"
+    cell = "".join(json.loads(notebook.read_text(encoding="utf-8"))["cells"][3]["source"])
+    function = next(node for node in ast.parse(cell).body
+                    if isinstance(node, ast.FunctionDef) and node.name == "automatic_workers")
+    scope = {}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), str(notebook), "exec"), scope)
+    workers = scope[function.name]
+    assert workers(8, 48 * 2**30) == 4
+    assert workers(4, 25 * 2**30) == 2
+    assert workers(8, 7 * 2**30) == 1
+    assert workers(2, 12 * 2**30) == 1
 
 
 def _read_avi_in_worker(path, access, output):
