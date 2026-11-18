@@ -267,6 +267,7 @@ def test_full_notebook_compiles_with_cpu_prepare_and_batch_56():
     for cell in cells[1:]:
         compile("".join(cell["source"]), notebook.name, "exec")
     assert "BATCH = 56" in "".join(cells[4]["source"])
+    assert "CHECKPOINT_EVERY = 5" in "".join(cells[4]["source"])
     assert '"--restore-only"' in "".join(cells[3]["source"])
     assert '"--device", "cuda"' in "".join(cells[4]["source"])
 
@@ -295,3 +296,78 @@ def test_threaded_train_epoch_keeps_short_final_batch(tmp_path, monkeypatch):
     assert history[0]["updates"] == 2
     assert all(int(state["step"]) == 2 for state in optimizer.state.values())
     assert 0 < history[0]["load_seconds"] <= history[0]["seconds"]
+
+
+def test_train_can_resume_or_score_after_interrupting_a_saved_epoch(tmp_path, monkeypatch):
+    class TinyCDCN(torch.nn.Conv2d):
+        def forward(self, image):
+            return {"depth": super().forward(image)}
+
+    root = tmp_path / "assets"
+    root.mkdir()
+    (root / "smoke_summary.json").write_text("{}", encoding="utf-8")
+    splits = {"Train": {"a": [0], "b": [1], "c": [2]}, "Dev": {"real": [], "fake": []}}
+    monkeypatch.setattr(pilot, "load_videos", lambda *args: splits)
+    monkeypatch.setattr(pilot, "OfficialCDCN", lambda theta: TinyCDCN(1, 1, 1))
+    monkeypatch.setattr(pilot, "OfficialContrastiveDepthLoss", torch.nn.MSELoss)
+    monkeypatch.setattr(pilot, "sample_training_frame",
+                        lambda _, rows, rng: (torch.rand(1, 4, 4) * rng.random(), torch.full((1, 4, 4), rows[0] / 2)))
+    monkeypatch.setattr(pilot, "score_dev", lambda *args: pilot.pd.DataFrame({
+        "video_id": ["real", "fake"], "label": [1, 0], "score": [0.7, 0.3],
+    }))
+
+    def train(out, epochs, **kwargs):
+        pilot.train(root, out, torch.device("cpu"), epochs, 2, 43, profile="full",
+                    checkpoint_every=1, **kwargs)
+
+    baseline, stopped, resumed, scored = (tmp_path / label for label in ("baseline", "stopped", "resumed", "scored"))
+    train(baseline, 3)
+    original_publish = pilot.publish_recovery
+
+    def save_then_interrupt(*args):
+        original_publish(*args)
+        raise KeyboardInterrupt
+
+    with monkeypatch.context() as scoped:
+        scoped.setattr(pilot, "publish_recovery", save_then_interrupt)
+        with pytest.raises(KeyboardInterrupt):
+            train(stopped, 3)
+
+    recovery = stopped / "resume.pt"
+    assert recovery.is_file() and not (stopped / "dev_scores.csv").exists()
+    train(resumed, 3, resume=recovery)
+    train(scored, 1, resume=recovery)
+
+    def weights(directory):
+        return torch.load(directory / "checkpoint.pt", weights_only=True)
+
+    resumed_weights = weights(resumed)
+    for name, tensor in weights(baseline).items():
+        assert torch.equal(tensor, resumed_weights[name])
+    first_epoch = torch.load(recovery, weights_only=True)
+    for name, tensor in weights(scored).items():
+        assert torch.equal(tensor, first_epoch["model"][name])
+    reports = [json.loads((directory / "pilot_result.json").read_text()) for directory in (resumed, scored)]
+    assert [row["epoch"] for row in reports[0]["history"]] == [1, 2, 3]
+    assert [row["epoch"] for row in reports[1]["history"]] == [1]
+    assert all(report["resumed_from_epoch"] == 1 for report in reports)
+    assert (scored / "dev_scores.csv").is_file()
+    with pytest.raises(ValueError, match="matching this manifest"):
+        pilot.read_recovery(recovery, first_epoch["config"] | {"batch": 3})
+
+
+def test_recovery_publish_failure_keeps_previous_drive_file_and_current_local_checkpoint(tmp_path, monkeypatch):
+    local = tmp_path / "runtime" / "resume.pt"
+    mirror = tmp_path / "resume.pt"
+    mirror.write_bytes(b"previous checkpoint")
+
+    def partial_transfer(source, destination):
+        destination.write_bytes(b"interrupted upload")
+        raise OSError("Drive connection failed")
+
+    monkeypatch.setattr(pilot.shutil, "copyfile", partial_transfer)
+    with pytest.raises(OSError, match="Local checkpoint"):
+        pilot.publish_recovery({"epoch": 5}, local, mirror)
+    assert torch.load(local, weights_only=True) == {"epoch": 5}
+    assert mirror.read_bytes() == b"previous checkpoint"
+    assert not mirror.with_suffix(".pt.part").exists()

@@ -43,7 +43,10 @@ trong `/content/cdcn-prnet-full/logs` cho đến khi runtime bị xóa.
 Sau khi cell 3 báo đủ 36.000 khung, chuyển sang **A100 80 GB** và chạy
 lại **cell 1–4** với cả hai tập trong `SPLITS`. Cell 4 chạy 3 epoch
 từ đầu với batch 56 rồi chấm toàn bộ Dev, để đo thời gian trước khi chốt
-lượt huấn luyện dài. Kết quả lưu trên Drive."""),
+lượt huấn luyện dài. Khi chạy dài hơn, mỗi 5 epoch cell 4 lưu `resume.pt`
+và in `RECOVERY_CHECKPOINT`. Để chấm Dev tại epoch đã lưu, đặt
+`RESUME_CHECKPOINT` thành đường dẫn đã in và `EPOCHS` bằng epoch đó.
+Đặt `EPOCHS` cao hơn nếu muốn train tiếp."""),
     ("code", MOUNT),
     ("code", LOAD_CODE),
     ("code", "#@title 3. Khôi phục hoặc chuẩn bị Train/Dev đầy đủ\nPREPARED_SPLITS = ()\n" + include_setup() + """
@@ -168,15 +171,19 @@ if set(globals().get("PREPARED_SPLITS", ())) != {"Train", "Dev"}:
 EPOCHS = 3
 BATCH = 56
 WORKERS = 4
+CHECKPOINT_EVERY = 5  # số epoch giữa hai lần lưu trạng thái phục hồi
+RESUME_CHECKPOINT = ""  # dán đường dẫn resume.pt để chạy tiếp hoặc chấm Dev
+resume = ["--resume", RESUME_CHECKPOINT.strip()] if RESUME_CHECKPOINT.strip() else []
 result = RUN / f"train-{time.time_ns()}"
 run("train-full-pilot", sys.executable, "-u", WORK / "scripts/cdcn_prnet_train_pilot.py",
     "--assets", assets, "--output", result, "--epochs", EPOCHS, "--batch", BATCH,
     "--seed", 43, "--device", "cuda", "--profile", "full", "--protocol", DATA / "Protocols.tar",
-    "--workers", WORKERS)
+    "--workers", WORKERS, "--checkpoint-every", CHECKPOINT_EVERY, *resume)
 report = json.loads((result / "pilot_result.json").read_text())
 print(json.dumps(report, indent=2))
-if EPOCHS > 1:
-    typical = statistics.median(row["seconds"] for row in report["history"][1:])
+epochs_this_run = report["history"][report.get("resumed_from_epoch", 0):]
+if len(epochs_this_run) > 1:
+    typical = statistics.median(row["seconds"] for row in epochs_this_run[1:])
     print(f"Trung vị epoch sau khởi động: {typical:.2f}s")
 print("RUN_DIR", result)"""),
 ]

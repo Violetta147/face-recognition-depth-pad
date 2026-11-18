@@ -108,6 +108,21 @@ rồi chép một lần lên Drive sau khi kết thúc. Nếu Drive mất kết 
 tải log cục bộ về trước khi xóa runtime. Các ZIP hoàn tất vẫn được tìm
 trong cùng khóa cache khi chạy lại với cùng dữ liệu và bộ tiền xử lý.
 
+Cell 4 lưu `resume.pt` sau mỗi `CHECKPOINT_EVERY = 5` epoch và ở epoch
+cuối. Dòng `RECOVERY_CHECKPOINT` ghi số epoch đã lưu cùng đường dẫn.
+Tệp phục hồi lưu trọng số, trạng thái Adam, lịch tốc độ học, bộ sinh số
+ngẫu nhiên và lịch sử loss. Mỗi lần lưu thay thế mốc phục hồi trước của
+cùng lượt. Nếu không chép được lên Drive, lỗi ghi đường dẫn bản lưu trên
+runtime.
+
+Để dừng thủ công, chờ dòng `RECOVERY_CHECKPOINT` rồi dừng cell 4.
+Khi chạy lại, dán đường dẫn `resume.pt` vào `RESUME_CHECKPOINT` ở cell 4.
+Đặt `EPOCHS` bằng số epoch đã lưu nếu chỉ cần chấm Dev tại mốc đó, hoặc
+đặt cao hơn để huấn luyện tiếp tới tổng số epoch mong muốn. Giữ seed,
+batch, số worker và manifest dữ liệu của lượt gốc. Trên runtime mới, chạy
+lại cell 1–3 trước khi chạy cell 4. Kết quả của lần chấm Dev được lưu trong
+thư mục lượt mới, gồm `checkpoint.pt`, `dev_scores.csv` và `pilot_result.json`.
+
 ## Các nghiên cứu tiếp theo
 
 - E1 dự đoán bản đồ giả độ sâu từ 3DDFA V2 cho mặt thật. E2 thêm đầu
