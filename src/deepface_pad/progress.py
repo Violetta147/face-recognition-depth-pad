@@ -1,7 +1,10 @@
 """Periodic progress for notebook jobs and loops."""
 from __future__ import annotations
 
+from contextlib import suppress
+import os
 from pathlib import Path
+import signal
 import subprocess
 import threading
 import time
@@ -47,15 +50,17 @@ class Progress:
         print(self.message("failed" if exc_type else "finished"), flush=True)
 
 
-def run_logged(command, *, label, log, cwd=None, env=None):
+def run_logged(command, *, label, log, cwd=None, env=None, separate_process_group=False):
     """Forward combined child output to the cell and preserve the original error."""
     log = Path(log)
     log.parent.mkdir(parents=True, exist_ok=True)
     command = [str(arg) for arg in command]
+    separate_process_group = separate_process_group and os.name == "posix"
     print(f"Log: {log}", flush=True)
     with log.open("x", encoding="utf-8") as out, Progress(label, interval=60):
         with subprocess.Popen(command, cwd=cwd, env=env, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace") as proc:
+                              stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace",
+                              start_new_session=separate_process_group) as proc:
             try:
                 for line in proc.stdout:
                     out.write(line)
@@ -63,12 +68,19 @@ def run_logged(command, *, label, log, cwd=None, env=None):
                     print(line, end="", flush=True)
                 code = proc.wait()
             except BaseException:
-                if proc.poll() is None:
+                if separate_process_group:
+                    with suppress(ProcessLookupError):
+                        os.killpg(proc.pid, signal.SIGTERM)
+                elif proc.poll() is None:
                     proc.terminate()
                 try:
                     proc.wait(timeout=5)
                 except subprocess.TimeoutExpired:
-                    proc.kill()
+                    if separate_process_group:
+                        with suppress(ProcessLookupError):
+                            os.killpg(proc.pid, signal.SIGKILL)
+                    else:
+                        proc.kill()
                     proc.wait()
                 raise
         if code:

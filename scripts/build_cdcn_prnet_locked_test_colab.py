@@ -10,8 +10,8 @@ CELLS = [
 
 1. Mở notebook trên Colab và chạy cell 1–3 trên **CPU**. Cell 3 xác minh
    checkpoint 100 epoch và ngưỡng Dev, rồi chuẩn bị 600 video Test với
-   MTCNN và PRNet, 8 khung mỗi video. Cell này lưu mỗi video đã xử lý lên
-   Drive và có thể chạy lại nếu runtime ngắt.
+   MTCNN và PRNet, 8 khung mỗi video. Mặc định dùng hai tiến trình CPU.
+   Cell này khôi phục các ZIP cũ rồi lưu từng video mới lên Drive.
 2. Khi thấy `TEST_DATA_READY`, chuyển sang GPU rồi chạy lại cell 1–3 để
    khôi phục cache trong runtime mới. Cell 4 đọc checkpoint đã khóa và
    chấm Test. Notebook in đường dẫn kết quả sau `CDCN_LOCKED_TEST_READY`.
@@ -48,7 +48,10 @@ if not TRAIN_RUN.is_dir():
 RUN.mkdir(parents=True)
 print("Thư mục kết quả:", RUN)
 print("Runtime:", torch.cuda.get_device_name() if torch.cuda.is_available() else "CPU")"""),
-    ("code", LOAD_CODE),
+    ("code", LOAD_CODE.replace(
+        "run_logged(args, label=label, log=log,",
+        'run_logged(args, label=label, log=log, separate_process_group=(label == "prepare-locked-test"),'
+    )),
     ("code", "#@title 3. Chuẩn bị hoặc khôi phục 600 video Test\n" + include_setup() + """
 
 import json
@@ -73,14 +76,28 @@ if source.stat().st_size != expected_bytes:
     raise ValueError(f"Kiểm tra dung lượng Test TAR: {source}")
 with source.open("rb") as stream:
     prefix_hash = hashlib.sha256(stream.read(65536)).hexdigest()
+
+def test_cache_worker_hashes(workers):
+    if workers == {
+        "cdcn_prnet_smoke.py": "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8",
+        "cdcn_prnet_expanded.py": "655fcf8ff5679dd0947cb6249ac4e9c8160dd7980fce758628c45a4a018c78c4",
+    }:
+        return workers | {
+            "cdcn_prnet_expanded.py": "6eb2a41eb6aa5b8cbc35b94677b8c940a27f56acea6ffd7a3db2a910a5fa4562",
+        }
+    return workers
+
+worker_hashes = {script: hashlib.sha256((package / script).read_text(encoding="utf-8").encode()).hexdigest()
+                 for script in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}
 config = {"protocol": locked["protocol_sha256"], "profile": "p1-test8-mtcnn-prnet",
           "archive": {"name": name, "bytes": expected_bytes, "prefix_sha256": prefix_hash},
-          "workers": {script: hashlib.sha256((package / script).read_text(encoding="utf-8").encode()).hexdigest()
-                      for script in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}}
+          "workers": test_cache_worker_hashes(worker_hashes)}
 key = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:20]
 cache = BASE / "test-cache" / key
 assets = WORK / f"assets-{key}"
-(RUN / "cache-config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
+PREP_WORKERS = 2  # 1 chạy tuần tự, 2 chạy song song hai video nếu CPU đủ lõi
+run_config = config | {"requested_prep_workers": PREP_WORKERS, "source_worker_hashes": worker_hashes}
+(RUN / "cache-config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
 
 REPAIR_CACHE = False  # đặt True nếu đủ 600 ZIP nhưng worker báo cache hỏng
 zip_count = len(list((cache / "Test").glob("*.zip")))
@@ -91,7 +108,10 @@ if complete:
     python = sys.executable
 else:
     prepare_prnet_environment()
-    run("install-prep-io", sys.executable, "-m", "uv", "pip", "install", "--python", PY, "pandas==2.2.3")
+    io_packages = ["pandas==2.2.3"]
+    if PREP_WORKERS > 1:
+        io_packages.append("threadpoolctl==3.6.0")
+    run("install-prep-io", sys.executable, "-m", "uv", "pip", "install", "--python", PY, *io_packages)
     python = PY
     if shutil.disk_usage(WORK).free > expected_bytes + 12 * 2**30:
         stage = ["--stage-dir", WORK / "archives"]
@@ -100,7 +120,7 @@ else:
 
 run("prepare-locked-test", python, "-u", package / "cdcn_prnet_expanded.py",
     "--data", DATA, "--output", assets, "--cache", cache, "--prnet", WORK / "PRNet",
-    "--renderer", WORK / "PRNet-Depth-Generation", "--full", "--splits", "Test",
+    "--renderer", WORK / "PRNet-Depth-Generation", "--full", "--splits", "Test", "--workers", PREP_WORKERS,
     *stage, *(["--restore-only"] if complete else []))
 manifest = assets / "smoke_summary.json"
 copy_progress(manifest, RUN / "preparation.json", "Save Test preparation manifest")

@@ -1,9 +1,15 @@
+import ast
 import base64
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+import hashlib
 import io
 import json
+import multiprocessing
+import os
 from pathlib import Path
 import sys
 import tarfile
+from threading import Barrier
 from types import SimpleNamespace
 
 import pandas as pd
@@ -124,3 +130,112 @@ def test_test_notebook_bundles_current_code():
         for script in ("cdcn_prnet_locked_test", "cdcn_prnet_train_pilot", "cdcn_prnet_expanded"):
             name = f"scripts/{script}.py"
             assert archive.extractfile(name).read() == (ROOT / name).read_bytes()
+
+
+def test_parallel_revision_uses_existing_test_cache():
+    notebook = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Locked_Test.ipynb"
+    cell = "".join(json.loads(notebook.read_text(encoding="utf-8"))["cells"][3]["source"])
+    function = next(node for node in ast.parse(cell).body
+                    if isinstance(node, ast.FunctionDef) and node.name == "test_cache_worker_hashes")
+    scope = {}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), str(notebook), "exec"), scope)
+    workers = {name: hashlib.sha256((ROOT / "scripts" / name).read_text(encoding="utf-8").encode()).hexdigest()
+               for name in ("cdcn_prnet_smoke.py", "cdcn_prnet_expanded.py")}
+    normalize = scope[function.name]
+    # Recorded by the serial notebook for the private Test TAR.
+    config = {"protocol": locked.LOCK["protocol_sha256"], "profile": "p1-test8-mtcnn-prnet",
+              "archive": {"name": "Test_files.tar", "bytes": 39211162112,
+                          "prefix_sha256": "f8aaf9090246f0378a792467a635e811d30afdde685e68a905837ec4fc78c50e"},
+              "workers": normalize(workers)}
+    assert hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:20] == "6566c176f4d084b28ef0"
+    changed = workers | {"cdcn_prnet_smoke.py": "f" * 64}
+    assert normalize(changed) == changed
+
+
+@pytest.mark.parametrize("reference_matches", [True, False])
+def test_prepare_resumes_cache_and_only_parallelizes_remaining_videos(tmp_path, monkeypatch, capsys, reference_matches):
+    (tmp_path / "Protocols.tar").write_bytes(b"fixture")
+    members = {f"1_3_36_{access}": access for access in (1, 2, 3)}
+    with tarfile.open(tmp_path / "Test_files.tar", "w") as archive:
+        for video in members:
+            member = tarfile.TarInfo(f"Test/{video}.avi")
+            member.size = 4
+            archive.addfile(member, io.BytesIO(b"mock"))
+
+    prnet, renderer = tmp_path / "PRNet", tmp_path / "renderer"
+    weight = prnet / "Data/net-data/256_256_resfcn256_weight.data-00000-of-00001"
+    weight.parent.mkdir(parents=True)
+    weight.write_bytes(b"tf-data")
+    weight.with_suffix(".index").write_bytes(b"tf-index")
+    monkeypatch.setattr(expanded, "WEIGHT_SHA", expanded.sha(weight))
+    monkeypatch.setattr(expanded, "INDEX_SHA", expanded.sha(weight.with_suffix(".index")))
+    monkeypatch.setattr(expanded, "subprocess", SimpleNamespace(
+        check_output=lambda command, text: expanded.PRNET_COMMIT if Path(command[2]) == prnet else expanded.DEPTH_COMMIT))
+    monkeypatch.setattr(expanded, "full_membership", lambda protocol, splits: {"Test": members})
+    monkeypatch.setattr(expanded, "load_models", lambda *args: ())
+    monkeypatch.setattr(expanded, "init_process", lambda *args: None)
+    monkeypatch.setattr(expanded.os, "cpu_count", lambda: 2)
+    if hasattr(expanded.os, "sched_getaffinity"):
+        monkeypatch.setattr(expanded.os, "sched_getaffinity", lambda pid: {0, 1})
+    monkeypatch.setattr(expanded, "ProcessPoolExecutor", lambda max_workers, **options:
+                        ThreadPoolExecutor(max_workers=max_workers))
+    cache, output, baseline = tmp_path / "cache", tmp_path / "assets", tmp_path / "baseline"
+    (cache / "Test").mkdir(parents=True)
+    first = next(iter(members))
+    barrier = Barrier(2, timeout=5)
+
+    def emit(path, access, split, root, models, slots, *, spread_train):
+        assert not spread_train
+        if root.name == "rendered":
+            assert reference_matches
+            barrier.wait()
+        prnet_sum = 5 if root.name == "probe" and not reference_matches else 10
+        result = []
+        for slot in slots:
+            for name in expanded.frame_assets(split, path.stem, slot + 1):
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(b"assets")
+            result.append({"video_id": path.stem, "split": split, "access": access, "slot": slot,
+                           "frame_id": slot + 1, "prnet_sum_32": prnet_sum, "train_target_zero": access != 1})
+        return result
+
+    monkeypatch.setattr(expanded, "emit_video", emit)
+    rows = emit(Path(f"{first}.avi"), 1, "Test", baseline, (), expanded.PILOT_SLOTS, spread_train=False)
+    first_zip = cache / "Test" / f"{first}.zip"
+    expanded.publish_video(first_zip, baseline, "Test", first, 1, rows)
+    old_hash, old_mtime = expanded.sha(first_zip), first_zip.stat().st_mtime_ns
+    expanded.prepare(tmp_path, cache, output, prnet, renderer, full=True, splits=["Test"], workers=2)
+
+    log = capsys.readouterr().out
+    if reference_matches:
+        assert "PARALLEL_REFERENCE_MATCH" in log and "PREP_WORKERS 2" in log
+    else:
+        assert "PARALLEL_REFERENCE_DIFFERS" in log and "PREP_WORKERS 1" in log
+    assert old_hash == expanded.sha(first_zip) and old_mtime == first_zip.stat().st_mtime_ns
+    assert len(list((cache / "Test").glob("*.zip"))) == 3
+    assert not list(output.glob("prepare-*"))
+    manifest = json.loads((output / "smoke_summary.json").read_text(encoding="utf-8"))
+    assert not manifest["failures"] and len(manifest["frames"]) == 24
+
+
+def _read_avi_in_worker(path, access, output):
+    return os.getpid(), path.read_bytes()
+
+
+def test_parallel_jobs_run_in_spawned_processes(tmp_path, monkeypatch):
+    tar = tmp_path / "Test_files.tar"
+    waiting = {f"1_3_36_{access}": access for access in (1, 2, 3)}
+    with tarfile.open(tar, "w") as archive:
+        for video in waiting:
+            payload = video.encode()
+            member = tarfile.TarInfo(f"{video}.avi")
+            member.size = len(payload)
+            archive.addfile(member, io.BytesIO(payload))
+
+    monkeypatch.setattr(expanded, "prepare_test_video", _read_avi_in_worker)
+    with ProcessPoolExecutor(max_workers=2, mp_context=multiprocessing.get_context("spawn")) as pool:
+        with tarfile.open(tar) as archive:
+            jobs = list(expanded.parallel_jobs(pool, archive, tmp_path, tmp_path, waiting, 2))
+    assert not waiting and len(jobs) == 3
+    assert all(pid != os.getpid() and payload == path.stem.encode() for path, _, (pid, payload) in jobs)
