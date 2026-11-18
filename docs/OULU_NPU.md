@@ -159,6 +159,12 @@ trước rồi mở bản mới trong cùng runtime nếu có thể để dùng 
 các ZIP. Đặt `START_FRESH = True` khi chủ động dựng lại toàn bộ Test
 trong cache riêng. Checkpoint và ngưỡng Dev tiếp tục dùng bản đã khóa.
 
+[Notebook kiểm tra runtime Colab](../notebooks/Colab_Runtime_Inventory.ipynb)
+đọc tên CPU, số vCPU theo giới hạn thực tế, RAM và GPU NVIDIA của phiên
+đang kết nối. Chạy một cell, lưu JSON rồi đổi runtime nếu cần so sánh.
+Kết quả ghi tài nguyên của phiên đo. Con số bốn trong notebook Test là
+giới hạn số tiến trình chuẩn bị video mà dự án chọn.
+
 
 ## Các nghiên cứu tiếp theo
 
