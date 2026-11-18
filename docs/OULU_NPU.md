@@ -123,6 +123,26 @@ batch, số worker và manifest dữ liệu của lượt gốc. Trên runtime m
 lại cell 1–3 trước khi chạy cell 4. Kết quả của lần chấm Dev được lưu trong
 thư mục lượt mới, gồm `checkpoint.pt`, `dev_scores.csv` và `pilot_result.json`.
 
+### Chấm Test Protocol 1 với checkpoint 100 epoch
+
+Lượt seed 43, batch 56 đạt ACER gộp 1,04% trên 900 video Dev. Lượt 50
+epoch đạt 10,35% trên cùng Dev. Chọn checkpoint 100 epoch và khóa ngưỡng
+Dev `0.0007160214008763433` trước khi chuẩn bị Test.
+
+1. Mở [notebook Test](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Locked_Test.ipynb).
+   Chạy cell 1–3 trên CPU. Cell 3 kiểm SHA-256 của checkpoint và protocol,
+   rồi dựng 4.800 khung bằng MTCNN và PRNet cho đúng 600 video Test chính
+   thức. ZIP theo video nằm trong `test-cache` trên Drive. Có thể chạy lại
+   cell 1–3 để tiếp tục từ các video còn thiếu.
+2. Khi thấy `TEST_DATA_READY`, chuyển sang GPU, chạy lại cell 1–3 để khôi
+   phục cache rồi chạy cell 4. Cell 4 dùng chung phép tính điểm theo video
+   với Dev. Video có điểm lớn hơn ngưỡng được nhận là thật.
+3. Tìm đường dẫn `CDCN_LOCKED_TEST_READY`. Drive lưu `test_lock.json`,
+   `test_scores.csv` và `test_metrics.json` dưới `locked-test-p1`. JSON
+   ghi số lỗi, APCER gộp, BPCER, ACER và dấu vân tay của dữ liệu và mô hình.
+
+Kết quả Test của cấu hình này đang chờ lượt chấm trên Colab.
+
 ## Các nghiên cứu tiếp theo
 
 - E1 dự đoán bản đồ giả độ sâu từ 3DDFA V2 cho mặt thật. E2 thêm đầu

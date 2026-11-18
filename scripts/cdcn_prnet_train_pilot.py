@@ -131,10 +131,10 @@ def frame_ratios(depth, denominators):
 
 
 @torch.inference_mode()
-def score_dev(model, root, videos, batch, device):
+def score_videos(model, root, videos, batch, device, *, split):
     model.eval()
     scores = []
-    with Progress("Score Dev", len(videos), "videos") as progress:
+    with Progress(f"Score {split}", len(videos), "videos") as progress:
         for done, (video, rows) in enumerate(sorted(videos.items()), 1):
             frames = [load_frame(root, row, 1.3) for row in rows]
             images = torch.stack([normalized_rgb(im) for im, _ in frames])
@@ -147,6 +147,10 @@ def score_dev(model, root, videos, batch, device):
                            "score": torch.cat(ratios).mean().item()})
             progress.update(done)
     return pd.DataFrame(scores)
+
+
+def score_dev(model, root, videos, batch, device):
+    return score_videos(model, root, videos, batch, device, split="Dev")
 
 
 def publish_recovery(state, local, destination):

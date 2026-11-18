@@ -24,12 +24,13 @@ FULL_COUNTS = {"Train": 1200, "Dev": 900}
 FULL_TRAIN_SLOTS = tuple(range(24))
 
 
-def full_membership(protocol):
+def full_membership(protocol, *, splits=("Train", "Dev")):
     from deepface_pad.oulu_npu import protocol_videos
 
+    names = {"Train": "train", "Dev": "val", "Test": "test"}
     return {
-        split: {video.id: video.access for video in protocol_videos(protocol, 1, None, name)}
-        for split, name in (("Train", "train"), ("Dev", "val"))
+        split: {video.id: video.access for video in protocol_videos(protocol, 1, None, names[split])}
+        for split in splits
     }
 
 
@@ -119,9 +120,15 @@ def restore_video(cache_path, root, split, video, access, slots=PILOT_SLOTS, *, 
 
 def prepare(data, cache, output, prnet, renderer, baseline=None, full=False,
             dev_cache=None, splits=("Train", "Dev"), stage_dir=None, restore_only=False):
+    test_only = tuple(splits) == ("Test",)
+    if "Test" in splits and not (test_only and full and baseline is None and dev_cache is None):
+        raise ValueError("Test preparation requires --full --splits Test by itself")
     protocol = data / "Protocols.tar"
     protocol_digest = sha(protocol)
-    selected = full_membership(protocol) if full else {split: select_group(protocol, split) for split in SUBJECT_COUNTS}
+    if full:
+        selected = full_membership(protocol, splits=("Test",)) if test_only else full_membership(protocol)
+    else:
+        selected = {split: select_group(protocol, split) for split in SUBJECT_COUNTS}
     if len(set(splits)) != len(splits) or (full and baseline is not None):
         raise ValueError("Choose unique splits and use --dev-cache to seed full preparation")
     output.mkdir(parents=True, exist_ok=full)
@@ -240,5 +247,5 @@ if __name__ == "__main__":
     parser.add_argument("--dev-cache", type=Path)
     parser.add_argument("--stage-dir", type=Path)
     parser.add_argument("--restore-only", action="store_true")
-    parser.add_argument("--splits", nargs="+", choices=("Train", "Dev"), default=("Train", "Dev"))
+    parser.add_argument("--splits", nargs="+", choices=("Train", "Dev", "Test"), default=("Train", "Dev"))
     prepare(**vars(parser.parse_args()))

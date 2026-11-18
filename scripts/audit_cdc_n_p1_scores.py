@@ -22,6 +22,18 @@ def load_scores(path):
     return frame
 
 
+def rates(frame, threshold):
+    # The public evaluator uses strict >, even though sklearn's ROC uses >=.
+    live = frame.loc[frame.label.eq(1), "score"]
+    attack = frame.loc[frame.label.eq(0), "score"]
+    rejected = int(live.le(threshold).sum())
+    accepted = int(attack.gt(threshold).sum())
+    bpcer, apcer = rejected / len(live), accepted / len(attack)
+    return {"apcer_pooled": apcer, "bpcer": bpcer, "acer_pooled": (apcer + bpcer) / 2,
+            "live_rejected": rejected, "live_total": len(live),
+            "attack_accepted": accepted, "attack_total": len(attack)}
+
+
 def score(dev, test):
     # The public code picks the first ROC point nearest to FPR = FNR.
     fpr, tpr, thresholds = roc_curve(dev.label, dev.score, pos_label=1)
@@ -29,18 +41,7 @@ def score(dev, test):
     if not np.isfinite(threshold):
         raise NonFiniteDevThreshold("Dev did not yield a finite threshold")
 
-    def rates(frame):
-        # The public evaluator uses strict >, even though sklearn's ROC uses >=.
-        live = frame.loc[frame.label.eq(1), "score"]
-        attack = frame.loc[frame.label.eq(0), "score"]
-        rejected = int(live.le(threshold).sum())
-        accepted = int(attack.gt(threshold).sum())
-        bpcer, apcer = rejected / len(live), accepted / len(attack)
-        return {"apcer_pooled": apcer, "bpcer": bpcer, "acer_pooled": (apcer + bpcer) / 2,
-                "live_rejected": rejected, "live_total": len(live),
-                "attack_accepted": accepted, "attack_total": len(attack)}
-
-    return {"threshold_from_dev": threshold, "dev": rates(dev), "test": rates(test)}
+    return {"threshold_from_dev": threshold, "dev": rates(dev, threshold), "test": rates(test, threshold)}
 
 
 def main():

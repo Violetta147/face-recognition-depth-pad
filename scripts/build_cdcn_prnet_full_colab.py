@@ -72,11 +72,12 @@ def normalize_splits(splits):
 SPLITS = normalize_splits(SPLITS)
 
 def cache_worker_hashes(scripts):
-    # This exact worker revision only changes where ZIPs are opened.
-    if scripts == {
-        "cdcn_prnet_smoke.py": "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8",
-        "cdcn_prnet_expanded.py": "f0794f5537278642aa3c5c795c42f0321b1feeec6295af151aa06db13b6f8134",
-    }:
+    # These exact revisions change ZIP transport or add Test without changing Train/Dev assets.
+    if (scripts["cdcn_prnet_smoke.py"] == "71818e0945dc8bb715268abfb86f1b7f1a8be3342216f0eea72a4c4e7af921a8"
+            and scripts["cdcn_prnet_expanded.py"] in {
+                "f0794f5537278642aa3c5c795c42f0321b1feeec6295af151aa06db13b6f8134",
+                "6eb2a41eb6aa5b8cbc35b94677b8c940a27f56acea6ffd7a3db2a910a5fa4562",
+            }):
         return scripts | {
             "cdcn_prnet_expanded.py": "9611f0b3464a441ea1582eca0ceca61741f2d644fa1230cb892592ca0751652a",
         }
