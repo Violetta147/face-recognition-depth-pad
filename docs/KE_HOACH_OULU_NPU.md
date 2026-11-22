@@ -1,11 +1,30 @@
 # Kế hoạch thực nghiệm DeepFace-PAD trên OULU-NPU
 
-**Ưu tiên hiện tại: tái lập CDCN CVPR 2020 trên Protocol 1.** Mốc của
-CDCN là ACER 1,0% ở Bảng 4. Trước khi lặp cặp E1–E3, đọc
-[đối chiếu paper và mã CDCN công khai](CDCN_CVPR2020_OULU_P1.md) để xác
-minh bộ asset tiền xử lý, checkpoint và cấu hình cần cho lượt tái lập.
+**Cập nhật ngày 22/11/2026. Ưu tiên tiếp tục CDCN–PRNet trên Protocol 1.**
+Lượt 100 epoch đã hoàn tất Test, ACER gộp 6,67%, APCER gộp 3,33% và
+BPCER 10,00%. Đã kiểm lại CSV, danh sách video, ngưỡng Dev và các hash
+nguồn. [Kết quả đã xác minh](results/OULU_P1_CDCN_PRNET_20261118.md).
 
-Cập nhật ngày 14/11/2026. **Điểm bắt đầu khi quay lại: khôi phục cache RGB Train/Dev và chạy thử tạo pseudo-depth trên một nhóm nhỏ.** Kế hoạch này ghi các bước dự kiến. Lượt thực nghiệm đã hoàn tất hiện là MobileNetV3-Small trên Protocol 1, seed 43.
+Tiếp theo mở [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb),
+chọn A100 80 GB và chạy cell 1–4. Khôi phục dữ liệu Train/Dev đã có,
+tiếp tục từ trạng thái epoch 100 đến tổng 1.300 epoch. Chấm Dev mỗi
+50 epoch, lưu phục hồi mỗi năm epoch. Chọn ACER gộp Dev thấp nhất và
+giữ epoch sớm khi hòa. Ngân sách thời gian ước lượng 6–7 giờ, cộng
+khôi phục cache và ghi checkpoint. Kết quả dự kiến là
+`dev-continuation-p1/from100-seed43-to1300-every50/dev_selection.json`
+trên Drive. Lượt dài này chưa chạy.
+
+[Mở bản notebook đã tải lên Drive](https://drive.google.com/file/d/1O14PaeAGDh2G15GeRmLQWYSPksxcReW-/view).
+
+Mốc CDCN trong paper là ACER 1,0% ở Bảng 4. Giới hạn 1.300 epoch dựa
+trên mục 4.2 của paper. Tần suất Dev 50 epoch là quyết định của dự án.
+Xem [đối chiếu paper và mã CDCN công khai](CDCN_CVPR2020_OULU_P1.md)
+về các khác biệt tiền xử lý và phần cứng còn cần kiểm chứng.
+
+## Diễn biến các lượt trước
+
+Phần dưới lưu diễn biến từ ngày 14/11/2026, bắt đầu bằng MobileNet và
+3DDFA V2, sau đó chuyển sang nhánh CDCN–PRNet ở kế hoạch hiện tại.
 
 **Notebook cho bước 1–2**: [Face_PAD_OULU_NPU_Depth_Smoke.ipynb](../notebooks/Face_PAD_OULU_NPU_Depth_Smoke.ipynb). Chọn CPU và chạy cell 1–4, rồi xem RGB và map ở cell 5. Notebook chỉ đọc 16 ảnh mỗi split trực tiếp từ ZIP đã khóa. Mỗi split lấy 12 ảnh thật từ sáu camera × hai phiên và bốn ảnh tấn công, mỗi thiết bị tạo mẫu một ảnh. Bước lấy mẫu đã kiểm bằng ZIP thật. Việc dựng map bằng 3DDFA V2 vẫn cần chạy trên Colab.
 

@@ -15,7 +15,7 @@ class NonFiniteDevThreshold(ValueError):
 
 
 def load_scores(path):
-    frame = pd.read_csv(path)
+    frame = pd.read_csv(path, float_precision="round_trip")
     if (frame.video_id.isna().any() or frame.video_id.duplicated().any()
             or set(frame.label) != {0, 1} or not np.isfinite(frame.score).all()):
         raise ValueError(f"{path} requires one finite score per video and both labels")

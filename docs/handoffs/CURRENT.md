@@ -1,8 +1,22 @@
 # Bàn giao hiện tại của DeepFace-PAD
 
-**Phạm vi cập nhật 14/11/2026.** Dự án nghiên cứu Face PAD. Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](../reviews/defense_readthrough_20261114/QUYET_DINH.md).
+**Phạm vi cập nhật 22/11/2026.** Dự án nghiên cứu Face PAD. Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](../reviews/defense_readthrough_20261114/QUYET_DINH.md).
 
 ## Điểm tiếp tục hiện tại
+
+OULU-NPU P1, CDCN–PRNet seed 43, batch 56, 100 epoch đã hoàn tất
+Test với ngưỡng Dev khóa. Kiểm lại CSV và JSON trên Drive cho APCER
+gộp 3,33%, BPCER 10,00%, ACER gộp 6,67%. [Kết quả và nguồn](../results/OULU_P1_CDCN_PRNET_20261118.md).
+
+Bước kế tiếp đã chuẩn bị là tiếp tục từ `resume.pt` epoch 100 tới
+tổng 1.300 epoch, chấm Dev mỗi 50 và lưu phục hồi mỗi năm epoch.
+Chạy cell 1–4 trong [notebook tiếp tục](../../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
+trên A100 80 GB. Tự khôi phục các mốc đang dở. Kế hoạch cố định và
+checkpoint tốt nhất theo Dev lưu trong `dev-continuation-p1` trên
+Drive. Lượt huấn luyện dài chưa chạy. Ước lượng 6–7 giờ, cộng đọc cache
+và lưu checkpoint. [Kế hoạch OULU hiện tại](../KE_HOACH_OULU_NPU.md).
+
+## Nhánh CASIA và giải trình trước đó
 
 Bắt đầu từ câu hỏi dùng BCE khi mô hình được huấn luyện bằng Focal.
 Đối chiếu [ghi chú E3 và Focal](../reviews/defense_readthrough_20261114/CHON_E3_VA_FOCAL.md)

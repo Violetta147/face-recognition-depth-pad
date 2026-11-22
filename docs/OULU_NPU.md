@@ -141,7 +141,18 @@ Dev `0.0007160214008763433` trước khi chuẩn bị Test.
    `test_scores.csv` và `test_metrics.json` dưới `locked-test-p1`. JSON
    ghi số lỗi, APCER gộp, BPCER, ACER và dấu vân tay của dữ liệu và mô hình.
 
-Kết quả Test của cấu hình này đang chờ lượt chấm trên Colab.
+Lượt Test đã hoàn tất ngày 18/11/2026, kiểm lại CSV và JSON trên Drive
+ngày 22/11. APCER gộp 3,33% (16/480), BPCER 10,00% (12/120) và ACER
+gộp 6,67%. Ngưỡng Dev giữ ở `0.0007160214008763433`. Xem
+[kết quả và bảng lỗi theo video](results/OULU_P1_CDCN_PRNET_20261118.md).
+
+Lượt tiếp theo dùng [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
+trên A100 80 GB. Chạy cell 1–4 để khôi phục 36.000 khung Train/Dev
+và tiếp tục từ `resume.pt` epoch 100. Lịch cố định kết thúc ở 1.300
+epoch, chấm Dev mỗi 50 epoch và lưu phục hồi mỗi năm epoch. Notebook
+tự tìm trạng thái của lượt tiếp tục khi chạy lại. Chọn checkpoint bằng
+ACER gộp Dev thấp nhất, hòa giữ epoch sớm hơn, gồm cả baseline 100.
+`dev_selection.json` ghi mọi mốc Dev và checkpoint được chọn.
 
 Cell 3 mặc định đặt `PREP_WORKERS = 0` để chọn tối đa bốn tiến trình
 theo vCPU và RAM còn trống. Mỗi tiến trình dùng cấu hình MTCNN và PRNet

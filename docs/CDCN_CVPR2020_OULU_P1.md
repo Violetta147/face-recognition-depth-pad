@@ -1,5 +1,12 @@
 # Đối chiếu và tái lập CDCN CVPR 2020 trên OULU-NPU Protocol 1
 
+**Trạng thái ngày 22/11/2026.** CDCN–PRNet đủ Protocol 1, seed 43,
+batch 56, 100 epoch đã chấm Test với ngưỡng Dev khóa. ACER gộp Test
+6,67%, BPCER 10,00%, APCER gộp 3,33%. Đã đối chiếu CSV và JSON từ
+Drive. [Bản ghi kết quả và khác biệt còn mở](results/OULU_P1_CDCN_PRNET_20261118.md).
+Những bảng so E1–E3 bên dưới ghi cấu hình lịch sử. Notebook tiếp tục
+đến 1.300 epoch đã được tạo để kiểm lịch huấn luyện dài trên Dev.
+
 Mục tiêu trước mắt là dòng **CDCN, ACER 1,0%** trong Bảng 4 của Yu và
 cộng sự. Dòng CDCN++ đạt 0,2% và dùng kiến trúc tìm kiếm cùng mô-đun
 chú ý đa tỉ lệ. E1–E3 hiện tại là thử nghiệm kiến trúc CDCN trên pipeline

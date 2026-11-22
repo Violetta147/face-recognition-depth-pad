@@ -19,3 +19,13 @@ def test_dev_threshold_is_frozen_and_equal_scores_are_rejected():
     assert result["test"]["live_rejected"] == 1
     assert result["test"]["attack_accepted"] == 1
     assert result["test"]["acer_pooled"] == 0.5
+
+
+def test_loading_scores_preserves_the_saved_threshold(tmp_path):
+    threshold = 0.0007160214008763433
+    path = tmp_path / "scores.csv"
+    pd.DataFrame({"video_id": ["live", "attack"], "label": [1, 0],
+                  "score": [threshold, 0.0]}).to_csv(path, index=False)
+    loaded = audit.load_scores(path)
+    assert loaded.score.iloc[0] == threshold
+    assert audit.rates(loaded, threshold)["live_rejected"] == 1
