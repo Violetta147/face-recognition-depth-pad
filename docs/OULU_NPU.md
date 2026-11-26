@@ -147,12 +147,20 @@ gộp 6,67%. Ngưỡng Dev giữ ở `0.0007160214008763433`. Xem
 [kết quả và bảng lỗi theo video](results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Lượt tiếp theo dùng [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
-trên A100 80 GB. Chạy cell 1–4 để khôi phục 36.000 khung Train/Dev
+trên A100 40 GB hoặc 80 GB. Chạy cell 1–4 để khôi phục 36.000 khung Train/Dev
 và tiếp tục từ `resume.pt` epoch 100. Lịch cố định kết thúc ở 1.300
 epoch, chấm Dev mỗi 50 epoch và lưu phục hồi mỗi năm epoch. Notebook
 tự tìm trạng thái của lượt tiếp tục khi chạy lại. Chọn checkpoint bằng
 ACER gộp Dev thấp nhất, hòa giữ epoch sớm hơn, gồm cả baseline 100.
 `dev_selection.json` ghi mọi mốc Dev và checkpoint được chọn.
+
+A100 40 GB đã chạy batch 56 trong phép đo trước, với đỉnh PyTorch
+giữ khoảng 35,50 GiB. Có thể tiếp tục trên A100 40 GB được Colab cấp.
+Trong phép đo đó, batch 56 đạt 97,67 khung/giây trên 40 GB và 106,80
+khung/giây trên 80 GB. Thời gian cả lượt tiếp tục trên 40 GB cần xác
+nhận từ log thực tế. Bộ phục hồi kiểm loại thiết bị `cuda` cùng cấu
+hình huấn luyện và manifest, cho phép phục hồi trên cả hai A100.
+Xem [bảng đo bộ nhớ và tốc độ](CDCN_CVPR2020_OULU_P1.md#lượt-traindev-mở-rộng).
 
 Cell 3 mặc định đặt `PREP_WORKERS = 0` để chọn tối đa bốn tiến trình
 theo vCPU và RAM còn trống. Mỗi tiến trình dùng cấu hình MTCNN và PRNet

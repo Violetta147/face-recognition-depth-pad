@@ -16,7 +16,7 @@ và ACER gộp 6,67% trên 600 video. CSV và JSON nguồn đã được kiểm 
 [Kết quả, nguồn và các khác biệt với paper](docs/results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Lượt tiếp theo đã có [notebook tiếp tục Train và Dev](notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb).
-Chọn Colab A100 80 GB và chạy cell 1–4 để khôi phục cache Train/Dev,
+Chọn Colab A100 40 GB hoặc 80 GB và chạy cell 1–4 để khôi phục cache Train/Dev,
 tiếp tục từ trạng thái epoch 100 tới tổng 1.300 epoch. Notebook chấm Dev
 mỗi 50 epoch và lưu trạng thái phục hồi mỗi năm epoch. Lượt dài này chưa
 chạy. Dữ liệu OULU-NPU và cache được quản lý trên Drive theo quyền sử dụng

@@ -6,7 +6,7 @@ BPCER 10,00%. Đã kiểm lại CSV, danh sách video, ngưỡng Dev và các ha
 nguồn. [Kết quả đã xác minh](results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Tiếp theo mở [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb),
-chọn A100 80 GB và chạy cell 1–4. Khôi phục dữ liệu Train/Dev đã có,
+chọn A100 40 GB hoặc 80 GB và chạy cell 1–4. Khôi phục dữ liệu Train/Dev đã có,
 tiếp tục từ trạng thái epoch 100 đến tổng 1.300 epoch. Chấm Dev mỗi
 50 epoch, lưu phục hồi mỗi năm epoch. Chọn ACER gộp Dev thấp nhất và
 giữ epoch sớm khi hòa. Ngân sách thời gian ước lượng 6–7 giờ, cộng

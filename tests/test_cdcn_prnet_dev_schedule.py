@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import tarfile
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -108,3 +109,27 @@ def test_continuation_notebook_compiles_and_contains_schedule_worker():
         worker = bundle.extractfile("scripts/cdcn_prnet_dev_schedule.py").read()
     assert worker == (ROOT / "scripts/cdcn_prnet_dev_schedule.py").read_bytes()
     assert '"--epochs", 1300' in "".join(cells[4]["source"])
+
+
+def test_continuation_cell_accepts_a100_40gb_and_keeps_resume_configuration(tmp_path):
+    path = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb"
+    cells = json.loads(path.read_text(encoding="utf-8"))["cells"]
+    calls = []
+
+    def run(label, *args):
+        calls.append((label, args))
+        output = Path(args[args.index("--output") + 1])
+        output.mkdir(parents=True)
+        (output / "dev_selection.json").write_text(json.dumps({"best": {"epoch": 100}}))
+
+    gpu = SimpleNamespace(total_memory=40 * 2**30, name="NVIDIA A100-SXM4-40GB")
+    namespace = {"torch": SimpleNamespace(cuda=SimpleNamespace(
+        is_available=lambda: True, get_device_properties=lambda *_: gpu)),
+        "PREPARED_SPLITS": ("Train", "Dev"), "BASE": tmp_path, "WORK": tmp_path,
+        "DATA": tmp_path, "assets": tmp_path / "assets", "run": run, "sys": sys, "json": json}
+    exec("".join(cells[4]["source"]), namespace)
+    assert len(calls) == 1
+    args = calls[0][1]
+    assert str(args[args.index("--initial") + 1]).endswith("train-1794973542248985819")
+    assert args[args.index("--epochs") + 1] == 1300
+    assert args[args.index("--workers") + 1] == 4

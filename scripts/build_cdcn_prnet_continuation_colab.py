@@ -6,8 +6,12 @@ from build_oulu_colab import ROOT, build_notebook
 CELLS = [
     ("markdown", """# CDCN và PRNet · Tiếp tục từ epoch 100 trên OULU-NPU P1
 
-Chọn **A100 80 GB**, chạy **cell 1 → 2 → 3 → 4**. Cell 3 khôi phục
+Chọn **A100 40 GB hoặc 80 GB**, chạy **cell 1 → 2 → 3 → 4**. Cell 3 khôi phục
 1.200 video Train và 900 video Dev từ cache, tổng 36.000 khung.
+
+Batch 56 đã chạy trong phép đo A100 40 GB trước đó, với đỉnh bộ nhớ
+PyTorch giữ khoảng 35,50 GiB. Có thể dùng A100 40 GB đang được cấp để
+tiếp tục. RAM hệ thống và RAM GPU được Colab hiển thị riêng.
 
 Cell 4 tiếp tục từ `resume.pt` epoch 100, gồm trọng số, Adam, lịch LR
 và bộ sinh số ngẫu nhiên. Cấu hình dùng batch 56, seed 43 và bốn worker
@@ -19,9 +23,9 @@ Mỗi năm epoch lưu trạng thái phục hồi lên Drive. Để dừng, chờ
 cùng cấu hình. Notebook tự tìm trạng thái đã lưu và các mốc Dev hoàn tất.
 `DEV_SELECTION` cho biết checkpoint tốt nhất theo Dev đã chấm.
 
-Ước lượng từ lượt A100 trước là khoảng **6–7 giờ** cho 1.200 epoch bổ sung
+Ước lượng từ lượt A100 80 GB trước là khoảng **6–7 giờ** cho 1.200 epoch bổ sung
 và 24 lượt Dev, cộng khôi phục cache và lưu checkpoint. Thời gian thực tế
-phụ thuộc runtime và Drive. Mốc 1.300 theo giới hạn huấn luyện trong paper.
+trên A100 40 GB cần xem log các epoch đầu. Mốc 1.300 theo giới hạn huấn luyện trong paper.
 Tần suất Dev 50 epoch là lựa chọn của dự án.
 
 Kết quả cuối ở `dev_selection.json`, log và các thư mục epoch trên Drive.
@@ -32,7 +36,7 @@ liệu kết quả của dự án."""),
     FULL[3],
     ("code", """#@title 4. Tiếp tục tới epoch 1300, chấm Dev mỗi 50 epoch
 if not torch.cuda.is_available():
-    raise RuntimeError("Chọn A100 80 GB rồi chạy lại cell 1–4.")
+    raise RuntimeError("Chọn A100 40 GB hoặc 80 GB rồi chạy lại cell 1–4.")
 if set(globals().get("PREPARED_SPLITS", ())) != {"Train", "Dev"}:
     raise RuntimeError("Chạy cell 3 với đủ Train và Dev.")
 

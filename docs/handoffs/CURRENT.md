@@ -11,7 +11,8 @@ gộp 3,33%, BPCER 10,00%, ACER gộp 6,67%. [Kết quả và nguồn](../result
 Bước kế tiếp đã chuẩn bị là tiếp tục từ `resume.pt` epoch 100 tới
 tổng 1.300 epoch, chấm Dev mỗi 50 và lưu phục hồi mỗi năm epoch.
 Chạy cell 1–4 trong [notebook tiếp tục](../../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
-trên A100 80 GB. Tự khôi phục các mốc đang dở. Kế hoạch cố định và
+trên A100 40 GB hoặc 80 GB. Batch 56 đã đo chạy được trên 40 GB,
+đỉnh bộ nhớ PyTorch giữ 35,50 GiB. Tự khôi phục các mốc đang dở. Kế hoạch cố định và
 checkpoint tốt nhất theo Dev lưu trong `dev-continuation-p1` trên
 Drive. Lượt huấn luyện dài chưa chạy. Ước lượng 6–7 giờ, cộng đọc cache
 và lưu checkpoint. [Kế hoạch OULU hiện tại](../KE_HOACH_OULU_NPU.md).
