@@ -6,15 +6,20 @@ BPCER 10,00%. Đã kiểm lại CSV, danh sách video, ngưỡng Dev và các ha
 nguồn. [Kết quả đã xác minh](results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Tiếp theo mở [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb),
-chọn A100 40 GB hoặc 80 GB và chạy cell 1–4. Khôi phục dữ liệu Train/Dev đã có,
+chọn A100 80 GB theo quyết định giữ cùng GPU của lượt nguồn và chạy cell 1–4.
+Khôi phục dữ liệu Train/Dev đã có,
 tiếp tục từ trạng thái epoch 100 đến tổng 1.300 epoch. Chấm Dev mỗi
 50 epoch, lưu phục hồi mỗi năm epoch. Chọn ACER gộp Dev thấp nhất và
 giữ epoch sớm khi hòa. Ngân sách thời gian ước lượng 6–7 giờ, cộng
 khôi phục cache và ghi checkpoint. Kết quả dự kiến là
-`dev-continuation-p1/from100-seed43-to1300-every50/dev_selection.json`
+`dev-continuation-p1/from100-seed43-to1300-every50-a10080/dev_selection.json`
 trên Drive. Lượt dài này chưa chạy.
 
-[Mở bản notebook đã tải lên Drive](https://drive.google.com/file/d/1O14PaeAGDh2G15GeRmLQWYSPksxcReW-/view).
+[Mở notebook nhánh A100 80 GB](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view).
+
+[Rà soát phần cứng ngày 26/11](reviews/A100_CONTINUATION_20261126.md)
+ghi rõ khả năng chạy vừa bộ nhớ trên 40 GB và giới hạn về đối chiếu kết
+quả số học. Nhánh chính kiểm GPU và ghi môi trường tính toán trước train.
 
 Mốc CDCN trong paper là ACER 1,0% ở Bảng 4. Giới hạn 1.300 epoch dựa
 trên mục 4.2 của paper. Tần suất Dev 50 epoch là quyết định của dự án.

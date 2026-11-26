@@ -3,10 +3,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import time
 
 import torch
+import cv2
+import numpy as np
 
 from cdcn_prnet_locked_test import verify_run
 from cdcn_prnet_smoke import sha
@@ -19,7 +22,22 @@ def write_json(path, value):
     partial.replace(path)
 
 
-def candidate(directory, config, epoch):
+def training_environment(device):
+    gpu = device.type == "cuda"
+    return {"gpu": torch.cuda.get_device_name(device) if gpu else None,
+            "gpu_total_bytes": torch.cuda.get_device_properties(device).total_memory if gpu else None,
+            "torch": str(torch.__version__), "cuda": torch.version.cuda,
+            "cudnn": torch.backends.cudnn.version(), "opencv": cv2.__version__, "numpy": np.__version__,
+            "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "cudnn_benchmark": torch.backends.cudnn.benchmark,
+            "tf32_matmul": torch.backends.cuda.matmul.allow_tf32,
+            "tf32_cudnn": torch.backends.cudnn.allow_tf32,
+            "float32_matmul_precision": torch.get_float32_matmul_precision(),
+            "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG")}
+
+
+def candidate(directory, config, epoch, *, gpu=None):
     path = directory / "pilot_result.json"
     report = json.loads(path.read_text(encoding="utf-8"))
     expected = {key: config[key] for key in ("seed", "batch", "assets_manifest_sha256", "architecture_source_commit")}
@@ -27,6 +45,7 @@ def candidate(directory, config, epoch):
             or report.get("mode") != "full" or report.get("loader_workers") != config["workers"]
             or report.get("device") != config["device"] or report.get("train_videos") != 1200
             or report.get("dev_videos") != 900 or report.get("dev_frames_per_video") != 8
+            or (gpu is not None and report.get("gpu") != gpu)
             or [row["epoch"] for row in report["history"]] != list(range(1, epoch + 1))
             or sha(directory / "checkpoint.pt") != report["checkpoint_sha256"]):
         raise ValueError(f"Unexpected scheduled training result in {directory}")
@@ -46,12 +65,17 @@ def save_selection(output, candidates, plan, complete):
 def continue_training(initial, assets, protocol, output, device, *, epochs=1300, dev_every=50,
                       checkpoint_every=5, workers=4):
     locked = verify_run(initial, protocol)
+    source_report = json.loads((initial / "pilot_result.json").read_text(encoding="utf-8"))
+    environment = training_environment(device)
+    if device.type == "cuda" and environment["gpu"] != source_report["gpu"]:
+        raise ValueError(f"This continuation uses the baseline GPU {source_report['gpu']}; "
+                         f"current GPU is {environment['gpu']}")
     start = locked["epoch"]
     if epochs <= start or min(dev_every, checkpoint_every, workers) < 1:
         raise ValueError("Choose a later final epoch and positive evaluation, save and worker intervals")
     config = {"profile": "full", "seed": locked["seed"], "batch": locked["batch"], "workers": workers,
               "device": device.type, "assets_manifest_sha256": sha(assets / "smoke_summary.json"),
-              "architecture_source_commit": json.loads((initial / "pilot_result.json").read_text())["architecture_source_commit"]}
+              "architecture_source_commit": source_report["architecture_source_commit"]}
     if config["assets_manifest_sha256"] != locked["assets_manifest_sha256"]:
         raise ValueError("Restore the original Train/Dev manifest before continuing")
     recovery = initial / "resume.pt"
@@ -64,13 +88,15 @@ def continue_training(initial, assets, protocol, output, device, *, epochs=1300,
     milestones = list(range(start + dev_every, epochs, dev_every)) + [epochs]
     plan = {"source_run": str(initial), "source_report_sha256": locked["dev_report_sha256"],
             "source_resume_sha256": sha(recovery), "config": config, "milestones": milestones,
-            "checkpoint_every": checkpoint_every, "protocol_sha256": locked["protocol_sha256"]}
+            "checkpoint_every": checkpoint_every, "protocol_sha256": locked["protocol_sha256"],
+            "environment": environment,
+            "source_environment": {key: source_report.get(key) for key in ("gpu", "torch", "opencv")}}
     output.mkdir(parents=True, exist_ok=True)
     plan_path = output / "schedule.json"
     if plan_path.exists() and json.loads(plan_path.read_text(encoding="utf-8")) != plan:
         raise ValueError("Use a separate output directory for a changed Dev schedule")
     write_json(plan_path, plan)
-    candidates = [candidate(initial, config, start)]
+    candidates = [candidate(initial, config, start, gpu=environment["gpu"])]
     save_selection(output, candidates, plan, complete=False)
 
     for target in milestones:
@@ -78,7 +104,7 @@ def continue_training(initial, assets, protocol, output, device, *, epochs=1300,
         completed = sorted(segment.glob("attempt-*/pilot_result.json"))
         if completed:
             finished = completed[0].parent
-            item = candidate(finished, config, target)
+            item = candidate(finished, config, target, gpu=environment["gpu"])
             recovery = finished / "resume.pt"
             print(f"REUSE_DEV_EPOCH {target} {finished}", flush=True)
         else:
@@ -93,7 +119,7 @@ def continue_training(initial, assets, protocol, output, device, *, epochs=1300,
             finished = segment / f"attempt-{time.time_ns()}"
             train(assets, finished, device, target, locked["batch"], locked["seed"], "full", protocol,
                   workers, checkpoint_every=checkpoint_every, resume=recovery)
-            item = candidate(finished, config, target)
+            item = candidate(finished, config, target, gpu=environment["gpu"])
             recovery = finished / "resume.pt"
         candidates.append(item)
         save_selection(output, candidates, plan, complete=target == epochs)

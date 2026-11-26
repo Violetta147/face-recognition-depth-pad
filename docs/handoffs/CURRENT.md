@@ -1,6 +1,6 @@
 # Bàn giao hiện tại của DeepFace-PAD
 
-**Phạm vi cập nhật 22/11/2026.** Dự án nghiên cứu Face PAD. Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](../reviews/defense_readthrough_20261114/QUYET_DINH.md).
+**Phạm vi cập nhật 26/11/2026.** Dự án nghiên cứu Face PAD. Xác thực sinh trắc học khuôn mặt là bối cảnh ứng dụng. [Quyết định phạm vi](../reviews/defense_readthrough_20261114/QUYET_DINH.md).
 
 ## Điểm tiếp tục hiện tại
 
@@ -11,11 +11,16 @@ gộp 3,33%, BPCER 10,00%, ACER gộp 6,67%. [Kết quả và nguồn](../result
 Bước kế tiếp đã chuẩn bị là tiếp tục từ `resume.pt` epoch 100 tới
 tổng 1.300 epoch, chấm Dev mỗi 50 và lưu phục hồi mỗi năm epoch.
 Chạy cell 1–4 trong [notebook tiếp tục](../../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
-trên A100 40 GB hoặc 80 GB. Batch 56 đã đo chạy được trên 40 GB,
-đỉnh bộ nhớ PyTorch giữ 35,50 GiB. Tự khôi phục các mốc đang dở. Kế hoạch cố định và
+trên A100 80 GB theo quyết định giữ cùng GPU của lượt nguồn. Tự khôi phục
+các mốc đang dở trong nhánh `from100-seed43-to1300-every50-a10080`. Kế hoạch cố định và
 checkpoint tốt nhất theo Dev lưu trong `dev-continuation-p1` trên
 Drive. Lượt huấn luyện dài chưa chạy. Ước lượng 6–7 giờ, cộng đọc cache
 và lưu checkpoint. [Kế hoạch OULU hiện tại](../KE_HOACH_OULU_NPU.md).
+
+[Rà soát phần cứng ngày 26/11](../reviews/A100_CONTINUATION_20261126.md)
+ghi việc 40 GB đã đo chạy được batch 56 nhưng chưa đối chiếu kết quả
+huấn luyện với 80 GB. Notebook kiểm GPU trước train và ghi môi trường
+tính toán để đối chiếu khi tiếp tục. Giữ cùng GPU chưa bảo đảm trùng từng bit.
 
 ## Nhánh CASIA và giải trình trước đó
 
