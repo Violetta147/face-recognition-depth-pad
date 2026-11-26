@@ -147,7 +147,8 @@ gộp 6,67%. Ngưỡng Dev giữ ở `0.0007160214008763433`. Xem
 [kết quả và bảng lỗi theo video](results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Lượt tiếp theo dùng [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
-trên A100 80 GB, cùng GPU ghi ở lượt nguồn. Chạy cell 1–4 để khôi phục 36.000 khung Train/Dev
+trên A100 40 GB hoặc 80 GB. Người dùng đã duyệt tiếp tục trên 40 GB.
+Chạy cell 1–4 để khôi phục 36.000 khung Train/Dev
 và tiếp tục từ `resume.pt` epoch 100. Lịch cố định kết thúc ở 1.300
 epoch, chấm Dev mỗi 50 epoch và lưu phục hồi mỗi năm epoch. Notebook
 tự tìm trạng thái của lượt tiếp tục khi chạy lại. Chọn checkpoint bằng
@@ -156,14 +157,25 @@ ACER gộp Dev thấp nhất, hòa giữ epoch sớm hơn, gồm cả baseline 1
 
 A100 40 GB đã chạy batch 56 trong phép đo trước, với đỉnh PyTorch
 giữ khoảng 35,50 GiB. Sự tương đương kết quả huấn luyện giữa hai GPU
-chưa được kiểm chứng. Theo ưu tiên của người dùng, nhánh chính chọn
-giữ A100-SXM4-80GB của lượt 100 epoch. Cell 4 và worker kiểm GPU
-trước khi train. `schedule.json` ghi các phiên bản thư viện và cờ tính
-toán, đối chiếu chúng khi tiếp tục cùng lượt. Giữ cùng loại GPU vẫn
-chưa chứng minh kết quả trùng từng bit.
+chưa được kiểm chứng. Lượt 100 epoch dùng A100 80 GB. Phần tiếp tục
+trên 40 GB giữ nguyên cấu hình học, trạng thái phục hồi và cách đánh
+giá. `schedule.json` ghi lịch sử GPU, các phiên bản thư viện và cờ tính
+toán theo lần chạy. Các trường này phục vụ truy vết, được tách khỏi
+phần đối chiếu thiết kế. Kiểm tra nguồn, manifest và cấu hình học vẫn
+áp dụng khi phục hồi.
 [Quyết định và phạm vi bằng chứng](reviews/A100_CONTINUATION_20261126.md).
 
-Nhánh chính lưu ở `dev-continuation-p1/from100-seed43-to1300-every50-a10080`.
+Thư mục tiếp tục dùng đường dẫn ban đầu
+`dev-continuation-p1/from100-seed43-to1300-every50`. Đã kiểm trên Drive
+ngày 26/11, chưa có thư mục tiến độ `dev-continuation-p1` để cần chuyển.
+Notebook được cập nhật tại cùng [tệp Drive hiện hành](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view).
+
+Log lượt 100 epoch cho trung vị 16,931 giây mỗi epoch sau khởi động,
+Dev 120,214 giây. Với 1.200 epoch và 24 lượt Dev còn lại, thời gian
+ở tốc độ cũ là 6,445 giờ. Tỷ lệ thông lượng batch 56 giữa 80 GB và
+40 GB là 106,802/97,674, cho ước lượng tham khảo 7,048 giờ trên 40 GB.
+Phép quy đổi thông lượng chưa phải thời gian cả epoch được đo trên 40 GB.
+Xem [cách tính CU và nguồn](KE_HOACH_OULU_NPU.md#ước-lượng-thời-gian-và-cu).
 
 Cell 3 mặc định đặt `PREP_WORKERS = 0` để chọn tối đa bốn tiến trình
 theo vCPU và RAM còn trống. Mỗi tiến trình dùng cấu hình MTCNN và PRNet

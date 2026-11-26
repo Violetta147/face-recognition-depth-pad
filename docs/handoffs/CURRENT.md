@@ -11,16 +11,20 @@ gộp 3,33%, BPCER 10,00%, ACER gộp 6,67%. [Kết quả và nguồn](../result
 Bước kế tiếp đã chuẩn bị là tiếp tục từ `resume.pt` epoch 100 tới
 tổng 1.300 epoch, chấm Dev mỗi 50 và lưu phục hồi mỗi năm epoch.
 Chạy cell 1–4 trong [notebook tiếp tục](../../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb)
-trên A100 80 GB theo quyết định giữ cùng GPU của lượt nguồn. Tự khôi phục
-các mốc đang dở trong nhánh `from100-seed43-to1300-every50-a10080`. Kế hoạch cố định và
+trên A100 40 GB hoặc 80 GB theo bốn thay đổi tối thiểu người dùng đã duyệt.
+Tự khôi phục các mốc đang dở trong `from100-seed43-to1300-every50`. Kế hoạch cố định và
 checkpoint tốt nhất theo Dev lưu trong `dev-continuation-p1` trên
-Drive. Lượt huấn luyện dài chưa chạy. Ước lượng 6–7 giờ, cộng đọc cache
-và lưu checkpoint. [Kế hoạch OULU hiện tại](../KE_HOACH_OULU_NPU.md).
+Drive. Ngày 26/11 đã kiểm Drive, chưa có thư mục tiến độ của lượt tiếp tục.
+Ước lượng tham khảo 7,05 giờ trước I/O, dự trù 8–10 giờ tương đương
+65,3–81,6 CU ở mức người dùng cung cấp 8,16 CU mỗi giờ. Ngân sách còn
+307,65 CU. [Kế hoạch OULU và nguồn thời gian](../KE_HOACH_OULU_NPU.md).
 
 [Rà soát phần cứng ngày 26/11](../reviews/A100_CONTINUATION_20261126.md)
 ghi việc 40 GB đã đo chạy được batch 56 nhưng chưa đối chiếu kết quả
-huấn luyện với 80 GB. Notebook kiểm GPU trước train và ghi môi trường
-tính toán để đối chiếu khi tiếp tục. Giữ cùng GPU chưa bảo đảm trùng từng bit.
+huấn luyện với 80 GB. Đã gỡ điều kiện trùng tên GPU. Môi trường được
+ghi thành lịch sử, tách khỏi kiểm thiết kế để tiếp tục cùng trạng thái
+trên 40 GB. Batch, loss, optimizer, seed và quy tắc chọn trên Dev giữ
+theo kế hoạch trước đó.
 
 ## Nhánh CASIA và giải trình trước đó
 

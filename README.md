@@ -16,15 +16,15 @@ và ACER gộp 6,67% trên 600 video. CSV và JSON nguồn đã được kiểm 
 [Kết quả, nguồn và các khác biệt với paper](docs/results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Lượt tiếp theo đã có [notebook tiếp tục Train và Dev](notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb).
-Nhánh chính chọn Colab A100 80 GB, cùng GPU đã ghi ở lượt 100 epoch.
-Chạy cell 1–4 để khôi phục cache Train/Dev,
+Chọn Colab A100 40 GB hoặc 80 GB. Chạy cell 1–4 để khôi phục cache Train/Dev,
 tiếp tục từ trạng thái epoch 100 tới tổng 1.300 epoch. Notebook chấm Dev
 mỗi 50 epoch và lưu trạng thái phục hồi mỗi năm epoch. Lượt dài này chưa
 chạy. Dữ liệu OULU-NPU và cache được quản lý trên Drive theo quyền sử dụng
 dataset. [Hướng dẫn notebook và cache](docs/OULU_NPU.md).
 
-[Quyết định phần cứng và giới hạn bằng chứng](docs/reviews/A100_CONTINUATION_20261126.md)
-ghi cơ sở chọn GPU và các thông tin cần theo dõi khi tiếp tục.
+[Quyết định tiếp tục trên 40 GB và giới hạn bằng chứng](docs/reviews/A100_CONTINUATION_20261126.md)
+ghi phạm vi thay đổi đã duyệt. Ước lượng chi phí ở mức 8,16 CU mỗi giờ
+là khoảng 65,3–81,6 CU nếu tổng thời gian nằm trong dải dự trù 8–10 giờ.
 
 Lượt 1–6 đã có kết quả. Lượt 7 đã có phân tích lỗi ba seed, 20 hình và log
 webcam thực đo. Lượt 7 còn thiếu cảnh ảnh in, kiểm quay lại đủ cửa sổ và

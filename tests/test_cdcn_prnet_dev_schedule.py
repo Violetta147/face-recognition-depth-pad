@@ -112,7 +112,7 @@ def test_continuation_notebook_compiles_and_contains_schedule_worker():
 
 
 @pytest.mark.parametrize("memory_gib", [40, 80])
-def test_continuation_cell_checks_baseline_gpu_before_training(tmp_path, memory_gib):
+def test_continuation_cell_accepts_both_a100_sizes_with_original_schedule(tmp_path, memory_gib):
     path = ROOT / "notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb"
     cells = json.loads(path.read_text(encoding="utf-8"))["cells"]
     calls = []
@@ -128,32 +128,35 @@ def test_continuation_cell_checks_baseline_gpu_before_training(tmp_path, memory_
         is_available=lambda: True, get_device_properties=lambda *_: gpu, get_device_name=lambda: gpu.name)),
         "PREPARED_SPLITS": ("Train", "Dev"), "BASE": tmp_path, "WORK": tmp_path,
         "DATA": tmp_path, "assets": tmp_path / "assets", "run": run, "sys": sys, "json": json}
-    if memory_gib == 40:
-        with pytest.raises(RuntimeError, match="A100-SXM4-80GB"):
-            exec("".join(cells[4]["source"]), namespace)
-        assert not calls
-        return
     exec("".join(cells[4]["source"]), namespace)
     assert len(calls) == 1
     args = calls[0][1]
     assert str(args[args.index("--initial") + 1]).endswith("train-1794973542248985819")
     assert args[args.index("--epochs") + 1] == 1300
     assert args[args.index("--workers") + 1] == 4
+    assert args[args.index("--dev-every") + 1] == 50
+    assert args[args.index("--checkpoint-every") + 1] == 5
+    assert Path(args[args.index("--output") + 1]).name == "from100-seed43-to1300-every50"
 
 
-def test_worker_rejects_gpu_change_before_writing_training_outputs(schedule_fixture, tmp_path, monkeypatch):
+def test_worker_accepts_gpu_change_and_reaches_original_recovery_checks(schedule_fixture, tmp_path, monkeypatch):
     assets, initial, output, _ = schedule_fixture
     path = initial / "pilot_result.json"
     report = json.loads(path.read_text()) | {"gpu": "NVIDIA A100-SXM4-80GB"}
     path.write_text(json.dumps(report))
     monkeypatch.setattr(schedule, "training_environment", lambda _: {"gpu": "NVIDIA A100-SXM4-40GB"})
-    with pytest.raises(ValueError, match="baseline GPU"):
+    def reached_recovery(path, config):
+        assert config["device"] == "cuda" and config["batch"] == 56
+        raise RuntimeError("reached original recovery checks")
+
+    monkeypatch.setattr(schedule, "read_recovery", reached_recovery)
+    with pytest.raises(RuntimeError, match="reached original recovery"):
         schedule.continue_training(initial, assets, tmp_path / "protocol.tar", output,
                                    torch.device("cuda"), epochs=150)
     assert not output.exists()
 
 
-def test_schedule_detects_changed_environment_when_resuming(schedule_fixture, tmp_path, monkeypatch):
+def test_schedule_records_environment_changes_and_reads_older_plan_metadata(schedule_fixture, tmp_path, monkeypatch):
     assets, initial, output, _ = schedule_fixture
 
     def interrupt(*args, **kwargs):
@@ -165,7 +168,24 @@ def test_schedule_detects_changed_environment_when_resuming(schedule_fixture, tm
                                    torch.device("cpu"), epochs=150)
     plan = json.loads((output / "schedule.json").read_text())
     assert plan["environment"]["torch"] == str(torch.__version__)
-    monkeypatch.setattr(schedule, "training_environment", lambda _: plan["environment"] | {"torch": "changed"})
-    with pytest.raises(ValueError, match="separate output directory"):
+    # Read both the first plan format and the later environment-locked format.
+    for key in ("environment", "environment_history", "source_environment"):
+        plan.pop(key, None)
+    (output / "schedule.json").write_text(json.dumps(plan))
+    with pytest.raises(KeyboardInterrupt):
         schedule.continue_training(initial, assets, tmp_path / "protocol.tar", output,
                                    torch.device("cpu"), epochs=150)
+    before = json.loads((output / "schedule.json").read_text())
+    before.pop("environment_history")
+    before["environment"]["gpu"] = "NVIDIA A100-SXM4-80GB"
+    (output / "schedule.json").write_text(json.dumps(before))
+    current = before["environment"] | {"gpu": "NVIDIA A100-SXM4-40GB", "torch": "observed version"}
+    monkeypatch.setattr(schedule, "training_environment", lambda _: current)
+    with pytest.raises(KeyboardInterrupt):
+        schedule.continue_training(initial, assets, tmp_path / "protocol.tar", output,
+                                   torch.device("cpu"), epochs=150)
+    after = json.loads((output / "schedule.json").read_text())
+    assert after["environment"] == current
+    assert after["environment_history"][0]["runtime"] == before["environment"]
+    assert after["environment_history"][-1]["runtime"] == current
+    assert all(after[key] == value for key, value in plan.items())

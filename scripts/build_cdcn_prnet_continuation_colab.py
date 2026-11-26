@@ -6,14 +6,13 @@ from build_oulu_colab import ROOT, build_notebook
 CELLS = [
     ("markdown", """# CDCN và PRNet · Tiếp tục từ epoch 100 trên OULU-NPU P1
 
-Nhánh tiếp tục chính dùng **A100 80 GB**, cùng GPU đã ghi ở lượt 100 epoch.
-Chạy **cell 1 → 2 → 3 → 4**. Cell 3 khôi phục
+Chọn **A100 40 GB hoặc 80 GB**. Chạy **cell 1 → 2 → 3 → 4**. Cell 3 khôi phục
 1.200 video Train và 900 video Dev từ cache, tổng 36.000 khung.
 
-Batch 56 đã chạy được trong phép đo A100 40 GB. Độ tương đương của kết
-quả huấn luyện giữa 40 GB và 80 GB chưa được kiểm chứng. Nhánh này chọn
-giữ cùng GPU để giảm thay đổi điều kiện tính toán. Cell 4 kiểm GPU trước
-khi train. Chi tiết quyết định có trong `docs/reviews/A100_CONTINUATION_20261126.md`.
+Batch 56 đã chạy được trong phép đo A100 40 GB. Người dùng đã duyệt
+tiếp tục trên 40 GB với thiết kế huấn luyện và đánh giá ban đầu.
+Lượt nguồn 100 epoch chạy trên A100 80 GB. Môi trường của phần tiếp tục
+được ghi để báo cáo việc chuyển GPU. Độ khớp từng bit chưa được kiểm chứng.
 
 Cell 4 tiếp tục từ `resume.pt` epoch 100, gồm trọng số, Adam, lịch LR
 và bộ sinh số ngẫu nhiên. Cấu hình dùng batch 56, seed 43 và bốn worker
@@ -25,14 +24,20 @@ Mỗi năm epoch lưu trạng thái phục hồi lên Drive. Để dừng, chờ
 cùng cấu hình. Notebook tự tìm trạng thái đã lưu và các mốc Dev hoàn tất.
 `DEV_SELECTION` cho biết checkpoint tốt nhất theo Dev đã chấm.
 
-`schedule.json` ghi GPU, phiên bản thư viện và các tùy chọn tính toán.
-Các thông tin này được đối chiếu khi tiếp tục cùng lượt. Cùng loại GPU
-vẫn chưa bảo đảm kết quả trùng từng bit. Bộ kiểm thử cục bộ kiểm logic
-phục hồi. Độ khớp trên Colab cần bằng chứng thực nghiệm tương ứng.
+`schedule.json` ghi GPU, phiên bản thư viện và các tùy chọn tính toán
+theo lần tiếp tục. Thông tin môi trường phục vụ truy vết. Các kiểm tra
+manifest, checkpoint, trạng thái phục hồi và cấu hình học vẫn được áp dụng.
 
-Ước lượng từ lượt A100 80 GB trước là khoảng **6–7 giờ** cho 1.200 epoch bổ sung
-và 24 lượt Dev, cộng khôi phục cache và lưu checkpoint. Mốc 1.300 theo giới hạn huấn luyện trong paper.
-Tần suất Dev 50 epoch là lựa chọn của dự án.
+Log A100 80 GB ghi trung vị **16,93 giây mỗi epoch** sau khởi động,
+Dev **120,21 giây**. Phần còn lại gồm **1.200 epoch và 24 lượt Dev**,
+tương đương **6,45 giờ** ở tốc độ đã đo. Quy đổi tham khảo bằng tỷ lệ
+batch 56 đã đo trên hai GPU cho khoảng **7,05 giờ** trên 40 GB.
+Đây là ước lượng, chưa phải thời gian đo của lượt tiếp tục trên 40 GB.
+
+Với **307,65 CU** còn lại và **8,16 CU mỗi giờ** do người dùng cung cấp,
+7,05 giờ tương ứng khoảng **57,5 CU**, chưa tính khôi phục và lưu dữ liệu.
+Dự trù 8–10 giờ tương ứng **65,3–81,6 CU**. Dải dự trù phục vụ ước tính
+chi phí. Mốc kết thúc vẫn là tổng 1.300 epoch và lịch Dev vẫn mỗi 50 epoch.
 
 Kết quả cuối ở `dev_selection.json`, log và các thư mục epoch trên Drive.
 Lượt Test epoch 100 đã hoàn tất với ACER gộp 6,67% và được ghi trong tài
@@ -42,15 +47,12 @@ liệu kết quả của dự án."""),
     FULL[3],
     ("code", """#@title 4. Tiếp tục tới epoch 1300, chấm Dev mỗi 50 epoch
 if not torch.cuda.is_available():
-    raise RuntimeError("Nhánh tiếp tục chính dùng A100 80 GB rồi chạy lại cell 1–4.")
-gpu_name = torch.cuda.get_device_name()
-if gpu_name != "NVIDIA A100-SXM4-80GB":
-    raise RuntimeError(f"Nhánh này giữ GPU của lượt 100 epoch, A100-SXM4-80GB. Hiện tại {gpu_name}.")
+    raise RuntimeError("Chọn runtime A100 40 GB hoặc 80 GB rồi chạy lại cell 1–4.")
 if set(globals().get("PREPARED_SPLITS", ())) != {"Train", "Dev"}:
     raise RuntimeError("Chạy cell 3 với đủ Train và Dev.")
 
 INITIAL_RUN = BASE / "full-runs/1794972293512067663/train-1794973542248985819"
-CONTINUATION = BASE / "dev-continuation-p1/from100-seed43-to1300-every50-a10080"
+CONTINUATION = BASE / "dev-continuation-p1/from100-seed43-to1300-every50"
 run("continue-train-dev", sys.executable, "-u", WORK / "scripts/cdcn_prnet_dev_schedule.py",
     "--initial", INITIAL_RUN, "--assets", assets, "--protocol", DATA / "Protocols.tar",
     "--output", CONTINUATION, "--epochs", 1300, "--dev-every", 50,

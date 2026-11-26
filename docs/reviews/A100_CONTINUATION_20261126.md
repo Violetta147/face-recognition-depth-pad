@@ -6,10 +6,12 @@ Người dùng ưu tiên tính đúng đắn và khả năng giải trình khi t
 lượt CDCN–PRNet trên OULU-NPU P1 từ epoch 100 tới 1.300. Runtime hiện
 tại được Colab cấp A100 40 GB, còn lượt 100 epoch đã dùng A100 80 GB.
 
-Nhánh tiếp tục chính chọn giữ `NVIDIA A100-SXM4-80GB`, theo tên GPU
-trong báo cáo gốc. Đây là lựa chọn kiểm soát điều kiện của lượt này.
-Việc dùng A100 40 GB trong một thực nghiệm có cấu hình và nguồn gốc
-được ghi đầy đủ vẫn có thể hợp lệ về phương pháp.
+Sau rà soát, người dùng đã duyệt bốn thay đổi tối thiểu để tiếp tục
+trên A100 40 GB với thiết kế huấn luyện và đánh giá ban đầu. Khuyến
+nghị trước đó yêu cầu trùng A100 80 GB đã được điều chỉnh. Phạm vi đã
+duyệt gồm gỡ điều kiện trùng tên GPU, tách thông tin môi trường khỏi
+kiểm thiết kế, dùng một notebook và đường dẫn tiếp tục, cập nhật hướng
+dẫn cùng kiểm thử. Môi trường của đoạn tiếp tục được ghi để truy vết.
 
 ## Bằng chứng đã có và giới hạn
 
@@ -39,19 +41,27 @@ CPU. Các giả thuyết này cần được phân biệt với kết quả đã
 
 ## Cách thực hiện nhánh chính
 
-1. Chọn runtime có GPU `NVIDIA A100-SXM4-80GB` trước cell 4.
+1. Chọn runtime A100 40 GB hoặc 80 GB trước cell 4.
 2. Khôi phục cùng cache Train/Dev và trạng thái epoch 100 đã khóa.
 3. Chạy cùng batch 56, seed 43, optimizer, lịch LR và quy tắc chọn
    checkpoint trên Dev như kế hoạch đã ghi.
 4. Ghi GPU, VRAM, PyTorch, CUDA, cuDNN, NumPy, OpenCV, TF32 và các tùy
-   chọn deterministic trong `schedule.json`. Khi tiếp tục cùng lịch,
-   đối chiếu bộ thông tin đó. Thông tin GPU và thư viện được ghi từ
+   chọn deterministic trong `schedule.json` theo từng lần tiếp tục.
+   Môi trường là thông tin quan sát. Phần kiểm thiết kế vẫn đối chiếu
+   nguồn, manifest, cấu hình học và lịch Dev. Thông tin GPU và thư viện từ
    lượt nguồn cũng nằm trong `source_environment` để kiểm tra.
 
-Notebook và worker kiểm GPU trước khi train. Thư mục của nhánh này là
-`dev-continuation-p1/from100-seed43-to1300-every50-a10080`, giúp định vị
-đúng cấu hình đã chọn. Nếu đã có dữ liệu ở thư mục tiếp tục cũ, giữ dữ
-liệu đó để kiểm riêng theo báo cáo và checkpoint tương ứng.
+Notebook yêu cầu thiết bị CUDA để train. Bộ phục hồi giữ kiểm hash,
+manifest, cấu hình học và trạng thái. Thư mục tiếp tục dùng đường dẫn
+ban đầu `dev-continuation-p1/from100-seed43-to1300-every50`. Ngày 26/11
+đã kiểm thư mục Drive gốc, chưa có `dev-continuation-p1` để cần chuyển
+tiến độ. Notebook được cập nhật trên cùng tệp Drive hiện hành.
+
+Log nguồn ghi trung vị 16,931 giây mỗi epoch sau khởi động và Dev
+120,214 giây. Ước lượng tham khảo cho phần còn lại trên 40 GB là 7,05
+giờ trước I/O, hoặc dải dự trù 8–10 giờ tương đương 65,3–81,6 CU ở mức
+8,16 CU mỗi giờ. Ngân sách người dùng cung cấp còn 307,65 CU.
+[Phép tính và nguồn](../KE_HOACH_OULU_NPU.md#ước-lượng-thời-gian-và-cu).
 
 Mã ghi lại các cờ tính toán đang dùng. Lượt nguồn chưa ghi đủ các cờ
 đó, nên không suy ra chúng từ seed hoặc tên GPU. Kiểm thử phần mềm đã

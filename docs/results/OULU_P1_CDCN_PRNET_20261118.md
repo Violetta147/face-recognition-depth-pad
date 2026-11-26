@@ -108,7 +108,7 @@ Dev tại mỗi mốc 50 epoch. Quy tắc chọn là ACER gộp Dev thấp nhấ
 hòa giữ epoch sớm, gồm cả mốc 100. Cứ năm epoch lưu trạng thái phục hồi.
 Lịch Dev 50 epoch và quy tắc chọn là quyết định của dự án.
 
-[Notebook nhánh A100 80 GB trên Drive](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view)
+[Notebook tiếp tục trên A100 40 GB hoặc 80 GB](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view)
 được cập nhật theo [rà soát phần cứng ngày 26/11](../reviews/A100_CONTINUATION_20261126.md).
 
 Ước lượng khoảng 6–7 giờ A100 cho 1.200 epoch bổ sung và 24 lượt Dev,

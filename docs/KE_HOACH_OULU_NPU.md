@@ -6,25 +6,67 @@ BPCER 10,00%. Đã kiểm lại CSV, danh sách video, ngưỡng Dev và các ha
 nguồn. [Kết quả đã xác minh](results/OULU_P1_CDCN_PRNET_20261118.md).
 
 Tiếp theo mở [notebook tiếp tục Train và Dev](../notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb),
-chọn A100 80 GB theo quyết định giữ cùng GPU của lượt nguồn và chạy cell 1–4.
+chọn A100 40 GB hoặc 80 GB và chạy cell 1–4. Người dùng đã duyệt
+tiếp tục trên 40 GB với cùng thiết kế ban đầu.
 Khôi phục dữ liệu Train/Dev đã có,
 tiếp tục từ trạng thái epoch 100 đến tổng 1.300 epoch. Chấm Dev mỗi
 50 epoch, lưu phục hồi mỗi năm epoch. Chọn ACER gộp Dev thấp nhất và
 giữ epoch sớm khi hòa. Ngân sách thời gian ước lượng 6–7 giờ, cộng
 khôi phục cache và ghi checkpoint. Kết quả dự kiến là
-`dev-continuation-p1/from100-seed43-to1300-every50-a10080/dev_selection.json`
+`dev-continuation-p1/from100-seed43-to1300-every50/dev_selection.json`
 trên Drive. Lượt dài này chưa chạy.
 
-[Mở notebook nhánh A100 80 GB](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view).
+[Mở notebook tiếp tục đã cập nhật](https://drive.google.com/file/d/1Uu38sF-tfA7tAxG_q2-pCxyEZ3m7IloH/view).
 
 [Rà soát phần cứng ngày 26/11](reviews/A100_CONTINUATION_20261126.md)
 ghi rõ khả năng chạy vừa bộ nhớ trên 40 GB và giới hạn về đối chiếu kết
-quả số học. Nhánh chính kiểm GPU và ghi môi trường tính toán trước train.
+quả số học. Thông tin môi trường được ghi theo lần tiếp tục. Thiết kế,
+manifest và trạng thái phục hồi được kiểm riêng.
 
 Mốc CDCN trong paper là ACER 1,0% ở Bảng 4. Giới hạn 1.300 epoch dựa
 trên mục 4.2 của paper. Tần suất Dev 50 epoch là quyết định của dự án.
 Xem [đối chiếu paper và mã CDCN công khai](CDCN_CVPR2020_OULU_P1.md)
 về các khác biệt tiền xử lý và phần cứng còn cần kiểm chứng.
+
+## Ước lượng thời gian và CU
+
+Tính ngày 26/11/2026 từ lịch sử 100 epoch trong
+[báo cáo lượt nguồn](https://drive.google.com/file/d/1XnbgJPJakIdSdvWL9p523a3oUbAgP5hx/view).
+Đã tải lại trên Drive và xác nhận SHA-256
+`0611fa499d38ff84d5e02b38865cd5e57c148f83e3cf086254e4f6815babcc18`.
+
+| Thành phần | Số liệu |
+| --- | --- |
+| Epoch đầu trên A100 80 GB | 21,205 giây |
+| Trung vị epoch 2–100 | 16,931 giây |
+| Khoảng thời gian epoch 2–100 | 16,847–17,102 giây |
+| Một lượt chấm đủ Dev | 120,214 giây |
+| Phần còn lại | 1.200 epoch và 24 lượt Dev |
+| Thời gian theo tốc độ 80 GB đã đo | `(1200 × 16,931 + 24 × 120,214) / 3600 = 6,445 giờ` |
+| Tham khảo cho 40 GB | `6,445 × (106,802 / 97,674) = 7,048 giờ` |
+
+Tỷ lệ 106,802/97,674 lấy từ thông lượng batch 56 ở
+[phép đo 80 GB](https://drive.google.com/file/d/1TDcounNfHCX0m9tX59EQ6WzFV057uz8j/view)
+và [phép đo 40 GB](https://drive.google.com/file/d/1O-NkvMQQRWtBuI6QwCSw85NIPn_Uv6Og/view).
+Đó là phép đo trên đầu vào đã nạp sẵn. Quy đổi toàn bộ thời gian bằng
+tỷ lệ này là giả định dự trù, cần được cập nhật từ log thực tế 40 GB.
+
+Người dùng cung cấp ngân sách còn lại 307,65 CU và tốc độ 8,16 CU mỗi
+giờ. Ngân sách tương đương khoảng 37,70 giờ ở đúng mức sử dụng đó.
+
+| Kịch bản ước lượng | Chi phí ở mức 8,16 CU mỗi giờ |
+| --- | ---: |
+| 6,445 giờ, theo tốc độ 80 GB cũ | 52,6 CU |
+| 7,048 giờ, quy đổi tham khảo cho 40 GB | 57,5 CU |
+| Dự trù 8 giờ | 65,3 CU |
+| Dự trù 10 giờ | 81,6 CU |
+
+Các phép tính 6,445 và 7,048 giờ chưa tính khôi phục cache, ghi trạng
+thái lên Drive, khởi tạo lại giữa các mốc và gián đoạn runtime. Dải
+8–10 giờ là dự trù các chi phí đó, chưa phải cận trên được đo. Ở mốc
+10 giờ sẽ còn khoảng 226,05 CU nếu tốc độ sử dụng giữ 8,16 CU mỗi giờ.
+Lịch huấn luyện vẫn là tổng 1.300 epoch, chấm Dev mỗi 50 và lưu phục
+hồi mỗi 5 epoch. Dải thời gian dự trù không được dùng làm điều kiện dừng.
 
 ## Diễn biến các lượt trước
 
