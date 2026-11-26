@@ -6,19 +6,29 @@ CDCN có bộ phân loại học từ bản đồ độ sâu. Kế hoạch gồm
 
 ## Tiếp tục công việc
 
-Đọc [trạng thái và kết quả](docs/PROJECT_STATUS.md), sau đó đọc
-[bàn giao hiện hành](docs/handoffs/CURRENT.md). Bàn giao chỉ rõ phần còn thiếu
-của Lượt 7–8 và vị trí tài liệu mới. Không cần lịch sử chat hoặc prompt đặc biệt.
-Phiên Codex mới làm việc trong thư mục repository đã mở.
+Đọc [bàn giao hiện hành](docs/handoffs/CURRENT.md) và
+[kế hoạch OULU-NPU](docs/KE_HOACH_OULU_NPU.md) để tiếp tục nhánh đang làm.
+Các lượt CASIA trước đó có trong [trạng thái và kết quả](docs/PROJECT_STATUS.md).
+
+CDCN–PRNet trên OULU-NPU Protocol 1 đã hoàn tất lượt 100 epoch, seed 43,
+batch 56. Với ngưỡng lấy từ Dev, Test đạt APCER gộp 3,33%, BPCER 10,00%
+và ACER gộp 6,67% trên 600 video. CSV và JSON nguồn đã được kiểm lại.
+[Kết quả, nguồn và các khác biệt với paper](docs/results/OULU_P1_CDCN_PRNET_20261118.md).
+
+Lượt tiếp theo đã có [notebook tiếp tục Train và Dev](notebooks/Face_PAD_OULU_NPU_CDCN_PRNet_Continue_Train_Dev.ipynb).
+Chọn Colab A100 80 GB và chạy cell 1–4 để khôi phục cache Train/Dev,
+tiếp tục từ trạng thái epoch 100 tới tổng 1.300 epoch. Notebook chấm Dev
+mỗi 50 epoch và lưu trạng thái phục hồi mỗi năm epoch. Lượt dài này chưa
+chạy. Dữ liệu OULU-NPU và cache được quản lý trên Drive theo quyền sử dụng
+dataset. [Hướng dẫn notebook và cache](docs/OULU_NPU.md).
 
 Lượt 1–6 đã có kết quả. Lượt 7 đã có phân tích lỗi ba seed, 20 hình và log
 webcam thực đo. Lượt 7 còn thiếu cảnh ảnh in, kiểm quay lại đủ cửa sổ và
 hoàn thiện giải thích lỗi webcam. [Báo cáo và paper mới](reports/round8_documents_20261023/README.md)
 đã tích hợp kết quả đến Lượt 7: báo cáo 35 trang, phần chính 27 trang, đúng
 ba chương; paper tiếng Việt sáu trang theo bố cục tham chiếu IEEE conference.
-Các bản lịch sử giữ nguyên. Chưa làm webcam, slide hoặc train mới trong
-phiên tài liệu; chưa push, upload hoặc nộp bài. Phiên sau đọc bàn giao và
-tiếp tục theo nhiệm vụ người dùng giao.
+Các tài liệu này ghi kết quả CASIA đến mốc Lượt 7–8. Nhánh OULU-NPU có
+kế hoạch, notebook và bản ghi kết quả riêng theo các liên kết phía trên.
 
 ## Thiết lập và dữ liệu
 
